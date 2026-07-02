@@ -24,7 +24,7 @@ export default function LoginPage() {
   const loginMutation = useLogin();
   // const [homeIntroShown, setHomeIntroShown] = useState(false);
   sessionStorage.setItem("company_name", loginMutation.data?.data?.company_name || "");
-  const hasShown = sessionStorage.getItem("home_introo");
+  // const hasShown = sessionStorage.getItem("home_introo");
   const {
     register,
     handleSubmit,
