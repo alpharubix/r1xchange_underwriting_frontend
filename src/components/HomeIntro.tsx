@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
 export default function HomeIntro() {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function HomeIntro() {
       const timer = setTimeout(() => {
         setShow(false);
         sessionStorage.setItem("home_intro", "true");
-      }, 250500);
+      }, 1500);
 
       return () => clearTimeout(timer);
     }
