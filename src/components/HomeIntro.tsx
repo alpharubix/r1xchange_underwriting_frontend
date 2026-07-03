@@ -8,7 +8,7 @@ export default function HomeIntro() {
 
   useEffect(() => {
     
-    const hasShown = sessionStorage.getItem("home_introo");
+    const hasShown = sessionStorage.getItem("home_intro");
     setCompanyName(sessionStorage.getItem("company_name") || "");
 
     if (!hasShown) {
