@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        poppins: ["Poppins", ...defaultTheme.fontFamily.sans],
+      },
       colors: {
         navy: {
           DEFAULT: "#000080",

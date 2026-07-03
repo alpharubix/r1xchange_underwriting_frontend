@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
 export default function HomeIntro() {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
@@ -17,7 +17,7 @@ export default function HomeIntro() {
       const timer = setTimeout(() => {
         setShow(false);
         sessionStorage.setItem("home_intro", "true");
-      }, 1500);
+      }, 250500);
 
       return () => clearTimeout(timer);
     }
@@ -57,16 +57,16 @@ export default function HomeIntro() {
            <img
               src={r1xchangeLogoWhiteWebView}
               alt="R1Xchange"
-              className="w-[420px] md:w-[550px] "
+              className="w-[320px] md:w-[450px] "
             />
             {
               companyName ? (
-                <div className="mt-10 flex justify-center ">
-                  <div className=" border border-gray-200  px-10 py-4 shadow-md">
-                    <p className="text-[0.1] text-center uppercase tracking-[0.3em] text-gray-200 px-10">
-                      Welcome
+                <div className="flex justify-center ">
+                  <div className=" border border-gray-800 border-2 shadow-xl  px-6 py-3 shadow-md bg-[#1a1a1a] rounded-lg">
+                    <p className="text-[0.1] font-poppins poppins-regular text-center uppercase tracking-[0.3em] text-gray-400 px-10">
+                     Welcome
                     </p>
-                    <h2 className="mt-1 text-3xl font-bold text-white px-10">
+                    <h2 className="mt-1 text-2xl font-poppins poppins-bold text-white px-10 border-t border-gray-600 pt-2 text-center poppins-letter-spacing">
                       {companyName}
                     </h2>
                   </div>
