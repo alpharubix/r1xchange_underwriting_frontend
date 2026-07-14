@@ -62,7 +62,7 @@ export default function SignupPage() {
 
   const onSubmit = (values: RegisterFormValues) => {
     const { confirm_password: _, ...payload } = values;
-    registerMutation.mutate(payload);
+    registerMutation.mutate({...payload,site_code: "R1X001"});
   };
 
   return (
@@ -341,7 +341,7 @@ export default function SignupPage() {
                     </p>
                   )}
                 </div>
-
+                
                 {/* Submit */}
                 <Button
                   type="submit"
