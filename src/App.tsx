@@ -24,6 +24,7 @@ const ITRTaxCalculationPage = lazy(() => import("@/pages/itr/TaxCalculation"));
 const ITRBalanceSheetPage = lazy(() => import("@/pages/itr/BalanceSheet"));
 const ITRProfitAndLossStatementPage = lazy(() => import("@/pages/itr/ProfitAndLossStatement"));
 const ITRRatioAnalysisPage = lazy(() => import("@/pages/itr/RatioAnalysis"));
+const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
 
 function App() {
   return (
@@ -79,6 +80,7 @@ function App() {
                         path="/itr/ratio-analysis"
                         element={<ITRRatioAnalysisPage />}
                       />
+                      <Route path="/cibil" element={<CibilCustDataFetching />} />
                     </Route>
                   </Route>
 
