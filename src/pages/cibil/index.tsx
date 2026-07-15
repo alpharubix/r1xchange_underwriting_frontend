@@ -53,22 +53,20 @@ export default function CibilWorkflow() {
             <div key={step} className="flex flex-col items-center flex-1">
               <div className="flex items-center w-full">
                 <div
-                  className={`w-full h-1 ${
-                    step === 1
+                  className={`w-full h-1 ${step === 1
                       ? 'bg-transparent'
                       : currentStep >= step
                         ? 'bg-black'
                         : 'bg-gray-200'
-                  }`}
+                    }`}
                 />
                 <div
-                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${
-                    currentStep === step
+                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step
                       ? 'border-black bg-black text-white shadow-md'
                       : currentStep > step
                         ? 'border-black bg-black text-white'
                         : 'border-gray-300 bg-white text-gray-500'
-                  } font-semibold text-sm transition-colors duration-300`}
+                    } font-semibold text-sm transition-colors duration-300`}
                 >
                   {currentStep > step ? (
                     <svg
@@ -89,19 +87,17 @@ export default function CibilWorkflow() {
                   )}
                 </div>
                 <div
-                  className={`w-full h-1 ${
-                    step === 4
+                  className={`w-full h-1 ${step === 4
                       ? 'bg-transparent'
                       : currentStep > step
                         ? 'bg-black'
                         : 'bg-gray-200'
-                  }`}
+                    }`}
                 />
               </div>
               <span
-                className={`text-xs mt-2 font-medium ${
-                  currentStep >= step ? 'text-black' : 'text-gray-400'
-                }`}
+                className={`text-xs mt-2 font-medium ${currentStep >= step ? 'text-black' : 'text-gray-400'
+                  }`}
               >
                 {stepLabels[step]}
               </span>

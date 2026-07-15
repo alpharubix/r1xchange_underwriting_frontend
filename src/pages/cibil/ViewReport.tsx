@@ -4,6 +4,12 @@ import { getCibilOverview } from "@/api/cibil";
 
 
 
+type ViewReportProps = {
+  reference_id?: string;
+  onBack?: () => void;
+  onStartNew?: () => void;
+};
+
 type ReportData = {
   reference_id: string;
   cibil_pulled_date?: string;
@@ -11,8 +17,13 @@ type ReportData = {
   [key: string]: unknown;
 };
 
-export default function ViewReport() {
-  const { reference_id } = useParams<{ reference_id: string }>();
+export default function ViewReport({
+  reference_id: propReferenceId,
+  onBack,
+  onStartNew,
+}: ViewReportProps = {}) {
+  const { reference_id: routeReferenceId } = useParams<{ reference_id: string }>();
+  const reference_id = propReferenceId || routeReferenceId;
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -67,10 +78,18 @@ export default function ViewReport() {
   };
 
   const handleBack = () => {
+    if (onBack) {
+      onBack();
+      return;
+    }
     navigate("/cibil/reports");
   };
 
   const handleStartNew = () => {
+    if (onStartNew) {
+      onStartNew();
+      return;
+    }
     navigate("/cibil");
   };
 
