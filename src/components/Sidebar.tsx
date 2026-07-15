@@ -10,6 +10,7 @@ import {
   Building2,
   FileText,
   PieChart,
+  ShieldCheck,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMe } from "@/hooks/useUser";
@@ -64,6 +65,14 @@ const navItems = [
       { label: "Balance Sheet", path: "/itr/balance-sheet" },
       { label: "Profit and Loss Statement", path: "/itr/profit-and-loss-statement" },
       { label: "Ratio Analysis", path: "/itr/ratio-analysis" },
+    ]
+  },
+  {
+    icon: ShieldCheck,
+    label: "CIBIL Reports",
+    subItems: [
+      { label: "Fetch New Report", path: "/cibil" },
+      { label: "Existing Reports", path: "/cibil/reports" }
     ]
   },
 ];

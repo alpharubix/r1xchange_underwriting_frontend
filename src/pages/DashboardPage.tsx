@@ -386,7 +386,10 @@ export default function DashboardPage() {
       title: 'CIBIL Score',
       description: 'Credit Report',
       icon: <CreditCard className="h-8 w-8 text-[#000000]" />,
-      disabled: true,
+      disabled: false,
+      onClick: () => {
+        navigate('/cibil');
+      }
     },
   ];
 
