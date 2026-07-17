@@ -1,4 +1,4 @@
-import { defaultLocale } from "react-day-picker";
+
 
 const Tile = ({
   title,
