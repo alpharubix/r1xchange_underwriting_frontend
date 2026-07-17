@@ -17,7 +17,6 @@ export interface CibilResponse<T> {
   data: T;
   responseCode?: string;
 }
-
 export interface GenerateCibilOtpRequest {
   first_name: string;
   middle_name: string;

@@ -22,13 +22,14 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import type { CashFlowData } from './cashFlowType';
 import rows from './cashflowtablerow';
+import BankAccountDetails from '../BankAccountDetails';
 
 export default function CashFlow() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-
+  const accountDetails = sessionStorage.getItem("account_details")
   const { data: dateRangeData } = useDateRange();
 
   useEffect(() => {
@@ -165,7 +166,8 @@ export default function CashFlow() {
           </p>
         </div>
       </div>
-
+      
+      {accountDetails && <BankAccountDetails/>}
       {/* Date Filter Card */}
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-[#000000]/10 bg-white">

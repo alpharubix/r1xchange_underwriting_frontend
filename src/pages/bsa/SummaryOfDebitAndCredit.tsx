@@ -20,6 +20,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import BankAccountDetails from './BankAccountDetails';
 // import { useNavigate } from "react-router-dom";
 
 interface MonthlyBreakdown {
@@ -36,17 +37,20 @@ interface SummaryData {
   total: any;
 }
 
-export default function SummeryOfDebitAndCredit() {
+export default function SummaryOfDebitAndCredit() {
   // const navigate = useNavigate();
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
+  // ADDING ACCOUNT_DETAILS
+  const [accountDetails, setAccountDetails] = useState<any>(null);
 
   const { data: dateRangeData } = useDateRange();
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
+      console.log(accountDetails);
       const from = new Date(dateRangeData.from_date);
       const to = new Date(dateRangeData.to_date);
 
@@ -125,6 +129,12 @@ export default function SummeryOfDebitAndCredit() {
             'Failed to load summary of debit and credit. Please try again.',
         }
       );
+      const acc_data= response.data.data.account_details;
+      
+      setAccountDetails(acc_data);
+      console.log("Setting:", accountDetails)
+      sessionStorage.setItem("account_details",JSON.stringify(acc_data));
+
       return response.data?.data as SummaryData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -231,6 +241,10 @@ export default function SummeryOfDebitAndCredit() {
         </div>
       </div>
 
+      {
+        accountDetails && <BankAccountDetails/>
+      }
+      
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">
           <CardContent className="p-4">

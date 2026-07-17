@@ -87,13 +87,32 @@ export default {
           from: { transform: "translateX(-100%)" },
           to: { transform: "translateX(0)" },
         },
+          infiniteFade: {
+          '0%': {
+            color: '#000000', // Black
+          },
+          '33%': {
+            color: '#6B7280', // Gray (Tailwind gray-500)
+          },
+          '66%': {
+            color: '#1E3A8A', // Dark Blue (Tailwind blue-900)
+          },
+          '100%': {
+            color: '#000000', // Back to Black
+          },
+      },
+      
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.4s ease-out",
         "slide-in": "slide-in 0.3s ease-out",
+        'infinite-fade': 'infiniteFade ease-in-out infinite',
       },
+     
+
+  
     },
   },
   plugins: [],

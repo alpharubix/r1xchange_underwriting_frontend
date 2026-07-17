@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
+import BankAccountDetails from './BankAccountDetails';
 
 interface MonthlyBreakdown {
   Month: string;
@@ -566,7 +567,7 @@ export default function OverviewMonthlyWise() {
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-
+  const accountDetails = sessionStorage.getItem("account_details")
   const { data: dateRangeData } = useDateRange();
 
   useEffect(() => {
@@ -589,7 +590,25 @@ export default function OverviewMonthlyWise() {
       setAppliedToDate(endStr);
     }
   }, [dateRangeData, appliedFromDate, appliedToDate]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const [showScrollHint, setShowScrollHint] = useState(true);
+
+  useEffect(() => {
+    const container = containerRef.current;
+
+    if (!container) return;
+
+    const handleScroll = () => {
+      setShowScrollHint(container.scrollTop < 80);
+    };
+    console.log(container.scrollTop);
+    container.addEventListener("scroll", handleScroll);
+
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  
   const handleApply = () => {
     if (!fromDate || !toDate) {
       toast.error('Please select both From and To dates');
@@ -748,7 +767,14 @@ export default function OverviewMonthlyWise() {
           </p>
         </div>
       </div>
-
+    {accountDetails && <BankAccountDetails/>}
+    {showScrollHint && (
+      <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+        <p className="text-sm text-gray-500">
+          ↑ Scroll up to view <span className="font-medium">Monthly Overview</span>
+        </p>
+      </div>
+    )}
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/20 bg-white">
           <CardContent className="p-4">
