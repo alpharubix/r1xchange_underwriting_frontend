@@ -23,7 +23,7 @@ interface SidebarContextValue {
 }
 const SidebarContext = createContext<SidebarContextValue>({
   collapsed: false,
-  setCollapsed: () => {},
+  setCollapsed: () => { },
 });
 
 export const useSidebar = () => useContext(SidebarContext);
@@ -107,7 +107,7 @@ export function AppSidebar() {
   const displayEmail = user?.email_id || "";
   const displayCompany = user?.company_name || "";
   const initials = getInitials(displayName);
-  sessionStorage.setItem("company_name",displayCompany)
+  sessionStorage.setItem("company_name", displayCompany)
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -144,7 +144,7 @@ export function AppSidebar() {
             alt="R1Xchange Logo"
             className="h-full w-full/3 m-auto object-fill scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
           />
-      </div>
+        </div>
         {/* {!collapsed && (
           <div className="animate-fade-in overflow-hidden">
             <p className="text-base font-bold text-white tracking-wide">R1Xchange</p>
