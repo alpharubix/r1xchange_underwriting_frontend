@@ -42,9 +42,9 @@ function InfoField({
   icon: React.ElementType; label: string; value: string;
 }) {
   return (
-    <div className="group flex items-start gap-4 p-4 rounded-2xl bg-white border border-[#000080]/8 hover:border-[#000080]/20 hover:shadow-md transition-all duration-200">
-      <div className="w-9 h-9 rounded-xl bg-[#000080]/8 flex items-center justify-center shrink-0 group-hover:bg-[#000080]/15 transition-colors">
-        <Icon className="w-4 h-4 text-[#000080]" />
+    <div className="group flex items-start gap-4 p-4 rounded-2xl bg-white border border-[#000000]/8 hover:border-[#000000]/20 hover:shadow-md transition-all duration-200">
+      <div className="w-9 h-9 rounded-xl bg-[#000000]/8 flex items-center justify-center shrink-0 group-hover:bg-[#000000]/15 transition-colors">
+        <Icon className="w-4 h-4 text-[#000000]" />
       </div>
       <div className="min-w-0 flex-1">
         <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">{label}</p>
@@ -213,7 +213,7 @@ const hasChanges =
         </div>
 
         {/* ── Hero Profile Card ────────────────────────────────────────────── */}
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#000080] to-[#0000cc] p-8 text-white shadow-xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#000000] to-[#0000cc] p-8 text-white shadow-xl">
           {/* Decorative circles */}
           <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
           <div className="absolute -bottom-8 -left-8 w-32 h-32 rounded-full bg-white/5 pointer-events-none" />
@@ -246,11 +246,11 @@ const hasChanges =
         </div>
 
         {/* ── Info / Edit Section ──────────────────────────────────────────── */}
-        <div className="bg-white rounded-3xl border border-[#000080]/10 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-3xl border border-[#000000]/10 shadow-sm overflow-hidden">
           {/* Section header */}
-          <div className="px-6 py-4 border-b border-[#000080]/8 flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-[#000000]/8 flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-4 h-4 text-[#000080]" />
+              <ShieldCheck className="w-4 h-4 text-[#000000]" />
               <h3 className="text-sm font-semibold text-foreground">
                 {editMode ? "Edit Information" : "Account Information"}
               </h3>
@@ -326,7 +326,7 @@ const hasChanges =
 
             {/* Bottom action bar — edit mode only */}
             {editMode && (
-              <div className="flex justify-end gap-3 mt-6 pt-5 border-t border-[#000080]/8">
+              <div className="flex justify-end gap-3 mt-6 pt-5 border-t border-[#000000]/8">
                 <button
                   onClick={handleCancel}
                   className="flex items-center gap-1.5 border border-red-200 text-red-500 hover:bg-red-50 px-5 py-2.5 rounded-xl text-sm transition-colors"
