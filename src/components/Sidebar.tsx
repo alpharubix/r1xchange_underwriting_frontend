@@ -138,13 +138,13 @@ export function AppSidebar() {
           collapsed ? "justify-center" : ""
         )}
       >
-        <div className="h-20 w-96">
-          <img
-            src={r1xchangeLogoWhiteWebView}
-            alt="R1Xchange Logo"
-            className="h-full w-full/3 m-auto object-fill scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
-          />
-        </div>
+        <div className="h-20 w-96 flex items-center justify-center">
+  <img
+    src={r1xchangeLogoWhiteWebView}
+    alt="R1Xchange Logo"
+    className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
+  />
+</div>
         {/* {!collapsed && (
           <div className="animate-fade-in overflow-hidden">
             <p className="text-base font-bold text-white tracking-wide">R1Xchange</p>
