@@ -8,7 +8,7 @@ export default function PublicRoute() {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 rounded-full border-4 border-[#000080]/20 border-t-[#000080] animate-spin" />
+          <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
         </div>
       </div>
     );

@@ -57,11 +57,11 @@ export default function ViewReport({
             <span className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               CIBIL Report
             </span>
-            <h1 className="mt-1 text-3xl font-bold text-[#000080] tracking-tight sm:text-4xl">
+            <h1 className="mt-1 text-3xl font-bold text-[#000000] tracking-tight sm:text-4xl">
               Report Sections
             </h1>
             <p className="mt-2 max-w-3xl break-all text-sm text-slate-600">
-              Reference ID: <span className="font-semibold text-[#000080]">{referenceId}</span>
+              Reference ID: <span className="font-semibold text-[#000000]">{referenceId}</span>
             </p>
           </div>
 
@@ -76,7 +76,7 @@ export default function ViewReport({
             <button
               type="button"
               onClick={handleStartNew}
-              className="rounded-xl bg-[#000080] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#000080]/80"
+              className="rounded-xl bg-[#000000] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#000000]/80"
             >
               Start New CIBIL Flow
             </button>
