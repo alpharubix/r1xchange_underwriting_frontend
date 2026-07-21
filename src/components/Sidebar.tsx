@@ -211,13 +211,14 @@ export function AppSidebar() {
                     const isSubActive = location.pathname === sub.path;
                     return (
                       <button
-                        key={sub.path}
-                        onClick={() => navigate('/profile')}
-                        className={cn(
-                          "flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 hover:pointer transition-colors",
-                          isSubActive && "text-white font-medium bg-white/20"
-                        )}
-                      >
+                      key={sub.path}
+                      type="button"
+                      onClick={() => navigate(sub.path)}
+                      className={cn(
+                        "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
+                        isSubActive && "text-white font-medium bg-white/20"
+                      )}
+                        >
                         <span className="truncate">{sub.label}</span>
                         {isSubActive && (
                           <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
@@ -237,9 +238,9 @@ export function AppSidebar() {
           onClick={handleLogout}
           disabled={logoutMutation.isPending}
           className={cn(
-            "sidebar-item w-full text-white/70 hover:text-white hover:bg-white/10",
-            collapsed && "justify-center px-0"
-          )}
+  "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
+  collapsed && "justify-center px-0"
+)}
           title={collapsed ? "Logout" : undefined}
           id="logout-btn"
         >
@@ -264,7 +265,7 @@ export function AppSidebar() {
                 {initials}
               </div>
             )}
-            <div className="overflow-hidden">
+            <div className="overflow-hidden hover:cursor-pointer" onClick={() => navigate("/profile")}>
               <p className="text-sm font-semibold text-white truncate">{displayName}</p>
               {displayCompany ? (
                 <p className="text-xs text-white/50 truncate">{displayCompany}</p>
