@@ -9,6 +9,7 @@ import PublicRoute from "@/components/PublicRoute";
 import ExistingReports from "./pages/cibil/ExistingReports";
 import ViewReport from "./pages/cibil/ViewReport";
 
+
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
@@ -27,6 +28,7 @@ const ITRBalanceSheetPage = lazy(() => import("@/pages/itr/BalanceSheet"));
 const ITRProfitAndLossStatementPage = lazy(() => import("@/pages/itr/ProfitAndLossStatement"));
 const ITRRatioAnalysisPage = lazy(() => import("@/pages/itr/RatioAnalysis"));
 const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
+const ProfileManagement = lazy(()=>import("@/pages/ProfileManagement"))
 
 
 function App() {
@@ -83,6 +85,7 @@ function App() {
                         path="/itr/ratio-analysis"
                         element={<ITRRatioAnalysisPage />}
                       />
+                      <Route path="/profile" element={<ProfileManagement />} />
                       <Route path="/cibil" element={<CibilCustDataFetching />} />
                       <Route path="/cibil/reports" element={<ExistingReports />} />
                       <Route path="/cibil/view-report/:reference_id" element={<ViewReport />} />
