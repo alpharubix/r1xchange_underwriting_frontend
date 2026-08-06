@@ -392,7 +392,7 @@ export default function DashboardPage() {
         navigate('/cibil');
       }
     },
-   
+
   ];
 
   return (
@@ -402,7 +402,7 @@ export default function DashboardPage() {
       {companyName && (
         <HomeIntro />
       )}
-      <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
+      <div className="p-8 pb-4 animate-fade-in relative min-h-screen flex flex-col">
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[#000000] mb-2">Dashboard</h1>
@@ -425,8 +425,8 @@ export default function DashboardPage() {
             <Card
               key={index}
               className={`transition-all duration-300 ${item.disabled
-                  ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                  : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#000000]/20 hover:border-[#000000]/50 bg-white'
+                ? 'opacity-60 cursor-not-allowed bg-gray-50'
+                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#000000]/20 hover:border-[#000000]/50 bg-white'
                 }`}
               onClick={!item.disabled ? item.onClick : undefined}
             >
@@ -893,6 +893,23 @@ export default function DashboardPage() {
             </Card>
           </motion.div>
         )}
+        <div className="flex items-center justify-center gap-4 text-sm mt-auto pt-8 pb-0">
+          <div className="w-20 h-px bg-black" />
+          <span className="text-black">///</span>
+
+          <span className="font-semibold text-gray-800">
+            Fueling the Future of Lending
+          </span>
+
+          <div className="w-px h-5 bg-gray-300" />
+
+          <span className="text-gray-500">
+            Engineered in Bengaluru 🖤
+          </span>
+
+          <span className="text-black">///</span>
+          <div className="w-20 h-px bg-black" />
+        </div>
         {/* Kyc Modal */}
         <KycModal isOpen={isKycModalOpen} onClose={() => setIsKycModalOpen(false)} />
       </div>

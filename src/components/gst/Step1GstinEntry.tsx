@@ -5,9 +5,10 @@ import { toast } from "sonner";
 
 interface Step1Props {
   onNext: (gstin: string) => void;
+  allowAutoRoute?: boolean;
 }
 
-export default function Step1GstinEntry({ onNext }: Step1Props) {
+export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1Props) {
   const [gstinInput, setGstinInput] = useState("");
 
   const { data: gstinData, isLoading: isLoadingGstin } = useQuery({
@@ -18,9 +19,11 @@ export default function Step1GstinEntry({ onNext }: Step1Props) {
   useEffect(() => {
     if (gstinData?.is_found && gstinData.gst_number) {
       setGstinInput(gstinData.gst_number);
-      onNext(gstinData.gst_number);
+      if (allowAutoRoute) {
+        onNext(gstinData.gst_number);
+      }
     }
-  }, [gstinData, onNext]);
+  }, [gstinData, onNext, allowAutoRoute]);
 
   const updateMutation = useMutation({
     mutationFn: updateGstin,

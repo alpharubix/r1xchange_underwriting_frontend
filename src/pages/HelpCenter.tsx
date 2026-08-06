@@ -247,7 +247,7 @@ export default function HelpCenter() {
                   </p> */}
                   <div className="pt-2 flex items-center justify-between bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
                     <span className="font-mono text-base font-bold text-[#000000] tracking-wide select-all">
-                      r1support@r1xchange.com
+                      support@r1xchange.com
                     </span>
                     <Button
                       onClick={copyEmailToClipboard}

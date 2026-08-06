@@ -19,7 +19,7 @@ export interface SaveGstinResponse {
 }
 
 export interface BasicInfoPayload {
-  gstin: string;
+  gstin: string[];
 }
 
 export interface BasicInfoResponse {
@@ -93,6 +93,7 @@ export interface GstHistoryItem {
   gst_reference_id_status: string;
   from_month: string;
   to_month: string;
+  gstin?: string;
 }
 
 export interface GstHistoryResponse {
@@ -112,6 +113,14 @@ export const updateGstin = async (data: SaveGstinPayload): Promise<SaveGstinResp
   const response = await apiClient.patch("/gst/gstin", data, {
     successMessage: "GSTIN updated successfully.",
     errorMessage: "Failed to update GSTIN. Please try again.",
+  });
+  return response.data;
+};
+
+export const addNewGstin = async (data: SaveGstinPayload): Promise<SaveGstinResponse> => {
+  const response = await apiClient.post("/gst/gstin/add-new", data, {
+    successMessage: "GSTIN added successfully.",
+    errorMessage: "Failed to add GSTIN. Please try again.",
   });
   return response.data;
 };

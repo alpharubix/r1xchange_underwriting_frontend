@@ -21,7 +21,8 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
     mutationFn: generateOtp,
     onSuccess: (res) => {
       toast.success("OTP sent successfully");
-      setOtpReferenceId(res.data.otp_reference_id);
+      const refId = res.data?.otp_reference_id || (res as any).otp_reference_id;
+      setOtpReferenceId(refId);
     },
     onError: (error: any) => {
       const msg = error.response?.data?.detail?.message || "Failed to generate OTP";
@@ -53,7 +54,8 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
   const submitMutation = useMutation({
     mutationFn: submitGst,
     onSuccess: (res) => {
-      onNext(res.data.gst_reference_id);
+      const refId = res.data?.gst_reference_id || (res as any).gst_reference_id;
+      onNext(refId);
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to submit for analysis");

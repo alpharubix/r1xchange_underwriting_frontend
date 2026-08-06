@@ -12,6 +12,7 @@ export default function GstWorkflow() {
   const [toMonth, setToMonth] = useState<string>("");
 
   useEffect(() => {
+    // Check if there's an ongoing processing session in localStorage
     const savedRefId = localStorage.getItem("gst_reference_id");
     if (savedRefId) {
       setGstReferenceId(savedRefId);
@@ -48,8 +49,14 @@ export default function GstWorkflow() {
     setCurrentStep(1);
   };
 
+  const handleGstinChange = (newGstin: string) => {
+    setGstin(newGstin);
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
+      
+      {/* Workflow Progress Bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
           {[1, 2, 3, 4].map((step) => (
@@ -57,35 +64,21 @@ export default function GstWorkflow() {
               <div className="flex items-center w-full">
                 <div
                   className={`w-full h-1 ${
-                    step === 1
-                      ? "bg-transparent"
-                      : currentStep >= step
-                      ? "bg-black"
-                      : "bg-gray-200"
+                    step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#000000]" : "bg-gray-200"
                   }`}
                 />
                 <div
                   className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${
                     currentStep === step
-                      ? "border-black bg-black text-white shadow-md"
+                      ? "border-[#000000] bg-[#000000] text-white shadow-md"
                       : currentStep > step
-                      ? "border-black bg-black text-white"
+                      ? "border-[#000000] bg-[#000000] text-white"
                       : "border-gray-300 bg-white text-gray-500"
                   } font-semibold text-sm transition-colors duration-300`}
                 >
                   {currentStep > step ? (
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M5 13l4 4L19 7"
-                      />
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
                   ) : (
                     step
@@ -93,19 +86,11 @@ export default function GstWorkflow() {
                 </div>
                 <div
                   className={`w-full h-1 ${
-                    step === 4
-                      ? "bg-transparent"
-                      : currentStep > step
-                      ? "bg-black"
-                      : "bg-gray-200"
+                    step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#000000]" : "bg-gray-200"
                   }`}
                 />
               </div>
-              <span
-                className={`text-xs mt-2 font-medium ${
-                  currentStep >= step ? "text-black" : "text-gray-400"
-                }`}
-              >
+              <span className={`text-xs mt-2 font-medium ${currentStep >= step ? "text-[#000000]" : "text-gray-400"}`}>
                 {step === 1 && "GSTIN"}
                 {step === 2 && "Business & Date"}
                 {step === 3 && "Authentication"}
@@ -117,14 +102,17 @@ export default function GstWorkflow() {
       </div>
 
       <div className="mt-8">
-        {currentStep === 1 && <Step1GstinEntry onNext={handleStep1Next} />}
-
+        {currentStep === 1 && (
+          <Step1GstinEntry onNext={handleStep1Next} />
+        )}
+        
         {currentStep === 2 && (
           <Step2BusinessInfo
             gstin={gstin}
             onSuccessSubmit={handleStep2Success}
             onRequiresAuth={handleStep2RequiresAuth}
             onBack={() => setCurrentStep(1)}
+            onGstinChange={handleGstinChange}
           />
         )}
 
@@ -139,9 +127,13 @@ export default function GstWorkflow() {
         )}
 
         {currentStep === 4 && (
-          <Step4Processing gstReferenceId={gstReferenceId} onRetry={handleRetry} />
+          <Step4Processing
+            gstReferenceId={gstReferenceId}
+            onRetry={handleRetry}
+          />
         )}
       </div>
+
     </div>
   );
 }
