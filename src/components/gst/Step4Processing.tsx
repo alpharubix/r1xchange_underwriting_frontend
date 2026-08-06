@@ -22,7 +22,8 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
     // Poll every 15 seconds (15000ms), but stop if max polls reached or status is not INPROGRESS
     refetchInterval: (query) => {
       if (pollCount >= MAX_POLLS) return false;
-      const statusList = query.state.data?.data?.gst_reference_id_status;
+      const rawData = query.state.data;
+      const statusList = rawData?.data?.gst_reference_id_status || (rawData as any)?.gst_reference_id_status;
       const currentStatus = statusList?.[0]?.gst_reference_id_status;
       
       if (currentStatus === "COMPLETED" || currentStatus === "FAILED") {
@@ -33,7 +34,7 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
     refetchIntervalInBackground: true,
   });
 
-  const statusList = data?.data?.gst_reference_id_status;
+  const statusList = data?.data?.gst_reference_id_status || (data as any)?.gst_reference_id_status;
   const currentStatus = statusList?.[0]?.gst_reference_id_status;
 
   useEffect(() => {

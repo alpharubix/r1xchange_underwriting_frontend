@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { fetchBasicInfo, submitGst } from "@/api/gst";
+import { useState, useEffect, useMemo } from "react";
+import { useQuery, useMutation, useQueries } from "@tanstack/react-query";
+import { fetchBasicInfo, submitGst, getGstin, addNewGstin } from "@/api/gst";
 import { toast } from "sonner";
 
 interface Step2Props {
@@ -8,25 +8,213 @@ interface Step2Props {
   onSuccessSubmit: (gstReferenceId: string) => void;
   onRequiresAuth: (fromMonth: string, toMonth: string) => void;
   onBack: () => void;
+  onGstinChange: (newGstin: string) => void;
 }
 
-export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAuth }: Step2Props) {
+const GSTIN_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+
+export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAuth, onBack, onGstinChange }: Step2Props) {
   const [fromMonth, setFromMonth] = useState("");
   const [toMonth, setToMonth] = useState("");
   const [needsAuth, setNeedsAuth] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newGstin, setNewGstin] = useState("");
 
-  const infoMutation = useMutation({
-    mutationFn: fetchBasicInfo,
-    onError: () => {
-      toast.error("Failed to fetch business details for this GSTIN");
+  // Fetch list of GSTINs from the backend
+  const { data: gstinData } = useQuery({
+    queryKey: ["gstin"],
+    queryFn: getGstin,
+  });
+
+  // Manage multiple GSTINs (normalized and filtered strictly to valid format)
+  const [gstinList, setGstinList] = useState<string[]>(() => {
+    const saved = localStorage.getItem("gstin_list");
+    let list: string[] = [];
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) {
+          list = parsed
+            .map((g) => String(g || "").toUpperCase().trim())
+            .filter((g) => GSTIN_REGEX.test(g));
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    const safePropGstin = typeof gstin === "string" 
+      ? gstin 
+      : Array.isArray(gstin) 
+      ? gstin[0] 
+      : "";
+    if (safePropGstin) {
+      const normalizedGstin = String(safePropGstin).toUpperCase().trim();
+      if (GSTIN_REGEX.test(normalizedGstin) && !list.includes(normalizedGstin)) {
+        list.push(normalizedGstin);
+      }
+    }
+    return list;
+  });
+
+  const [activeGstin, setActiveGstin] = useState<string>(() => {
+    const safePropGstin = typeof gstin === "string" 
+      ? gstin 
+      : Array.isArray(gstin) 
+      ? gstin[0] 
+      : "";
+    return String(safePropGstin).toUpperCase().trim();
+  });
+
+  useEffect(() => {
+    localStorage.setItem("gstin_list", JSON.stringify(gstinList));
+  }, [gstinList]);
+
+  // Fetch basic info for all GSTINs using useQueries for automatic de-duplication, caching and loading states
+  const basicInfoQueries = useQueries({
+    queries: gstinList.map((gstinCode) => {
+      const normalized = String(gstinCode || "").toUpperCase().trim();
+      const isValid = GSTIN_REGEX.test(normalized);
+      return {
+        queryKey: ["gstinBasicInfo", normalized],
+        queryFn: () => fetchBasicInfo({ gstin: [normalized] }),
+        enabled: isValid,
+      };
+    }),
+  });
+
+  // Debug logs to identify why data is not showing up
+  console.log("DEBUG: gstinList =", gstinList);
+  console.log("DEBUG: basicInfoQueries =", basicInfoQueries.map((q, idx) => ({
+    gstin: gstinList[idx],
+    status: q.status,
+    isLoading: q.isLoading,
+    isError: q.isError,
+    error: q.error,
+    data: q.data,
+  })));
+
+  const businessDataMap = useMemo(() => {
+    const map: Record<string, any> = {};
+    basicInfoQueries.forEach((q, idx) => {
+      const gstinCode = gstinList[idx]?.toUpperCase().trim();
+      if (!gstinCode) return;
+      const raw = q.data?.data || q.data;
+      const data = Array.isArray(raw) ? raw[0] : raw;
+      if (data) {
+        map[gstinCode] = data;
+      }
+    });
+    return map;
+  }, [basicInfoQueries, gstinList]);
+
+  const loadingMap = useMemo(() => {
+    const map: Record<string, boolean> = {};
+    basicInfoQueries.forEach((q, idx) => {
+      const gstinCode = gstinList[idx]?.toUpperCase().trim();
+      if (gstinCode) {
+        map[gstinCode] = q.isLoading;
+      }
+    });
+    return map;
+  }, [basicInfoQueries, gstinList]);
+
+  // Synchronize list with backend response
+  useEffect(() => {
+    let list: string[] = [];
+    if (gstinData?.is_found && gstinData.gst_number) {
+      const rawList = Array.isArray(gstinData.gst_number)
+        ? gstinData.gst_number
+        : typeof gstinData.gst_number === "string"
+        ? gstinData.gst_number.split(",").map((g: string) => g.trim()).filter(Boolean)
+        : [];
+      list = rawList
+        .map((g) => String(g || "").toUpperCase().trim())
+        .filter((g) => GSTIN_REGEX.test(g));
+    }
+
+    const safePropGstin = typeof gstin === "string" 
+      ? gstin 
+      : Array.isArray(gstin) 
+      ? gstin[0] 
+      : "";
+
+    setGstinList((prev) => {
+      const mergedList = Array.from(
+        new Set([
+          ...prev.map((g) => String(g || "").toUpperCase().trim()),
+          ...list,
+          ...(safePropGstin && GSTIN_REGEX.test(String(safePropGstin).toUpperCase().trim()) 
+            ? [String(safePropGstin).toUpperCase().trim()] 
+            : [])
+        ])
+      ).filter((g) => GSTIN_REGEX.test(g));
+
+      const isSame = prev.length === mergedList.length && prev.every((val, index) => val === mergedList[index]);
+      return isSame ? prev : mergedList;
+    });
+  }, [gstinData, gstin]);
+
+  // Set active GSTIN
+  useEffect(() => {
+    const safePropGstin = typeof gstin === "string" 
+      ? gstin 
+      : Array.isArray(gstin) 
+      ? gstin[0] 
+      : "";
+    if (safePropGstin) {
+      const normalized = String(safePropGstin).toUpperCase().trim();
+      if (GSTIN_REGEX.test(normalized)) {
+        setActiveGstin(normalized);
+      }
+    }
+  }, [gstin]);
+
+  const addNewGstinMutation = useMutation({
+    mutationFn: addNewGstin,
+    onSuccess: (res) => {
+      const updatedGstin = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
+      if (!updatedGstin || !GSTIN_REGEX.test(updatedGstin)) return;
+      toast.success("GSTIN added successfully.");
+      setIsModalOpen(false);
+      
+      setGstinList(prev => {
+        if (!prev.includes(updatedGstin)) {
+          return [...prev, updatedGstin];
+        }
+        return prev;
+      });
+      setActiveGstin(updatedGstin);
+      onGstinChange(updatedGstin);
+    },
+    onError: (error: any) => {
+      const msg = error.response?.data?.message || "Failed to add GSTIN";
+      toast.error(msg);
     }
   });
+
+  const handleModalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const gstinToSave = newGstin.toUpperCase().trim();
+
+    if (gstinToSave.length !== 15) {
+      toast.error("GSTIN must be exactly 15 characters long");
+      return;
+    }
+
+    if (!GSTIN_REGEX.test(gstinToSave)) {
+      toast.error("Invalid GSTIN format");
+      return;
+    }
+
+    addNewGstinMutation.mutate({ gstin: gstinToSave });
+  };
 
   const submitMutation = useMutation({
     mutationFn: submitGst,
     onSuccess: (res) => {
       toast.success("Analysis started successfully!");
-      onSuccessSubmit(res.data.gst_reference_id);
+      const refId = res.data?.gst_reference_id || (res as any).gst_reference_id;
+      onSuccessSubmit(refId);
     },
     onError: (error: any) => {
       const detail = error.response?.data?.detail;
@@ -42,13 +230,6 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
     }
   });
 
-  useEffect(() => {
-    if (gstin) {
-      infoMutation.mutate({ gstin });
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [gstin]);
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -59,140 +240,275 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
       return;
     }
 
-    submitMutation.mutate({ gstin, from_month: fromMonth, to_month: toMonth });
+    submitMutation.mutate({ gstin: activeGstin, from_month: fromMonth, to_month: toMonth });
   };
-
-  const businessData = infoMutation.data?.data;
-
-  if (infoMutation.isPending) {
-    return (
-      <div className="flex flex-col items-center justify-center p-12 bg-white rounded-lg shadow-sm border border-gray-100">
-        <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin mb-4" />
-        <p className="text-gray-600 font-medium animate-pulse">Fetching business details (this may take a few seconds)...</p>
-      </div>
-    );
-  }
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-100">
-      <div className="flex items-center mb-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Business Details</h2>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-xl font-bold text-slate-800">Business Details</h2>
+        <button
+          type="button"
+          onClick={() => {
+            setNewGstin("");
+            setIsModalOpen(true);
+          }}
+          className="px-4 py-2 text-sm font-semibold text-white bg-[#000000] hover:bg-[#000000] rounded-md transition-colors shadow-sm flex items-center gap-1.5"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          Add new
+        </button>
       </div>
 
-      {businessData ? (
-        <div className="space-y-6">
-          <div className="bg-gray-50 p-4 rounded-md grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="block text-gray-500 mb-1">Legal Name</span>
-              <strong className="text-gray-900">{businessData.legalNameOfBusiness}</strong>
-            </div>
-            <div>
-              <span className="block text-gray-500 mb-1">Trade Name</span>
-              <strong className="text-gray-900">{businessData.tradeName}</strong>
-            </div>
-            <div>
-              <span className="block text-gray-500 mb-1">Status</span>
-              <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${businessData.gstinStatus.toLowerCase() === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-                {businessData.gstinStatus}
-              </span>
-            </div>
-            <div>
-              <span className="block text-gray-500 mb-1">Taxpayer Type</span>
-              <strong className="text-gray-900">{businessData.taxpayerType}</strong>
-            </div>
-            <div>
-              <span className="block text-gray-500 mb-1">Date of Registration</span>
-              <strong className="text-gray-900">{businessData.dateOfRegistration}</strong>
-            </div>
-            <div>
-              <span className="block text-gray-500 mb-1">Constitution of Business</span>
-              <strong className="text-gray-900">{businessData.constitutionOfBusiness}</strong>
-            </div>
-          </div>
+      <div className="space-y-4 mb-6">
+        {gstinList.map((itemGstin) => {
+          const isSelected = itemGstin === activeGstin;
+          const data = businessDataMap[itemGstin];
+          const isLoading = loadingMap[itemGstin];
 
-          {businessData.gstinStatus.toLowerCase() !== 'active' ? (
-            <div className="bg-red-50 border-l-4 border-red-400 p-4">
-              <div className="flex">
-                <div className="ml-3">
-                  <p className="text-sm text-red-700">
-                    Your GSTIN status is not Active. You cannot proceed further.
-                  </p>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="border-t border-gray-100 pt-6">
-              <h3 className="text-lg font-medium text-gray-900 mb-2">Select Duration</h3>
-              <p className="text-gray-500 text-sm mb-4">
-                Specify the period you would like to run the analysis for.
-              </p>
-
-              <div className="grid grid-cols-2 gap-4 mb-6">
-                <div>
-                  <label htmlFor="fromMonth" className="block text-sm font-medium text-gray-700 mb-1">
-                    From Month
-                  </label>
-                  <input
-                    id="fromMonth"
-                    type="text"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000]"
-                    placeholder="MMYYYY"
-                    value={fromMonth}
-                    onChange={(e) => setFromMonth(e.target.value)}
-                    required
-                    maxLength={6}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="toMonth" className="block text-sm font-medium text-gray-700 mb-1">
-                    To Month
-                  </label>
-                  <input
-                    id="toMonth"
-                    type="text"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000]"
-                    placeholder="MMYYYY"
-                    value={toMonth}
-                    onChange={(e) => setToMonth(e.target.value)}
-                    required
-                    maxLength={6}
-                  />
-                </div>
-              </div>
-
-              {needsAuth ? (
-                <div className="space-y-4">
-                  <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-md">
-                    <p className="text-sm text-amber-700 font-medium">
-                      Authentication required. Please complete the OTP verification with the GST Portal to proceed.
-                    </p>
+          return (
+            <div
+              key={itemGstin}
+              className={`border-2 rounded-xl transition-all overflow-hidden ${
+                isSelected 
+                  ? "border-[#000000] shadow-sm bg-white" 
+                  : "border-slate-100 hover:border-slate-300 bg-slate-50/20 cursor-pointer"
+              }`}
+              onClick={() => {
+                if (!isSelected) {
+                  setActiveGstin(itemGstin);
+                  onGstinChange(itemGstin);
+                }
+              }}
+            >
+              {/* Card Header / Summary */}
+              <div className="p-4 flex items-center justify-between hover:bg-slate-50/40 transition-colors">
+                <div className="flex items-center gap-3">
+                  {/* Selector Circle Indicator */}
+                  <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${
+                    isSelected 
+                      ? "border-[#000000] bg-[#000000]" 
+                      : "border-slate-300 bg-white"
+                  }`}>
+                    {isSelected && (
+                      <div className="w-2 h-2 rounded-full bg-white" />
+                    )}
                   </div>
-                  <button
-                    type="button"
-                    onClick={() => onRequiresAuth(fromMonth, toMonth)}
-                    className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-3 px-6 rounded-md transition-colors flex justify-center items-center shadow-sm"
-                  >
-                    Authenticate with OTP
-                  </button>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold text-slate-800 tracking-wide uppercase">{itemGstin}</span>
+                      {isLoading && (
+                        <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#000000] animate-spin" />
+                      )}
+                    </div>
+                    {data && (
+                      <span className="text-xs text-slate-500 font-medium">{data.tradeName || data.legalNameOfBusiness}</span>
+                    )}
+                  </div>
                 </div>
-              ) : (
+
+                {data && data.gstinStatus && (
+                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold ${
+                    (data.gstinStatus || "").toLowerCase() === 'active' 
+                      ? 'bg-green-50 text-green-700' 
+                      : 'bg-red-50 text-red-700'
+                  }`}>
+                    {data.gstinStatus}
+                  </span>
+                )}
+              </div>
+
+              {/* Expanded details (only for selected card) */}
+              {isSelected && (
+                <div className="border-t border-slate-100 p-6 bg-white space-y-6" onClick={(e) => e.stopPropagation()}>
+                  {data ? (
+                    <>
+                      {/* Business Grid Card Details */}
+                      <div className="bg-slate-50/60 p-5 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 text-sm">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Legal Name</span>
+                          <strong className="text-[14px] font-bold text-slate-900">{data.legalNameOfBusiness}</strong>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Trade Name</span>
+                          <strong className="text-[14px] font-bold text-slate-900">{data.tradeName}</strong>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Status</span>
+                          <div className="mt-1">
+                            <span className={`inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold ${
+                              (data.gstinStatus || "").toLowerCase() === 'active' 
+                                ? 'bg-green-100 text-green-700' 
+                                : 'bg-red-100 text-red-700'
+                            }`}>
+                              {data.gstinStatus}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Taxpayer Type</span>
+                          <strong className="text-[14px] font-bold text-slate-900">{data.taxpayerType}</strong>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Date of Registration</span>
+                          <strong className="text-[14px] font-bold text-slate-900">{data.dateOfRegistration}</strong>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-xs font-medium text-slate-400 mb-1">Constitution of Business</span>
+                          <strong className="text-[14px] font-bold text-slate-900">{data.constitutionOfBusiness}</strong>
+                        </div>
+                      </div>
+
+                      {/* Select Duration Form */}
+                      {(data.gstinStatus || "").toLowerCase() !== 'active' ? (
+                        <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md">
+                          <p className="text-sm text-red-700">
+                            Your GSTIN status is not Active. You cannot proceed further.
+                          </p>
+                        </div>
+                      ) : (
+                        <form onSubmit={handleSubmit} className="border-t border-slate-100 pt-6">
+                          <h3 className="text-lg font-semibold text-slate-800 mb-1">Select Duration</h3>
+                          <p className="text-slate-400 text-sm mb-6">
+                            Specify the period you would like to run the analysis for.
+                          </p>
+
+                          <div className="grid grid-cols-2 gap-4 mb-6">
+                            <div>
+                              <label htmlFor="fromMonth" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                From Month
+                              </label>
+                              <input
+                                id="fromMonth"
+                                type="text"
+                                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#000000]/20 focus:border-[#000000] outline-none text-slate-800 placeholder-slate-300"
+                                placeholder="MMYYYY"
+                                value={fromMonth}
+                                onChange={(e) => setFromMonth(e.target.value)}
+                                required
+                                maxLength={6}
+                              />
+                            </div>
+                            <div>
+                              <label htmlFor="toMonth" className="block text-sm font-semibold text-slate-700 mb-1.5">
+                                To Month
+                              </label>
+                              <input
+                                id="toMonth"
+                                type="text"
+                                className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#000000]/20 focus:border-[#000000] outline-none text-slate-800 placeholder-slate-300"
+                                placeholder="MMYYYY"
+                                value={toMonth}
+                                onChange={(e) => setToMonth(e.target.value)}
+                                required
+                                maxLength={6}
+                              />
+                            </div>
+                          </div>
+
+                          {needsAuth ? (
+                            <div className="space-y-4">
+                              <div className="bg-amber-50 border-l-4 border-amber-400 p-4 rounded-md">
+                                <p className="text-sm text-amber-700 font-medium">
+                                  Authentication required. Please complete the OTP verification with the GST Portal to proceed.
+                                </p>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => onRequiresAuth(fromMonth, toMonth)}
+                                className="w-full bg-[#000000] hover:bg-[#000000] text-white font-medium py-3 px-6 rounded-md transition-colors flex justify-center items-center shadow-sm"
+                              >
+                                Authenticate with OTP
+                              </button>
+                            </div>
+                          ) : (
+                            <button
+                              type="submit"
+                              disabled={submitMutation.isPending}
+                              className="bg-[#000000] hover:bg-[#000000] text-white font-semibold py-2.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex justify-center items-center shadow-sm"
+                            >
+                              {submitMutation.isPending ? (
+                                <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+                              ) : null}
+                              {submitMutation.isPending ? "Starting Analysis..." : "Start Analysis"}
+                            </button>
+                          )}
+                        </form>
+                      )}
+                    </>
+                  ) : (
+                    <div className="flex justify-center py-4">
+                      {isLoading ? (
+                        <div className="flex items-center gap-2 text-slate-500">
+                          <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#000000] animate-spin" />
+                          <span>Fetching business details...</span>
+                        </div>
+                      ) : (
+                        <p className="text-sm text-slate-500">No details loaded. Click card to retry.</p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Add New GSTIN Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-lg shadow-xl border border-gray-100 max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Add New GSTIN</h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Enter the new Goods and Services Tax Identification Number (GSTIN) you would like to analyze.
+            </p>
+
+            <form onSubmit={handleModalSubmit} className="space-y-4">
+              <div>
+                <label htmlFor="newGstin" className="block text-sm font-medium text-gray-700 mb-1">
+                  GSTIN Number
+                </label>
+                <input
+                  id="newGstin"
+                  type="text"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000] uppercase"
+                  placeholder="e.g. 27AAAPL1234C1Z5"
+                  value={newGstin}
+                  onChange={(e) => {
+                    const clean = e.target.value.replace(/[^A-Z0-9]/gi, "").toUpperCase().slice(0, 15);
+                    setNewGstin(clean);
+                  }}
+                  required
+                  maxLength={15}
+                  autoFocus
+                />
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  disabled={addNewGstinMutation.isPending}
+                  className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-md transition-colors"
+                >
+                  Cancel
+                </button>
                 <button
                   type="submit"
-                  disabled={submitMutation.isPending}
-                  className="bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-6 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center shadow-sm"
+                  disabled={addNewGstinMutation.isPending}
+                  className="bg-[#000000] hover:bg-[#000000] text-white text-sm font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
                 >
-                  {submitMutation.isPending ? (
+                  {addNewGstinMutation.isPending ? (
                     <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
                   ) : null}
-                  {submitMutation.isPending ? "Starting Analysis..." : "Start Analysis"}
+                  {addNewGstinMutation.isPending ? "Saving..." : "Save GSTIN"}
                 </button>
-              )}
+              </div>
             </form>
-          )}
-        </div>
-      ) : (
-        <div className="text-center py-8 text-red-500">
-          Failed to load business details. Please try again.
+          </div>
         </div>
       )}
     </div>
