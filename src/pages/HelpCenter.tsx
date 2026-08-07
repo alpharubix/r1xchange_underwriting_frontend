@@ -25,7 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import apiClient from "@/lib/axios";
+import apiClient, { extractErrorMessage } from "@/lib/axios";
 
 interface Ticket {
   id: string;
@@ -126,6 +126,8 @@ export default function HelpCenter() {
         description: ticketDescribe,
         service: ticketService,
         priority: ticketPriority
+      }, {
+        skipErrorToast: true
       });
 
       const { message, data } = response.data;
@@ -159,7 +161,8 @@ export default function HelpCenter() {
       fetchTickets();
     } catch (error: any) {
       console.error(error);
-      toast.error(error.response?.data?.message || error.response?.data?.detail?.message || "Failed to submit ticket to support center");
+      const msg = extractErrorMessage(error) || "Failed to submit ticket to support center";
+      toast.error(msg);
     } finally {
       setIsSubmitting(false);
     }

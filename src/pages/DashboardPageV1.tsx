@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import apiClient from '@/lib/axios';
+import apiClient, { extractErrorMessage } from '@/lib/axios';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
@@ -146,6 +146,7 @@ export default function DashboardPage() {
     mutationFn: async (uploadData: FormData) => {
       const response = await apiClient.post('/bsa/upload', uploadData, {
         headers: { 'Content-Type': 'multipart/form-data' },
+        skipErrorToast: true,
       });
       return response.data as UploadResponse;
     },
@@ -155,7 +156,8 @@ export default function DashboardPage() {
       setModalStep('confirmation');
     },
     onError: (error: any) => {
-      toast.error(`${error.response?.data?.detail?.message}`);
+      const msg = extractErrorMessage(error) || 'Failed to upload bank statement';
+      toast.error(msg);
     },
   });
 
@@ -163,6 +165,8 @@ export default function DashboardPage() {
     mutationFn: async (upload_ref_id: string) => {
       const response = await apiClient.post('/bsa/upload_ref_id', {
         upload_ref_id,
+      }, {
+        skipErrorToast: true,
       });
       return response.data;
     },
@@ -171,7 +175,8 @@ export default function DashboardPage() {
       handleCloseModal();
     },
     onError: (error: any) => {
-      toast.error(`${error.response?.data?.detail?.message}`);
+      const msg = extractErrorMessage(error) || 'Failed to confirm statement';
+      toast.error(msg);
     },
   });
 

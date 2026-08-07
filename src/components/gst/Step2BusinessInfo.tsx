@@ -186,10 +186,7 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
       setActiveGstin(updatedGstin);
       onGstinChange(updatedGstin);
     },
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to add GSTIN";
-      toast.error(msg);
-    }
+
   });
 
   const handleModalSubmit = (e: React.FormEvent) => {
