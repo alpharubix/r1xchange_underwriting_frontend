@@ -18,9 +18,15 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
 
   useEffect(() => {
     if (gstinData?.is_found && gstinData.gst_number) {
-      setGstinInput(gstinData.gst_number);
-      if (allowAutoRoute) {
-        onNext(gstinData.gst_number);
+      const resolvedGstin = Array.isArray(gstinData.gst_number)
+        ? (gstinData.gst_number[0] || "")
+        : gstinData.gst_number;
+
+      if (resolvedGstin) {
+        setGstinInput(resolvedGstin);
+        if (allowAutoRoute) {
+          onNext(resolvedGstin);
+        }
       }
     }
   }, [gstinData, onNext, allowAutoRoute]);
