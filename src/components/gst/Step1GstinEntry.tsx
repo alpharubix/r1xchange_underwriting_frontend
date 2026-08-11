@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getGstin, updateGstin } from "@/api/gst";
 import { toast } from "sonner";
 
@@ -10,6 +10,7 @@ interface Step1Props {
 
 export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1Props) {
   const [gstinInput, setGstinInput] = useState("");
+  const queryClient = useQueryClient();
 
   const { data: gstinData, isLoading: isLoadingGstin } = useQuery({
     queryKey: ["gstin"],
@@ -34,7 +35,9 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
   const updateMutation = useMutation({
     mutationFn: updateGstin,
     onSuccess: (res) => {
-      onNext(res.data.gstin);
+      queryClient.invalidateQueries({ queryKey: ["gstin"] });
+      const resolved = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
+      onNext(resolved);
     },
     onError: (error: any) => {
       const msg = error.response?.data?.message || "Failed to update GSTIN";
