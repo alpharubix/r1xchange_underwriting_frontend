@@ -76,23 +76,18 @@ export default function HelpCenter() {
           createdAt: t.created_at,
         }));
         setTickets(mappedTickets);
-        localStorage.setItem("5pointcredit_tickets", JSON.stringify(mappedTickets));
       } else {
         setTickets([]);
-        localStorage.setItem("5pointcredit_tickets", JSON.stringify([]));
       }
     } catch (e) {
-      console.error("Failed to fetch tickets from backend, loading from localStorage fallback", e);
-      const savedTickets = localStorage.getItem("5pointcredit_tickets");
-      if (savedTickets) {
-        try {
-          setTickets(JSON.parse(savedTickets));
-        } catch (parseError) {
-          console.error("Failed to parse saved tickets", parseError);
-        }
-      }
+      console.error("Failed to fetch tickets from backend", e);
+      setTickets([]);
     }
   };
+
+  useEffect(() => {
+    localStorage.removeItem("5pointcredit_tickets");
+  }, []);
 
   useEffect(() => {
     if (activeTab === "home") {
@@ -103,7 +98,6 @@ export default function HelpCenter() {
   // Save tickets helper
   const saveTickets = (updatedTickets: Ticket[]) => {
     setTickets(updatedTickets);
-    localStorage.setItem("5pointcredit_tickets", JSON.stringify(updatedTickets));
   };
 
   // Submit Ticket Handler
@@ -142,7 +136,7 @@ export default function HelpCenter() {
         priority: ticketPriority,
         describe: ticketDescribe,
         status: status,
-        createdAt: new Date().toLocaleString(),
+        createdAt: data?.created_at || new Date().toISOString(),
       };
 
       const updatedTickets = [newTicket, ...tickets];
