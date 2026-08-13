@@ -25,7 +25,7 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
       const rawData = query.state.data;
       const statusList = rawData?.data?.gst_reference_id_status || (rawData as any)?.gst_reference_id_status;
       const currentStatus = statusList?.[0]?.gst_reference_id_status;
-      
+
       if (currentStatus === "COMPLETED" || currentStatus === "FAILED") {
         return false; // stop polling
       }
@@ -48,7 +48,7 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-sm border border-gray-100 text-center">
-      
+
       {currentStatus === "COMPLETED" ? (
         <div className="animate-in zoom-in duration-500">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">

@@ -38,6 +38,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     queryClient.clear();
     queryClient.setQueryData(["user", "me"], null);
     localStorage.removeItem("gst_reference_id");
+    localStorage.removeItem("gstin_list");
+    localStorage.removeItem("5pointcredit_tickets");
   }, [queryClient]);
 
   // Listen for 401 events dispatched by the axios interceptor

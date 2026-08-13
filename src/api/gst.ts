@@ -19,7 +19,7 @@ export interface SaveGstinResponse {
 }
 
 export interface BasicInfoPayload {
-  gstin: string[];
+  gstin: string | string[];
 }
 
 export interface BasicInfoResponse {
@@ -32,7 +32,7 @@ export interface BasicInfoResponse {
     constitutionOfBusiness: string;
     natureOfBusiness: string[];
     dateOfRegistration: string;
-  };
+  }[];
 }
 
 export interface GenerateOtpPayload {
@@ -89,11 +89,11 @@ export interface GstStatusResponse {
 }
 
 export interface GstHistoryItem {
+  gstin: string;
   reference_id: string;
   gst_reference_id_status: string;
   from_month: string;
   to_month: string;
-  gstin?: string;
 }
 
 export interface GstHistoryResponse {
@@ -126,7 +126,11 @@ export const addNewGstin = async (data: SaveGstinPayload): Promise<SaveGstinResp
 };
 
 export const fetchBasicInfo = async (data: BasicInfoPayload): Promise<BasicInfoResponse> => {
-  const response = await apiClient.post("/gst/gstin-basic-info", data, {
+  const payload = {
+    ...data,
+    gstin: Array.isArray(data.gstin) ? data.gstin : [data.gstin],
+  };
+  const response = await apiClient.post("/gst/gstin-basic-info", payload, {
     errorMessage: "Could not fetch GST basic info. Please verify your GSTIN.",
   });
   return response.data;

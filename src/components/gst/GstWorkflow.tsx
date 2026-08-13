@@ -55,7 +55,7 @@ export default function GstWorkflow() {
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
-      
+
       {/* Workflow Progress Bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -63,18 +63,16 @@ export default function GstWorkflow() {
             <div key={step} className="flex flex-col items-center flex-1">
               <div className="flex items-center w-full">
                 <div
-                  className={`w-full h-1 ${
-                    step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#000000]" : "bg-gray-200"
-                  }`}
+                  className={`w-full h-1 ${step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#000000]" : "bg-gray-200"
+                    }`}
                 />
                 <div
-                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${
-                    currentStep === step
-                      ? "border-[#000000] bg-[#000000] text-white shadow-md"
-                      : currentStep > step
+                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step
+                    ? "border-[#000000] bg-[#000000] text-white shadow-md"
+                    : currentStep > step
                       ? "border-[#000000] bg-[#000000] text-white"
                       : "border-gray-300 bg-white text-gray-500"
-                  } font-semibold text-sm transition-colors duration-300`}
+                    } font-semibold text-sm transition-colors duration-300`}
                 >
                   {currentStep > step ? (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -85,9 +83,8 @@ export default function GstWorkflow() {
                   )}
                 </div>
                 <div
-                  className={`w-full h-1 ${
-                    step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#000000]" : "bg-gray-200"
-                  }`}
+                  className={`w-full h-1 ${step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#000000]" : "bg-gray-200"
+                    }`}
                 />
               </div>
               <span className={`text-xs mt-2 font-medium ${currentStep >= step ? "text-[#000000]" : "text-gray-400"}`}>
@@ -105,7 +102,7 @@ export default function GstWorkflow() {
         {currentStep === 1 && (
           <Step1GstinEntry onNext={handleStep1Next} />
         )}
-        
+
         {currentStep === 2 && (
           <Step2BusinessInfo
             gstin={gstin}

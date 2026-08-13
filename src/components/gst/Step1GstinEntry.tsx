@@ -5,10 +5,9 @@ import { toast } from "sonner";
 
 interface Step1Props {
   onNext: (gstin: string) => void;
-  allowAutoRoute?: boolean;
 }
 
-export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1Props) {
+export default function Step1GstinEntry({ onNext }: Step1Props) {
   const [gstinInput, setGstinInput] = useState("");
   const queryClient = useQueryClient();
 
@@ -19,18 +18,20 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
 
   useEffect(() => {
     if (gstinData?.is_found && gstinData.gst_number) {
-      const resolvedGstin = Array.isArray(gstinData.gst_number)
-        ? (gstinData.gst_number[0] || "")
-        : gstinData.gst_number;
+      const rawGst = gstinData.gst_number;
+      const gstinVal = Array.isArray(rawGst)
+        ? rawGst[0]
+        : typeof rawGst === "string"
+        ? rawGst.split(",")[0]
+        : "";
 
-      if (resolvedGstin) {
-        setGstinInput(resolvedGstin);
-        if (allowAutoRoute) {
-          onNext(resolvedGstin);
-        }
+      const cleanGstin = gstinVal?.trim() || "";
+      if (cleanGstin) {
+        setGstinInput(cleanGstin);
+        onNext(cleanGstin);
       }
     }
-  }, [gstinData, onNext, allowAutoRoute]);
+  }, [gstinData, onNext]);
 
   const updateMutation = useMutation({
     mutationFn: updateGstin,
@@ -39,17 +40,18 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
       const resolved = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
       onNext(resolved);
     },
-    onError: (error: any) => {
-      const msg = error.response?.data?.message || "Failed to update GSTIN";
-      toast.error(msg);
-    },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const gstin = gstinInput.toUpperCase();
+    const gstin = gstinInput.toUpperCase().trim();
     const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
     
+    if (gstin.length !== 15) {
+      toast.error("GSTIN must be exactly 15 characters long");
+      return;
+    }
+
     if (!gstRegex.test(gstin)) {
       toast.error("Invalid GSTIN format");
       return;
@@ -61,7 +63,7 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
   if (isLoadingGstin) {
     return (
       <div className="flex justify-center p-8">
-        <span className="h-8 w-8 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+        <span className="h-8 w-8 rounded-full border-4 border-[#000080]/20 border-t-[#000080] animate-spin" />
       </div>
     );
   }
@@ -81,10 +83,13 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
           <input
             id="gstin"
             type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000] uppercase"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000080] focus:border-[#000080] uppercase"
             placeholder="e.g. 27AAAPL1234C1Z5"
             value={gstinInput}
-            onChange={(e) => setGstinInput(e.target.value.toUpperCase())}
+            onChange={(e) => {
+              const clean = e.target.value.replace(/[^A-Z0-9]/gi, "").toUpperCase().slice(0, 15);
+              setGstinInput(clean);
+            }}
             required
             maxLength={15}
           />
@@ -93,7 +98,7 @@ export default function Step1GstinEntry({ onNext, allowAutoRoute = true }: Step1
         <button
           type="submit"
           disabled={updateMutation.isPending}
-          className="w-full bg-[#000000] hover:bg-[#000000]/60 hover:border  text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          className="w-full bg-[#000080] hover:bg-[#000060] text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
         >
           {updateMutation.isPending ? (
             <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
