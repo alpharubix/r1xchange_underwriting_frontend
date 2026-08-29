@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+
+import BsaUploadModal from '@/components/BsaUploadModal';
+import ItrUploadModal from '@/components/ItrUploadModal';
+import GstUploadModal from '@/components/GstUploadModal';
+import CibilUploadModal from '@/components/CibilUploadModal';
 import {
   Users,
   Eye,
@@ -38,6 +43,10 @@ interface ServiceReportProps {
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
   const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil">("bsa");
+  const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
+  const [isItrModalOpen, setIsItrModalOpen] = useState(false);
+  const [isGstModalOpen, setIsGstModalOpen] = useState(false);
+  const [isCibilModalOpen, setIsCibilModalOpen] = useState(false);
 
   // Fetch BSA reports using React Query and map keys defensively
   const { data: bsaReports = [], isLoading: isBsaLoading } = useQuery({
@@ -171,6 +180,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">BSA Reports</h3>
               <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
             </div>
+            <Button 
+              onClick={() => setIsBsaModalOpen(true)}
+              className="bg-[#000000] hover:bg-[#000060] text-white"
+            >
+              + Create New BSA Report
+            </Button>
           </div>
 
           <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -245,6 +260,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">GST Analysis</h3>
               <p className="text-xs text-slate-500 mt-0.5">Goods and Services Tax Reports & Filings</p>
             </div>
+            <Button 
+              onClick={() => setIsGstModalOpen(true)}
+              className="bg-[#000000] hover:bg-[#000060] text-white"
+            >
+              + Create New GST Report
+            </Button>
           </div>
 
           <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -327,6 +348,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">ITR Analysis</h3>
               <p className="text-xs text-slate-500 mt-0.5">Income Tax Return Statements</p>
             </div>
+            <Button 
+              onClick={() => setIsItrModalOpen(true)}
+              className="bg-[#000000] hover:bg-[#000060] text-white"
+            >
+              + Create New ITR Report
+            </Button>
           </div>
 
           <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -405,6 +432,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">CIBIL Report</h3>
               <p className="text-xs text-slate-500 mt-0.5">Credit Bureau Score & Report Details</p>
             </div>
+            <Button 
+              onClick={() => setIsCibilModalOpen(true)}
+              className="bg-[#000000] hover:bg-[#000060] text-white"
+            >
+              + Create New CIBIL Report
+            </Button>
           </div>
 
           <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -470,6 +503,27 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           </Card>
         </div>
       )}
+
+      <BsaUploadModal 
+        isOpen={isBsaModalOpen} 
+        onClose={() => setIsBsaModalOpen(false)} 
+        custId={selectedCustomer.id} 
+      />
+      <ItrUploadModal 
+        isOpen={isItrModalOpen} 
+        onClose={() => setIsItrModalOpen(false)} 
+        custId={selectedCustomer.id} 
+      />
+      <GstUploadModal 
+        isOpen={isGstModalOpen} 
+        onClose={() => setIsGstModalOpen(false)} 
+        custId={selectedCustomer.id} 
+      />
+      <CibilUploadModal 
+        isOpen={isCibilModalOpen} 
+        onClose={() => setIsCibilModalOpen(false)} 
+        custId={selectedCustomer.id} 
+      />
     </div>
   );
 }

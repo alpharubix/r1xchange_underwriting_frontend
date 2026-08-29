@@ -6,6 +6,7 @@ type ViewReportProps = {
   reference_id?: string;
   onBack?: () => void;
   onStartNew?: () => void;
+  custId?: string;
 };
 
 export default function ViewReport({

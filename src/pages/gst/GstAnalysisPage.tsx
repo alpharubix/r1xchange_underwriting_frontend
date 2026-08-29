@@ -1,8 +1,10 @@
 import GstWorkflow from "@/components/gst/GstWorkflow";
-import { useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 export default function GstAnalysisPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const custId = searchParams.get("cust_id");
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -11,6 +13,7 @@ export default function GstAnalysisPage() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900">GST Analysis</h1>
             <p className="text-gray-500 mt-1">Authenticate and process your GST data</p>
+            {custId && <p className="text-[#7754f8] mt-1 font-medium text-sm">Target Customer ID: {custId}</p>}
           </div>
           <button
             onClick={() => navigate("/gst/history")}
@@ -23,7 +26,7 @@ export default function GstAnalysisPage() {
           </button>
         </div>
 
-        <GstWorkflow />
+        <GstWorkflow custId={custId || undefined} />
       </div>
     </div>
   );

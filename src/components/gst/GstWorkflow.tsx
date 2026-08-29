@@ -4,7 +4,7 @@ import Step2BusinessInfo from "./Step2BusinessInfo";
 import Step3OtpValidation from "./Step3OtpValidation";
 import Step4Processing from "./Step4Processing";
 
-export default function GstWorkflow() {
+export default function GstWorkflow({ custId, onComplete }: { custId?: string, onComplete?: () => void }) {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [gstin, setGstin] = useState<string>("");
   const [gstReferenceId, setGstReferenceId] = useState<string>("");
@@ -100,7 +100,7 @@ export default function GstWorkflow() {
 
       <div className="mt-8">
         {currentStep === 1 && (
-          <Step1GstinEntry onNext={handleStep1Next} />
+          <Step1GstinEntry onNext={handleStep1Next} custId={custId} />
         )}
 
         {currentStep === 2 && (
@@ -110,6 +110,7 @@ export default function GstWorkflow() {
             onRequiresAuth={handleStep2RequiresAuth}
             onBack={() => setCurrentStep(1)}
             onGstinChange={handleGstinChange}
+            custId={custId}
           />
         )}
 
@@ -120,6 +121,7 @@ export default function GstWorkflow() {
             toMonth={toMonth}
             onNext={handleStep3Next}
             onBack={() => setCurrentStep(2)}
+            custId={custId}
           />
         )}
 
@@ -127,6 +129,8 @@ export default function GstWorkflow() {
           <Step4Processing
             gstReferenceId={gstReferenceId}
             onRetry={handleRetry}
+            custId={custId}
+            onComplete={onComplete}
           />
         )}
       </div>

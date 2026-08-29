@@ -9,16 +9,17 @@ interface Step3Props {
   toMonth: string;
   onNext: (gstReferenceId: string) => void;
   onBack: () => void;
+  custId?: string;
 }
 
-export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, onBack }: Step3Props) {
+export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, onBack, custId }: Step3Props) {
   const [userName, setUserName] = useState("");
   const [otp, setOtp] = useState("");
   const [otpReferenceId, setOtpReferenceId] = useState("");
   const [isValidated, setIsValidated] = useState(false);
 
   const otpMutation = useMutation({
-    mutationFn: generateOtp,
+    mutationFn: (data: Parameters<typeof generateOtp>[0]) => generateOtp(data, custId),
     onSuccess: (res) => {
       toast.success("OTP sent successfully");
       const refId = res.data?.otp_reference_id || (res as any).otp_reference_id;
@@ -31,7 +32,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
   });
 
   const validateMutation = useMutation({
-    mutationFn: validateOtp,
+    mutationFn: (data: Parameters<typeof validateOtp>[0]) => validateOtp(data, custId),
     onSuccess: () => {
       setIsValidated(true);
       toast.success("OTP Verified Successfully");
@@ -52,7 +53,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
   });
 
   const submitMutation = useMutation({
-    mutationFn: submitGst,
+    mutationFn: (data: Parameters<typeof submitGst>[0]) => submitGst(data, custId),
     onSuccess: (res) => {
       const refId = res.data?.gst_reference_id || (res as any).gst_reference_id;
       onNext(refId);

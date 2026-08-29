@@ -1,13 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGstHistory } from '@/api/gst';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function GstHistoryPage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const custId = searchParams.get('cust_id') || undefined;
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['gstHistory'],
-    queryFn: getGstHistory,
+    queryKey: ['gstHistory', custId],
+    queryFn: () => getGstHistory(custId),
     retry: false,
   });
 
@@ -122,7 +124,7 @@ export default function GstHistoryPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {historyList.map((item) => (
+                {historyList.map((item: any) => (
                   <tr key={item.reference_id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {item.gstin || 'N/A'}

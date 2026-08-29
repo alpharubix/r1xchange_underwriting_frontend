@@ -5,15 +5,16 @@ import { toast } from "sonner";
 
 interface Step1Props {
   onNext: (gstin: string) => void;
+  custId?: string;
 }
 
-export default function Step1GstinEntry({ onNext }: Step1Props) {
+export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   const [gstinInput, setGstinInput] = useState("");
   const queryClient = useQueryClient();
 
   const { data: gstinData, isLoading: isLoadingGstin } = useQuery({
-    queryKey: ["gstin"],
-    queryFn: getGstin,
+    queryKey: ["gstin", custId],
+    queryFn: () => getGstin(custId),
   });
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export default function Step1GstinEntry({ onNext }: Step1Props) {
   }, [gstinData, onNext]);
 
   const updateMutation = useMutation({
-    mutationFn: updateGstin,
+    mutationFn: (data: Parameters<typeof updateGstin>[0]) => updateGstin(data, custId),
     onSuccess: (res) => {
       queryClient.invalidateQueries({ queryKey: ["gstin"] });
       const resolved = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
