@@ -119,7 +119,6 @@ export const updateGstin = async (data: SaveGstinPayload): Promise<SaveGstinResp
 
 export const addNewGstin = async (data: SaveGstinPayload): Promise<SaveGstinResponse> => {
   const response = await apiClient.post("/gst/gstin/add-new", data, {
-    successMessage: "GSTIN added successfully.",
     errorMessage: "Failed to add GSTIN. Please try again.",
   });
   return response.data;
@@ -138,7 +137,6 @@ export const fetchBasicInfo = async (data: BasicInfoPayload): Promise<BasicInfoR
 
 export const generateOtp = async (data: GenerateOtpPayload): Promise<GenerateOtpResponse> => {
   const response = await apiClient.post("/gst/generate-otp", data, {
-    successMessage: "OTP sent to your registered mobile number.",
     errorMessage: "Failed to generate OTP. Please try again.",
   });
   return response.data;
@@ -146,7 +144,6 @@ export const generateOtp = async (data: GenerateOtpPayload): Promise<GenerateOtp
 
 export const validateOtp = async (data: ValidateOtpPayload): Promise<ValidateOtpResponse> => {
   const response = await apiClient.post("/gst/validate-otp", data, {
-    successMessage: "OTP verified successfully.",
     errorMessage: "Invalid or expired OTP. Please try again.",
   });
   return response.data;
@@ -154,7 +151,6 @@ export const validateOtp = async (data: ValidateOtpPayload): Promise<ValidateOtp
 
 export const submitGst = async (data: SubmitGstPayload): Promise<SubmitGstResponse> => {
   const response = await apiClient.post("/gst/post-gstin", data, {
-    successMessage: "GST data submitted successfully.",
     errorMessage: "GST submission failed. Please try again.",
   });
   return response.data;

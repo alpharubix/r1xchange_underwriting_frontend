@@ -7,7 +7,7 @@ export default function HomeIntro() {
   const [companyName, setCompanyName] = useState("");
 
   useEffect(() => {
-    
+
     const hasShown = sessionStorage.getItem("home_introo");
     setCompanyName(sessionStorage.getItem("company_name") || "");
 
@@ -51,10 +51,10 @@ export default function HomeIntro() {
               duration: 0.5,
               ease: [0.22, 0.5, 0.36, 0.5],
             }}
-            
+
           >
-           
-           <img
+
+            <img
               src={r1xchangeLogoWhiteWebView}
               alt="R1Xchange"
               className="w-[420px] md:w-[550px] "
@@ -76,7 +76,7 @@ export default function HomeIntro() {
                   Welcome to <span className="text-white">R1Xchange</span>
                 </p>
               )
-          }
+            }
           </motion.div>
         </motion.div>
       )}
