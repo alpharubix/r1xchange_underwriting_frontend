@@ -4,6 +4,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Eye, EyeOff, Plus, X, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import apiClient from "@/lib/axios";
@@ -165,16 +172,19 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
           {/* Status */}
           <div className="space-y-1.5">
             <Label htmlFor="filter-status" className="text-xs font-semibold text-slate-600">Status</Label>
-            <select
-              id="filter-status"
-              value={filterStatus}
-              onChange={(e) => setFilterStatus(e.target.value)}
-              className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:border-[#1D1E2C] focus:ring-[#1D1E2C] focus:outline-none cursor-pointer"
+            <Select
+              value={filterStatus || "all"}
+              onValueChange={(val) => setFilterStatus(val === "all" ? "" : val)}
             >
-              <option value="">All Statuses</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </select>
+              <SelectTrigger className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#1D1E2C] outline-none shadow-none">
+                <SelectValue placeholder="All Statuses" />
+              </SelectTrigger>
+              <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
+                <SelectItem value="all" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">All Statuses</SelectItem>
+                <SelectItem value="active" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Active</SelectItem>
+                <SelectItem value="inactive" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Created By */}

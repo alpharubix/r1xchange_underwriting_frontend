@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
-import { getUserBsaReports, getUserGstReports , getUserItrReports, getUserCibilReports } from '@/api/user';
+import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
 
 
 interface Customer {
@@ -41,6 +41,38 @@ interface ServiceReportProps {
   onBack: () => void;
 }
 
+const formatDateTime = (dateString: string) => {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+
+  const formattedDate = date.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+
+  const formattedTime = date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  return `${formattedDate}, ${formattedTime}`;
+};
+
+const formatDateOnly = (dateString: string) => {
+  if (!dateString) return "-";
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return dateString;
+  
+  return date.toLocaleDateString("en-US", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
   const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
@@ -59,7 +91,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         bsaFromDate: item.bsa_from_date || item.bsaFromDate || item.from_date || '',
         bsaToDate: item.bsa_to_date || item.bsaToDate || item.to_date || '',
         tenure: item.tenure || '',
-        generatedOn: item.created_at || item.generatedOn || item.generated_on || item.created_on || ''
+        generatedOn: formatDateTime(item.created_at || item.generatedOn || item.generated_on || item.created_on || '')
       }));
     },
     enabled: !!selectedCustomer?.id && reportsSubTab === "bsa",
@@ -76,7 +108,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         gstn: item.gstin || item.gst_number || item.gstn || item.gst_no || selectedCustomer.gst_no || '',
         gstFromDate: item.gst_from_date || item.gstFromDate || item.from_date || item.from_month || '',
         gstToDate: item.gst_to_date || item.gstToDate || item.to_date || item.to_month || '',
-        generatedOn: item.created_at || item.generatedOn || item.generated_on || item.created_on || '',
+        generatedOn: formatDateTime(item.created_at || item.generatedOn || item.generated_on || item.created_on || ''),
         status: item.status || item.report_status || 'Active',
         completed: item.completed !== undefined ? String(item.completed) : 'Yes'
       }));
@@ -94,7 +126,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         reportId: item.report_id || item.reportId || item.reference_id || item.itr_reference_id || '',
         itrFromDate: item.itr_from_date || item.itrFromDate || item.from_date || '',
         itrToDate: item.itr_to_date || item.itrToDate || item.to_date || '',
-        generatedOn: item.created_at || item.generatedOn || item.generated_on || item.created_on || '',
+        generatedOn: formatDateTime(item.created_at || item.generatedOn || item.generated_on || item.created_on || ''),
         status: item.status || item.report_status || 'Active'
       }));
     },
@@ -111,7 +143,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         reportId: item.report_id || item.reportId || item.reference_id || item.cibil_reference_id || '',
         cibilFromDate: item.cibil_from_date || item.cibilFromDate || item.from_date || '',
         cibilToDate: item.cibil_to_date || item.cibilToDate || item.to_date || '',
-        generatedOn: item.created_at || item.generatedOn || item.generated_on || item.created_on || '',
+        generatedOn: formatDateTime(item.created_at || item.generatedOn || item.generated_on || item.created_on || ''),
         status: item.status || item.report_status || 'Active'
       }));
     },
@@ -141,7 +173,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         <div>
           <h2 className="text-xl font-bold text-slate-900">{selectedCustomer.name}</h2>
           <p className="text-xs text-slate-400 mt-1 font-semibold">
-            ID: {selectedCustomer.id} • {selectedCustomer.phone}
+            ID : {selectedCustomer.id} <span className="px-2 text-[#000000]/60">|</span> Phone : {selectedCustomer.phone}
           </p>
         </div>
       </div>
@@ -180,7 +212,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">BSA Reports</h3>
               <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
             </div>
-            <Button 
+            <Button
               onClick={() => setIsBsaModalOpen(true)}
               className="bg-[#000000] hover:bg-[#000060] text-white"
             >
@@ -225,10 +257,10 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                       bsaReports.map((report) => (
                         <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                           <td className="py-4 px-4 text-slate-500">{report.ReportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{report.bsaFromDate}</td>
-                          <td className="py-4 px-4 text-slate-600">{report.bsaToDate}</td>
+                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateOnly(report.bsaFromDate)}</td>
+                          <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.bsaToDate)}</td>
                           <td className="py-4 px-4 text-slate-500">{report.tenure}</td>
-                          <td className="py-4 px-4 text-slate-800">{report.generatedOn}</td>
+                          <td className="py-4 px-4 text-slate-800">{formatDateTime(report.generatedOn)}</td>
                           <td className="py-4 px-4 text-center">
                             <div className="flex items-center justify-center gap-2">
                               <button
@@ -260,7 +292,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">GST Analysis</h3>
               <p className="text-xs text-slate-500 mt-0.5">Goods and Services Tax Reports & Filings</p>
             </div>
-            <Button 
+            <Button
               onClick={() => setIsGstModalOpen(true)}
               className="bg-[#000000] hover:bg-[#000060] text-white"
             >
@@ -308,9 +340,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                           <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
                           <td className="py-4 px-4 font-bold text-slate-800">{report.gstn}</td>
-                          <td className="py-4 px-4 text-slate-600">{report.gstFromDate}</td>
-                          <td className="py-4 px-4 text-slate-800">{report.gstToDate}</td>
-                          <td className="py-4 px-4 text-slate-600">{report.generatedOn}</td>
+                          <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.gstFromDate)}</td>
+                          <td className="py-4 px-4 text-slate-800">{formatDateOnly(report.gstToDate)}</td>
+                          <td className="py-4 px-4 text-slate-600">{formatDateTime(report.generatedOn)}</td>
                           <td className="py-4 px-4">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
                               {report.status}
@@ -348,7 +380,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">ITR Analysis</h3>
               <p className="text-xs text-slate-500 mt-0.5">Income Tax Return Statements</p>
             </div>
-            <Button 
+            <Button
               onClick={() => setIsItrModalOpen(true)}
               className="bg-[#000000] hover:bg-[#000060] text-white"
             >
@@ -392,14 +424,14 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                       itrReports.map((report) => (
                         <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                           <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{report.generatedOn}</td>
+                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateTime(report.generatedOn)}</td>
                           <td className="py-4 px-4">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
                               {report.status}
                             </span>
                           </td>
                           <td className="py-4 px-4 text-slate-600">
-                            {report.itrFromDate && report.itrToDate ? `${report.itrFromDate} - ${report.itrToDate}` : 'N/A'}
+                            {report.itrFromDate && report.itrToDate ? `${formatDateOnly(report.itrFromDate)} - ${formatDateOnly(report.itrToDate)}` : 'N/A'}
                           </td>
                           <td className="py-4 px-4 text-center">
                             <div className="flex items-center justify-center gap-2">
@@ -432,7 +464,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <h3 className="text-lg font-bold text-slate-900">CIBIL Report</h3>
               <p className="text-xs text-slate-500 mt-0.5">Credit Bureau Score & Report Details</p>
             </div>
-            <Button 
+            <Button
               onClick={() => setIsCibilModalOpen(true)}
               className="bg-[#000000] hover:bg-[#000060] text-white"
             >
@@ -475,7 +507,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                       cibilReports.map((report) => (
                         <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                           <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{report.generatedOn}</td>
+                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateTime(report.generatedOn)}</td>
                           <td className="py-4 px-4">
                             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
                               {report.status}
@@ -504,25 +536,25 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         </div>
       )}
 
-      <BsaUploadModal 
-        isOpen={isBsaModalOpen} 
-        onClose={() => setIsBsaModalOpen(false)} 
-        custId={selectedCustomer.id} 
+      <BsaUploadModal
+        isOpen={isBsaModalOpen}
+        onClose={() => setIsBsaModalOpen(false)}
+        custId={selectedCustomer.id}
       />
-      <ItrUploadModal 
-        isOpen={isItrModalOpen} 
-        onClose={() => setIsItrModalOpen(false)} 
-        custId={selectedCustomer.id} 
+      <ItrUploadModal
+        isOpen={isItrModalOpen}
+        onClose={() => setIsItrModalOpen(false)}
+        custId={selectedCustomer.id}
       />
-      <GstUploadModal 
-        isOpen={isGstModalOpen} 
-        onClose={() => setIsGstModalOpen(false)} 
-        custId={selectedCustomer.id} 
+      <GstUploadModal
+        isOpen={isGstModalOpen}
+        onClose={() => setIsGstModalOpen(false)}
+        custId={selectedCustomer.id}
       />
-      <CibilUploadModal 
-        isOpen={isCibilModalOpen} 
-        onClose={() => setIsCibilModalOpen(false)} 
-        custId={selectedCustomer.id} 
+      <CibilUploadModal
+        isOpen={isCibilModalOpen}
+        onClose={() => setIsCibilModalOpen(false)}
+        custId={selectedCustomer.id}
       />
     </div>
   );

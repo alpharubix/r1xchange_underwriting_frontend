@@ -48,7 +48,7 @@ export default function GstUploadModal({ isOpen, onClose, custId }: GstUploadMod
               GST Analysis
             </h2>
             <p className="text-gray-500 mt-1">Authenticate and process your GST data</p>
-            {custId && <p className="text-[#7754f8] mt-1 font-medium text-sm">Target Customer ID: {custId}</p>}
+            {custId && <p className="text-gray-500 mt-1 font-medium text-sm">Target Customer ID: <span className="text-[#7754f8]">{custId}</span></p>}
           </div>
 
           <div className="p-6 pt-0">

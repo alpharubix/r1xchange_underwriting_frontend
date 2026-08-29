@@ -20,6 +20,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAssociatedAnchorsList, getAnchorUsers } from '@/api/user';
 import apiClient from '@/lib/axios';
@@ -63,7 +70,7 @@ export default function AnchorCustomerPage() {
   const [filterCompanyName, setFilterCompanyName] = useState("");
   const [filterGSTNo, setFilterGSTNo] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  
+
 
 
   // Sidebar and active tab states
@@ -109,7 +116,7 @@ export default function AnchorCustomerPage() {
       setAnchorsList([]);
     }
   }, [fetchedAnchors, isSuperAnchor]);
-  
+
 
   const queryParam = isSuperAnchor
     ? (selectedAnchorFilter ?? undefined)
@@ -216,7 +223,7 @@ export default function AnchorCustomerPage() {
       queryClient.invalidateQueries({ queryKey: ["anchor", "users-list"] });
       setIsNewCustomerModalOpen(false);
       setNewCustomerForm({
-        
+
         name: '',
         phone: '',
         company_name: '',
@@ -375,28 +382,34 @@ export default function AnchorCustomerPage() {
       {/* ─── MAIN CONTENT AREA ─── */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#F0F1F5]">
         {/* Top Header Block */}
-        <header className="w-full bg-white border-b border-[#F0F1F5] h-16 shrink-0 flex items-center justify-between px-8 z-10 shadow-[0_1px_2px_rgba(20,20,30,0.04)]">
-          <div>
-            <span className="font-['Space_Grotesk'] text-lg font-bold text-[#1D1E2C] flex items-center gap-2">
-              R1<span className="text-[#FF6B4A]">X</span>change
-              <span className="text-[10px] font-bold text-[#FF6B4A] bg-[#FFF0EC] px-2.5 py-0.5 rounded-md uppercase ml-2 tracking-wider flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-[#FF6B4A]" />
-                {isSuperAnchor ? "Super-Anchor View" : "Anchor View"}
+        <header className="mx-6 mt-6 mb-2 bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[24px] h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-[0_8px_32px_rgba(31,38,135,0.07)] transition-all">
+          <div className="flex items-center gap-4">
+            <span className="font-['Space_Grotesk'] text-2xl font-black text-slate-900 tracking-tighter flex items-center">
+              R1
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#FF8C6A] mx-0.5">X</span>
+              change
+            </span>
+            <div className="h-6 w-[1px] bg-slate-300/50 mx-2"></div>
+            <span className="text-[10px] font-extrabold text-[#FF6B4A] bg-white/50 backdrop-blur-sm border border-white/60 px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-2 shadow-sm">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF6B4A] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF6B4A]"></span>
               </span>
+              {isSuperAnchor ? "Super-Anchor View" : "Anchor View"}
             </span>
           </div>
 
           <div className="flex items-center gap-6">
             {/* Profile Menu */}
-            <div className="flex items-center gap-3">
-              <div className="h-9 w-9 rounded-xl bg-[#FFF0EC] text-[#FF6B4A] flex items-center justify-center font-black text-sm shrink-0">
+            <div className="flex items-center gap-3 bg-white/50 hover:bg-white/80 p-1.5 pr-4 rounded-full cursor-pointer transition-all border border-white/60 shadow-sm hover:shadow">
+              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8C6A] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-inner">
                 {user?.anchor_name ? String(user.anchor_name).charAt(0).toUpperCase() : (user?.customer_name ? String(user.customer_name).charAt(0).toUpperCase() : "A")}
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
-                <span className="text-xs font-bold text-[#1D1E2C]">
+                <span className="text-sm font-bold text-slate-900">
                   {user?.anchor_name || user?.customer_name || "Enterprise Partner"}
                 </span>
-                <span className="text-[10px] text-[#A0A3AD] font-semibold mt-0.5">
+                <span className="text-[11px] text-slate-500 font-medium mt-0.5">
                   {user?.email_id || user?.login_id || "anchor_portal"}
                 </span>
               </div>
@@ -653,16 +666,19 @@ export default function AnchorCustomerPage() {
                         {/* Status */}
                         <div className="space-y-1.5">
                           <Label htmlFor="filter-status" className="text-xs font-semibold text-slate-600">Status</Label>
-                          <select
-                            id="filter-status"
-                            value={filterStatus}
-                            onChange={(e) => setFilterStatus(e.target.value)}
-                            className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:border-[#1D1E2C] focus:ring-[#1D1E2C] focus:outline-none cursor-pointer"
+                          <Select
+                            value={filterStatus || "all"}
+                            onValueChange={(val) => setFilterStatus(val === "all" ? "" : val)}
                           >
-                            <option value="">All Statuses</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                          </select>
+                            <SelectTrigger className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#1D1E2C] outline-none shadow-none">
+                              <SelectValue placeholder="All Statuses" />
+                            </SelectTrigger>
+                            <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
+                              <SelectItem value="all" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">All Statuses</SelectItem>
+                              <SelectItem value="active" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Active</SelectItem>
+                              <SelectItem value="inactive" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Inactive</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </div>
 
                       </div>
@@ -733,7 +749,7 @@ export default function AnchorCustomerPage() {
                                 </td>
 
                                 {/* Name */}
-                                <td className="py-4 px-4 font-bold text-[#1D1E2C]">
+                                <td className={`py-4 px-4 font-bold transition-colors ${selectedCustomer?.id === cust.id ? 'text-[#FF6B4A]' : 'text-[#1D1E2C]'}`}>
                                   {cust.name}
                                 </td>
 
