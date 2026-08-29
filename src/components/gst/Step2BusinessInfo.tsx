@@ -9,11 +9,12 @@ interface Step2Props {
   onRequiresAuth: (fromMonth: string, toMonth: string) => void;
   onBack: () => void;
   onGstinChange: (newGstin: string) => void;
+  custId?: string;
 }
 
 const GSTIN_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
-export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAuth, onGstinChange }: Step2Props) {
+export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAuth, onGstinChange, custId }: Step2Props) {
   const [fromMonth, setFromMonth] = useState("");
   const [toMonth, setToMonth] = useState("");
   const [needsAuth, setNeedsAuth] = useState(false);
@@ -22,8 +23,8 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
 
   // Fetch list of GSTINs from the backend
   const { data: gstinData, isSuccess: isGstinLoaded, isFetching: isFetchingGstin } = useQuery({
-    queryKey: ["gstin"],
-    queryFn: getGstin,
+    queryKey: ["gstin", custId],
+    queryFn: () => getGstin(custId),
   });
 
   const [shouldFetchBasicInfo, setShouldFetchBasicInfo] = useState(false);
@@ -48,8 +49,8 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
           ? gstinData.gst_number.split(",").map((g: string) => g.trim()).filter(Boolean)
           : [];
       list = rawList
-        .map((g) => String(g || "").toUpperCase().trim())
-        .filter((g) => GSTIN_REGEX.test(g));
+        .map((g: any) => String(g || "").toUpperCase().trim())
+        .filter((g: string) => GSTIN_REGEX.test(g));
     }
 
     const safePropGstin = typeof gstin === "string"
@@ -81,8 +82,8 @@ export default function Step2BusinessInfo({ gstin, onSuccessSubmit, onRequiresAu
       const normalized = String(gstinCode || "").toUpperCase().trim();
       const isValid = GSTIN_REGEX.test(normalized);
       return {
-        queryKey: ["gstinBasicInfo", normalized],
-        queryFn: () => fetchBasicInfo({ gstin: normalized }),
+        queryKey: ["gstinBasicInfo", normalized, custId],
+        queryFn: () => fetchBasicInfo({ gstin: normalized }, custId),
         enabled: isValid && shouldFetchBasicInfo,
       };
     }),
@@ -123,8 +124,8 @@ useEffect(() => {
         ? gstinData.gst_number.split(",").map((g: string) => g.trim()).filter(Boolean)
         : [];
     list = rawList
-      .map((g) => String(g || "").toUpperCase().trim())
-      .filter((g) => GSTIN_REGEX.test(g));
+      .map((g: any) => String(g || "").toUpperCase().trim())
+      .filter((g: string) => GSTIN_REGEX.test(g));
   }
 
   const safePropGstin = typeof gstin === "string"
@@ -142,7 +143,7 @@ useEffect(() => {
           ? [String(safePropGstin).toUpperCase().trim()]
           : [])
       ])
-    ).filter((g) => GSTIN_REGEX.test(g));
+    ).filter((g: string) => GSTIN_REGEX.test(g));
 
     const isSame = prev.length === mergedList.length && prev.every((val, index) => val === mergedList[index]);
     return isSame ? prev : mergedList;
@@ -165,7 +166,7 @@ useEffect(() => {
 }, [gstin]);
 
 const addNewGstinMutation = useMutation({
-  mutationFn: addNewGstin,
+  mutationFn: (data: Parameters<typeof addNewGstin>[0]) => addNewGstin(data, custId),
   onSuccess: (res) => {
     const updatedGstin = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
     if (!updatedGstin || !GSTIN_REGEX.test(updatedGstin)) return;
@@ -202,7 +203,7 @@ const handleModalSubmit = (e: React.FormEvent) => {
 };
 
 const submitMutation = useMutation({
-  mutationFn: submitGst,
+  mutationFn: (data: Parameters<typeof submitGst>[0]) => submitGst(data, custId),
   onSuccess: (res) => {
     toast.success("Analysis started successfully!");
     onSuccessSubmit(res.data.gst_reference_id);

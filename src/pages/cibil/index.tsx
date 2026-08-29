@@ -13,7 +13,7 @@ const stepLabels: Record<CibilStep, string> = {
   4: 'Report',
 };
 
-export default function CibilWorkflow() {
+export default function CibilWorkflow({ custId }: { custId?: string }) {
   const [currentStep, setCurrentStep] = useState<CibilStep>(1);
   const [identityPayload, setIdentityPayload] =
     useState<CibilIdentityPayload | null>(null);
@@ -108,7 +108,7 @@ export default function CibilWorkflow() {
 
       <div className="mt-8">
         {currentStep === 1 && (
-          <IdentityForm onNext={handleIdentitySubmitted} />
+          <IdentityForm onNext={handleIdentitySubmitted} custId={custId} />
         )}
 
         {currentStep === 2 && identityPayload && otpFlowId && (
@@ -117,6 +117,7 @@ export default function CibilWorkflow() {
             mobileNumber={identityPayload.mobile_number}
             onBack={() => setCurrentStep(1)}
             onVerified={handleVerified}
+            custId={custId}
           />
         )}
 
@@ -125,6 +126,7 @@ export default function CibilWorkflow() {
             otpFlowId={otpFlowId}
             onBack={() => setCurrentStep(2)}
             onViewReport={handleViewReport}
+            custId={custId}
           />
         )}
 
@@ -133,6 +135,7 @@ export default function CibilWorkflow() {
             reference_id={reference_id}
             onBack={() => setCurrentStep(3)}
             onStartNew={handleStartNew}
+            custId={custId}
           />
         )}
       </div>

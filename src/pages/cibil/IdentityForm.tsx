@@ -15,6 +15,7 @@ import type {
 
 interface IdentityFormProps {
   onNext: (payload: CibilIdentityPayload, otpFlowId: string) => void;
+  custId?: string;
 }
 
 const defaultValues: CibilIdentityPayload = {
@@ -94,21 +95,21 @@ const stateOptions = [
 ];
 
 
-async function submitIdentityDetails(payload: CibilIdentityPayload) {
-  const response = await generateCibilOtp(payload);
+async function submitIdentityDetails(payload: CibilIdentityPayload, custId?: string) {
+  const response = await generateCibilOtp(payload, undefined, custId);
 
   return {
     otp_flow_id: response.data.otp_flow_id,
     payload,
   };
 }
-export default function IdentityForm({ onNext }: IdentityFormProps) {
+export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
   const [formValues, setFormValues] =
     useState<CibilIdentityPayload>(defaultValues);
   const [fieldErrors, setFieldErrors] = useState<CibilFieldErrors>({});
   const [identityType, setIdentityType] = useState('PAN');
   const identityMutation = useMutation({
-    mutationFn: submitIdentityDetails,
+    mutationFn: (payload: CibilIdentityPayload) => submitIdentityDetails(payload, custId),
     onSuccess: (response) => {
       setFieldErrors({});
       toast.success('Identity details submitted. OTP has been initiated.');

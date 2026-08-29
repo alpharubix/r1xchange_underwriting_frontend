@@ -94,6 +94,10 @@ apiClient.interceptors.response.use(
   (error) => {
     console.error("API error response:", error.response);
     
+    if (error.response?.status === 401) {
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+    }
+
     if (!error.config?.skipErrorToast) {
       const serverMessage = extractErrorMessage(error);
       console.log("Extracted server error message:", serverMessage);

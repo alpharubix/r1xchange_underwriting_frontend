@@ -1,10 +1,14 @@
+import { useSearchParams } from 'react-router-dom';
 import CibilWorkflow from './index';
 
 export default function CibilCustDataFetching() {
+  const [searchParams] = useSearchParams();
+  const custId = searchParams.get('cust_id') || undefined;
 
   const handleReports = () => {
     // Navigate to the reports page
-    window.location.href = '/cibil/reports';
+    const queryStr = custId ? `?cust_id=${custId}` : '';
+    window.location.href = `/cibil/reports${queryStr}`;
   }
 
   return (
@@ -16,13 +20,14 @@ export default function CibilCustDataFetching() {
             <p className="text-gray-500 mt-1">
               Authenticate customer consent and process CIBIL report data
             </p>
+            {custId && <p className="text-[#7754f8] mt-1 font-medium text-sm">Target Customer ID: {custId}</p>}
             <button className="mt-4 px-4 py-2 bg-[#000000] text-white rounded hover:bg-[#000000]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000000]" onClick={handleReports}>
               View Previous Reports
             </button>
           </div>
         </div>
 
-        <CibilWorkflow />
+        <CibilWorkflow custId={custId} />
       </div>
     </div>
   );

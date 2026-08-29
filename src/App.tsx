@@ -11,10 +11,16 @@ import ViewReport from "./pages/cibil/ViewReport";
 
 
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
+const AnchorLoginPage = lazy(() => import("./pages/AnochorLogin/AnchorLoginPage"));
+const AdminLoginPage = lazy(() => import("./pages/adminlogin/AdminLoginPage"));
+const AdminProtectedRoute = lazy(() => import("./components/AdminProtectedRoute"));
+const AdminDashboardPage = lazy(() => import("@/pages/adminlogin/AdminUsersPage"));
 const SignupPage = lazy(() => import("@/pages/SignupPage"));
 const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
 const DashboardLayout = lazy(() => import("@/layouts/DashboardLayout"));
 const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
+const AnchorProtectedRoute = lazy(() => import("./components/AnchorProtectedRoute"));
+const AnchorCustomerPage = lazy(() => import("./pages/AnochorLogin/AnchorCustomerPage"));
 const SummeryOfDebitAndCredit = lazy(() => import("@/pages/bsa/SummaryOfDebitAndCredit"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const CashFlow = lazy(() => import("@/pages/bsa/cashFlow/CashFlow"));
@@ -55,7 +61,31 @@ function App() {
                     <Route path="/forgot-password" element={<ForgotPasswordPage />} />
                   </Route>
 
+                  {/* Anchor Login Page */}
+                  <Route path="/anchors/login" element={<AnchorLoginPage />} />
+                  <Route path="/Anchors/login" element={<AnchorLoginPage />} />
+
+                  {/* Admin Login Page */}
+                  <Route path="/admins/login" element={<AdminLoginPage />} />
+                  <Route path="/Admins/login" element={<AdminLoginPage />} />
+
+                  {/* Admin Dashboard */}
+                  <Route element={<AdminProtectedRoute />}>
+                    <Route path="/admins" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/Admins" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/admins/dashboard" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/admins/dashboard/:tab" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/Admins/dashboard" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/Admins/dashboard/:tab" element={<Navigate to="/admins/user" replace />} />
+                    <Route path="/admins/:tab" element={<AdminDashboardPage />} />
+                    <Route path="/Admins/:tab" element={<AdminDashboardPage />} />
+                  </Route>
+
                   {/* Protected routes */}
+                  <Route element={<AnchorProtectedRoute />}>
+                    <Route path="/anchors/dashboard" element={<AnchorCustomerPage />} />
+                    <Route path="/Anchors/dashboard" element={<AnchorCustomerPage />} />
+                  </Route>
                   <Route element={<ProtectedRoute />}>
                     <Route element={<DashboardLayout />}>
                       <Route path="/home/dashboard" element={<DashboardPage />} />

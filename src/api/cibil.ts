@@ -168,12 +168,14 @@ const normalizeResponse = <T>(
 
 export async function generateCibilOtp(
   payload: GenerateCibilOtpRequest,
-  options?: RequestOptions
+  options?: RequestOptions,
+  custId?: string
 ) {
+  const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.post<GenerateCibilOtpResponse>(
     '/cibil/generate-otp',
     payload,
-    { signal: options?.signal }
+    { signal: options?.signal, params }
   );
 
   return normalizeResponse(response.data, 'OTP flow ID was not returned.');
@@ -181,12 +183,14 @@ export async function generateCibilOtp(
 
 export async function validateCibilOtp(
   payload: VerifyCibilOtpRequest,
-  options?: RequestOptions
+  options?: RequestOptions,
+  custId?: string
 ) {
+  const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.post<VerifyCibilOtpResponse>(
     '/cibil/validate-otp',
     payload,
-    { signal: options?.signal }
+    { signal: options?.signal, params }
   );
 
   return normalizeResponse(response.data, 'Unable to verify OTP.');
@@ -194,21 +198,24 @@ export async function validateCibilOtp(
 
 export async function resendCibilOtp(
   payload: ResendCibilOtpRequest,
-  options?: RequestOptions
+  options?: RequestOptions,
+  custId?: string
 ) {
+  const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.post<ResendCibilOtpResponse>(
     '/cibil/resend-otp',
     payload,
-    { signal: options?.signal }
+    { signal: options?.signal, params }
   );
 
   return normalizeResponse(response.data, 'Unable to resend OTP.');
 }
 
-export async function listCibilReports(options?: RequestOptions) {
+export async function listCibilReports(options?: RequestOptions, custId?: string) {
+  const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.get<ListCibilReportsResponse>(
     '/cibil/list-reports',
-    { signal: options?.signal }
+    { signal: options?.signal, params }
   );
 
   return normalizeResponse(response.data, 'Unable to fetch CIBIL reports.');
@@ -264,11 +271,13 @@ export async function getCibilAnalysis(
 
 export async function getCibilWebhookStatus(
   otpFlowId: string,
-  options?: RequestOptions
+  options?: RequestOptions,
+  custId?: string
 ) {
+  const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.get<CibilWebhookStatusResponse>(
     `/cibil/webhook-status/${encodeURIComponent(otpFlowId)}`,
-    { signal: options?.signal }
+    { signal: options?.signal, params }
   );
 
   return normalizeResponse(

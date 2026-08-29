@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronLeft, FileText, ArrowRight } from "lucide-react";
 import GstOverviewTab from "./gst-reports/GstOverviewTab";
@@ -10,18 +10,20 @@ import { getGstHistory } from "@/api/gst";
 export default function GstReportPage() {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const custId = searchParams.get("cust_id") || undefined;
   const state = location.state as { gst_reference_id?: string };
   const stateRefId = state?.gst_reference_id;
 
   const { data: historyData, isLoading: isHistoryLoading } = useQuery({
-    queryKey: ["gstHistory"],
-    queryFn: getGstHistory,
+    queryKey: ["gstHistory", custId],
+    queryFn: () => getGstHistory(custId),
     enabled: !stateRefId,
   });
 
   const historyList = historyData?.data || [];
   const latestCompletedReport = historyList.find(
-    (item) => item.gst_reference_id_status === "COMPLETED"
+    (item: any) => item.gst_reference_id_status === "COMPLETED"
   );
 
   const gstReferenceId = stateRefId || latestCompletedReport?.reference_id;

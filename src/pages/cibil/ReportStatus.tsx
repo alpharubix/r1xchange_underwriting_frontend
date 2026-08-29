@@ -15,6 +15,7 @@ interface ReportStatusProps {
   otpFlowId: string;
   onBack: () => void;
   onViewReport: (referenceId?: string) => void;
+  custId?: string;
 }
 
 const POLL_INTERVAL_MS = 10000;
@@ -39,15 +40,16 @@ const getLatestReport = (reports: CibilReportListItem[]) => {
 
 async function getReportStatus(
   otpFlowId: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
+  custId?: string
 ): Promise<CibilReportStatus> {
-  const statusResponse = await getCibilWebhookStatus(otpFlowId, { signal });
+  const statusResponse = await getCibilWebhookStatus(otpFlowId, { signal }, custId);
   const webhookStatus = normalizeWebhookStatus(
     statusResponse.data.webhook_status
   );
 
   if (webhookStatus === 'SUCCESS') {
-    const reportsResponse = await listCibilReports({ signal });
+    const reportsResponse = await listCibilReports({ signal }, custId);
     const latestReport = getLatestReport(reportsResponse.data);
 
     if (!latestReport?.reference_id) {
@@ -87,6 +89,7 @@ export default function ReportStatus({
   otpFlowId,
   onBack,
   onViewReport,
+  custId,
 }: ReportStatusProps) {
   const [pollCount, setPollCount] = useState(0);
   const hasTimedOut = pollCount >= MAX_POLLS;
@@ -95,7 +98,7 @@ export default function ReportStatus({
     queryKey: ['cibilReportStatus', otpFlowId],
     queryFn: async ({ signal }) => {
       setPollCount((current) => current + 1);
-      return getReportStatus(otpFlowId, signal);
+      return getReportStatus(otpFlowId, signal, custId);
     },
     enabled: Boolean(otpFlowId) && !hasTimedOut,
     refetchInterval: (query) => {

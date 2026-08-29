@@ -102,73 +102,86 @@ export interface GstHistoryResponse {
 
 // ─── API Functions ────────────────────────────────────────────────────────────
 
-export const getGstin = async (): Promise<GstinResponse> => {
+export const getGstin = async (custId?: string): Promise<GstinResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.get("/gst/gstin", {
     errorMessage: "Failed to fetch GSTIN. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const updateGstin = async (data: SaveGstinPayload): Promise<SaveGstinResponse> => {
+export const updateGstin = async (data: SaveGstinPayload, custId?: string): Promise<SaveGstinResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.patch("/gst/gstin", data, {
     successMessage: "GSTIN updated successfully.",
     errorMessage: "Failed to update GSTIN. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const addNewGstin = async (data: SaveGstinPayload): Promise<SaveGstinResponse> => {
+export const addNewGstin = async (data: SaveGstinPayload, custId?: string): Promise<SaveGstinResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/gstin/add-new", data, {
-    successMessage: "GSTIN added successfully.",
     errorMessage: "Failed to add GSTIN. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const fetchBasicInfo = async (data: BasicInfoPayload): Promise<BasicInfoResponse> => {
+export const fetchBasicInfo = async (data: BasicInfoPayload, custId?: string): Promise<BasicInfoResponse> => {
   const payload = {
     ...data,
     gstin: Array.isArray(data.gstin) ? data.gstin : [data.gstin],
   };
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/gstin-basic-info", payload, {
     errorMessage: "Could not fetch GST basic info. Please verify your GSTIN.",
+    ...config,
   });
   return response.data;
 };
 
-export const generateOtp = async (data: GenerateOtpPayload): Promise<GenerateOtpResponse> => {
+export const generateOtp = async (data: GenerateOtpPayload, custId?: string): Promise<GenerateOtpResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/generate-otp", data, {
-    successMessage: "OTP sent to your registered mobile number.",
     errorMessage: "Failed to generate OTP. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const validateOtp = async (data: ValidateOtpPayload): Promise<ValidateOtpResponse> => {
+export const validateOtp = async (data: ValidateOtpPayload, custId?: string): Promise<ValidateOtpResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/validate-otp", data, {
-    successMessage: "OTP verified successfully.",
     errorMessage: "Invalid or expired OTP. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const submitGst = async (data: SubmitGstPayload): Promise<SubmitGstResponse> => {
+export const submitGst = async (data: SubmitGstPayload, custId?: string): Promise<SubmitGstResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/post-gstin", data, {
-    successMessage: "GST data submitted successfully.",
     errorMessage: "GST submission failed. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const getGstRefStatus = async (data: GstStatusPayload): Promise<GstStatusResponse> => {
+export const getGstRefStatus = async (data: GstStatusPayload, custId?: string): Promise<GstStatusResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
   const response = await apiClient.post("/gst/get-gst-ref-status", data, {
     errorMessage: "Failed to fetch GST status. Please try again.",
+    ...config,
   });
   return response.data;
 };
 
-export const getGstHistory = async (): Promise<GstHistoryResponse> => {
-  const response = await apiClient.get("/gst/users-ref-ids");
+export const getGstHistory = async (custId?: string): Promise<GstHistoryResponse> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
+  const response = await apiClient.get("/gst/users-ref-ids", config);
   return response.data;
 };
 

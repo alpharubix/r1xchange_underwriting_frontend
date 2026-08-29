@@ -6,9 +6,11 @@ import { useNavigate } from "react-router-dom";
 interface Step4Props {
   gstReferenceId: string;
   onRetry: () => void;
+  custId?: string;
+  onComplete?: () => void;
 }
 
-export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props) {
+export default function Step4Processing({ gstReferenceId, onRetry, onComplete }: Step4Props) {
   const navigate = useNavigate();
   const [pollCount, setPollCount] = useState(0);
   const MAX_POLLS = 40;
@@ -59,10 +61,13 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Analysis Complete!</h2>
           <p className="text-gray-500 mb-6 font-medium">Your GST data has been successfully processed.</p>
           <button
-            onClick={() => navigate("/gst/history")}
+            onClick={() => {
+              if (onComplete) onComplete();
+              else navigate("/gst/history");
+            }}
             className="bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-md"
           >
-            View History
+            {onComplete ? "Close" : "View History"}
           </button>
         </div>
       ) : hasFailed ? (
@@ -97,11 +102,12 @@ export default function Step4Processing({ gstReferenceId, onRetry }: Step4Props)
           <button
             onClick={() => {
               localStorage.removeItem("gst_reference_id");
-              navigate("/gst/history");
+              if (onComplete) onComplete();
+              else navigate("/gst/history");
             }}
             className="bg-gray-100 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-200 transition-colors"
           >
-            Go to History
+            {onComplete ? "Close" : "Go to History"}
           </button>
         </div>
       ) : (

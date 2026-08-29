@@ -9,6 +9,7 @@ interface OTPVerificationProps {
   mobileNumber: string;
   onBack: () => void;
   onVerified: () => void;
+  custId?: string;
 }
 
 const RESEND_SECONDS = 30;
@@ -18,6 +19,7 @@ export default function OTPVerification({
   mobileNumber,
   onBack,
   onVerified,
+  custId,
 }: OTPVerificationProps) {
   const [otp, setOtp] = useState('');
   const [secondsRemaining, setSecondsRemaining] = useState(RESEND_SECONDS);
@@ -34,7 +36,7 @@ export default function OTPVerification({
 
   const verifyMutation = useMutation({
     mutationFn: (payload: Parameters<typeof validateCibilOtp>[0]) =>
-      validateCibilOtp(payload),
+      validateCibilOtp(payload, undefined, custId),
     onSuccess: () => {
       toast.success('OTP verified successfully');
       onVerified();
@@ -46,7 +48,7 @@ export default function OTPVerification({
 
   const resendMutation = useMutation({
     mutationFn: (nextOtpFlowId: string) =>
-      resendCibilOtp({ otp_flow_id: nextOtpFlowId }),
+      resendCibilOtp({ otp_flow_id: nextOtpFlowId }, undefined, custId),
     onSuccess: () => {
       setOtp('');
       setSecondsRemaining(RESEND_SECONDS);

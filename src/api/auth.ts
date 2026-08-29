@@ -15,6 +15,10 @@ export interface LoginPayload {
   email_id: string;
   password: string;
 }
+export interface AnchorLoginPayload {
+  login_id: string;
+  password: string;
+}
 
 export interface ForgotPasswordPayload {
   email_id: string;
@@ -30,6 +34,12 @@ export interface ResetPasswordPayload {
   new_password: string;
 }
 
+export interface AdminLoginPayload {
+  login_id: string;
+  password: string;
+}
+
+
 // ─── API Functions ────────────────────────────────────────────────────────────
 
 export const registerUser = async (data: RegisterPayload) => {
@@ -42,8 +52,14 @@ export const registerUser = async (data: RegisterPayload) => {
 
 export const loginUser = async (data: LoginPayload) => {
   const response = await apiClient.post("/auth/login", data, {
-    successMessage: "Login successfull!",
     errorMessage: "Invalid email or password. Please try again.",
+  });
+  return response.data;
+};
+
+export const loginAnchor = async (data: AnchorLoginPayload) => {
+  const response = await apiClient.post("/auth/anchor/login", data, {
+    errorMessage: "Invalid login_id or password. Please try again.",
   });
   return response.data;
 };
@@ -76,6 +92,14 @@ export const resetPassword = async (data: ResetPasswordPayload) => {
   const response = await apiClient.post("/auth/reset_password", data, {
     successMessage: "Password reset successfully. Please log in.",
     errorMessage: "Failed to reset password. Your link may have expired.",
+  });
+  return response.data;
+};
+
+export const loginAdmin = async (data: AdminLoginPayload) => {
+  const response = await apiClient.post("/auth/admin/login", data, {
+    errorMessage: "Invalid credentials. Please try again.",
+
   });
   return response.data;
 };
