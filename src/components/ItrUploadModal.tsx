@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -167,8 +168,8 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
 
   if (!isOpen) return null;
 
-  return (
-    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
+  return createPortal(
+    <motion.div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
       <Card className="w-full max-w-md shadow-2xl relative animate-scale-in">
         <button
           onClick={handleCloseItrModal}
@@ -311,6 +312,7 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
           )}
         </CardContent>
       </Card>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }

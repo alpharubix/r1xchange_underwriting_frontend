@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -33,8 +34,8 @@ import {
 } from 'lucide-react';
 
 interface Bank {
-  bank_name: string;
-  bank_code: string;
+  bankName: string;
+  code: string;
 }
 
 interface UploadFileInfo {
@@ -92,7 +93,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
   const { data: banks, isLoading: isLoadingBanks } = useQuery({
     queryKey: ['banks'],
     queryFn: async () => {
-      const response = await apiClient.get('/bank-scoring/available-banks');
+      const response = await apiClient.get('/bsa/get-bank-names');
       return response.data?.data as Bank[];
     },
   });
@@ -199,9 +200,9 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <motion.div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur"
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
@@ -302,27 +303,24 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                   <Label htmlFor="bankCode">
                     Select Bank <span className="text-red-500">*</span>
                   </Label>
-                  <select
-                    id="bankCode"
-                    name="bankCode"
+                  <Select
                     value={formData.bankCode}
-                    onChange={handleInputChange}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    required
+                    onValueChange={(value) => setFormData({ ...formData, bankCode: value })}
                   >
-                    <option value="" disabled>
-                      Select a bank
-                    </option>
-                    {isLoadingBanks ? (
-                      <option disabled>Loading banks...</option>
-                    ) : (
-                      banks?.map((bank, idx) => (
-                        <option key={idx} value={bank.bank_code}>
-                          {bank.bank_name}
-                        </option>
-                      ))
-                    )}
-                  </select>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={isLoadingBanks ? "Loading banks..." : "Select a bank"} />
+                    </SelectTrigger>
+                    <SelectContent className="z-[100]">
+                      <SelectGroup>
+                        <SelectLabel>Available Banks</SelectLabel>
+                        {!isLoadingBanks && banks?.map((bank, idx) => (
+                          <SelectItem key={idx} value={bank.code}>
+                            {bank.bankName}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
                 </div>
 
                 <div className="space-y-2">
@@ -473,6 +471,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
           </>
         )}
       </Card>
-    </motion.div>
+    </motion.div>,
+    document.body
   );
 }
