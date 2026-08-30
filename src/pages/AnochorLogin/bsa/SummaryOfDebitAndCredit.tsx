@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
+
 import {
   Card,
   CardContent,
@@ -36,19 +37,76 @@ interface SummaryData {
   total: any;
 }
 
-export default function SummeryOfDebitAndCredit() {
-  // const navigate = useNavigate();
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
-  const [appliedFromDate, setAppliedFromDate] = useState('');
-  const [appliedToDate, setAppliedToDate] = useState('');
+interface SummeryOfDebitAndCreditProps {
+  custId?: string;
+  reportId?: string;
+  fromDate?: string;
+  toDate?: string;
+}
 
-  const { data: dateRangeData } = useDateRange();
+const formatDateSafely = (dateStr: string) => {
+  if (!dateStr) return '-';
+  let date = new Date(dateStr);
+  if (isNaN(date.getTime())) {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      if (parts[0].length === 2 && parts[2].length === 4) {
+        date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`);
+      } else if (parts[0].length === 4) {
+        date = new Date(`${parts[0]}-${parts[1]}-${parts[2]}T00:00:00`);
+      }
+    }
+  }
+  if (isNaN(date.getTime())) {
+    return dateStr;
+  }
+  return format(date, 'PPP');
+};
+
+const parseDateSafely = (dateStr: string) => {
+  if (!dateStr) return new Date();
+  const cleanStr = dateStr.split('T')[0];
+  let date = new Date(cleanStr + 'T00:00:00');
+  if (isNaN(date.getTime())) {
+    const parts = cleanStr.split('-');
+    if (parts.length === 3) {
+      if (parts[0].length === 2 && parts[2].length === 4) {
+        date = new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`);
+      } else if (parts[0].length === 4) {
+        date = new Date(`${parts[0]}-${parts[1]}-${parts[2]}T00:00:00`);
+      }
+    }
+  }
+  return date;
+};
+
+export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: propFromDate, toDate: propToDate }: SummeryOfDebitAndCreditProps = {}) {
+  // const navigate = useNavigate();
+  const cleanPropFromDate = propFromDate ? propFromDate.split('T')[0] : '';
+  const cleanPropToDate = propToDate ? propToDate.split('T')[0] : '';
+
+  const [fromDate, setFromDate] = useState(cleanPropFromDate);
+  const [toDate, setToDate] = useState(cleanPropToDate);
+  const [appliedFromDate, setAppliedFromDate] = useState(cleanPropFromDate);
+  const [appliedToDate, setAppliedToDate] = useState(cleanPropToDate);
+
+  const { data: dateRangeData } = useDateRange({ custId });
+
+  useEffect(() => {
+    if (propFromDate && propToDate) {
+      const cleanFrom = propFromDate.split('T')[0];
+      const cleanTo = propToDate.split('T')[0];
+      setFromDate(cleanFrom);
+      setToDate(cleanTo);
+      setAppliedFromDate(cleanFrom);
+      setAppliedToDate(cleanTo);
+    }
+  }, [propFromDate, propToDate]);
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
-      const from = new Date(dateRangeData.from_date);
-      const to = new Date(dateRangeData.to_date);
+      const from = parseDateSafely(dateRangeData.from_date);
+      const to = parseDateSafely(dateRangeData.to_date);
 
       const defaultTo = new Date(from);
       defaultTo.setMonth(defaultTo.getMonth() + 12);
@@ -116,10 +174,17 @@ export default function SummeryOfDebitAndCredit() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['summary-of-debit-and-credit', appliedFromDate, appliedToDate],
+    queryKey: ['summary-of-debit-and-credit', appliedFromDate, appliedToDate, custId, reportId],
     queryFn: async () => {
+      const cleanFromDate = appliedFromDate.split('T')[0];
+      const cleanToDate = appliedToDate.split('T')[0];
+      let url = `/bsa/summary-of-debit-and-credit_monthwise?`;
+      if (custId) {
+        url += `cust_id=${encodeURIComponent(custId)}&`;
+      }
+      url += `from_date=${cleanFromDate}&to_date=${cleanToDate}`;
       const response = await apiClient.get(
-        `/bsa/summary-of-debit-and-credit_monthwise?from_date=${appliedFromDate}&to_date=${appliedToDate}`,
+        url,
         {
           errorMessage:
             'Failed to load summary of debit and credit. Please try again.',
@@ -408,14 +473,9 @@ export default function SummeryOfDebitAndCredit() {
           <div>
             <CardTitle className="text-xl text-black">Monthly Overview</CardTitle>
             <CardDescription>
-              {dateRangeData?.from_date && dateRangeData?.to_date && (
+              {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(dateRangeData.from_date + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                  From {formatDateSafely(appliedFromDate)} To {formatDateSafely(appliedToDate)}
                 </>
               )}
             </CardDescription>

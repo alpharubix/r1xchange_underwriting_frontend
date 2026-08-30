@@ -26,7 +26,7 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
 
   const accountDetails = data.data.find((item: any) => item["Account Details"])?.["Account Details"];
   const majorData = data.data.find((item: any) => item["Major Suppliers & Customers "])?.["Major Suppliers & Customers "];
-  
+
   const suppliers = majorData?.find((item: any) => item["10 Major Suppliers"])?.["10 Major Suppliers"] || [];
   const customers = majorData?.find((item: any) => item["10 Major Customers"])?.["10 Major Customers"] || [];
 
@@ -96,28 +96,28 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
           </h3>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-center">
             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">Company Name</span>
-               <span className="text-gray-700">{accountDetails["GSTR Analysis Report  - "] || "N/A"}</span>
+              <span className="font-semibold text-[#000000] block mb-1">Company Name</span>
+              <span className="text-gray-700">{accountDetails["GSTR Analysis Report  - "] || "N/A"}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">GSTIN</span>
-               <span className="text-gray-700">{accountDetails["GSTIN"]}</span>
+              <span className="font-semibold text-[#000000] block mb-1">GSTIN</span>
+              <span className="text-gray-700">{accountDetails["GSTIN"]}</span>
             </div>
-             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">PAN</span>
-               <span className="text-gray-700">{accountDetails["PAN"]}</span>
+            <div className="border border-gray-200 rounded-md p-2">
+              <span className="font-semibold text-[#000000] block mb-1">PAN</span>
+              <span className="text-gray-700">{accountDetails["PAN"]}</span>
             </div>
-             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">State</span>
-               <span className="text-gray-700">{accountDetails["State of Operations(based on max. gross sales)"]}</span>
+            <div className="border border-gray-200 rounded-md p-2">
+              <span className="font-semibold text-[#000000] block mb-1">State</span>
+              <span className="text-gray-700">{accountDetails["State of Operations(based on max. gross sales)"]}</span>
             </div>
-             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">Period From</span>
-               <span className="text-gray-700">{accountDetails["periodFrom"]}</span>
+            <div className="border border-gray-200 rounded-md p-2">
+              <span className="font-semibold text-[#000000] block mb-1">Period From</span>
+              <span className="text-gray-700">{accountDetails["periodFrom"]}</span>
             </div>
-             <div className="border border-gray-200 rounded-md p-2">
-               <span className="font-semibold text-[#000000] block mb-1">Period To</span>
-               <span className="text-gray-700">{accountDetails["periodTo"]}</span>
+            <div className="border border-gray-200 rounded-md p-2">
+              <span className="font-semibold text-[#000000] block mb-1">Period To</span>
+              <span className="text-gray-700">{accountDetails["periodTo"]}</span>
             </div>
           </div>
         </div>

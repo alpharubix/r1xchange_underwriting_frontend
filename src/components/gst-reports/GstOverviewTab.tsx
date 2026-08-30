@@ -76,8 +76,8 @@ export default function GstOverviewTab({
   // Process pie chart data
   const pieData = businessBreakupGstr1
     ? Object.entries(businessBreakupGstr1)
-        .map(([name, value]) => ({ name, value: Number(value) }))
-        .filter((item) => item.value !== 0)
+      .map(([name, value]) => ({ name, value: Number(value) }))
+      .filter((item) => item.value !== 0)
     : [];
 
   const SectionTitle = ({ children }: { children: React.ReactNode }) => (
@@ -122,7 +122,7 @@ export default function GstOverviewTab({
               <span className="text-gray-700">
                 {
                   accountDetails[
-                    'State of Operations(based on max. gross sales)'
+                  'State of Operations(based on max. gross sales)'
                   ]
                 }
               </span>
@@ -155,15 +155,15 @@ export default function GstOverviewTab({
             <div className="p-0">
               <table className="w-full text-sm text-left">
                 <thead className="bg-[#000000]/70 text-white">
-                    <tr>
-                      <th className="px-4 py-2 border border-right border-t-0 border-b-0  w-2/3">
-                        Particulars
-                      </th>
-                      <th className="px-4 py-2  text-right">
-                        Taxable Value
-                      </th>
-                    </tr>
-                  </thead>
+                  <tr>
+                    <th className="px-4 py-2 border border-right border-t-0 border-b-0  w-2/3">
+                      Particulars
+                    </th>
+                    <th className="px-4 py-2  text-right">
+                      Taxable Value
+                    </th>
+                  </tr>
+                </thead>
                 <tbody>
                   {overviewOfReturns.map((section: any, idx: number) => {
                     const sectionName = Object.keys(section)[0];
@@ -184,18 +184,18 @@ export default function GstOverviewTab({
                             typeof rawVal === 'number'
                               ? rawVal < 0
                               : typeof rawVal === 'string' &&
-                                rawVal.trim().startsWith('-');
+                              rawVal.trim().startsWith('-');
                           return (
-                          <tr key={i} className="hover:bg-gray-50">
-                            <td
-                              className={`px-4 py-2 border border-gray-200 ${key.startsWith('Gross') || key.startsWith('Profit') || key.includes('Liability') || key.includes('Available') ? 'font-semibold text-[#000000]' : 'text-gray-700'}`}
-                            >
-                              {key}
-                            </td>
-                            <td className={`px-4 py-2 border border-gray-200 text-right font-medium ${isNegative ? 'text-red-600' : ''}`}>
-                              {value as string}
-                            </td>
-                          </tr>
+                            <tr key={i} className="hover:bg-gray-50">
+                              <td
+                                className={`px-4 py-2 border border-gray-200 ${key.startsWith('Gross') || key.startsWith('Profit') || key.includes('Liability') || key.includes('Available') ? 'font-semibold text-[#000000]' : 'text-gray-700'}`}
+                              >
+                                {key}
+                              </td>
+                              <td className={`px-4 py-2 border border-gray-200 text-right font-medium ${isNegative ? 'text-red-600' : ''}`}>
+                                {value as string}
+                              </td>
+                            </tr>
                           );
                         })}
                       </React.Fragment>
@@ -245,7 +245,7 @@ export default function GstOverviewTab({
                                 typeof rawVal === 'number'
                                   ? rawVal < 0
                                   : typeof rawVal === 'string' &&
-                                    rawVal.trim().startsWith('-');
+                                  rawVal.trim().startsWith('-');
                               return (
                                 <tr key={i} className="hover:bg-gray-50">
                                   <td className="px-4 py-2 border border-gray-200 text-gray-700">
@@ -290,7 +290,7 @@ export default function GstOverviewTab({
                       typeof rawVal === 'number'
                         ? rawVal < 0
                         : typeof rawVal === 'string' &&
-                          rawVal.trim().startsWith('-');
+                        rawVal.trim().startsWith('-');
                     return (
                       <tr key={idx} className="hover:bg-gray-50">
                         <td className="px-4 py-2 border border-gray-200 text-gray-700 font-medium">
@@ -346,7 +346,7 @@ export default function GstOverviewTab({
                             typeof rawVal === 'number'
                               ? rawVal < 0
                               : typeof rawVal === 'string' &&
-                                rawVal.trim().startsWith('-');
+                              rawVal.trim().startsWith('-');
                           return (
                             <tr key={i} className="hover:bg-gray-50">
                               <td className="px-4 py-2 border border-gray-200 text-gray-700 w-2/3">

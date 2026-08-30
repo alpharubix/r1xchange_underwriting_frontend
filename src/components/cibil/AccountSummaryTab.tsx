@@ -42,7 +42,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
   // Resolve accounts list based on payload format
   const segmentAccounts = useMemo(() => {
     let parsed: any[] = [];
-    
+
     if (Array.isArray(accountsList)) {
       // Mock format (flat array)
       parsed = accountsList.filter((acc: any) => {
@@ -54,7 +54,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
       // Real format (dictionary with activeAccounts and closedAccounts)
       const segmentKey = activeSegment === 'Active' ? 'activeAccounts' : 'closedAccounts';
       const segmentObj = accountsList[segmentKey] || {};
-      
+
       // Gather all accounts from sub-categories (creditCard, personalLoan, autoLoan, etc.)
       Object.values(segmentObj).forEach((loanList: any) => {
         if (Array.isArray(loanList)) {
@@ -67,7 +67,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
         }
       });
     }
-    
+
     return parsed.map(normalizeAccount);
   }, [accountsList, activeSegment]);
 
@@ -123,11 +123,10 @@ export default function AccountSummaryTab({ data }: { data: any }) {
                 setActiveSegment(segment);
                 setExpandedAccounts({});
               }}
-              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
-                activeSegment === segment
+              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${activeSegment === segment
                   ? 'bg-[#000000] text-white shadow-md'
                   : 'text-slate-500 hover:text-slate-800'
-              }`}
+                }`}
             >
               {segment} Accounts
             </button>
@@ -144,7 +143,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
             {formatINR(totals.sanctioned)}
           </p>
         </div>
-        
+
         {/* Outstanding debt */}
         <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
           <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Current Balance</span>
@@ -172,22 +171,21 @@ export default function AccountSummaryTab({ data }: { data: any }) {
                 <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-500 border-b border-slate-100 pb-2">
                   {loanType} ({typedAccounts.length})
                 </h3>
-                
+
                 <div className="grid grid-cols-1 gap-4">
                   {typedAccounts.map((acc: any, index: number) => {
                     const uniqueId = `${acc.loanType}-${acc.accountNo}-${index}`;
                     const isExpanded = !!expandedAccounts[uniqueId];
                     const hasOverdue = Number(acc.overdue) > 0;
-                    
+
                     return (
-                      <div 
-                        key={uniqueId} 
-                        className={`overflow-hidden rounded-xl border transition-all ${
-                          hasOverdue ? 'border-red-200 shadow-red-50/50 shadow-sm' : 'border-slate-200 shadow-sm'
-                        } bg-white`}
+                      <div
+                        key={uniqueId}
+                        className={`overflow-hidden rounded-xl border transition-all ${hasOverdue ? 'border-red-200 shadow-red-50/50 shadow-sm' : 'border-slate-200 shadow-sm'
+                          } bg-white`}
                       >
                         {/* Main Summary Header */}
-                        <div 
+                        <div
                           onClick={() => toggleExpand(uniqueId)}
                           className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 gap-4 cursor-pointer hover:bg-slate-50/50"
                         >
@@ -212,7 +210,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
                               <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Current Balance</p>
                               <p className="font-bold text-[#000000]">{formatINR(acc.currentBalance)}</p>
                             </div>
-                            
+
                             {/* Overdue indicator */}
                             {hasOverdue && (
                               <div className="text-right pr-2">

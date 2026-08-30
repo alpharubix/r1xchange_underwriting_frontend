@@ -22,7 +22,7 @@ const glossaryItems = [
 export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryData }) {
   const [historySegment, setHistorySegment] = useState<'Active' | 'Closed'>('Active');
   const cibilReport = data?.cibil_report?.EquifaxRetail || {};
-  
+
   const activeTracks = (cibilReport as any).activeAccountRepaymentTrack || [];
   const closedTracks = (cibilReport as any).closedAccountRepaymentTrack || [];
   const selectedTracks = (historySegment === 'Active' ? activeTracks : closedTracks) as any[];
@@ -31,7 +31,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
   const getCellColor = (trackVal: string) => {
     if (!trackVal || trackVal === '-') return 'bg-slate-50 text-slate-300 border-slate-100';
     const lower = trackVal.toLowerCase();
-    
+
     // Split trackVal (e.g., '000/XXX', 'NEW/XXX', '01+/SPM', 'STD/STD', 'CLSD/XXX')
     const parts = lower.split('/');
     const dpd = parts[0] || '';
@@ -64,16 +64,16 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
   // Resolve month values dynamically from the row object (handles case mismatch e.g., 'Jan' vs 'jan', 'Jun' vs 'june')
   const getMonthValue = (row: any, monthName: string) => {
     const m = monthName.toLowerCase();
-    
+
     // Exact casing matches
     if (row[monthName] !== undefined && row[monthName] !== null) return String(row[monthName]);
     if (row[m] !== undefined && row[m] !== null) return String(row[m]);
-    
+
     // Custom variations
     if (m === 'jun' || m === 'june') return String(row.Jun ?? row.jun ?? row.june ?? '-');
     if (m === 'jul' || m === 'july') return String(row.Jul ?? row.jul ?? row.july ?? '-');
     if (m === 'sept' || m === 'sep') return String(row.Sept ?? row.sep ?? row.sept ?? '-');
-    
+
     return '-';
   };
 
@@ -86,11 +86,10 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
             <button
               key={segment}
               onClick={() => setHistorySegment(segment)}
-              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${
-                historySegment === segment
+              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${historySegment === segment
                   ? 'bg-[#000000] text-white shadow-md'
                   : 'text-slate-500 hover:text-slate-800'
-              }`}
+                }`}
             >
               {segment} Timeline
             </button>
@@ -103,7 +102,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
         {selectedTracks.length > 0 ? (
           selectedTracks.map((track: any, idx: number) => {
             const history = track.paymentStatus || track.repaymentHistory || [];
-            
+
             const loanType = track.loanType || track.accountType || 'Account';
             const accNo = track.accountNo || 'N/A';
             const limit = track.sanctionedAmount ?? track.sanctionedAmountCreditLimit ?? track.santionedamountCreditLimit ?? 0;
@@ -140,7 +139,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
                 <div className="overflow-x-auto">
                   <div className="min-w-[800px] space-y-2">
                     {/* Months header */}
-                    <div 
+                    <div
                       className="gap-2 text-center text-[10px] font-bold uppercase tracking-wider text-slate-400 py-1"
                       style={{ display: 'grid', gridTemplateColumns: '100px repeat(12, minmax(0, 1fr))' }}
                     >
@@ -151,8 +150,8 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
                     {/* Timeline rows */}
                     {history.length > 0 ? (
                       history.map((row: any, rIdx: number) => (
-                        <div 
-                          key={rIdx} 
+                        <div
+                          key={rIdx}
                           className="gap-2 items-center text-center"
                           style={{ display: 'grid', gridTemplateColumns: '100px repeat(12, minmax(0, 1fr))' }}
                         >

@@ -326,7 +326,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                       placeholder="E.g., Tata Group"
                       value={newAnchorForm.name}
                       onChange={(e) => setNewAnchorForm({ ...newAnchorForm, name: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#7754f8] focus:ring-[#7754f8] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                       autoComplete="off"
                     />
                   </div>
@@ -343,7 +343,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                         placeholder="E.g., 9876543210"
                         value={newAnchorForm.phone}
                         onChange={(e) => setNewAnchorForm({ ...newAnchorForm, phone: e.target.value })}
-                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#7754f8] focus:ring-[#7754f8] shadow-none"
+                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                         autoComplete="off"
                       />
                     </div>
@@ -359,7 +359,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                     placeholder="E.g., Tata Sons Private Limited"
                     value={newAnchorForm.company_name}
                     onChange={(e) => setNewAnchorForm({ ...newAnchorForm, company_name: e.target.value })}
-                    className="h-10 rounded-xl border-slate-200 focus:border-[#7754f8] focus:ring-[#7754f8] shadow-none"
+                    className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                     autoComplete="off"
                   />
                 </div>
@@ -376,7 +376,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                       placeholder="E.g., admin@tata.com"
                       value={newAnchorForm.email_id}
                       onChange={(e) => setNewAnchorForm({ ...newAnchorForm, email_id: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#7754f8] focus:ring-[#7754f8] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                       autoComplete="new-email"
                     />
                   </div>
@@ -393,7 +393,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                         placeholder="Enter account password"
                         value={newAnchorForm.password}
                         onChange={(e) => setNewAnchorForm({ ...newAnchorForm, password: e.target.value })}
-                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#7754f8] focus:ring-[#7754f8] shadow-none"
+                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                         autoComplete="new-password"
                       />
                       <button
@@ -422,7 +422,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#000080] hover:bg-[#5130d2] text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm"
+                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm"
                   >
                     Create Anchor
                   </Button>
