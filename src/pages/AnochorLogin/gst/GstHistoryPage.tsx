@@ -7,11 +7,11 @@ export default function GstHistoryPage() {
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['gstHistory'],
-    queryFn: getGstHistory,
+    queryFn: () => getGstHistory(),
     retry: false,
   });
 
-  const historyList = data?.data || [];
+  const historyList = (data as any)?.data || [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -122,7 +122,7 @@ export default function GstHistoryPage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {historyList.map((item) => (
+                {historyList.map((item: any) => (
                   <tr key={item.reference_id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {item.gstin || 'N/A'}
@@ -136,10 +136,10 @@ export default function GstHistoryPage() {
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.gst_reference_id_status === 'COMPLETED'
-                            ? 'bg-green-100 text-green-800'
-                            : item.gst_reference_id_status === 'FAILED'
-                              ? 'bg-red-100 text-red-800'
-                              : 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-green-100 text-green-800'
+                          : item.gst_reference_id_status === 'FAILED'
+                            ? 'bg-red-100 text-red-800'
+                            : 'bg-yellow-100 text-yellow-800'
                           }`}
                       >
                         {item.gst_reference_id_status}

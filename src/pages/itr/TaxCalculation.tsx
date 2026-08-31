@@ -8,7 +8,7 @@ import { Loader2 } from 'lucide-react';
 export default function TaxCalculation() {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['itrTaxCalculation'],
-    queryFn: getItrTaxCalculation,
+    queryFn: () => getItrTaxCalculation(),
   });
 
   if (isLoading) {

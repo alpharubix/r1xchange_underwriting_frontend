@@ -80,7 +80,7 @@ export function useLogin() {
         }
         setUser(finalProfile);
         queryClient.setQueryData(["user", "me"], finalProfile);
-        role = finalProfile.role || role;
+        role = (finalProfile.role as string) || role;
       } catch (err) {
         const user = data?.user || data?.data?.user || data?.data || {};
         const finalUser = { ...user };
