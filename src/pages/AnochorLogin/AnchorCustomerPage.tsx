@@ -462,7 +462,7 @@ export default function AnchorCustomerPage() {
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Anchor Code</span>
-                          <span className="text-base font-mono font-extrabold text-[#7754f8] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
+                          <span className="text-base font-mono font-extrabold text-[#FF6B4A] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Login ID</span>
@@ -510,7 +510,7 @@ export default function AnchorCustomerPage() {
                             setSelectedAnchorFilter(selectedAnchor?._id || selectedAnchor?.anchor_code || null);
                             setActiveTab("customer");
                           }}
-                          className="bg-[#000080] hover:bg-[#5130d2] text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm"
+                          className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm"
                         >
                           <Eye className="h-5 w-5" />
                           View Users under Anchor
@@ -561,13 +561,13 @@ export default function AnchorCustomerPage() {
                 <div className="flex items-center justify-between bg-indigo-50/80 border border-indigo-100 rounded-2xl px-5 py-3.5 text-indigo-900 shadow-sm animate-in slide-in-from-top duration-250">
                   <div className="flex items-center gap-2 text-sm font-semibold">
                     <span>Showing users under Anchor:</span>
-                    <span className="font-extrabold text-[#7754f8] bg-[#7754f8]/10 px-2.5 py-0.5 rounded-lg border border-[#7754f8]/15 uppercase font-mono tracking-wider">
+                    <span className="font-extrabold text-[#FF6B4A] bg-[#FFF0EC] px-2.5 py-0.5 rounded-lg border border-[#FF6B4A]/15 uppercase font-mono tracking-wider">
                       {anchorsList.find(a => a._id === selectedAnchorFilter || a.anchor_code === selectedAnchorFilter)?.anchor_name || selectedAnchorFilter}
                     </span>
                   </div>
                   <button
                     onClick={() => setSelectedAnchorFilter(null)}
-                    className="text-indigo-400 hover:text-[#7754f8] font-bold flex items-center gap-1.5 transition-colors text-xs uppercase tracking-wider"
+                    className="text-slate-400 hover:text-[#FF6B4A] font-bold flex items-center gap-1.5 transition-colors text-xs uppercase tracking-wider"
                   >
                     Clear Filter <X className="h-4 w-4" />
                   </button>
@@ -578,8 +578,8 @@ export default function AnchorCustomerPage() {
 
               {isSuperAnchor && !selectedAnchorFilter ? (
                 <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-[#e2e8f0] rounded-3xl space-y-4 shadow-sm min-h-[350px]">
-                  <div className="h-16 w-16 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 shadow-inner">
-                    <Users className="h-8 w-8 text-[#7754f8]" />
+                  <div className="h-16 w-16 rounded-full bg-[#FFF0EC] flex items-center justify-center text-[#FF6B4A] shadow-inner">
+                    <Users className="h-8 w-8 text-[#FF6B4A]" />
                   </div>
                   <div className="max-w-md space-y-2">
                     <h3 className="text-lg font-bold text-slate-900">No Anchor Selected</h3>
@@ -589,7 +589,7 @@ export default function AnchorCustomerPage() {
                   </div>
                   <Button
                     onClick={() => setActiveTab("anchor")}
-                    className="bg-[#000080] hover:bg-[#5130d2] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#000080]/15"
+                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1D1E2C]/15"
                   >
                     Go to Anchors List
                   </Button>
@@ -727,7 +727,7 @@ export default function AnchorCustomerPage() {
                             <tr>
                               <td colSpan={11} className="py-12 text-center text-slate-400 font-bold">
                                 <div className="flex justify-center items-center gap-3">
-                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#000080] animate-spin" />
+                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1D1E2C] animate-spin" />
                                   <span>Loading users list...</span>
                                 </div>
                               </td>
@@ -892,7 +892,7 @@ export default function AnchorCustomerPage() {
                   </div>
                   <Button
                     onClick={() => setActiveTab("customer")}
-                    className="bg-[#000080] hover:bg-[#5130d2] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#000080]/15"
+                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1D1E2C]/15"
                   >
                     Go to Customers List
                   </Button>
@@ -949,7 +949,7 @@ export default function AnchorCustomerPage() {
                       placeholder="Enter Customer Name"
                       value={newCustomerForm.name}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, name: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#000080] focus:ring-[#000080] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                       autoComplete="off"
                     />
                   </div>
@@ -966,7 +966,7 @@ export default function AnchorCustomerPage() {
                         placeholder="E.g., 9876543210"
                         value={newCustomerForm.phone}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, phone: e.target.value })}
-                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#000080] focus:ring-[#000080] shadow-none"
+                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                         autoComplete="off"
                       />
                     </div>
@@ -982,7 +982,7 @@ export default function AnchorCustomerPage() {
                     placeholder="E.g., ABC Pvt Ltd"
                     value={newCustomerForm.company_name}
                     onChange={(e) => setNewCustomerForm({ ...newCustomerForm, company_name: e.target.value })}
-                    className="h-10 rounded-xl border-slate-200 focus:border-[#000080] focus:ring-[#000080] shadow-none"
+                    className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                     autoComplete="off"
                   />
                 </div>
@@ -999,7 +999,7 @@ export default function AnchorCustomerPage() {
                       placeholder="E.g., name@domain.com"
                       value={newCustomerForm.email_id}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, email_id: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#000080] focus:ring-[#000080] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                       autoComplete="new-email"
                     />
                   </div>
@@ -1016,7 +1016,7 @@ export default function AnchorCustomerPage() {
                         placeholder="Enter account password"
                         value={newCustomerForm.password}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, password: e.target.value })}
-                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#000080] focus:ring-[#000080] shadow-none"
+                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                         autoComplete="new-password"
                       />
                       <button
@@ -1045,7 +1045,7 @@ export default function AnchorCustomerPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#000080] hover:bg-[#5130d2] text-white rounded-xl px-5 h-10 shadow-md shadow-[#000080]/10"
+                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-5 h-10 shadow-md shadow-[#1D1E2C]/10"
                   >
                     Create Customer
                   </Button>

@@ -189,6 +189,7 @@ export const getGstHistory = async (custId?: string): Promise<GstHistoryResponse
 
 export interface GstReportPayload {
   gst_reference_id: string;
+  cust_id?: string;
 }
 
 export interface GstOverviewResponse {

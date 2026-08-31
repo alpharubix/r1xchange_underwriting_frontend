@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
-import { 
-  User, Calendar, ShieldCheck, Mail, Briefcase, 
-  IndianRupee, CreditCard, AlertOctagon, Landmark, 
+import {
+  User, Calendar, ShieldCheck, Mail, Briefcase,
+  IndianRupee, CreditCard, AlertOctagon, Landmark,
   Search
 } from 'lucide-react';
 import type { CibilOverviewData } from '@/api/cibil';
@@ -15,11 +15,11 @@ const formatINR = (val: unknown) => {
 
 export default function OverviewTab({ data }: { data: CibilOverviewData }) {
   const cibilReport = data?.cibil_report?.EquifaxRetail || {};
-  
+
   // Safe extraction of data parts
   const bureauAnalysis = (cibilReport as any).BureauAnalysis || {};
   const generalInfo = (cibilReport as any).generalInfo || {};
-  
+
   // Dynamic extraction to support both mock and real ScoreMe API payloads
   const basicInfo = generalInfo.basicInfo || {};
   const name = basicInfo.name ?? generalInfo.name ?? 'N/A';
@@ -27,10 +27,10 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
   const age = basicInfo.age ?? generalInfo.age ?? '';
   const gender = basicInfo.gender ?? generalInfo.gender ?? 'N/A';
   const email = basicInfo.email ?? generalInfo.email ?? 'N/A';
-  
+
   const ident = generalInfo['identification(s)'] || {};
   const pan = ident.pan ?? generalInfo.pan ?? 'N/A';
-  
+
   const empInfo = generalInfo.employmentInformation || {};
   const occupation = empInfo.occupation ?? generalInfo.occupation ?? 'N/A';
   const income = empInfo.salary ?? generalInfo.income ?? 0;
@@ -95,7 +95,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
 
   // Extract score
   const score = Number(bureauAnalysis.score || 715);
-  
+
   // Calculate score color and status
   const scoreMetrics = useMemo(() => {
     // Equifax score ranges from 300 to 900
@@ -129,9 +129,9 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm flex flex-col items-center justify-center text-center">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-full bg-slate-50 opacity-50 blur-2xl" />
           <div className="absolute bottom-0 left-0 h-24 w-24 rounded-full bg-slate-50 opacity-50 blur-2xl" />
-          
+
           <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-4">Bureau Score</h4>
-          
+
           {/* Dial SVG */}
           <div className="relative flex flex-col items-center justify-center w-64 h-36 mt-4">
             <svg viewBox="0 0 256 144" className="w-full h-full">
@@ -149,7 +149,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
                   <stop offset="100%" stopColor="#34D399" />
                 </linearGradient>
               </defs>
-              
+
               {/* Background segmented tracks */}
               {/* Red segment (300 to 600 - 50%) */}
               <path
@@ -192,11 +192,11 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
               />
 
               {/* Needle/Pointer Group */}
-              <g 
-                style={{ 
-                  transform: `rotate(${scoreMetrics.percent * 1.8}deg)`, 
-                  transformOrigin: '128px 128px' 
-                }} 
+              <g
+                style={{
+                  transform: `rotate(${scoreMetrics.percent * 1.8}deg)`,
+                  transformOrigin: '128px 128px'
+                }}
                 className="transition-transform duration-1000 ease-out"
               >
                 {/* <line x1="128" y1="128" x2="38" y2="128" stroke="#1E293B" strokeWidth="3" strokeLinecap="round" /> */}
@@ -206,22 +206,20 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
               {/* Center cap outer */}
               {/* <circle cx="128" cy="128" r="2" fill="#1E293B" opacity="0.9" /> */}
             </svg>
-            
+
             {/* Centered Score text, placed nicely under the peak of the arc */}
             <div className="absolute bottom-0 flex flex-col items-center justify-center">
-              <span className={`text-4xl font-extrabold tracking-tight ${
-                score >= 700 ? 'text-emerald-500' : score >= 600 ? 'text-amber-500' : 'text-red-500'
-              }`}>{score}</span>
+              <span className={`text-4xl font-extrabold tracking-tight ${score >= 700 ? 'text-emerald-500' : score >= 600 ? 'text-amber-500' : 'text-red-500'
+                }`}>{score}</span>
               <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">Equifax Score</span>
             </div>
           </div>
 
           <div className="mt-4">
-            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${
-              scoreMetrics.status === 'Excellent' ? 'bg-emerald-50 text-emerald-700' :
-              scoreMetrics.status === 'Good' ? 'bg-green-50 text-green-700' :
-              scoreMetrics.status === 'Fair' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
-            }`}>
+            <span className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${scoreMetrics.status === 'Excellent' ? 'bg-emerald-50 text-emerald-700' :
+                scoreMetrics.status === 'Good' ? 'bg-green-50 text-green-700' :
+                  scoreMetrics.status === 'Fair' ? 'bg-amber-50 text-amber-700' : 'bg-red-50 text-red-700'
+              }`}>
               {scoreMetrics.status}
             </span>
             <p className="mt-2 text-xs text-slate-500 max-w-xs">{scoreMetrics.description}</p>
@@ -456,7 +454,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Total DPDs Recorded</span>
               <p className="mt-1 text-2xl font-extrabold text-slate-800">{totalNoOfDpdsRecorded}</p>
             </div>
-            
+
             {/* Metric Box */}
             <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
               <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">DPDs in Active Accounts</span>

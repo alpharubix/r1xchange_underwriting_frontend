@@ -5,10 +5,18 @@ import CustomerProfile from '@/components/itr/CustomerProfile';
 import { renderYearlyTable, renderDataTable } from '@/components/itr/ItrTableHelper';
 import { Loader2 } from 'lucide-react';
 
-export default function TaxCalculation() {
+interface TaxCalculationProps {
+  custId?: string;
+  reportId?: string;
+}
+
+export default function TaxCalculation({ custId, reportId }: TaxCalculationProps = {}) {
+  const finalCustId = custId || localStorage.getItem("selected_cust_id");
+  const finalReportId = reportId || localStorage.getItem("selected_itr_report_id");
+
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['itrTaxCalculation'],
-    queryFn: getItrTaxCalculation,
+    queryKey: ['itrTaxCalculation', finalCustId, finalReportId],
+    queryFn: () => getItrTaxCalculation(finalCustId),
   });
 
   if (isLoading) {

@@ -51,11 +51,11 @@ export default function Sidebar({
         <div className={`flex flex-col ${sidebarCollapsed ? "items-center" : ""}`}>
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-[#FF6B4A] to-[#FF8F6B] text-white flex items-center justify-center font-black text-sm shrink-0">
-              R1
+              C
             </div>
             {!sidebarCollapsed && (
               <span className="font-['Space_Grotesk'] text-lg font-bold text-[#1D1E2C]">
-                R1<span className="text-[#FF6B4A]">X</span>change
+               CRISP
               </span>
             )}
           </div>
