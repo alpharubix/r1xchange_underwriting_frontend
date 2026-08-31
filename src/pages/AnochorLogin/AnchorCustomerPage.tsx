@@ -30,9 +30,11 @@ import {
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAssociatedAnchorsList, getAnchorUsers } from '@/api/user';
 import apiClient from '@/lib/axios';
+import { useSearchParams } from 'react-router-dom';
 import Sidebar from "./Sidebar";
 import SuperAnchor from "./SuperAnchor";
 import ServiceReport from "./ServiceReport";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 // Mock customer type definition
 interface Customer {
@@ -73,20 +75,45 @@ export default function AnchorCustomerPage() {
 
 
 
-  // Sidebar and active tab states
+  // URL params and active tab states
+  const [searchParams, setSearchParams] = useSearchParams();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeTab, setActiveTab] = useState<"anchor" | "customer" | "reports">(
-    isSuperAnchor ? "anchor" : "customer"
-  );
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
+
+  const activeTabParam = searchParams.get("tab") as "anchor" | "customer" | "reports" | null;
+  const activeTab = activeTabParam || (isSuperAnchor ? "anchor" : "customer");
+
+  const setActiveTab = (tab: "anchor" | "customer" | "reports") => {
+    setSearchParams(prev => {
+      prev.set("tab", tab);
+      return prev;
+    }, { replace: false });
+  };
+
+  const customerIdParam = searchParams.get("customerId");
+
+  // We define selectedCustomer in a useMemo below, after customers is defined
   const [selectedAnchorFilter, setSelectedAnchorFilter] = useState<string | null>(null);
   const [selectedAnchor, setSelectedAnchor] = useState<any | null>(null);
   const [superAnchorViewMode, setSuperAnchorViewMode] = useState<"list" | "details">("list");
 
   // Initial customer list matching the mockup image
-  const [customers, setCustomers] = useState<Customer[]>([
+  const [customers, setCustomers] = useState<Customer[]>([]);
 
-  ]);
+  const selectedCustomer = useMemo(() => {
+    if (!customerIdParam) return null;
+    return customers.find(c => String(c.id) === customerIdParam) || null;
+  }, [customerIdParam, customers]);
+
+  const setSelectedCustomer = (customer: Customer | null) => {
+    setSearchParams(prev => {
+      if (customer) {
+        prev.set("customerId", String(customer.id));
+      } else {
+        prev.delete("customerId");
+      }
+      return prev;
+    }, { replace: false });
+  };
 
   // Fetch anchors list if super anchor
   const { data: fetchedAnchors } = useQuery({
@@ -547,13 +574,15 @@ export default function AnchorCustomerPage() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setIsNewCustomerModalOpen(true)}
-                  className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
-                >
-                  <Plus className="h-4 w-4 stroke-[3]" />
-                  New User
-                </button>
+                <Tooltip content="Create New User">
+                  <button
+                    onClick={() => setIsNewCustomerModalOpen(true)}
+                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
+                  >
+                    <Plus className="h-4 w-4 stroke-[3]" />
+                    New User
+                  </button>
+                </Tooltip>
               </div>
 
               {/* Selected Anchor Filter Banner for Super Anchor */}
@@ -805,17 +834,18 @@ export default function AnchorCustomerPage() {
 
                                 {/* Action details button */}
                                 <td className="py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
-                                  <button
-                                    onClick={() => {
-                                      setSelectedCustomer(cust);
-                                      setActiveTab("reports");
-                                      toast.info(`Viewing reports for ${cust.name}`);
-                                    }}
-                                    className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
-                                    title="View Reports"
-                                  >
-                                    <Eye className="h-4 w-4" />
-                                  </button>
+                                  <Tooltip content="View Customer Reports">
+                                    <button
+                                      onClick={() => {
+                                        setSelectedCustomer(cust);
+                                        setActiveTab("reports");
+                                        toast.info(`Viewing reports for ${cust.name}`);
+                                      }}
+                                      className="p-1.5 rounded-lg bg-[#FF6B4A]/10 text-[#FF6B4A] hover:bg-[#FF6B4A] hover:text-white transition-all shadow-sm group"
+                                    >
+                                      <Eye className="h-4 w-4" />
+                                    </button>
+                                  </Tooltip>
                                 </td>
                               </tr>
                             ))
@@ -929,12 +959,14 @@ export default function AnchorCustomerPage() {
                   <h2 className="text-xl font-bold text-slate-900">Add New Customer</h2>
                   <p className="text-xs text-slate-400 mt-0.5 font-medium">Create a new customer profile and allocate audit credits</p>
                 </div>
-                <button
-                  onClick={() => setIsNewCustomerModalOpen(false)}
-                  className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
-                >
-                  <X className="h-5 w-5" />
-                </button>
+                <Tooltip content="Close Dialog">
+                  <button
+                    onClick={() => setIsNewCustomerModalOpen(false)}
+                    className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors"
+                  >
+                    <X className="h-5 w-5" />
+                  </button>
+                </Tooltip>
               </div>
 
               <form onSubmit={handleCreateCustomer} className="space-y-4 mt-4" autoComplete="off">
@@ -1019,17 +1051,21 @@ export default function AnchorCustomerPage() {
                         className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
                         autoComplete="new-password"
                       />
-                      <button
-                        type="button"
-                        onClick={() => setShowNewCustPassword(!showNewCustPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 focus:outline-none"
-                      >
-                        {showNewCustPassword ? (
-                          <EyeOff className="h-4 w-4" />
-                        ) : (
-                          <Eye className="h-4 w-4" />
-                        )}
-                      </button>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
+                        <Tooltip content={showNewCustPassword ? "Hide Password" : "Show Password"}>
+                          <button
+                            type="button"
+                            onClick={() => setShowNewCustPassword(!showNewCustPassword)}
+                            className="text-slate-400 hover:text-slate-600 focus:outline-none flex"
+                          >
+                            {showNewCustPassword ? (
+                              <EyeOff className="h-4 w-4" />
+                            ) : (
+                              <Eye className="h-4 w-4" />
+                            )}
+                          </button>
+                        </Tooltip>
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -296,12 +296,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 />
               )}
             </div>
-            <Button
-              onClick={() => setIsBsaModalOpen(true)}
-              className="bg-[#000000] hover:bg-[#000060] text-white"
-            >
-              + Create New BSA Report
-            </Button>
+            
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in duration-200">
@@ -310,6 +305,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <h3 className="text-lg font-bold text-slate-900">BSA Reports</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
               </div>
+            <Button
+              onClick={() => setIsBsaModalOpen(true)}
+              className="bg-[#000000] hover:bg-[#000060] text-white"
+            >
+              + Create New BSA Report
+            </Button>
             </div>
 
             <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -360,10 +361,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                   onClick={() => {
                                     setViewingBsaReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
                                   title="View Report"
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View Report
                                 </button>
                               </div>
                             </td>
@@ -457,10 +459,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_gst_from_date", report.gstFromDate || '');
                                     localStorage.setItem("selected_gst_to_date", report.gstToDate || '');
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
                                   title="View Report"
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View Report
                                 </button>
                               </div>
                             </td>
@@ -553,10 +556,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_itr_report_id", report.reportId);
                                     setViewingItrReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
                                   title="View Report"
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View Report
                                 </button>
                               </div>
                             </td>
@@ -639,10 +643,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                 <button
                                   type="button"
                                   onClick={() => setViewingCibilReport(report)}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
                                   title="View Report"
                                 >
-                                  <Eye className="h-4 w-4" />
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View Report
                                 </button>
                               </div>
                             </td>

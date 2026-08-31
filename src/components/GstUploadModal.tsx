@@ -24,16 +24,16 @@ export default function GstUploadModal({ isOpen, onClose, custId }: GstUploadMod
   return createPortal(
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[rgba(0,0,0,0.5)] backdrop-blur"
+        initial={{ opacity: 0 ,backgroundColor: 'rgba(0, 0, 0, 0)'}}
+        animate={{ opacity: 1 ,backdropFilter: 'blur(6px)'}}
         exit={{ opacity: 0 }}
       >
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          className="w-full max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl shadow-2xl relative"
+          exit={{ opacity: 0, scale: 1.2 }}
+          className="w-full max-w-4xl max-h-[95vh] bg-black/50 overflow-y-auto bg-white rounded-xl shadow-2xl relative"
         >
           <button
             onClick={onClose}

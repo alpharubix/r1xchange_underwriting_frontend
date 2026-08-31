@@ -206,7 +206,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
       initial={{ opacity: 0, scale: 0 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.3 }}
+      transition={{ duration: 0.6 }}
     >
       <Card className="w-full max-w-lg shadow-2xl relative animate-scale-in max-h-[90vh] overflow-y-auto">
         <button

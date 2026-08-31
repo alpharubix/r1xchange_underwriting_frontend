@@ -18,6 +18,8 @@ export default function ProfitAndLossStatement({ custId, reportId }: ProfitAndLo
     queryFn: () => getItrProfitAndLoss(finalCustId),
   });
 
+
+
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">

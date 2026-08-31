@@ -11,7 +11,7 @@ import { z } from "zod";
 import { useAnchorLogin, getApiError } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
-const loginSchema = z.object({  
+const loginSchema = z.object({
   id: z.string().min(1, "ID is required"),
   password: z.string().min(1, "Password is required"),
 });
@@ -49,13 +49,47 @@ export default function AnchorLoginPage() {
         {/* Visual Graphic Elements */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
           {/* Ambient Glow behind the orb */}
-          <div className="absolute -right-24 top-[15%] w-[600px] h-[600px] rounded-full bg-[#5839f5]/25 blur-[120px]" />
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.5, 0.8, 0.5],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute -right-24 top-[15%] w-[600px] h-[600px] rounded-full bg-[#5839f5]/25 blur-[120px]"
+          />
 
           {/* Glowing Orb/Sphere */}
-          <div className="absolute -right-24 top-[20%] w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#4027db] to-[#120760] opacity-90 border-t border-l border-white/20 shadow-[inset_15px_15px_40px_rgba(255,255,255,0.22),_0_0_80px_rgba(83,69,211,0.25)]" />
+          <motion.div
+            animate={{
+              y: [0, -30, 0],
+              x: [0, -10, 0],
+            }}
+            transition={{
+              duration: 6,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute -right-24 top-[20%] w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#4027db] to-[#120760] opacity-90 border-t border-l border-white/20 shadow-[inset_15px_15px_40px_rgba(255,255,255,0.22),_0_0_80px_rgba(83,69,211,0.25)]"
+          />
 
           {/* Diagonal Glassmorphic Overlay */}
-          <div className="absolute right-[-15%] bottom-[-15%] w-[100%] h-[90%] rounded-[100px] bg-gradient-to-tr from-white/[0.05] to-transparent backdrop-blur-[14px] border-t border-l border-white/[0.08] shadow-[25px_-25px_60px_rgba(0,0,0,0.2)] transform rotate-[-38deg] origin-bottom-right" />
+          <motion.div
+            initial={{ rotate: -38 }}
+            animate={{
+              y: [0, 15, 0],
+              rotate: [-38, -39, -38]
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="absolute right-[-15%] bottom-[-15%] w-[100%] h-[90%] rounded-[100px] bg-gradient-to-tr from-white/[0.05] to-transparent backdrop-blur-[14px] border-t border-l border-white/[0.08] shadow-[25px_-25px_60px_rgba(0,0,0,0.2)] origin-bottom-right"
+          />
 
           {/* Fading Dot Grid Pattern */}
           <div className="absolute right-8 bottom-8 w-[200px] h-[250px] opacity-40">
@@ -87,7 +121,7 @@ export default function AnchorLoginPage() {
           </div>
           <span className="text-sm fo\
           nt-bold tracking-[0.15em] text-white/90 uppercase">
-            CRISP 
+            CRISP
           </span>
         </div>
 
@@ -187,7 +221,7 @@ export default function AnchorLoginPage() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full h-12 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all duration-200 flex items-center justify-center gap-2"
+                  className="w-full h-12 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#000000]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
                 >
                   {loginMutation.isPending ? (
                     <>
