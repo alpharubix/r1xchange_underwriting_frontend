@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { regex, z } from "zod";
+import { z } from "zod";
 import { useAnchorLogin, getApiError } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
