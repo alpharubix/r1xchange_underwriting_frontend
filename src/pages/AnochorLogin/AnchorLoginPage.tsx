@@ -38,7 +38,7 @@ export default function AnchorLoginPage() {
       password: values.password,
     }, {
       onError: (err) => {
-        if (err.message.toLocaleLowerCase()=="Unauthorized Access") {
+        if (err.message.toLocaleLowerCase() == "Unauthorized Access") {
           toast.error("Invalid ID or password. Please try again.");
         }
         toast.error(getApiError(err));
@@ -117,7 +117,7 @@ export default function AnchorLoginPage() {
         </div>
 
         <div className="relative z-10 flex items-center gap-4">
-          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-16 w-auto object-contain select-none" />
+          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-10 w-auto object-contain select-none" />
         </div>
 
         {/* Center Text Branding */}
