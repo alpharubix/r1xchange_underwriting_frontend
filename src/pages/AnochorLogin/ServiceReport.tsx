@@ -81,12 +81,11 @@ const formatDateOnly = (dateString: string) => {
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
   const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil">("bsa");
-<<<<<<< HEAD
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
   const [isCibilModalOpen, setIsCibilModalOpen] = useState(false);
-=======
+
   const [viewingBsaReport, setViewingBsaReport] = useState<any | null>(null);
   const [bsaDetailTab, setBsaDetailTab] = useState<"overview" | "summary" | "cashflow">("overview");
   const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
@@ -106,9 +105,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       localStorage.removeItem("selected_gst_to_date");
     };
   }, [selectedCustomer]);
->>>>>>> 0d3fa8c (service report Intergrete API)
 
-  // Fetch BSA reports using React Query and map keys defensively
   const { data: bsaReports = [], isLoading: isBsaLoading } = useQuery({
     queryKey: ["reports", "bsa", selectedCustomer.id],
     queryFn: async () => {
@@ -125,7 +122,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     enabled: !!selectedCustomer?.id && reportsSubTab === "bsa",
   });
 
-  // Fetch GST reports using React Query and map keys defensively
   const { data: gstReports = [], isLoading: isGstLoading } = useQuery({
     queryKey: ["reports", "gst", selectedCustomer.id],
     queryFn: async () => {
@@ -144,7 +140,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     enabled: !!selectedCustomer?.id && reportsSubTab === "gst",
   });
 
-  // Fetch ITR reports using React Query and map keys defensively
   const { data: itrReports = [], isLoading: isItrLoading } = useQuery({
     queryKey: ["reports", "itr", selectedCustomer.id],
     queryFn: async () => {
@@ -161,7 +156,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     enabled: !!selectedCustomer?.id && reportsSubTab === "itr",
   });
 
-  // Fetch CIBIL reports using React Query and map keys defensively
   const { data: cibilReports = [], isLoading: isCibilLoading } = useQuery({
     queryKey: ["reports", "cibil", selectedCustomer.id],
     queryFn: async () => {
@@ -181,7 +175,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      {/* Title Block */}
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">Services & Reports</h1>
         <Button
@@ -193,7 +186,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         </Button>
       </div>
 
-      {/* Selected Customer Header Block */}
       <div className="flex items-center gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
         <div className="h-14 w-14 rounded-full bg-[#FFF0EC] text-[#FF6B4A] flex items-center justify-center font-bold text-lg shadow-inner shrink-0">
           <Users className="h-7 w-7 text-[#FF6B4A]" />
@@ -206,7 +198,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         </div>
       </div>
 
-      {/* Sub-navigation tabs block */}
       <div className="flex border-b border-slate-100 gap-6">
         {(["bsa", "gst", "itr", "cibil"] as const).map((tab) => {
           const labels: Record<string, string> = {
@@ -239,7 +230,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         })}
       </div>
 
-      {/* BSA Report Sub-Tab */}
       {reportsSubTab === "bsa" && (
         viewingBsaReport ? (
           <div className="space-y-6 animate-in fade-in duration-200">
@@ -256,7 +246,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               </span>
             </div>
 
-            {/* Inner Tabs for BSA Details */}
             <div className="flex border-b border-slate-100 gap-6">
               {(["overview", "summary", "cashflow"] as const).map((tab) => {
                 const labels: Record<string, string> = {
@@ -281,7 +270,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               })}
             </div>
 
-            {/* Render Component */}
             <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-6">
               {bsaDetailTab === "overview" && (
                 <OverviewMonthlyWise
@@ -337,35 +325,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <th className="py-3 px-4 font-semibold text-slate-500">Generated On</th>
                         <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
                       </tr>
-<<<<<<< HEAD
-                    ) : bsaReports.length === 0 ? (
-                      <tr>
-                        <td colSpan={6} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            <FileSpreadsheet className="h-8 w-8 text-slate-300" />
-                            <span>No reports generated yet</span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      bsaReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
-                          <td className="py-4 px-4 text-slate-500">{report.ReportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateOnly(report.bsaFromDate)}</td>
-                          <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.bsaToDate)}</td>
-                          <td className="py-4 px-4 text-slate-500">{report.tenure}</td>
-                          <td className="py-4 px-4 text-slate-800">{formatDateTime(report.generatedOn)}</td>
-                          <td className="py-4 px-4 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toast.info(`Viewing details for report ${report.id}`)}
-                                className="p-1.5 rounded-lg border border-slate-200 text-[#000080] hover:border-[#000080] hover:bg-[#000080]/5 transition-colors shadow-sm"
-                                title="View Report"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </button>
-=======
                     </thead>
                     <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
                       {isBsaLoading ? (
@@ -374,7 +333,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                             <div className="flex flex-col items-center justify-center gap-2">
                               <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
                               <span>Loading reports...</span>
->>>>>>> 0d3fa8c (service report Intergrete API)
                             </div>
                           </td>
                         </tr>
@@ -391,10 +349,10 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         bsaReports.map((report) => (
                           <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                             <td className="py-4 px-4 text-slate-500">{report.ReportId}</td>
-                            <td className="py-4 px-4 font-bold text-slate-800">{report.bsaFromDate}</td>
-                            <td className="py-4 px-4 text-slate-600">{report.bsaToDate}</td>
+                            <td className="py-4 px-4 font-bold text-slate-800">{formatDateOnly(report.bsaFromDate)}</td>
+                            <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.bsaToDate)}</td>
                             <td className="py-4 px-4 text-slate-500">{report.tenure}</td>
-                            <td className="py-4 px-4 text-slate-800">{report.generatedOn}</td>
+                            <td className="py-4 px-4 text-slate-800">{formatDateTime(report.generatedOn)}</td>
                             <td className="py-4 px-4 text-center">
                               <div className="flex items-center justify-center gap-2">
                                 <button
@@ -421,11 +379,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         )
       )}
 
-      {/* GST Report Sub-Tab */}
       {reportsSubTab === "gst" && (
         viewingGstReport ? (
           <GstReportPage
-          
             gstReferenceId={viewingGstReport.reportId}
             onBack={() => setViewingGstReport(null)}
           />
@@ -436,18 +392,13 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <h3 className="text-lg font-bold text-slate-900">GST Analysis</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Goods and Services Tax Reports & Filings</p>
               </div>
+              <Button
+                onClick={() => setIsGstModalOpen(true)}
+                className="bg-[#000000] hover:bg-[#000060] text-white"
+              >
+                + Create New GST Report
+              </Button>
             </div>
-<<<<<<< HEAD
-            <Button
-              onClick={() => setIsGstModalOpen(true)}
-              className="bg-[#000000] hover:bg-[#000060] text-white"
-            >
-              + Create New GST Report
-            </Button>
-          </div>
-=======
->>>>>>> 0d3fa8c (service report Intergrete API)
-
             <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
               <CardContent className="p-6">
                 <div className="overflow-x-auto">
@@ -463,41 +414,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <th className="py-3 px-4 font-semibold text-slate-500">Completed</th>
                         <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
                       </tr>
-<<<<<<< HEAD
-                    ) : gstReports.length === 0 ? (
-                      <tr>
-                        <td colSpan={8} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            <FileSpreadsheet className="h-8 w-8 text-slate-300" />
-                            <span>No reports generated yet</span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      gstReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
-                          <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{report.gstn}</td>
-                          <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.gstFromDate)}</td>
-                          <td className="py-4 px-4 text-slate-800">{formatDateOnly(report.gstToDate)}</td>
-                          <td className="py-4 px-4 text-slate-600">{formatDateTime(report.generatedOn)}</td>
-                          <td className="py-4 px-4">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-                              {report.status}
-                            </span>
-                          </td>
-                          <td className="py-4 px-4 text-slate-600">{report.completed}</td>
-                          <td className="py-4 px-4 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toast.info(`Viewing details for GST report ${report.id}`)}
-                                className="p-1.5 rounded-lg border border-slate-200 text-[#000080] hover:border-[#000080] hover:bg-[#000080]/5 transition-colors shadow-sm"
-                                title="View Report"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </button>
-=======
                     </thead>
                     <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
                       {isGstLoading ? (
@@ -506,7 +422,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                             <div className="flex flex-col items-center justify-center gap-2">
                               <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
                               <span>Loading reports...</span>
->>>>>>> 0d3fa8c (service report Intergrete API)
                             </div>
                           </td>
                         </tr>
@@ -524,9 +439,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                           <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                             <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
                             <td className="py-4 px-4 font-bold text-slate-800">{report.gstn}</td>
-                            <td className="py-4 px-4 text-slate-600">{report.gstFromDate}</td>
-                            <td className="py-4 px-4 text-slate-800">{report.gstToDate}</td>
-                            <td className="py-4 px-4 text-slate-600">{report.generatedOn}</td>
+                            <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.gstFromDate)}</td>
+                            <td className="py-4 px-4 text-slate-800">{formatDateOnly(report.gstToDate)}</td>
+                            <td className="py-4 px-4 text-slate-600">{formatDateTime(report.generatedOn)}</td>
                             <td className="py-4 px-4">
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
                                 {report.status}
@@ -561,11 +476,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         )
       )}
 
-      {/* ITR Report Sub-Tab */}
       {reportsSubTab === "itr" && (
         viewingItrReport ? (
           <ItrReportPage
-           
             itrReportId={viewingItrReport.reportId}
             onBack={() => {
               setViewingItrReport(null);
@@ -579,17 +492,13 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <h3 className="text-lg font-bold text-slate-900">ITR Analysis</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Income Tax Return Statements</p>
               </div>
+              <Button
+                onClick={() => setIsItrModalOpen(true)}
+                className="bg-[#000000] hover:bg-[#000060] text-white"
+              >
+                + Create New ITR Report
+              </Button>
             </div>
-<<<<<<< HEAD
-            <Button
-              onClick={() => setIsItrModalOpen(true)}
-              className="bg-[#000000] hover:bg-[#000060] text-white"
-            >
-              + Create New ITR Report
-            </Button>
-          </div>
-=======
->>>>>>> 0d3fa8c (service report Intergrete API)
 
             <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
               <CardContent className="p-6">
@@ -603,40 +512,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <th className="py-3 px-4 font-semibold text-slate-500">PERIOD</th>
                         <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
                       </tr>
-<<<<<<< HEAD
-                    ) : itrReports.length === 0 ? (
-                      <tr>
-                        <td colSpan={5} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            <FileSpreadsheet className="h-8 w-8 text-slate-300" />
-                            <span>No reports generated yet</span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      itrReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
-                          <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateTime(report.generatedOn)}</td>
-                          <td className="py-4 px-4">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-                              {report.status}
-                            </span>
-                          </td>
-                          <td className="py-4 px-4 text-slate-600">
-                            {report.itrFromDate && report.itrToDate ? `${formatDateOnly(report.itrFromDate)} - ${formatDateOnly(report.itrToDate)}` : 'N/A'}
-                          </td>
-                          <td className="py-4 px-4 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toast.info(`Viewing details for ITR report ${report.id}`)}
-                                className="p-1.5 rounded-lg border border-slate-200 text-[#000080] hover:border-[#000080] hover:bg-[#000080]/5 transition-colors shadow-sm"
-                                title="View Report"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </button>
-=======
                     </thead>
                     <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
                       {isItrLoading ? (
@@ -645,7 +520,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                             <div className="flex flex-col items-center justify-center gap-2">
                               <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
                               <span>Loading reports...</span>
->>>>>>> 0d3fa8c (service report Intergrete API)
                             </div>
                           </td>
                         </tr>
@@ -662,14 +536,14 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         itrReports.map((report) => (
                           <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
                             <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                            <td className="py-4 px-4 font-bold text-slate-800">{report.generatedOn}</td>
+                            <td className="py-4 px-4 font-bold text-slate-800">{formatDateTime(report.generatedOn)}</td>
                             <td className="py-4 px-4">
                               <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
                                 {report.status}
                               </span>
                             </td>
                             <td className="py-4 px-4 text-slate-600">
-                              {report.itrFromDate && report.itrToDate ? `${report.itrFromDate} - ${report.itrToDate}` : 'N/A'}
+                              {report.itrFromDate && report.itrToDate ? `${formatDateOnly(report.itrFromDate)} - ${formatDateOnly(report.itrToDate)}` : 'N/A'}
                             </td>
                             <td className="py-4 px-4 text-center">
                               <div className="flex items-center justify-center gap-2">
@@ -698,11 +572,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         )
       )}
 
-      {/* CIBIL Report Sub-Tab */}
       {reportsSubTab === "cibil" && (
         viewingCibilReport ? (
           <CibilReportView
-           
             reference_id={viewingCibilReport.reportId}
             onBack={() => setViewingCibilReport(null)}
           />
@@ -713,17 +585,13 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <h3 className="text-lg font-bold text-slate-900">CIBIL Report</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Credit Bureau Score & Report Details</p>
               </div>
+              <Button
+                onClick={() => setIsCibilModalOpen(true)}
+                className="bg-[#000000] hover:bg-[#000060] text-white"
+              >
+                + Create New CIBIL Report
+              </Button>
             </div>
-<<<<<<< HEAD
-            <Button
-              onClick={() => setIsCibilModalOpen(true)}
-              className="bg-[#000000] hover:bg-[#000060] text-white"
-            >
-              + Create New CIBIL Report
-            </Button>
-          </div>
-=======
->>>>>>> 0d3fa8c (service report Intergrete API)
 
             <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
               <CardContent className="p-6">
@@ -736,37 +604,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <th className="py-3 px-4 font-semibold text-slate-500">Status</th>
                         <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
                       </tr>
-<<<<<<< HEAD
-                    ) : cibilReports.length === 0 ? (
-                      <tr>
-                        <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
-                          <div className="flex flex-col items-center justify-center gap-2">
-                            <FileSpreadsheet className="h-8 w-8 text-slate-300" />
-                            <span>No reports generated yet</span>
-                          </div>
-                        </td>
-                      </tr>
-                    ) : (
-                      cibilReports.map((report) => (
-                        <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
-                          <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
-                          <td className="py-4 px-4 font-bold text-slate-800">{formatDateTime(report.generatedOn)}</td>
-                          <td className="py-4 px-4">
-                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
-                              {report.status}
-                            </span>
-                          </td>
-                          <td className="py-4 px-4 text-center">
-                            <div className="flex items-center justify-center gap-2">
-                              <button
-                                type="button"
-                                onClick={() => toast.info(`Viewing details for CIBIL report ${report.id}`)}
-                                className="p-1.5 rounded-lg border border-slate-200 text-[#000080] hover:border-[#000080] hover:bg-[#000080]/5 transition-colors shadow-sm"
-                                title="View Report"
-                              >
-                                <Eye className="h-4 w-4" />
-                              </button>
-=======
                     </thead>
                     <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
                       {isCibilLoading ? (
@@ -775,7 +612,6 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                             <div className="flex flex-col items-center justify-center gap-2">
                               <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
                               <span>Loading reports...</span>
->>>>>>> 0d3fa8c (service report Intergrete API)
                             </div>
                           </td>
                         </tr>

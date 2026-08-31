@@ -382,7 +382,6 @@ export default function AnchorCustomerPage() {
       {/* ─── MAIN CONTENT AREA ─── */}
       <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#F0F1F5]">
         {/* Top Header Block */}
-<<<<<<< HEAD
         <header className="mx-6 mt-6 mb-2 bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[24px] h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-[0_8px_32px_rgba(31,38,135,0.07)] transition-all">
           <div className="flex items-center gap-4">
             <span className="font-['Space_Grotesk'] text-2xl font-black text-slate-900 tracking-tighter flex items-center">
@@ -395,15 +394,6 @@ export default function AnchorCustomerPage() {
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF6B4A] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF6B4A]"></span>
-=======
-        <header className="w-full bg-white border-b border-[#F0F1F5] h-16 shrink-0 flex items-center justify-between px-8 z-10 shadow-[0_1px_2px_rgba(20,20,30,0.04)]">
-          <div>
-            <span className="font-['Space_Grotesk'] text-lg font-bold text-[#1D1E2C] flex items-center gap-2">
-CRISP
-              <span className="text-[10px] font-bold text-[#FF6B4A] bg-[#FFF0EC] px-2.5 py-0.5 rounded-md uppercase ml-2 tracking-wider flex items-center gap-1.5">
-                <span className="w-1 h-1 rounded-full bg-[#FF6B4A]" />
-                {isSuperAnchor ? "Super-Anchor View" : "Anchor View"}
->>>>>>> 0d3fa8c (service report Intergrete API)
               </span>
               {isSuperAnchor ? "Super-Anchor View" : "Anchor View"}
             </span>
