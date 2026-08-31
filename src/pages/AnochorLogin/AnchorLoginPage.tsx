@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { z } from "zod";
+import { regex, z } from "zod";
 import { useAnchorLogin, getApiError } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
 const loginSchema = z.object({
   id: z.string().min(1, "ID is required"),
@@ -37,6 +38,9 @@ export default function AnchorLoginPage() {
       password: values.password,
     }, {
       onError: (err) => {
+        if (err.message.toLocaleLowerCase()=="Unauthorized Access") {
+          toast.error("Invalid ID or password. Please try again.");
+        }
         toast.error(getApiError(err));
       },
     });
@@ -112,17 +116,8 @@ export default function AnchorLoginPage() {
           </div>
         </div>
 
-        {/* Header Logo */}
         <div className="relative z-10 flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
-            <span className="text-2xl font-black text-[#2213b2] select-none">
-              C
-            </span>
-          </div>
-          <span className="text-sm fo\
-          nt-bold tracking-[0.15em] text-white/90 uppercase">
-            CRISP
-          </span>
+          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-16 w-auto object-contain select-none" />
         </div>
 
         {/* Center Text Branding */}
@@ -130,7 +125,7 @@ export default function AnchorLoginPage() {
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-[1.12] tracking-tight">
             Welcome
             <br />
-            CRISP
+            R1Xchange
             <br />
             Underwriting Platform
           </h1>

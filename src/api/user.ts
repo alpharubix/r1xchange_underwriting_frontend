@@ -13,7 +13,7 @@ export interface UserProfile {
 }
 
 export const getMe = async (): Promise<UserProfile> => {
-  const response = await apiClient.get("/user/me");
+  const response = await apiClient.get("/user/me", { skipErrorToast: true } as any);
   return response.data?.data ?? response.data;
 
 };

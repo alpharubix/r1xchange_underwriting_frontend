@@ -67,8 +67,8 @@ export const loginAnchor = async (data: AnchorLoginPayload) => {
 export const logoutUser = async () => {
   const response = await apiClient.post("/auth/logout", undefined, {
     successMessage: "You've been logged out successfully.",
-    errorMessage: "Logout failed. Please try again.",
-  });
+    skipErrorToast: true,
+  } as any);
   return response.data;
 };
 
