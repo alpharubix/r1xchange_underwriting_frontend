@@ -91,6 +91,13 @@ export default function AnchorCustomerPage() {
 
   const customerIdParam = searchParams.get("customerId");
 
+  // Redirect if they land on reports without a customer selected
+  useEffect(() => {
+    if (activeTab === "reports" && !customerIdParam) {
+      setActiveTab("customer");
+    }
+  }, [activeTab, customerIdParam]);
+
   // We define selectedCustomer in a useMemo below, after customers is defined
   const [selectedAnchorFilter, setSelectedAnchorFilter] = useState<string | null>(null);
   const [selectedAnchor, setSelectedAnchor] = useState<any | null>(null);
@@ -767,8 +774,11 @@ export default function AnchorCustomerPage() {
                                 key={cust.id}
                                 className="hover:bg-[#F6F6F8] transition-colors group cursor-pointer text-[#3A3C46]"
                                 onClick={() => {
-                                  setSelectedCustomer(cust);
-                                  setActiveTab("reports");
+                                  setSearchParams(prev => {
+                                    prev.set("customerId", String(cust.id));
+                                    prev.set("tab", "reports");
+                                    return prev;
+                                  });
                                   toast.info(`Viewing reports for ${cust.name}`);
                                 }}
                               >
@@ -837,8 +847,11 @@ export default function AnchorCustomerPage() {
                                   <Tooltip content="View Customer Reports">
                                     <button
                                       onClick={() => {
-                                        setSelectedCustomer(cust);
-                                        setActiveTab("reports");
+                                        setSearchParams(prev => {
+                                          prev.set("customerId", String(cust.id));
+                                          prev.set("tab", "reports");
+                                          return prev;
+                                        });
                                         toast.info(`Viewing reports for ${cust.name}`);
                                       }}
                                       className="p-1.5 rounded-lg bg-[#FF6B4A]/10 text-[#FF6B4A] hover:bg-[#FF6B4A] hover:text-white transition-all shadow-sm group"
@@ -901,7 +914,7 @@ export default function AnchorCustomerPage() {
           {/* ─── REPORTS TAB ─── */}
           {activeTab === "reports" && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              {selectedCustomer ? (
+              {selectedCustomer && (
                 <ServiceReport
                   selectedCustomer={selectedCustomer}
                   onBack={() => {
@@ -909,24 +922,6 @@ export default function AnchorCustomerPage() {
                     setActiveTab("customer");
                   }}
                 />
-              ) : (
-                <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-[#e2e8f0] rounded-3xl space-y-4 shadow-sm">
-                  <div className="h-16 w-16 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 shadow-inner">
-                    <FileSpreadsheet className="h-8 w-8" />
-                  </div>
-                  <div className="max-w-md space-y-2">
-                    <h3 className="text-lg font-bold text-slate-900">Direct Access Blocked</h3>
-                    <p className="text-sm text-slate-500 font-medium">
-                      Reports cannot be opened directly from the sidebar. Please go to the Customers list and click the customer action button (eye icon) to view reports.
-                    </p>
-                  </div>
-                  <Button
-                    onClick={() => setActiveTab("customer")}
-                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1D1E2C]/15"
-                  >
-                    Go to Customers List
-                  </Button>
-                </div>
               )}
             </div>
           )}
