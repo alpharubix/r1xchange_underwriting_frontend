@@ -1,0 +1,178 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Loader2, ArrowLeft, IndianRupee, AlertCircle, Check, Save } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { getRectifyMoneyReports, submitRectifyMoneySelections } from "@/api/money";
+import { format } from "date-fns";
+import { toast } from "sonner";
+
+interface RectifyMoneyReportViewProps {
+  custId: string;
+  referenceId: string;
+  onBack: () => void;
+}
+
+const safeFormatDate = (dateStr: string) => {
+  if (!dateStr) return "N/A";
+  let dateObj = new Date(dateStr);
+  if (isNaN(dateObj.getTime())) {
+    const parts = dateStr.split('-');
+    if (parts.length === 3) {
+      dateObj = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    }
+  }
+  if (isNaN(dateObj.getTime())) return dateStr;
+  return format(dateObj, 'dd MMM yyyy');
+};
+
+export default function RectifyMoneyReportView({ custId, referenceId, onBack }: RectifyMoneyReportViewProps) {
+  const queryClient = useQueryClient();
+
+  const { data: report, isLoading, isError } = useQuery({
+    queryKey: ["reports", "rectify_money", custId, referenceId],
+    queryFn: () => getRectifyMoneyReports(custId, referenceId),
+  });
+
+  const submitMutation = useMutation({
+    mutationFn: (selectedAccounts: { account_number: string, lender_name: string }[]) => 
+      submitRectifyMoneySelections(custId, { reference_id: referenceId, selected_accounts: selectedAccounts }),
+    onSuccess: () => {
+      toast.success("Selections submitted successfully!");
+      queryClient.invalidateQueries({ queryKey: ["reports", "rectify_money", custId, referenceId] });
+    },
+    onError: () => {
+      toast.error("Failed to submit selections");
+    }
+  });
+
+  const toggleCheckbox = (account: any) => {
+    queryClient.setQueryData(["reports", "rectify_money", custId, referenceId], (old: any) => {
+      if (!old || !old.accounts) return old;
+      return {
+        ...old,
+        accounts: old.accounts.map((acc: any) => 
+          (acc.account_number === account.account_number && acc.lender_name === account.lender_name) 
+            ? { ...acc, check_box: !acc.check_box } 
+            : acc
+        )
+      };
+    });
+  };
+
+  const handleSubmit = () => {
+    if (!report || !report.accounts) return;
+    const selected = report.accounts
+      .filter((acc: any) => acc.check_box)
+      .map((acc: any) => ({ account_number: acc.account_number, lender_name: acc.lender_name }));
+    submitMutation.mutate(selected);
+  };
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-300">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="outline"
+          size="icon"
+          onClick={onBack}
+          className="h-10 w-10 rounded-xl border-slate-200 hover:bg-slate-50 shrink-0"
+        >
+          <ArrowLeft className="h-4 w-4 text-slate-600" />
+        </Button>
+        <div className="flex flex-col">
+          <div className="flex items-center gap-4">
+            <h2 className="text-xl font-bold text-slate-900">Rectify Money Report</h2>
+          </div>
+          <p className="text-xs text-slate-500 mt-0.5">Reference ID: {referenceId}</p>
+        </div>
+      </div>
+
+      <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+        {isLoading ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+            <p className="text-slate-500 font-medium">Fetching accounts data...</p>
+          </div>
+        ) : isError ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-2">
+            <p className="text-red-500 font-medium">Failed to load rectify money report.</p>
+            <p className="text-sm text-slate-400">Please try again later.</p>
+          </div>
+        ) : !report?.accounts || report.accounts.length === 0 ? (
+          <div className="py-24 flex flex-col items-center justify-center gap-2 text-slate-500 font-medium">
+            <div className="h-12 w-12 rounded-full bg-emerald-50 flex items-center justify-center mb-2 text-emerald-500">
+              <Check className="h-6 w-6" />
+            </div>
+            No overdue accounts found for this report.
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-left border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-[#f1f5f9] text-slate-400 font-bold text-xs uppercase tracking-wider bg-slate-50/50">
+                  <th className="py-4 px-6 font-semibold">Lender Name</th>
+                  <th className="py-4 px-6 font-semibold">Account Number</th>
+                  <th className="py-4 px-6 font-semibold">Opened Date</th>
+                  <th className="py-4 px-6 font-semibold text-right">Overdue Amount</th>
+                  <th className="py-4 px-6 font-semibold text-center">Average DPD</th>
+                  <th className="py-4 px-6 font-semibold text-center">Select</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
+                {report.accounts.map((account, idx) => (
+                  <tr key={idx} className="hover:bg-slate-50/20 transition-colors">
+                    <td className="py-4 px-6 font-bold text-slate-900">{account.lender_name || "N/A"}</td>
+                    <td className="py-4 px-6 text-slate-600">{account.account_number || "N/A"}</td>
+                    <td className="py-4 px-6 text-slate-600">
+                      {safeFormatDate(account.opened_date)}
+                    </td>
+                    <td className="py-4 px-6 text-right font-bold text-red-500">
+                      {account.overdue_amount > 0 ? (
+                        <span className="flex items-center justify-end gap-1">
+                          <IndianRupee className="h-3 w-3" />
+                          {Number(account.overdue_amount).toLocaleString('en-IN')}
+                        </span>
+                      ) : "N/A"}
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-amber-50 text-amber-600 border border-amber-100">
+                        <AlertCircle className="h-3.5 w-3.5" />
+                        {account.average_dpd} Days
+                      </div>
+                    </td>
+                    <td className="py-4 px-6 text-center">
+                      <div className="flex justify-center">
+                        <button 
+                          onClick={() => toggleCheckbox(account)}
+                          type="button"
+                          className={`h-6 w-6 rounded-md flex items-center justify-center transition-colors border shadow-sm ${account.check_box ? 'bg-[#2E9B5C] border-[#2E9B5C] text-white' : 'bg-white border-slate-300 text-transparent hover:border-slate-400'}`}
+                        >
+                          <Check className="h-4 w-4" strokeWidth={3} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
+
+      {report?.accounts && report.accounts.length > 0 && (
+        <div className="flex justify-end pt-2">
+          <Button 
+            onClick={handleSubmit} 
+            disabled={submitMutation.isPending}
+            className="bg-[#FF6B4A] hover:bg-[#E55A39] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
+          >
+            {submitMutation.isPending ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+            ) : (
+              <Save className="h-4 w-4 mr-2" />
+            )}
+            Submit Selections
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+}

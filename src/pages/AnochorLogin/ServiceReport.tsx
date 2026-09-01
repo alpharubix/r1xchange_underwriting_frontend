@@ -19,6 +19,8 @@ import CashFlow from "./bsa/cashFlow/CashFlow";
 import GstReportPage from "./gst/GstReportPage";
 import ItrReportPage from "./itr/ItrReportPage";
 import CibilReportView from "./cibil/ViewReport";
+import SaveMoneyReportView from "./money/SaveMoneyReportView";
+import RectifyMoneyReportView from "./money/RectifyMoneyReportView";
 import { useQuery } from '@tanstack/react-query';
 import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
 
@@ -80,7 +82,7 @@ const formatDateOnly = (dateString: string) => {
 };
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
-  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil">("bsa");
+  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
@@ -91,6 +93,8 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
   const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
   const [viewingItrReport, setViewingItrReport] = useState<any | null>(null);
   const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(null);
+  const [viewingSaveMoneyReport, setViewingSaveMoneyReport] = useState<any | null>(null);
+  const [viewingRectifyMoneyReport, setViewingRectifyMoneyReport] = useState<any | null>(null);
 
   useEffect(() => {
     if (selectedCustomer?.id) {
@@ -169,7 +173,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         status: item.status || item.report_status || 'Active'
       }));
     },
-    enabled: !!selectedCustomer?.id && reportsSubTab === "cibil",
+    enabled: !!selectedCustomer?.id && (reportsSubTab === "cibil" || reportsSubTab === "save_money" || reportsSubTab === "rectify_money"),
   });
 
 
@@ -199,12 +203,14 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       </div>
 
       <div className="flex border-b border-slate-100 gap-6">
-        {(["bsa", "gst", "itr", "cibil"] as const).map((tab) => {
+        {(["bsa", "gst", "itr", "cibil", "save_money", "rectify_money"] as const).map((tab) => {
           const labels: Record<string, string> = {
             bsa: "BSA Report",
             gst: "GST Analysis",
             itr: "ITR Analysis",
             cibil: "CIBIL Report",
+            save_money: "Save Money",
+            rectify_money: "Rectify Money",
           };
           const isActive = reportsSubTab === tab;
           return (
@@ -216,6 +222,8 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 setViewingGstReport(null);
                 setViewingItrReport(null);
                 setViewingCibilReport(null);
+                setViewingSaveMoneyReport(null);
+                setViewingRectifyMoneyReport(null);
                 localStorage.removeItem("selected_itr_report_id");
               }}
               className={`pb-3 text-sm font-bold transition-all relative ${isActive ? "text-[#FF6B4A]" : "text-slate-400 hover:text-slate-600"
@@ -296,7 +304,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 />
               )}
             </div>
-            
+
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in duration-200">
@@ -305,12 +313,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <h3 className="text-lg font-bold text-slate-900">BSA Reports</h3>
                 <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
               </div>
-            <Button
-              onClick={() => setIsBsaModalOpen(true)}
-              className="bg-[#000000] hover:bg-[#000060] text-white"
-            >
-              + Create New BSA Report
-            </Button>
+              <Button
+                onClick={() => setIsBsaModalOpen(true)}
+                className="bg-[#000000] hover:bg-[#000060] text-white"
+              >
+                + Create New BSA Report
+              </Button>
             </div>
 
             <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -648,6 +656,170 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                 >
                                   <Eye className="h-3.5 w-3.5" />
                                   View Report
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )
+      )}
+
+      {reportsSubTab === "save_money" && (
+        viewingSaveMoneyReport ? (
+          <SaveMoneyReportView
+            custId={selectedCustomer.id}
+            referenceId={viewingSaveMoneyReport.reportId}
+            onBack={() => setViewingSaveMoneyReport(null)}
+          />
+        ) : (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Save Money</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Select a CIBIL report to analyze active accounts for savings</p>
+              </div>
+            </div>
+
+            <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-[#f1f5f9] text-slate-400 font-bold text-xs uppercase tracking-wider bg-slate-50/50">
+                        <th className="py-3 px-4 font-semibold text-slate-500">Report ID</th>
+                        <th className="py-3 px-4 font-semibold text-slate-500">Generated On</th>
+                        <th className="py-3 px-4 font-semibold text-slate-500">Status</th>
+                        <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
+                      {isCibilLoading ? (
+                        <tr>
+                          <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <span>Loading reports...</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : cibilReports.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <FileSpreadsheet className="h-8 w-8 text-slate-300" />
+                              <span>No reports generated yet</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        cibilReports.map((report) => (
+                          <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
+                            <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
+                            <td className="py-4 px-4 font-bold text-slate-800">{report.generatedOn}</td>
+                            <td className="py-4 px-4">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                                {report.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => setViewingSaveMoneyReport(report)}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  title="View Save Money Report"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        )
+      )}
+
+      {reportsSubTab === "rectify_money" && (
+        viewingRectifyMoneyReport ? (
+          <RectifyMoneyReportView
+            custId={selectedCustomer.id}
+            referenceId={viewingRectifyMoneyReport.reportId}
+            onBack={() => setViewingRectifyMoneyReport(null)}
+          />
+        ) : (
+          <div className="space-y-6 animate-in fade-in duration-200">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">Rectify Money</h3>
+                <p className="text-xs text-slate-500 mt-0.5">Select a CIBIL report to analyze overdue accounts and DPD</p>
+              </div>
+            </div>
+
+            <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
+              <CardContent className="p-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-sm">
+                    <thead>
+                      <tr className="border-b border-[#f1f5f9] text-slate-400 font-bold text-xs uppercase tracking-wider bg-slate-50/50">
+                        <th className="py-3 px-4 font-semibold text-slate-500">Report ID</th>
+                        <th className="py-3 px-4 font-semibold text-slate-500">Generated On</th>
+                        <th className="py-3 px-4 font-semibold text-slate-500">Status</th>
+                        <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
+                      {isCibilLoading ? (
+                        <tr>
+                          <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <span>Loading reports...</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : cibilReports.length === 0 ? (
+                        <tr>
+                          <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
+                            <div className="flex flex-col items-center justify-center gap-2">
+                              <FileSpreadsheet className="h-8 w-8 text-slate-300" />
+                              <span>No reports generated yet</span>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        cibilReports.map((report) => (
+                          <tr key={report.id} className="hover:bg-slate-50/20 transition-colors">
+                            <td className="py-4 px-4 text-slate-500">{report.reportId}</td>
+                            <td className="py-4 px-4 font-bold text-slate-800">{report.generatedOn}</td>
+                            <td className="py-4 px-4">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+                                {report.status}
+                              </span>
+                            </td>
+                            <td className="py-4 px-4 text-center">
+                              <div className="flex items-center justify-center gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => setViewingRectifyMoneyReport(report)}
+                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  title="View Rectify Money Report"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                  View
                                 </button>
                               </div>
                             </td>

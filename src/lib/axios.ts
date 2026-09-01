@@ -22,7 +22,7 @@ const apiClient = axios.create({
   },
   withCredentials: true,
 });
- 
+
 console.log("Base URL:", ENV.VITE_BACKEND_BASE_URL);
 
 
@@ -93,7 +93,7 @@ apiClient.interceptors.response.use(
   },
   (error) => {
     console.error("API error response:", error.response);
-    
+
     if (error.response?.status === 401) {
       window.dispatchEvent(new CustomEvent("auth:unauthorized"));
     }
