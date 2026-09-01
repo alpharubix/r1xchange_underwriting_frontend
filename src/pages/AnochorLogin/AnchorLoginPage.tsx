@@ -10,8 +10,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { z } from "zod";
 import { useAnchorLogin, getApiError } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
-const loginSchema = z.object({  
+const loginSchema = z.object({
   id: z.string().min(1, "ID is required"),
   password: z.string().min(1, "Password is required"),
 });
@@ -80,15 +81,20 @@ export default function AnchorLoginPage() {
 
         {/* Header Logo */}
         <div className="relative z-10 flex items-center gap-4">
-          <div className="flex h-11 w-11 items-center justify-center rounded-[14px] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.15)]">
-            <span className="text-2xl font-black text-[#2213b2] select-none">
-              C
+          <img
+            src={r1xchangeLogoWhiteWebView}
+            alt="R1Xchange logo"
+            className="h-20 md:h-20 w-auto object-contain hover:scale-200 transition-transform duration-300 drop-shadow-md"
+          />
+          <div className="h-10 w-[4px] bg-white/3" >X </div>
+          <div className="flex flex-col">
+            <span className="font-['Space_Grotesk'] text-2xl md:text-3xl font-extrabold tracking-wider text-white uppercase leading-none">
+              CRISP
+            </span>
+            <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-white/70 mt-1">
+              UNDERWRITING
             </span>
           </div>
-          <span className="text-sm fo\
-          nt-bold tracking-[0.15em] text-white/90 uppercase">
-            CRISP 
-          </span>
         </div>
 
         {/* Center Text Branding */}

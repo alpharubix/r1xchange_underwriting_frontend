@@ -33,6 +33,7 @@ import apiClient from '@/lib/axios';
 import Sidebar from "./Sidebar";
 import SuperAnchor from "./SuperAnchor";
 import ServiceReport from "./ServiceReport";
+import { getAnchorBrand } from "@/lib/brandLogo";
 
 // Mock customer type definition
 interface Customer {
@@ -62,6 +63,7 @@ export default function AnchorCustomerPage() {
   // Role detection: checks user.role and local storage
   const userRole = String(user?.role || localStorage.getItem("user_role") || "anchor").toLowerCase();
   const isSuperAnchor = userRole === "superanchor" || userRole === "super_anchor" || userRole === "super-anchor";
+  const brand = getAnchorBrand(user);
 
   //filter data state
   const [filterUserId, setFilterUserId] = useState("");
@@ -171,7 +173,7 @@ export default function AnchorCustomerPage() {
   };
 
   useEffect(() => {
-    if (fetchedUsers) {
+    if (fetchedUsers && fetchedUsers.length > 0) {
       console.log("Syncing fetchedUsers to customers state:", fetchedUsers);
       const mapped = fetchedUsers.map((user: any) => ({
         id: user._id || user.user_id || user.userId || user.id || user.account_id || user.accountId || user.accountid || "",
@@ -179,7 +181,7 @@ export default function AnchorCustomerPage() {
         phone: user.phone_no || user.phoneNo || user.phone || user.phoneNumber || "",
         company_name: user.company_name || user.companyName || user.companyname || "",
         gst_no: user.gst_no || user.gstNo || user.gst_number || user.gstNumber || user.gstnumber || user.gst || "",
-        status: user.status || user.Status || user.status || "",
+        status: user.status || user.Status || "Active",
         anchor_id: user.anchor_id || user.anchorId || user.anchorid || "",
         created_by: user.created_by || user.createdBy || user.createdBy || "",
         updated_by: user.updated_by || user.updatedBy || user.updatedBy || "",
@@ -188,7 +190,6 @@ export default function AnchorCustomerPage() {
         itr: getFlagValue(user, "itr"),
         cibil: getFlagValue(user, "cibil"),
       }));
-      console.log("Mapped customers for state:", mapped);
       setCustomers(mapped);
     }
   }, [fetchedUsers]);
@@ -208,6 +209,7 @@ export default function AnchorCustomerPage() {
     company_name: '',
     email_id: '',
     password: '',
+    anchor_id: '',
   });
 
   const handleLogout = () => {
@@ -223,12 +225,12 @@ export default function AnchorCustomerPage() {
       queryClient.invalidateQueries({ queryKey: ["anchor", "users-list"] });
       setIsNewCustomerModalOpen(false);
       setNewCustomerForm({
-
         name: '',
         phone: '',
         company_name: '',
         email_id: '',
         password: '',
+        anchor_id: '',
       });
     },
     onError: (err: any) => {
@@ -244,6 +246,11 @@ export default function AnchorCustomerPage() {
       return;
     }
 
+    if (isSuperAnchor && !newCustomerForm.anchor_id) {
+      toast.error("Please select an Anchor organization.");
+      return;
+    }
+
     const payload: any = {
       customer_name: newCustomerForm.name,
       company_name: newCustomerForm.company_name,
@@ -253,9 +260,10 @@ export default function AnchorCustomerPage() {
       site_code: "ACX01"
     };
 
-    if (isSuperAnchor && selectedAnchor) {
-      payload.anchor_id = selectedAnchor._id || selectedAnchor.id || selectedAnchorFilter;
-      payload.anchor_code = selectedAnchor.anchor_code;
+    if (isSuperAnchor) {
+      const chosenAnchor = anchorsList.find(a => a._id === newCustomerForm.anchor_id);
+      payload.anchor_id = newCustomerForm.anchor_id;
+      payload.anchor_code = chosenAnchor?.anchor_code || "";
     }
 
     registerMutation.mutate(payload);
@@ -323,8 +331,6 @@ export default function AnchorCustomerPage() {
     filterStatus
   ]);
 
-
-
   const formatSimpleCurrency = (val: any) => {
     const num = Number(val);
     if (isNaN(num)) return val;
@@ -338,19 +344,23 @@ export default function AnchorCustomerPage() {
     ) {
       const isTrue = val === true || val === 'true' || val === 1 || val === '1';
       return isTrue ? (
-        <span className="inline-flex items-center justify-center h-[22px] w-[22px] rounded-full bg-[#EAF9F0] text-[#2E9B5C]" title="Completed / True">
-          <Check className="h-3 w-3 stroke-[3]" />
+        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#EAF9F0] text-[#2E9B5C]" title="Completed / True">
+          <Check className="h-3.5 w-3.5 stroke-[2.5]" />
         </span>
       ) : (
-        <span className="inline-flex items-center justify-center h-[22px] w-[22px] rounded-full bg-[#FDEEEE] text-[#E5484D]" title="Pending / False">
-          <X className="h-3 w-3 stroke-[3]" />
+        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]" title="Pending / False">
+          <X className="h-3.5 w-3.5 stroke-[2.5]" />
         </span>
       );
     }
 
     const num = Number(val);
     if (isNaN(num) || val === '' || val === null || val === undefined) {
-      return <span className="text-slate-400 font-semibold">-</span>;
+      return (
+        <span className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]" title="Pending / False">
+          <X className="h-3.5 w-3.5 stroke-[2.5]" />
+        </span>
+      );
     }
 
     return (
@@ -380,37 +390,48 @@ export default function AnchorCustomerPage() {
       />
 
       {/* ─── MAIN CONTENT AREA ─── */}
-      <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#F0F1F5]">
+      <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#f4f6fa]">
         {/* Top Header Block */}
-        <header className="mx-6 mt-6 mb-2 bg-white/40 backdrop-blur-2xl border border-white/60 rounded-[24px] h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-[0_8px_32px_rgba(31,38,135,0.07)] transition-all">
-          <div className="flex items-center gap-4">
-            <span className="font-['Space_Grotesk'] text-2xl font-black text-slate-900 tracking-tighter flex items-center">
-              R1
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#FF6B4A] to-[#FF8C6A] mx-0.5">X</span>
-              change
+        <header className="mx-6 mt-6 mb-2 bg-white rounded-3xl h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-sm border border-gray-100/80 transition-all">
+          <div className="flex items-center gap-3">
+            <div className="h-9 w-9 rounded-xl bg-[#1106de] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0">
+              C
+            </div>
+            <span className="font-['Space_Grotesk'] text-2xl font-black text-[#1106de] tracking-tight flex items-center">
+              CRISP
             </span>
-            <div className="h-6 w-[1px] bg-slate-300/50 mx-2"></div>
-            <span className="text-[10px] font-extrabold text-[#FF6B4A] bg-white/50 backdrop-blur-sm border border-white/60 px-3 py-1.5 rounded-full uppercase tracking-widest flex items-center gap-2 shadow-sm">
+            <div className="h-6 w-[1px] bg-gray-200 mx-1"></div>
+            <span className="text-xs font-semibold text-[#1106de] bg-[#eff6ff] px-3.5 py-1.5 rounded-full flex items-center gap-2">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF6B4A] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#FF6B4A]"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4cd15b] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4cd15b]"></span>
               </span>
-              {isSuperAnchor ? "Super-Anchor View" : "Anchor View"}
+              {isSuperAnchor ? "Anchor View" : "User View"}
             </span>
           </div>
 
           <div className="flex items-center gap-6">
             {/* Profile Menu */}
-            <div className="flex items-center gap-3 bg-white/50 hover:bg-white/80 p-1.5 pr-4 rounded-full cursor-pointer transition-all border border-white/60 shadow-sm hover:shadow">
-              <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#FF6B4A] to-[#FF8C6A] text-white flex items-center justify-center font-black text-sm shrink-0 shadow-inner">
-                {user?.anchor_name ? String(user.anchor_name).charAt(0).toUpperCase() : (user?.customer_name ? String(user.customer_name).charAt(0).toUpperCase() : "A")}
+            <div className="flex items-center gap-3 cursor-pointer">
+              <div className="h-10 w-10 rounded-full bg-white border border-gray-200 flex items-center justify-center font-bold text-sm shrink-0 shadow-sm overflow-hidden p-1">
+                {brand.logo ? (
+                  <img
+                    src={brand.logo}
+                    alt={brand.name}
+                    className="h-full w-full object-contain"
+                  />
+                ) : (
+                  <div className="h-full w-full rounded-full bg-[#1106de] text-white flex items-center justify-center font-bold text-sm">
+                    {brand.initial}
+                  </div>
+                )}
               </div>
               <div className="hidden sm:flex flex-col items-start leading-tight">
-                <span className="text-sm font-bold text-slate-900">
-                  {user?.anchor_name || user?.customer_name || "Enterprise Partner"}
+                <span className="text-sm font-bold text-gray-900 capitalize">
+                  {brand.name}
                 </span>
-                <span className="text-[11px] text-slate-500 font-medium mt-0.5">
-                  {user?.email_id || user?.login_id || "anchor_portal"}
+                <span className="text-[11px] text-gray-400 font-medium mt-0.5">
+                  {user?.anchor_code || user?.id || "12346"}
                 </span>
               </div>
             </div>
@@ -453,7 +474,7 @@ export default function AnchorCustomerPage() {
                     </div>
                   </div>
 
-                  <Card className="border border-[#e2e8f0] bg-white shadow-sm rounded-3xl overflow-hidden max-w-3xl">
+                  <Card className="border border-gray-100 bg-white shadow-sm rounded-3xl overflow-hidden max-w-3xl">
                     <CardContent className="p-8 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -462,7 +483,7 @@ export default function AnchorCustomerPage() {
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Anchor Code</span>
-                          <span className="text-base font-mono font-extrabold text-[#FF6B4A] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
+                          <span className="text-base font-mono font-extrabold text-[#1106de] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Login ID</span>
@@ -472,12 +493,12 @@ export default function AnchorCustomerPage() {
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Status</span>
                           <span className="mt-1 block">
                             {selectedAnchor?.is_active ? (
-                              <span className="inline-flex bg-green-50 text-green-700 font-bold px-2.5 py-0.5 rounded-md text-[10px] uppercase">
-                                Active
+                              <span className="inline-flex bg-[#EAF9F0] text-[#2E9B5C] font-bold px-2.5 py-0.5 rounded-full text-xs">
+                                • Active
                               </span>
                             ) : (
-                              <span className="inline-flex bg-slate-100 text-slate-500 font-bold px-2.5 py-0.5 rounded-md text-[10px] uppercase">
-                                Inactive
+                              <span className="inline-flex bg-[#FDEEEE] text-[#E5484D] font-bold px-2.5 py-0.5 rounded-full text-xs">
+                                • Inactive
                               </span>
                             )}
                           </span>
@@ -510,7 +531,7 @@ export default function AnchorCustomerPage() {
                             setSelectedAnchorFilter(selectedAnchor?._id || selectedAnchor?.anchor_code || null);
                             setActiveTab("customer");
                           }}
-                          className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm"
+                          className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                         >
                           <Eye className="h-5 w-5" />
                           View Users under Anchor
@@ -542,44 +563,34 @@ export default function AnchorCustomerPage() {
                     </Button>
                   )}
                   <div>
-                    <h1 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1D1E2C]">Users</h1>
-                    <p className="text-sm text-[#8a8d97] font-medium">Manage your users and their services</p>
+                    <h1 className="text-3xl font-bold text-[#0f172a] tracking-tight">Customer</h1>
+                    <p className="text-sm text-gray-500 font-normal mt-1">Manage your users and their services</p>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => setIsNewCustomerModalOpen(true)}
-                  className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
+                  onClick={() => {
+                    setNewCustomerForm({
+                      name: '',
+                      phone: '',
+                      company_name: '',
+                      email_id: '',
+                      password: '',
+                      anchor_id: selectedAnchorFilter || '',
+                    });
+                    setIsNewCustomerModalOpen(true);
+                  }}
+                  className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold text-sm px-5 py-2.5 rounded-xl flex items-center gap-2 shadow-sm shadow-[#1106de]/20 transition-all cursor-pointer"
                 >
-                  <Plus className="h-4 w-4 stroke-[3]" />
-                  New User
+                  <Plus className="h-4 w-4 stroke-[2.5]" />
+                  <span>New User</span>
                 </button>
               </div>
 
-              {/* Selected Anchor Filter Banner for Super Anchor */}
-              {isSuperAnchor && selectedAnchorFilter && (
-                <div className="flex items-center justify-between bg-indigo-50/80 border border-indigo-100 rounded-2xl px-5 py-3.5 text-indigo-900 shadow-sm animate-in slide-in-from-top duration-250">
-                  <div className="flex items-center gap-2 text-sm font-semibold">
-                    <span>Showing users under Anchor:</span>
-                    <span className="font-extrabold text-[#FF6B4A] bg-[#FFF0EC] px-2.5 py-0.5 rounded-lg border border-[#FF6B4A]/15 uppercase font-mono tracking-wider">
-                      {anchorsList.find(a => a._id === selectedAnchorFilter || a.anchor_code === selectedAnchorFilter)?.anchor_name || selectedAnchorFilter}
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => setSelectedAnchorFilter(null)}
-                    className="text-slate-400 hover:text-[#FF6B4A] font-bold flex items-center gap-1.5 transition-colors text-xs uppercase tracking-wider"
-                  >
-                    Clear Filter <X className="h-4 w-4" />
-                  </button>
-                </div>
-              )}
-
-
-
               {isSuperAnchor && !selectedAnchorFilter ? (
-                <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-[#e2e8f0] rounded-3xl space-y-4 shadow-sm min-h-[350px]">
-                  <div className="h-16 w-16 rounded-full bg-[#FFF0EC] flex items-center justify-center text-[#FF6B4A] shadow-inner">
-                    <Users className="h-8 w-8 text-[#FF6B4A]" />
+                <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-gray-100 rounded-3xl space-y-4 shadow-sm min-h-[350px]">
+                  <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1106de] shadow-inner">
+                    <Users className="h-8 w-8 text-[#1106de]" />
                   </div>
                   <div className="max-w-md space-y-2">
                     <h3 className="text-lg font-bold text-slate-900">No Anchor Selected</h3>
@@ -589,145 +600,143 @@ export default function AnchorCustomerPage() {
                   </div>
                   <Button
                     onClick={() => setActiveTab("anchor")}
-                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1D1E2C]/15"
+                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1106de]/20"
                   >
                     Go to Anchors List
                   </Button>
                 </div>
               ) : (
                 /* Directory Card Block */
-                <Card className="border-none bg-white shadow-[0_1px_2px_rgba(20,20,30,0.04),0_8px_24px_rgba(20,20,30,0.04)] rounded-[20px] overflow-hidden">
-                  <CardContent className="p-6 space-y-4">
+                <Card className="border border-gray-100/80 bg-white shadow-sm rounded-3xl overflow-hidden">
+                  <CardContent className="p-6 lg:p-8 space-y-6">
 
-
-                    {/* Advanced Filters Block */}
-                    <div className="bg-[#F6F6F8] rounded-[18px] p-5 space-y-4">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+                    {/* Filters Block */}
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                         {/* Account ID */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-userid" className="text-xs font-semibold text-slate-600"> Account ID</Label>
+                          <Label htmlFor="filter-userid" className="text-xs font-semibold text-gray-700">Account ID</Label>
                           <Input
                             id="filter-userid"
                             placeholder="Search Account ID..."
                             value={filterUserId}
                             onChange={(e) => setFilterUserId(e.target.value)}
-                            className="h-10 text-xs border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] rounded-xl shadow-none bg-white"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
                         {/* Customer Name */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-custname" className="text-xs font-semibold text-slate-600">User Name</Label>
+                          <Label htmlFor="filter-custname" className="text-xs font-semibold text-gray-700">User Name</Label>
                           <Input
                             id="filter-custname"
                             placeholder="Search User Name..."
                             value={filterCustomerName}
                             onChange={(e) => setFilterCustomerName(e.target.value)}
-                            className="h-10 text-xs border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] rounded-xl shadow-none bg-white"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
                         {/* Mobile Number */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-phone" className="text-xs font-semibold text-slate-600">Mobile Number</Label>
+                          <Label htmlFor="filter-phone" className="text-xs font-semibold text-gray-700">Mobile Number</Label>
                           <Input
                             id="filter-phone"
                             placeholder="Search Mobile Number..."
                             value={filterPhoneNo}
                             onChange={(e) => setFilterPhoneNo(e.target.value)}
-                            className="h-10 text-xs border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] rounded-xl shadow-none bg-white"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
                         {/* Company Name */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-company" className="text-xs font-semibold text-slate-600">Company Name</Label>
+                          <Label htmlFor="filter-company" className="text-xs font-semibold text-gray-700">Company Name</Label>
                           <Input
                             id="filter-company"
                             placeholder="Search Company..."
                             value={filterCompanyName}
                             onChange={(e) => setFilterCompanyName(e.target.value)}
-                            className="h-10 text-xs border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] rounded-xl shadow-none bg-white"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
                         {/* GST No */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-gst" className="text-xs font-semibold text-slate-600">GST No</Label>
+                          <Label htmlFor="filter-gst" className="text-xs font-semibold text-gray-700">GST No</Label>
                           <Input
                             id="filter-gst"
                             placeholder="Search GST No..."
                             value={filterGSTNo}
                             onChange={(e) => setFilterGSTNo(e.target.value)}
-                            className="h-10 text-xs border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] rounded-xl shadow-none bg-white"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
+                      </div>
 
-                        {/* Status */}
-                        <div className="space-y-1.5">
-                          <Label htmlFor="filter-status" className="text-xs font-semibold text-slate-600">Status</Label>
+                      {/* Status row */}
+                      <div className="flex items-center justify-between">
+                        <div className="w-48 space-y-1.5">
+                          <Label htmlFor="filter-status" className="text-xs font-semibold text-gray-700">Status</Label>
                           <Select
                             value={filterStatus || "all"}
                             onValueChange={(val) => setFilterStatus(val === "all" ? "" : val)}
                           >
-                            <SelectTrigger className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#1D1E2C] outline-none shadow-none">
+                            <SelectTrigger className="w-full h-10 px-3 border border-gray-200/90 rounded-xl text-xs font-medium text-gray-700 bg-white focus:ring-[#1106de] outline-none shadow-none">
                               <SelectValue placeholder="All Statuses" />
                             </SelectTrigger>
-                            <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
-                              <SelectItem value="all" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">All Statuses</SelectItem>
-                              <SelectItem value="active" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Active</SelectItem>
-                              <SelectItem value="inactive" className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5">Inactive</SelectItem>
+                            <SelectContent className="z-[110] rounded-xl border-gray-100 shadow-xl overflow-hidden bg-white">
+                              <SelectItem value="all" className="text-xs font-medium py-2.5">All Statuses</SelectItem>
+                              <SelectItem value="active" className="text-xs font-medium py-2.5">Active</SelectItem>
+                              <SelectItem value="inactive" className="text-xs font-medium py-2.5">Inactive</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
 
+                        {/* Reset Button */}
+                        {(filterUserId || filterCustomerName || filterPhoneNo || filterCompanyName || filterGSTNo || filterStatus) && (
+                          <Button
+                            variant="ghost"
+                            onClick={() => {
+                              setFilterUserId("");
+                              setFilterCustomerName("");
+                              setFilterPhoneNo("");
+                              setFilterCompanyName("");
+                              setFilterGSTNo("");
+                              setFilterStatus("");
+                            }}
+                            className="h-8 px-3 rounded-lg text-xs font-semibold text-rose-500 hover:text-rose-600 hover:bg-rose-50/50 cursor-pointer self-end"
+                          >
+                            Clear Filters
+                          </Button>
+                        )}
                       </div>
                     </div>
 
-                    {/* Reset Button Row */}
-                    {(filterUserId || filterCustomerName || filterPhoneNo || filterCompanyName || filterGSTNo || filterStatus) && (
-                      <div className="flex justify-end pb-2">
-                        <Button
-                          variant="ghost"
-                          onClick={() => {
-                            setFilterUserId("");
-                            setFilterCustomerName("");
-                            setFilterPhoneNo("");
-                            setFilterCompanyName("");
-                            setFilterGSTNo("");
-                            setFilterStatus("");
-                          }}
-                          className="h-8 px-3 rounded-lg text-xs font-semibold text-rose-500 hover:text-rose-600 hover:bg-rose-50/50"
-                        >
-                          Clear Filters
-                        </Button>
-                      </div>
-                    )}
-
-                    {/* Custom Mock Table */}
+                    {/* Table */}
                     <div className="overflow-x-auto">
-                      <table className="w-full text-left border-collapse text-sm">
+                      <table className="w-full text-left border-collapse">
                         <thead>
-                          <tr className="border-b border-[#F0F1F5] text-[#A0A3AD] font-bold text-[10.5px] uppercase tracking-wider bg-[#F6F6F8]/30">
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">Account ID</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">User Name</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">Mobile Number</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">Company Name</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">GST No</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">Status</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">BSA</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">GST</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">ITR</th>
-                            <th className="py-3 px-4 font-bold text-[#A0A3AD]">CIBIL</th>
-                            <th className="py-3 px-4 font-bold text-center text-[#A0A3AD]">Actions</th>
+                          <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider">
+                            <th className="py-3 px-4 font-bold text-gray-400">ACCOUNT ID</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">USER NAME</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">COMPANY NAME</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">GST NO</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">STATUS</th>
+                            <th className="py-3 px-4 font-bold text-center text-gray-400">BSA</th>
+                            <th className="py-3 px-4 font-bold text-center text-gray-400">GST</th>
+                            <th className="py-3 px-4 font-bold text-center text-gray-400">ITR</th>
+                            <th className="py-3 px-4 font-bold text-center text-gray-400">CIBIL</th>
+                            <th className="py-3 px-4 font-bold text-center text-gray-400">ACTIONS</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#F6F6F8] text-[13px]">
+                        <tbody className="divide-y divide-gray-100 text-sm">
                           {isUsersLoading ? (
                             <tr>
-                              <td colSpan={11} className="py-12 text-center text-slate-400 font-bold">
+                              <td colSpan={11} className="py-12 text-center text-gray-400 font-bold">
                                 <div className="flex justify-center items-center gap-3">
-                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1D1E2C] animate-spin" />
+                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
                                   <span>Loading users list...</span>
                                 </div>
                               </td>
@@ -736,47 +745,46 @@ export default function AnchorCustomerPage() {
                             paginatedCustomers.map((cust) => (
                               <tr
                                 key={cust.id}
-                                className="hover:bg-[#F6F6F8] transition-colors group cursor-pointer text-[#3A3C46]"
+                                className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                                 onClick={() => {
                                   setSelectedCustomer(cust);
                                   setActiveTab("reports");
-                                  toast.info(`Viewing reports for ${cust.name}`);
                                 }}
                               >
-                                {/* ID */}
-                                <td className="py-4 px-4 font-semibold text-[#A0A3AD] group-hover:text-[#6b6e78] transition-colors">
+                                {/* ACCOUNT ID */}
+                                <td className="py-4 px-4 font-mono text-xs text-gray-600">
                                   {cust.id}
                                 </td>
 
-                                {/* Name */}
-                                <td className={`py-4 px-4 font-bold transition-colors ${selectedCustomer?.id === cust.id ? 'text-[#FF6B4A]' : 'text-[#1D1E2C]'}`}>
+                                {/* USER NAME */}
+                                <td className="py-4 px-4 font-bold text-gray-900">
                                   {cust.name}
                                 </td>
 
-                                {/* Mobile Number */}
-                                <td className="py-4 px-4 text-[#3A3C46] font-medium">
+                                {/* MOBILE NUMBER */}
+                                <td className="py-4 px-4 text-gray-700">
                                   {cust.phone}
                                 </td>
 
-                                {/* Company Name */}
-                                <td className="py-4 px-4 text-[#3A3C46] font-medium">
+                                {/* COMPANY NAME */}
+                                <td className="py-4 px-4 text-gray-700">
                                   {cust.company_name}
                                 </td>
 
-                                {/* GST No */}
-                                <td className="py-4 px-4 text-[#3A3C46] font-medium">
+                                {/* GST NO */}
+                                <td className="py-4 px-4 text-gray-700 font-mono">
                                   {cust.gst_no}
                                 </td>
 
-                                {/* Status */}
+                                {/* STATUS */}
                                 <td className="py-4 px-4">
                                   {cust.status && String(cust.status).toLowerCase() === 'active' ? (
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11.5px] font-bold bg-[#EAF9F0] text-[#2E9B5C]">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF9F0] text-[#2E9B5C]">
                                       <span className="h-1.5 w-1.5 rounded-full bg-[#2E9B5C]" />
                                       Active
                                     </span>
                                   ) : (
-                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11.5px] font-bold bg-[#FDEEEE] text-[#E5484D]">
+                                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FDEEEE] text-[#E5484D]">
                                       <span className="h-1.5 w-1.5 rounded-full bg-[#E5484D]" />
                                       Inactive
                                     </span>
@@ -784,34 +792,33 @@ export default function AnchorCustomerPage() {
                                 </td>
 
                                 {/* BSA */}
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 text-center">
                                   {renderStatusOrValue(cust.bsa)}
                                 </td>
 
                                 {/* GST */}
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 text-center">
                                   {renderStatusOrValue(cust.gst)}
                                 </td>
 
                                 {/* ITR */}
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 text-center">
                                   {renderStatusOrValue(cust.itr)}
                                 </td>
 
                                 {/* CIBIL */}
-                                <td className="py-4 px-4">
+                                <td className="py-4 px-4 text-center">
                                   {renderStatusOrValue(cust.cibil)}
                                 </td>
 
-                                {/* Action details button */}
+                                {/* ACTIONS */}
                                 <td className="py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
                                   <button
                                     onClick={() => {
                                       setSelectedCustomer(cust);
                                       setActiveTab("reports");
-                                      toast.info(`Viewing reports for ${cust.name}`);
                                     }}
-                                    className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                                    className="p-1.5 rounded-lg border border-gray-200 text-gray-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                     title="View Reports"
                                   >
                                     <Eye className="h-4 w-4" />
@@ -831,11 +838,11 @@ export default function AnchorCustomerPage() {
                     </div>
 
                     {/* Pagination block */}
-                    <div className="flex items-center justify-center pt-4 border-t border-[#F0F1F5] gap-1">
+                    <div className="flex items-center justify-center pt-4 border-t border-gray-100 gap-1.5">
                       <button
                         onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
                         disabled={currentPage === 1}
-                        className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-500 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+                        className="p-2 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500 disabled:opacity-40 disabled:hover:bg-white transition-colors cursor-pointer"
                       >
                         <ChevronLeft className="h-4 w-4" />
                       </button>
@@ -844,9 +851,9 @@ export default function AnchorCustomerPage() {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`h-9 w-9 rounded-lg border text-sm font-semibold transition-colors ${currentPage === page
-                            ? 'bg-[#1D1E2C] border-[#1D1E2C] text-white shadow-sm'
-                            : 'border-slate-200 hover:bg-slate-50 text-slate-600'
+                          className={`h-9 w-9 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${currentPage === page
+                            ? 'bg-[#1106de] border-[#1106de] text-white shadow-sm shadow-[#1106de]/20'
+                            : 'border-gray-200 hover:bg-gray-50 text-gray-600'
                             }`}
                         >
                           {page}
@@ -856,7 +863,7 @@ export default function AnchorCustomerPage() {
                       <button
                         onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
                         disabled={currentPage === totalPages}
-                        className="p-2 border border-slate-200 rounded-lg hover:bg-slate-50 text-slate-500 disabled:opacity-50 disabled:hover:bg-white transition-colors"
+                        className="p-2 border border-gray-200 rounded-xl hover:bg-gray-50 text-gray-500 disabled:opacity-40 disabled:hover:bg-white transition-colors cursor-pointer"
                       >
                         <ChevronRight className="h-4 w-4" />
                       </button>
@@ -910,6 +917,7 @@ export default function AnchorCustomerPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             {/* Backdrop */}
             <motion.div
+
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
@@ -938,6 +946,34 @@ export default function AnchorCustomerPage() {
               </div>
 
               <form onSubmit={handleCreateCustomer} className="space-y-4 mt-4" autoComplete="off">
+                {isSuperAnchor && (
+                  <div className="space-y-1">
+                    <Label htmlFor="cust-anchor" className="text-xs font-semibold text-slate-600">
+                      Select Anchor *
+                    </Label>
+                    <Select
+                      value={newCustomerForm.anchor_id}
+                      onValueChange={(val) => setNewCustomerForm({ ...newCustomerForm, anchor_id: val })}
+                      required
+                    >
+                      <SelectTrigger id="cust-anchor" className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#1106de] outline-none">
+                        <SelectValue placeholder="Select an Anchor Organization" />
+                      </SelectTrigger>
+                      <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
+                        {anchorsList.map((anc) => (
+                          <SelectItem
+                            key={anc._id}
+                            value={anc._id}
+                            className="text-xs font-medium cursor-pointer focus:bg-slate-50 focus:text-slate-900 transition-colors py-2.5"
+                          >
+                            {anc.anchor_name} ({anc.anchor_code})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label htmlFor="cust-name" className="text-xs font-semibold text-slate-600">
@@ -949,7 +985,7 @@ export default function AnchorCustomerPage() {
                       placeholder="Enter Customer Name"
                       value={newCustomerForm.name}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, name: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                       autoComplete="off"
                     />
                   </div>
@@ -966,7 +1002,7 @@ export default function AnchorCustomerPage() {
                         placeholder="E.g., 9876543210"
                         value={newCustomerForm.phone}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, phone: e.target.value })}
-                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                         autoComplete="off"
                       />
                     </div>
@@ -982,7 +1018,7 @@ export default function AnchorCustomerPage() {
                     placeholder="E.g., ABC Pvt Ltd"
                     value={newCustomerForm.company_name}
                     onChange={(e) => setNewCustomerForm({ ...newCustomerForm, company_name: e.target.value })}
-                    className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                    className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                     autoComplete="off"
                   />
                 </div>
@@ -999,7 +1035,7 @@ export default function AnchorCustomerPage() {
                       placeholder="E.g., name@domain.com"
                       value={newCustomerForm.email_id}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, email_id: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                       autoComplete="new-email"
                     />
                   </div>
@@ -1016,7 +1052,7 @@ export default function AnchorCustomerPage() {
                         placeholder="Enter account password"
                         value={newCustomerForm.password}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, password: e.target.value })}
-                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                         autoComplete="new-password"
                       />
                       <button
@@ -1045,7 +1081,7 @@ export default function AnchorCustomerPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white rounded-xl px-5 h-10 shadow-md shadow-[#1D1E2C]/10"
+                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-5 h-10 shadow-md shadow-[#1106de]/20 cursor-pointer"
                   >
                     Create Customer
                   </Button>

@@ -200,7 +200,7 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
   };
 
   const getInputClassName = (field: CibilGenerateOtpField) => {
-    return `w-full px-4 py-2 border rounded-md focus:ring-[#000000] focus:border-[#000000] ${fieldErrors[field] ? 'border-red-400' : 'border-gray-300'
+    return `w-full px-4 py-2 border rounded-xl focus:ring-[#1106de] focus:border-[#1106de] ${fieldErrors[field] ? 'border-red-400' : 'border-gray-300'
       }`;
   };
 
@@ -215,8 +215,8 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-semibold mb-2 text-[#000000]">
+    <div className="max-w-3xl mx-auto p-6 bg-white rounded-2xl shadow-sm border border-slate-100">
+      <h2 className="text-2xl font-bold mb-2 text-slate-900">
         Identity Details
       </h2>
       <p className="text-gray-500 mb-6 text-sm">
@@ -427,7 +427,7 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
         <button
           type="submit"
           disabled={identityMutation.isPending}
-          className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />

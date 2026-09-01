@@ -6,9 +6,9 @@ import { renderYearlyTable, renderDataTable } from '@/components/itr/ItrTableHel
 import { Loader2 } from 'lucide-react';
 
 export default function TaxCalculation() {
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<any>({
     queryKey: ['itrTaxCalculation'],
-    queryFn: getItrTaxCalculation,
+    queryFn: () => getItrTaxCalculation(),
   });
 
   if (isLoading) {

@@ -74,12 +74,12 @@ export default function OTPVerification({
         <button
           type="button"
           onClick={onBack}
-          className="text-gray-500 hover:text-gray-800 mr-3"
+          className="text-gray-500 hover:text-[#1106de] mr-3 cursor-pointer font-medium"
           disabled={verifyMutation.isPending}
         >
           Back
         </button>
-        <h2 className="text-2xl font-semibold text-[#000000]">
+        <h2 className="text-2xl font-bold text-slate-900">
           OTP Verification
         </h2>
       </div>
@@ -98,7 +98,7 @@ export default function OTPVerification({
             id="otp"
             type="text"
             inputMode="numeric"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000] text-center tracking-widest text-lg"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-[#1106de] focus:border-[#1106de] text-center tracking-widest text-lg"
             value={otp}
             onChange={(event) => setOtp(event.target.value)}
             placeholder="Enter OTP"
@@ -110,7 +110,7 @@ export default function OTPVerification({
         <button
           type="submit"
           disabled={verifyMutation.isPending}
-          className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {verifyMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -124,7 +124,7 @@ export default function OTPVerification({
           type="button"
           onClick={() => resendMutation.mutate(otpFlowId)}
           disabled={secondsRemaining > 0 || resendMutation.isPending}
-          className="text-sm font-medium text-[#000000] hover:underline disabled:text-gray-400 disabled:no-underline"
+          className="text-sm font-semibold text-[#1106de] hover:underline disabled:text-gray-400 disabled:no-underline cursor-pointer"
         >
           {resendMutation.isPending
             ? 'Resending...'

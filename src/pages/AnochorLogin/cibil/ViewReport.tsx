@@ -44,7 +44,7 @@ export default function ViewReport({
     return (
       <div className="bg-gray-50 py-12 px-4 flex items-center justify-center">
         <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-sm border border-gray-200 text-center">
-          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-50 text-[#000000] mb-4">
+          <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-50 text-[#1106de] mb-4">
             Reference ID is missing.
           </div>
         </div>
@@ -60,9 +60,9 @@ export default function ViewReport({
             {onBack && (
               <button
                 onClick={handleBack}
-                className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm"
+                className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
               >
-                <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-black" />
+                <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-[#1106de]" />
               </button>
             )}
             <div>
@@ -75,7 +75,7 @@ export default function ViewReport({
             <button
               type="button"
               onClick={handleStartNew}
-              className="rounded-xl bg-[#1D1E2C] px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#1D1E2C]/90"
+              className="rounded-xl bg-[#1106de] hover:bg-[#0e05b5] px-4 py-2.5 text-xs font-bold text-white shadow-sm shadow-[#1106de]/20 transition-colors cursor-pointer"
             >
               Start New CIBIL Flow
             </button>

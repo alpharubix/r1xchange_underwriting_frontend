@@ -86,8 +86,8 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
             <button
               key={segment}
               onClick={() => setHistorySegment(segment)}
-              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${historySegment === segment
-                  ? 'bg-[#000000] text-white shadow-md'
+              className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all cursor-pointer ${historySegment === segment
+                  ? 'bg-[#1106de] text-white shadow-md shadow-[#1106de]/20'
                   : 'text-slate-500 hover:text-slate-800'
                 }`}
             >
@@ -113,11 +113,11 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
                 {/* Header card for the account */}
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg bg-slate-50 p-2 text-slate-700">
+                    <div className="rounded-lg bg-blue-50/50 p-2 text-[#1106de]">
                       <Landmark className="h-5 w-5" />
                     </div>
                     <div>
-                      <h4 className="font-bold text-[#000000]">{loanType}</h4>
+                      <h4 className="font-bold text-slate-900">{loanType}</h4>
                       <p className="text-xs text-slate-500">Acct No: <strong className="font-semibold text-slate-700">{accNo}</strong></p>
                     </div>
                   </div>

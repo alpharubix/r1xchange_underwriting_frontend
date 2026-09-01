@@ -64,14 +64,14 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   if (isLoadingGstin) {
     return (
       <div className="flex justify-center p-8">
-        <span className="h-8 w-8 rounded-full border-4 border-[#000080]/20 border-t-[#000080] animate-spin" />
+        <span className="h-8 w-8 rounded-full border-4 border-[#1106de]/20 border-t-[#1106de] animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-semibold mb-4 text-gray-800">Enter GSTIN</h2>
+    <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-slate-100">
+      <h2 className="text-2xl font-semibold mb-4 text-slate-900">Enter GSTIN</h2>
       <p className="text-gray-500 mb-6 text-sm">
         Please provide your Goods and Services Tax Identification Number (GSTIN) to proceed.
       </p>
@@ -84,7 +84,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
           <input
             id="gstin"
             type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000080] focus:border-[#000080] uppercase"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] uppercase"
             placeholder="e.g. 27AAAPL1234C1Z5"
             value={gstinInput}
             onChange={(e) => {
@@ -99,7 +99,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
         <button
           type="submit"
           disabled={updateMutation.isPending}
-          className="w-full bg-[#000080] hover:bg-[#000060] text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {updateMutation.isPending ? (
             <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

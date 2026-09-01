@@ -22,7 +22,7 @@ export default function TaxCalculation({ custId, reportId }: TaxCalculationProps
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#000000]" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#1106de]" />
       </div>
     );
   }
@@ -45,8 +45,8 @@ export default function TaxCalculation({ custId, reportId }: TaxCalculationProps
       {tax_calculation["Computation of Tax Liability on Total Income"] && renderYearlyTable("Computation of Tax Liability on Total Income", tax_calculation["Computation of Tax Liability on Total Income"])}
 
       {tax_calculation["Tax Deducted At Source"] && Object.keys(tax_calculation["Tax Deducted At Source"]).length > 0 && (
-        <div className="bg-white rounded-md shadow-sm border border-gray-200 mb-6 overflow-hidden animate-in fade-in duration-500">
-          <div className="bg-[#000000] text-white px-4 py-2 text-center rounded-t-md font-semibold">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-100 mb-6 overflow-hidden animate-in fade-in duration-500">
+          <div className="bg-[#1106de] text-white px-4 py-2.5 text-center rounded-t-xl font-semibold">
             Tax Deducted At Source
           </div>
           <div className="p-0">

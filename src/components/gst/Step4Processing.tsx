@@ -65,7 +65,7 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
               if (onComplete) onComplete();
               else navigate("/gst/history");
             }}
-            className="bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-md"
+            className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-6 rounded-xl transition-colors shadow-md shadow-[#1106de]/20 cursor-pointer"
           >
             {onComplete ? "Close" : "View History"}
           </button>
@@ -83,7 +83,7 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
           </p>
           <button
             onClick={onRetry}
-            className="bg-[#000000] text-white px-6 py-2 rounded-md hover:bg-[#000000]/50 transition-colors"
+            className="bg-[#1106de] text-white px-6 py-2 rounded-xl hover:bg-[#0e05b5] transition-colors shadow-sm shadow-[#1106de]/20 cursor-pointer"
           >
             Try Again
           </button>
@@ -105,7 +105,7 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
               if (onComplete) onComplete();
               else navigate("/gst/history");
             }}
-            className="bg-gray-100 text-gray-800 px-6 py-2 rounded-md hover:bg-gray-200 transition-colors"
+            className="bg-gray-100 text-gray-800 px-6 py-2 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer"
           >
             {onComplete ? "Close" : "Go to History"}
           </button>
@@ -114,8 +114,8 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
         <div className="animate-in fade-in duration-300">
           <div className="relative mx-auto w-24 h-24 mb-6">
             <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-[#000000] border-t-transparent animate-spin"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-[#000000] font-semibold text-sm">
+            <div className="absolute inset-0 rounded-full border-4 border-[#1106de] border-t-transparent animate-spin"></div>
+            <div className="absolute inset-0 flex items-center justify-center text-[#1106de] font-semibold text-sm">
               {Math.min(90, Math.round((pollCount / 10) * 100))}%
             </div>
           </div>
