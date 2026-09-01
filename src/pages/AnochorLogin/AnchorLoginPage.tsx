@@ -80,27 +80,18 @@ export default function AnchorLoginPage() {
         </div>
 
         {/* Header Logo */}
-        <div className="relative z-10 flex items-center gap-4">
+        <div className="relative z-10 w-full flex items-center gap-4">
           <img
             src={r1xchangeLogoWhiteWebView}
             alt="R1Xchange logo"
-            className="h-20 md:h-20 w-auto object-contain hover:scale-200 transition-transform duration-300 drop-shadow-md"
+            className="h-25 w-auto object-cover hover:scale-200 transition-transform duration-300 drop-shadow-md"
           />
-          <div className="h-10 w-[4px] bg-white/3" >X </div>
-          <div className="flex flex-col">
-            <span className="font-['Space_Grotesk'] text-2xl md:text-3xl font-extrabold tracking-wider text-white uppercase leading-none">
-              CRISP
-            </span>
-            <span className="text-[10px] uppercase font-bold tracking-[0.25em] text-white/70 mt-1">
-              UNDERWRITING
-            </span>
-          </div>
         </div>
 
         {/* Center Text Branding */}
         <div className="relative z-10 my-auto max-w-lg select-none">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-[1.12] tracking-tight">
-            Welcome
+            Welcome To
             <br />
             CRISP
             <br />
