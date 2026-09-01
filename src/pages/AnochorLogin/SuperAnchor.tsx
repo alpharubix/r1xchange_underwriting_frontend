@@ -100,10 +100,10 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
       const matchesName = !filterName || anc.anchor_name.toLowerCase().includes(filterName.toLowerCase());
       const matchesCode = !filterCode || anc.anchor_code.toLowerCase().includes(filterCode.toLowerCase());
       const matchesLoginId = !filterLoginId || anc.login_id.toLowerCase().includes(filterLoginId.toLowerCase());
-      
+
       const statusStr = anc.is_active ? "active" : "inactive";
       const matchesStatus = !filterStatus || statusStr === filterStatus.toLowerCase();
-      
+
       const matchesCreatedBy = !filterCreatedBy || (anc.created_by || "").toLowerCase().includes(filterCreatedBy.toLowerCase());
       const matchesUpdatedBy = !filterUpdatedBy || (anc.updated_by || "").toLowerCase().includes(filterUpdatedBy.toLowerCase());
 
@@ -120,10 +120,10 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
         </div>
         <button
           onClick={() => setIsNewAnchorModalOpen(true)}
-          className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
+          className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
         >
           <Plus className="h-4 w-4 stroke-[3]" />
-          Create Anchor
+          Create User
         </button>
       </div>
 
@@ -214,7 +214,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
       </div>
 
 
-     
+
 
       <Card className="border-none bg-white shadow-[0_1px_2px_rgba(20,20,30,0.04),0_8px_24px_rgba(20,20,30,0.04)] rounded-[20px] overflow-hidden">
         <CardContent className="p-6">
@@ -236,22 +236,22 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
               </thead>
               <tbody className="divide-y divide-[#F6F6F8] text-[13px] text-[#3A3C46]">
                 {filteredAnchors.map((anc, idx) => (
-                  <tr 
-                    key={idx} 
+                  <tr
+                    key={idx}
                     onClick={() => onSelectAnchor?.(anc)}
                     className="hover:bg-[#F6F6F8] transition-colors cursor-pointer text-[#3A3C46]"
                   >
-                    <td className="py-4 px-4 font-bold text-[#1D1E2C]">{anc.anchor_name}</td>
-                    <td className="py-4 px-4 font-mono font-bold text-[#FF6B4A]">{anc.anchor_code}</td>
+                    <td className="py-4 px-4 font-bold text-slate-900">{anc.anchor_name}</td>
+                    <td className="py-4 px-4 font-mono font-bold text-[#1106de]">{anc.anchor_code}</td>
                     <td className="py-4 px-4 font-mono">{anc.login_id}</td>
                     <td className="py-4 px-4">
                       {anc.is_active ? (
-                        <span className="inline-flex bg-[#EAF9F0] text-[#2E9B5C] font-bold px-2.5 py-0.5 rounded-md text-[10px] uppercase">
-                          Active
+                        <span className="inline-flex bg-[#EAF9F0] text-[#2E9B5C] font-bold px-2.5 py-0.5 rounded-full text-xs">
+                          • Active
                         </span>
                       ) : (
-                        <span className="inline-flex bg-[#FDEEEE] text-[#E5484D] font-bold px-2.5 py-0.5 rounded-md text-[10px] uppercase">
-                          Inactive
+                        <span className="inline-flex bg-[#FDEEEE] text-[#E5484D] font-bold px-2.5 py-0.5 rounded-full text-xs">
+                          • Inactive
                         </span>
                       )}
                     </td>
@@ -267,7 +267,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                     <td className="py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
                       <button
                         onClick={() => onViewCustomers?.(anc._id || anc.anchor_code)}
-                        className="p-1.5 rounded-lg border border-slate-200 text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm"
+                        className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                         title="View Customers"
                       >
                         <Eye className="h-4 w-4" />
@@ -326,7 +326,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                       placeholder="E.g., Tata Group"
                       value={newAnchorForm.name}
                       onChange={(e) => setNewAnchorForm({ ...newAnchorForm, name: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                       autoComplete="off"
                     />
                   </div>
@@ -343,7 +343,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                         placeholder="E.g., 9876543210"
                         value={newAnchorForm.phone}
                         onChange={(e) => setNewAnchorForm({ ...newAnchorForm, phone: e.target.value })}
-                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                         autoComplete="off"
                       />
                     </div>
@@ -359,7 +359,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                     placeholder="E.g., Tata Sons Private Limited"
                     value={newAnchorForm.company_name}
                     onChange={(e) => setNewAnchorForm({ ...newAnchorForm, company_name: e.target.value })}
-                    className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                    className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                     autoComplete="off"
                   />
                 </div>
@@ -376,7 +376,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                       placeholder="E.g., admin@tata.com"
                       value={newAnchorForm.email_id}
                       onChange={(e) => setNewAnchorForm({ ...newAnchorForm, email_id: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                       autoComplete="new-email"
                     />
                   </div>
@@ -393,7 +393,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                         placeholder="Enter account password"
                         value={newAnchorForm.password}
                         onChange={(e) => setNewAnchorForm({ ...newAnchorForm, password: e.target.value })}
-                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1D1E2C] focus:ring-[#1D1E2C] shadow-none"
+                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
                         autoComplete="new-password"
                       />
                       <button
@@ -422,7 +422,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm"
+                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                   >
                     Create Anchor
                   </Button>

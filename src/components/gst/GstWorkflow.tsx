@@ -63,14 +63,14 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
             <div key={step} className="flex flex-col items-center flex-1">
               <div className="flex items-center w-full">
                 <div
-                  className={`w-full h-1 ${step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#000000]" : "bg-gray-200"
+                  className={`w-full h-1 ${step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#1106de]" : "bg-gray-200"
                     }`}
                 />
                 <div
                   className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step
-                    ? "border-[#000000] bg-[#000000] text-white shadow-md"
+                    ? "border-[#1106de] bg-[#1106de] text-white shadow-md shadow-[#1106de]/30"
                     : currentStep > step
-                      ? "border-[#000000] bg-[#000000] text-white"
+                      ? "border-[#1106de] bg-[#1106de] text-white"
                       : "border-gray-300 bg-white text-gray-500"
                     } font-semibold text-sm transition-colors duration-300`}
                 >
@@ -83,11 +83,11 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
                   )}
                 </div>
                 <div
-                  className={`w-full h-1 ${step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#000000]" : "bg-gray-200"
+                  className={`w-full h-1 ${step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#1106de]" : "bg-gray-200"
                     }`}
                 />
               </div>
-              <span className={`text-xs mt-2 font-medium ${currentStep >= step ? "text-[#000000]" : "text-gray-400"}`}>
+              <span className={`text-xs mt-2 font-medium ${currentStep >= step ? "text-[#1106de] font-semibold" : "text-gray-400"}`}>
                 {step === 1 && "GSTIN"}
                 {step === 2 && "Business & Date"}
                 {step === 3 && "Authentication"}

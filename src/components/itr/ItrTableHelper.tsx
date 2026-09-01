@@ -19,22 +19,22 @@ export const renderYearlyTable = (title: string, dataArray: any[]) => {
     key.toLowerCase().includes("ebitda");
 
   return (
-    <div className="mb-6 overflow-x-auto rounded-xl border border-gray-300 bg-white shadow-md animate-in fade-in duration-500">
-      <div className="bg-black px-4 py-3 text-center text-lg font-semibold tracking-wide text-white">
+    <div className="mb-6 overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-sm animate-in fade-in duration-500">
+      <div className="bg-[#1106de] px-4 py-3 text-center text-lg font-semibold tracking-wide text-white">
         {title}
       </div>
 
       <table className="w-full border-collapse text-sm">
-        <thead className="bg-black text-white">
+        <thead className="bg-[#1106de] text-white">
           <tr>
-            <th className="border border-gray-700 px-4 py-3 text-left">
+            <th className="border border-blue-900/30 px-4 py-3 text-left font-semibold">
               Particulars
             </th>
 
             {years.map((y) => (
               <th
                 key={y}
-                className="min-w-[120px] border border-gray-700 px-4 py-3 text-right"
+                className="min-w-[120px] border border-blue-900/30 px-4 py-3 text-right font-semibold"
               >
                 {y}
               </th>
@@ -46,13 +46,13 @@ export const renderYearlyTable = (title: string, dataArray: any[]) => {
           {allKeys.map((key, idx) => (
             <tr
               key={idx}
-              className="transition-colors duration-300 hover:bg-gray-100"
+              className="transition-colors duration-300 hover:bg-slate-50/80"
             >
               <td
-                className={`border border-gray-300 px-4 py-3 ${
+                className={`border border-slate-200 px-4 py-3 ${
                   isHighlighted(key)
-                    ? "font-semibold text-black"
-                    : "text-gray-700"
+                    ? "font-semibold text-slate-900"
+                    : "text-slate-700"
                 }`}
               >
                 {key}
@@ -79,10 +79,10 @@ export const renderYearlyTable = (title: string, dataArray: any[]) => {
                 return (
                   <td
                     key={y}
-                    className={`border border-gray-300 px-4 py-3 text-right ${
+                    className={`border border-slate-200 px-4 py-3 text-right ${
                       isNegative
                         ? "font-semibold text-red-600"
-                        : "font-medium text-gray-800"
+                        : "font-medium text-slate-800"
                     }`}
                   >
                     {val || "-"}
@@ -104,18 +104,18 @@ export const renderDataTable = (title: string, dataArray: any[]) => {
   );
 
   return (
-    <div className="bg-white rounded-md shadow-sm border border-gray-200 mb-6 overflow-x-auto animate-in fade-in duration-500">
-      <div className="bg-[#000000] text-white px-4 py-2 text-center font-semibold opacity-90 border-b border-white/20">
+    <div className="bg-white rounded-xl shadow-sm border border-slate-100 mb-6 overflow-x-auto animate-in fade-in duration-500">
+      <div className="bg-[#1106de] text-white px-4 py-2.5 text-center font-semibold border-b border-blue-900/30">
         {title}
       </div>
 
       <table className="w-full text-sm text-left border-collapse">
-        <thead className="bg-gray-100">
+        <thead className="bg-slate-50">
           <tr>
             {allKeys.map((key) => (
               <th
                 key={key}
-                className="px-4 py-2 border border-gray-200 font-semibold text-[#000000]"
+                className="px-4 py-2.5 border border-slate-200 font-semibold text-slate-800"
               >
                 {key}
               </th>

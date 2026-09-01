@@ -241,7 +241,7 @@ return (
           setNewGstin("");
           setIsModalOpen(true);
         }}
-        className="px-4 py-2 text-sm font-semibold text-white bg-[#000080] hover:bg-[#000060] rounded-md transition-colors shadow-sm flex items-center gap-1.5"
+        className="px-4 py-2 text-sm font-semibold text-white bg-[#1106de] hover:bg-[#0e05b5] rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors flex items-center gap-1.5 cursor-pointer"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -260,7 +260,7 @@ return (
           <div
             key={itemGstin}
             className={`border-2 rounded-xl transition-all overflow-hidden ${isSelected
-                ? "border-[#000080] shadow-sm bg-white"
+                ? "border-[#1106de] shadow-sm bg-white"
                 : "border-slate-100 hover:border-slate-300 bg-slate-50/20 cursor-pointer"
               }`}
             onClick={() => {
@@ -275,7 +275,7 @@ return (
               <div className="flex items-center gap-3">
                 {/* Selector Circle Indicator */}
                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${isSelected
-                    ? "border-[#000080] bg-[#000080]"
+                    ? "border-[#1106de] bg-[#1106de]"
                     : "border-slate-300 bg-white"
                   }`}>
                   {isSelected && (
@@ -286,7 +286,7 @@ return (
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-slate-800 tracking-wide uppercase">{itemGstin}</span>
                     {isLoading && (
-                      <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#000080] animate-spin" />
+                      <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
                     )}
                   </div>
                   {data && (
@@ -367,7 +367,7 @@ return (
                             <input
                               id="fromMonth"
                               type="text"
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#000080]/20 focus:border-[#000080] outline-none text-slate-800 placeholder-slate-300"
+                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1106de]/20 focus:border-[#1106de] outline-none text-slate-800 placeholder-slate-300"
                               placeholder="MMYYYY"
                               value={fromMonth}
                               onChange={(e) => setFromMonth(e.target.value)}
@@ -382,7 +382,7 @@ return (
                             <input
                               id="toMonth"
                               type="text"
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#000080]/20 focus:border-[#000080] outline-none text-slate-800 placeholder-slate-300"
+                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1106de]/20 focus:border-[#1106de] outline-none text-slate-800 placeholder-slate-300"
                               placeholder="MMYYYY"
                               value={toMonth}
                               onChange={(e) => setToMonth(e.target.value)}
@@ -402,7 +402,7 @@ return (
                             <button
                               type="button"
                               onClick={() => onRequiresAuth(fromMonth, toMonth)}
-                              className="w-full bg-[#000080] hover:bg-[#000060] text-white font-medium py-3 px-6 rounded-md transition-colors flex justify-center items-center shadow-sm"
+                              className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-3 px-6 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors flex justify-center items-center cursor-pointer"
                             >
                               Authenticate with OTP
                             </button>
@@ -411,7 +411,7 @@ return (
                           <button
                             type="submit"
                             disabled={submitMutation.isPending}
-                            className="bg-[#000080] hover:bg-[#000060] text-white font-semibold py-2.5 px-6 rounded-lg transition-colors disabled:opacity-70 flex justify-center items-center shadow-sm"
+                            className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                           >
                             {submitMutation.isPending ? (
                               <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -426,7 +426,7 @@ return (
                   <div className="flex justify-center py-4">
                     {isLoading ? (
                       <div className="flex items-center gap-2 text-slate-500">
-                        <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#000080] animate-spin" />
+                        <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
                         <span>Fetching business details...</span>
                       </div>
                     ) : (
@@ -444,7 +444,7 @@ return (
     {/* Add New GSTIN Modal */}
     {isModalOpen && (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-        <div className="bg-white rounded-lg shadow-xl border border-gray-100 max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
+        <div className="bg-white rounded-xl shadow-xl border border-gray-100 max-w-md w-full p-6 animate-in fade-in zoom-in duration-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-2">Add New GSTIN</h3>
           <p className="text-sm text-gray-500 mb-4">
             Enter the new Goods and Services Tax Identification Number (GSTIN) you would like to analyze.
@@ -458,7 +458,7 @@ return (
               <input
                 id="newGstin"
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000080] focus:border-[#000080] uppercase"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] uppercase"
                 placeholder="e.g. 27AAAPL1234C1Z5"
                 value={newGstin}
                 onChange={(e) => {
@@ -476,14 +476,14 @@ return (
                 type="button"
                 onClick={() => setIsModalOpen(false)}
                 disabled={addNewGstinMutation.isPending}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-md transition-colors"
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 border border-gray-300 rounded-xl transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={addNewGstinMutation.isPending}
-                className="bg-[#000080] hover:bg-[#000060] text-white text-sm font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+                className="bg-[#1106de] hover:bg-[#0e05b5] text-white text-sm font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
               >
                 {addNewGstinMutation.isPending ? (
                   <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

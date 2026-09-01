@@ -228,7 +228,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
 
         {/* Basic Info Cards */}
         <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000] border-b border-slate-100 pb-3 mb-4">
+          <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900 border-b border-slate-100 pb-3 mb-4">
             Personal & Identification Profile
           </h4>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -348,7 +348,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
       {/* Primary KPI Grid (Balance, Sanctioned, etc.) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Outstanding Balance */}
-        <div className="rounded-xl border border-slate-200 bg-[#000000] p-5 text-white shadow-sm flex flex-col justify-between">
+        <div className="rounded-xl border border-slate-200 bg-[#1106de] p-5 text-white shadow-sm flex flex-col justify-between">
           <div>
             <span className="inline-flex items-center rounded bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/95">
               Outstanding Debt
@@ -391,7 +391,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
           </div>
           <div className="border-t border-slate-100 mt-4 pt-3 flex items-center justify-between text-xs text-slate-500">
             <span>Accounts as Guarantor</span>
-            <span className="font-semibold text-[#000000]">{totalAccountAsAGuarantor}</span>
+            <span className="font-semibold text-slate-900">{totalAccountAsAGuarantor}</span>
           </div>
         </div>
       </div>
@@ -401,8 +401,8 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Lenders Table */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <Landmark className="h-5 w-5 text-slate-700" />
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+            <Landmark className="h-5 w-5 text-[#1106de]" />
+            <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Lender Distribution
             </h4>
           </div>
@@ -442,8 +442,8 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Obligations Summary */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <AlertOctagon className="h-5 w-5 text-slate-700" />
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+            <AlertOctagon className="h-5 w-5 text-[#1106de]" />
+            <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Repayment & Obligations
             </h4>
           </div>
@@ -505,8 +505,8 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Account Types Distribution */}
         <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <CreditCard className="h-5 w-5 text-slate-700" />
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+            <CreditCard className="h-5 w-5 text-[#1106de]" />
+            <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Account Types Breakdown
             </h4>
           </div>
@@ -537,15 +537,15 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Enquiries Box */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <Search className="h-5 w-5 text-slate-700" />
-            <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+            <Search className="h-5 w-5 text-[#1106de]" />
+            <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Bureau Enquiries
             </h4>
           </div>
 
           <div className="text-center py-4 border-b border-slate-100">
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Credit Enquiries</span>
-            <p className="text-4xl font-extrabold text-[#000000] mt-1">{totalEnquiries}</p>
+            <p className="text-4xl font-extrabold text-slate-900 mt-1">{totalEnquiries}</p>
             <p className="text-xs text-slate-500 mt-2">Recent Enquiry: <strong>{recentDateOfEnquiry}</strong></p>
           </div>
 

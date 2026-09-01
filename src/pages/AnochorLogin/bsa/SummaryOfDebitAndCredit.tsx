@@ -287,7 +287,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
       <div className="flex items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-black mb-2">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
             Summary of Debit and Credit
           </h1>
           <p className="text-gray-600">
@@ -297,7 +297,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
       </div>
 
       {dateRangeData && (
-        <Card className="mb-8 shadow-sm border-black/10 bg-white">
+        <Card className="mb-8 shadow-sm border-slate-100 bg-white">
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4 items-end">
               <div className="flex-1 space-y-1">
@@ -309,7 +309,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-full justify-start text-left font-normal bg-white border-black text-black',
+                        'w-full justify-start text-left font-normal bg-white border-slate-200 text-slate-800',
                         !fromDate && 'text-muted-foreground'
                       )}
                     >
@@ -326,10 +326,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-black text-white hover:bg-black hover:text-white focus:bg-black focus:text-white',
-                        day_today: 'bg-gray-100 text-black',
-                        nav_button: 'border border-black text-black hover:bg-gray-100',
-                        chevron: 'text-black',
+                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        chevron: 'text-slate-700',
                       }}
                       startMonth={
                         dateRangeData?.from_date
@@ -380,7 +380,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-full justify-start text-left font-normal bg-white border-black text-black',
+                        'w-full justify-start text-left font-normal bg-white border-slate-200 text-slate-800',
                         !toDate && 'text-muted-foreground'
                       )}
                     >
@@ -396,6 +396,12 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     <Calendar
                       mode="single"
                       captionLayout="dropdown"
+                      classNames={{
+                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        chevron: 'text-slate-700',
+                      }}
                       startMonth={
                         dateRangeData?.from_date
                           ? new Date(dateRangeData.from_date + 'T00:00:00')
@@ -436,14 +442,14 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
               <div className="flex gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-black hover:bg-black/90 text-white gap-2"
+                  className="bg-[#1106de] hover:bg-[#0e05b5] text-white gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
                 <Button
                   onClick={handleClear}
                   variant="outline"
-                  className="gap-2 border-black text-black hover:bg-gray-100"
+                  className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
@@ -468,10 +474,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
         </Card>
       )}
 
-      <Card className="shadow-lg border-black/10 bg-white">
-        <CardHeader className="flex flex-row items-center justify-between bg-gray-50/50 border-b pb-4">
+      <Card className="shadow-lg border-slate-100 bg-white rounded-2xl">
+        <CardHeader className="flex flex-row items-center justify-between bg-slate-50/70 border-b pb-4">
           <div>
-            <CardTitle className="text-xl text-black">Monthly Overview</CardTitle>
+            <CardTitle className="text-xl text-slate-900 font-bold">Monthly Overview</CardTitle>
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
@@ -485,7 +491,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
               variant="outline"
               onClick={() => refetch()}
               disabled={isLoading}
-              className="gap-2 border-black text-black hover:bg-gray-100"
+              className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
             >
               <RefreshCcw
                 className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
@@ -497,7 +503,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-              <Loader2 className="h-8 w-8 animate-spin text-black mb-4" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
               <p>Loading summary data...</p>
             </div>
           ) : isError ? (
@@ -508,7 +514,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
               <Button
                 onClick={() => refetch()}
                 variant="outline"
-                className="mt-4 border-black text-black hover:bg-gray-100"
+                className="mt-4 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
                 Try Again
               </Button>
@@ -516,18 +522,18 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
           ) : data ? (
             <div className="overflow-x-auto pb-4">
               <table className="w-full text-sm text-left border-collapse border border-gray-300">
-                <thead className="text-xs text-white bg-black">
+                <thead className="text-xs text-white bg-[#1106de]">
                   <tr>
-                    <th className="px-4 py-3 font-semibold border border-gray-400 w-48 sticky left-0 bg-black z-20">
+                    <th className="px-4 py-3 font-semibold border border-blue-900/30 w-48 sticky left-0 bg-[#1106de] z-20">
                       Months
                     </th>
-                    <th className="px-4 py-3 font-semibold text-right border border-gray-400 min-w-[120px]">
+                    <th className="px-4 py-3 font-semibold text-right border border-blue-900/30 min-w-[120px]">
                       Total
                     </th>
                     {expectedMonths.map((month) => (
                       <th
                         key={month}
-                        className="px-4 py-3 font-semibold text-right border border-gray-400 capitalize min-w-[120px]"
+                        className="px-4 py-3 font-semibold text-right border border-blue-900/30 capitalize min-w-[120px]"
                       >
                         {month}
                       </th>
@@ -535,10 +541,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  <tr className="bg-gray-400 text-white">
+                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
-                      className="px-4 py-1.5 font-semibold text-center border border-gray-400"
+                      className="px-4 py-1.5 font-bold text-center border border-blue-100"
                     >
                       Inflows (Value)
                     </td>
@@ -587,10 +593,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-gray-400 text-white">
+                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
-                      className="px-4 py-1.5 font-semibold text-center border border-gray-400"
+                      className="px-4 py-1.5 font-bold text-center border border-blue-100"
                     >
                       Inflows (No.)
                     </td>
@@ -648,10 +654,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-gray-400 text-white">
+                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
-                      className="px-4 py-1.5 font-semibold text-center border border-gray-400"
+                      className="px-4 py-1.5 font-bold text-center border border-blue-100"
                     >
                       Outflows (Value)
                     </td>
@@ -704,10 +710,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-gray-400 text-white">
+                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
-                      className="px-4 py-1.5 font-semibold text-center border border-gray-400"
+                      className="px-4 py-1.5 font-bold text-center border border-blue-100"
                     >
                       Outflows (No.)
                     </td>
@@ -773,7 +779,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">
-              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-black mb-4" />
+              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#1106de] mb-4" />
               <p className="text-gray-500">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

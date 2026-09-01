@@ -224,7 +224,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
         <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
             <div className="flex items-center gap-4 mb-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-[#000000] mb-2">Cash Flow</h1>
+                    <h1 className="text-3xl font-bold text-slate-900 mb-2">Cash Flow</h1>
                     <p className="text-gray-600">
                         Monthwise cash flow statement analysis
                     </p>
@@ -233,7 +233,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
 
             {/* Date Filter Card */}
             {dateRangeData && (
-                <Card className="mb-8 shadow-sm border-[#000000]/10 bg-white">
+                <Card className="mb-8 shadow-sm border-slate-100 bg-white">
                     <CardContent className="p-4">
                         <div className="flex flex-col md:flex-row gap-4 items-end">
                             <div className="flex-1 space-y-1">
@@ -366,14 +366,14 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                             <div className="flex gap-2">
                                 <Button
                                     onClick={handleApply}
-                                    className="bg-[#000000] hover:bg-[#000000]/90 text-white gap-2"
+                                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                                 >
                                     <Filter className="w-4 h-4" /> Apply Filter
                                 </Button>
                                 <Button
                                     onClick={handleClear}
                                     variant="outline"
-                                    className="gap-2 text-black"
+                                    className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
                                 >
                                     <X className="w-4 h-4" /> Clear
                                 </Button>
@@ -398,10 +398,10 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                 </Card>
             )}
 
-            <Card className="shadow-lg border-[#000000]/10 bg-white overflow-hidden">
-                <CardHeader className="flex flex-row items-center justify-between bg-gray-100 border-b pb-4">
+            <Card className="shadow-lg border-slate-100 bg-white overflow-hidden rounded-2xl">
+                <CardHeader className="flex flex-row items-center justify-between bg-slate-50/70 border-b pb-4">
                     <div>
-                        <CardTitle className="text-xl text-[#000000]">
+                        <CardTitle className="text-xl text-slate-900 font-bold">
                             Cash Flow Statement
                         </CardTitle>
                         <CardDescription>
@@ -417,10 +417,10 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                             variant="outline"
                             onClick={() => refetch()}
                             disabled={isLoading}
-                            className="gap-2 text-black"
+                            className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
                         >
                             <RefreshCcw
-                                className={`h-4 w-4 text-black  ${isLoading ? 'animate-spin' : ''}`}
+                                className={`h-4 w-4 text-slate-600 ${isLoading ? 'animate-spin' : ''}`}
                             />
                             Refresh
                         </Button>
@@ -429,7 +429,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                 <CardContent className="p-0">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-                            <Loader2 className="h-8 w-8 animate-spin text-[#000000] mb-4" />
+                            <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
                             <p>Loading cash flow data...</p>
                         </div>
                     ) : isError ? (
@@ -440,7 +440,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                             <Button
                                 onClick={() => refetch()}
                                 variant="outline"
-                                className="mt-4 text-black"
+                                className="mt-4 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
                             >
                                 Try Again
                             </Button>
@@ -449,11 +449,11 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                         <div className="overflow-x-auto w-full">
                             <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
                                 <thead>
-                                    <tr className="bg-[#000000] text-white text-xs">
-                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#000000] z-20">
+                                    <tr className="bg-[#1106de] text-white text-xs">
+                                        <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap min-w-[200px] sticky left-0 bg-[#1106de] z-20">
                                             Particulars
                                         </th>
-                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right">
+                                        <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap text-right">
                                             Overall/Total
                                         </th>
                                         {expectedMonths.map((month) => (

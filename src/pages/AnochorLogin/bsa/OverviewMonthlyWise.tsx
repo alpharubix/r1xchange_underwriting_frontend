@@ -805,7 +805,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)] bg-white">
       <div className="flex items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-black mb-2">
+          <h1 className="text-3xl font-bold text-slate-900 mb-2">
             Month-Wise Overview
           </h1>
           <p className="text-gray-600">
@@ -815,7 +815,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
       </div>
 
       {dateRangeData && (
-        <Card className="mb-8 shadow-sm border-black/20 bg-white">
+        <Card className="mb-8 shadow-sm border-slate-100 bg-white">
           <CardContent className="p-4">
             <div className="flex flex-col md:flex-row gap-4 items-end">
               <div className="flex-1 space-y-1">
@@ -827,7 +827,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-full justify-start text-left font-normal bg-white border-black/20',
+                        'w-full justify-start text-left font-normal bg-white border-slate-200 text-slate-800',
                         !fromDate && 'text-gray-400'
                       )}
                     >
@@ -843,6 +843,12 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                     <Calendar
                       mode="single"
                       captionLayout="dropdown"
+                      classNames={{
+                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        chevron: 'text-slate-700',
+                      }}
                       startMonth={
                         dateRangeData?.from_date
                           ? new Date(dateRangeData.from_date + 'T00:00:00')
@@ -892,7 +898,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                     <Button
                       variant={'outline'}
                       className={cn(
-                        'w-full justify-start text-left font-normal bg-white border-black/20',
+                        'w-full justify-start text-left font-normal bg-white border-slate-200 text-slate-800',
                         !toDate && 'text-gray-400'
                       )}
                     >
@@ -908,6 +914,12 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                     <Calendar
                       mode="single"
                       captionLayout="dropdown"
+                      classNames={{
+                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        chevron: 'text-slate-700',
+                      }}
                       startMonth={
                         dateRangeData?.from_date
                           ? new Date(dateRangeData.from_date + 'T00:00:00')
@@ -948,14 +960,14 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
               <div className="flex gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-black hover:bg-black/90 text-white gap-2"
+                  className="bg-[#1106de] hover:bg-[#0e05b5] text-white gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
                 <Button
                   onClick={handleClear}
                   variant="outline"
-                  className="gap-2 border-black/20 text-black hover:bg-black/5"
+                  className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
@@ -980,10 +992,10 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
         </Card>
       )}
 
-      <Card className="shadow-lg border-black/20 bg-white overflow-hidden">
-        <CardHeader className="flex flex-row items-center justify-between bg-gray-50 border-b pb-4">
+      <Card className="shadow-lg border-slate-100 bg-white overflow-hidden rounded-2xl">
+        <CardHeader className="flex flex-row items-center justify-between bg-slate-50/70 border-b pb-4">
           <div>
-            <CardTitle className="text-xl text-black">
+            <CardTitle className="text-xl text-slate-900 font-bold">
               Overview Details
             </CardTitle>
             <CardDescription>
@@ -999,7 +1011,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
               variant="outline"
               onClick={() => refetch()}
               disabled={isLoading}
-              className="gap-2 border-black/20 text-black hover:bg-black/5"
+              className="gap-2 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
             >
               <RefreshCcw
                 className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
@@ -1011,7 +1023,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-600">
-              <Loader2 className="h-8 w-8 animate-spin text-black mb-4" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
               <p>Loading overview data...</p>
             </div>
           ) : isError ? (
@@ -1022,7 +1034,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
               <Button
                 onClick={() => refetch()}
                 variant="outline"
-                className="mt-4 border-black/20 text-black hover:bg-black/5"
+                className="mt-4 border-slate-200 text-slate-700 hover:bg-slate-50 cursor-pointer"
               >
                 Try Again
               </Button>
@@ -1031,17 +1043,17 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
             <div className="overflow-x-auto w-full">
               <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
                 <thead>
-                  <tr className="bg-black text-white text-xs">
-                    <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[300px] sticky left-0 bg-black z-20">
+                  <tr className="bg-[#1106de] text-white text-xs">
+                    <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap min-w-[300px] sticky left-0 bg-[#1106de] z-20">
                       Particulars
                     </th>
-                    <th className="px-4 py-3 border border-black/20 font-bold whitespace-nowrap text-right">
+                    <th className="px-4 py-3 border border-blue-900/30 font-bold whitespace-nowrap text-right">
                       Overall/Total
                     </th>
                     {expectedMonths.map((month) => (
                       <th
                         key={month}
-                        className="px-4 py-3 border border-black/20 font-bold whitespace-nowrap text-center capitalize"
+                        className="px-4 py-3 border border-blue-900/30 font-bold whitespace-nowrap text-center capitalize"
                       >
                         {month}
                       </th>
@@ -1052,7 +1064,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                   {ROWS.map((row, index) => {
                     if (row.isSeparator) {
                       return (
-                        <tr key={index} className="h-1.5 bg-black">
+                        <tr key={index} className="h-1.5 bg-[#1106de]">
                           <td colSpan={expectedMonths.length + 2}></td>
                         </tr>
                       );
@@ -1060,7 +1072,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
 
                     const labelContent = (
                       <div
-                        className={`flex justify-between items-center w-full ${row.isRed ? 'text-red-700' : 'text-black'}`}
+                        className={`flex justify-between items-center w-full ${row.isRed ? 'text-red-700' : 'text-slate-900'}`}
                       >
                         <span>{row.label}</span>
                         {row.extraLabel && (
@@ -1071,18 +1083,18 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                       </div>
                     );
 
-                    const cellClass = `px-4 py-2.5 border border-black/20 ${row.isRed ? 'text-red-700' : 'text-black'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
+                    const cellClass = `px-4 py-2.5 border border-slate-200 ${row.isRed ? 'text-red-700' : 'text-slate-900'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
                     const bgClass = row.isGreyBg
-                      ? 'bg-gray-100'
+                      ? 'bg-slate-50'
                       : 'bg-white';
 
                     return (
                       <tr
                         key={index}
-                        className={`hover:bg-gray-50 transition-colors ${bgClass}`}
+                        className={`hover:bg-slate-50/80 transition-colors ${bgClass}`}
                       >
                         <td
-                          className={`px-4 py-2.5 border border-black/20 sticky left-0 z-10 ${row.isBold ? 'font-bold' : 'font-medium'} ${row.isGreyBg ? 'bg-gray-100' : 'bg-white'}`}
+                          className={`px-4 py-2.5 border border-slate-200 sticky left-0 z-10 ${row.isBold ? 'font-bold' : 'font-medium'} ${row.isGreyBg ? 'bg-slate-50' : 'bg-white'}`}
                         >
                           {labelContent}
                         </td>
@@ -1126,7 +1138,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
             </div>
           ) : (
             <div className="p-8 text-center text-gray-600">
-              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-black mb-4" />
+              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#1106de] mb-4" />
               <p className="text-gray-600">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

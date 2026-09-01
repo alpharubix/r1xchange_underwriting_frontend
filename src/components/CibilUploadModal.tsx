@@ -43,12 +43,12 @@ export default function CibilUploadModal({ isOpen, onClose, custId }: CibilUploa
           </button>
 
           <div className="p-6 pb-0">
-            <h2 className="text-2xl font-bold text-[#000000] flex items-center gap-2">
-              <FileText className="h-6 w-6" />
+            <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+              <FileText className="h-6 w-6 text-[#1106de]" />
               CIBIL Score
             </h2>
-            <p className="text-gray-500 mt-1 text-bold">Authenticate customer consent and process CIBIL report data</p>
-            {custId && <p className="text-gray-700 mt-1 font-medium text-sm text-bold ">Target Customer ID: <span className="text-[#FF0000]/80">{custId}</span></p>}
+            <p className="text-gray-500 mt-1 font-medium">Authenticate customer consent and process CIBIL report data</p>
+            {custId && <p className="text-gray-700 mt-1 font-medium text-sm">Target Customer ID: <span className="text-[#1106de] font-semibold">{custId}</span></p>}
           </div>
 
           <div className="p-6 pt-0">

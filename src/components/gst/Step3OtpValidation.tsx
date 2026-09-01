@@ -113,7 +113,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             <input
               id="userName"
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de]"
               placeholder="e.g. your_username"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
@@ -124,7 +124,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
           <button
             type="submit"
             disabled={otpMutation.isPending}
-            className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {otpMutation.isPending ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -145,7 +145,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             <input
               id="otp"
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#000000] focus:border-[#000000] text-center tracking-widest text-lg"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] text-center tracking-widest text-lg"
               placeholder="••••••"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
@@ -157,7 +157,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
           <button
             type="submit"
             disabled={validateMutation.isPending || submitMutation.isPending}
-            className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {(validateMutation.isPending || submitMutation.isPending) ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -170,7 +170,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
               type="button"
               onClick={handleResend}
               disabled={otpMutation.isPending}
-              className="text-sm text-[#000000] hover:underline disabled:text-gray-400"
+              className="text-sm text-[#1106de] font-semibold hover:underline disabled:text-gray-400 cursor-pointer"
             >
               {otpMutation.isPending ? "Resending..." : "Didn't receive code? Resend"}
             </button>
@@ -187,7 +187,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             type="button"
             onClick={handleManualSubmit}
             disabled={submitMutation.isPending}
-            className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-3 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center shadow-md"
+            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-3 px-4 rounded-xl shadow-md shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {submitMutation.isPending ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

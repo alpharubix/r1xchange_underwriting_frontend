@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 export default function GstHistoryPage() {
   const navigate = useNavigate();
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery<any>({
     queryKey: ['gstHistory'],
     queryFn: () => getGstHistory(),
     retry: false,
@@ -27,7 +27,7 @@ export default function GstHistoryPage() {
           </div>
           <button
             onClick={() => navigate('/gst/analysis')}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#000000] hover:bg-[#000000]/50 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000000]"
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-[#1106de] hover:bg-[#0e05b5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1106de] cursor-pointer"
           >
             <svg
               className="-ml-1 mr-2 h-5 w-5"
@@ -48,7 +48,7 @@ export default function GstHistoryPage() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
-            <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+            <span className="h-10 w-10 rounded-full border-4 border-[#1106de]/20 border-t-[#1106de] animate-spin" />
           </div>
         ) : isError ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12 text-center">
@@ -75,7 +75,7 @@ export default function GstHistoryPage() {
             </p>
             <button
               onClick={() => navigate('/gst/analysis')}
-              className="text-[#000000] font-medium hover:underline"
+              className="text-[#1106de] font-medium hover:underline cursor-pointer"
             >
               Start your first analysis
             </button>
@@ -153,7 +153,7 @@ export default function GstHistoryPage() {
                               state: { gst_reference_id: item.reference_id },
                             })
                           }
-                          className="text-[#000000] hover:text-[#000060]"
+                          className="text-[#1106de] hover:text-[#0e05b5] font-semibold cursor-pointer"
                         >
                           View Report
                         </button>

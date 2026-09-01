@@ -123,7 +123,7 @@ export default function AnchorLoginPage() {
         {/* Center Text Branding */}
         <div className="relative z-10 my-auto max-w-lg select-none">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-[1.12] tracking-tight">
-            Welcome
+            Welcome To
             <br />
             R1Xchange
             <br />

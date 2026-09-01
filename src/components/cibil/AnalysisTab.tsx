@@ -99,8 +99,8 @@ export default function AnalysisTab({ data }: { data: CibilAnalysisData }) {
       {/* Analysis Table */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-          <TrendingUp className="h-5 w-5 text-slate-700" />
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+          <TrendingUp className="h-5 w-5 text-[#1106de]" />
+          <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
             Credit Facility & Delays Analysis
           </h4>
         </div>
@@ -181,8 +181,8 @@ export default function AnalysisTab({ data }: { data: CibilAnalysisData }) {
       {/* Comments & Insights Section */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-          <MessageSquare className="h-5 w-5 text-slate-700" />
-          <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000]">
+          <MessageSquare className="h-5 w-5 text-[#1106de]" />
+          <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
             Credit Insights & Comments
           </h4>
         </div>
@@ -197,7 +197,7 @@ export default function AnalysisTab({ data }: { data: CibilAnalysisData }) {
                   className={`rounded-xl border p-4 flex gap-3 ${
                     isDefaultWarning 
                       ? 'border-red-100 bg-red-50/30 text-red-950' 
-                      : 'border-slate-100 bg-slate-50/50 text-[#000000]'
+                      : 'border-slate-100 bg-slate-50/50 text-slate-900'
                   }`}
                 >
                   <div className={`rounded-lg p-2 shrink-0 h-10 w-10 flex items-center justify-center ${

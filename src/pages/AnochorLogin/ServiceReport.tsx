@@ -7,7 +7,6 @@ import ItrUploadModal from '@/components/ItrUploadModal';
 import GstUploadModal from '@/components/GstUploadModal';
 import CibilUploadModal from '@/components/CibilUploadModal';
 import {
-  Users,
   Eye,
   FileSpreadsheet,
   Loader2,
@@ -48,6 +47,24 @@ interface ServiceReportProps {
   selectedCustomer: Customer;
   onBack: () => void;
 }
+
+const getCustomerInitials = (name?: string): string => {
+  if (!name) return "U";
+  const cleanName = name.trim();
+  const parts = cleanName.split(/[\s_\-]+/).filter(Boolean);
+  if (parts.length >= 2) {
+    return (parts[0][0] + parts[1][0]).toUpperCase();
+  }
+  if (parts.length === 1) {
+    const single = parts[0];
+    const upperMatches = single.match(/[A-Z]/g);
+    if (upperMatches && upperMatches.length >= 2) {
+      return (upperMatches[0] + upperMatches[1]).toUpperCase();
+    }
+    return single.slice(0, 2).toUpperCase();
+  }
+  return cleanName.slice(0, 2).toUpperCase();
+};
 
 const formatDateTime = (dateString: string) => {
   if (!dateString) return "-";
@@ -179,25 +196,30 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
 
   return (
     <div className="space-y-6 animate-in fade-in duration-200">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold tracking-tight text-slate-900">Services & Reports</h1>
-        <Button
-          variant="outline"
-          onClick={onBack}
-          className="border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 h-10 shadow-none text-xs font-bold"
-        >
-          Back to Customers
-        </Button>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            onClick={onBack}
+            className="p-2.5 h-10 w-10 border-slate-200 rounded-xl hover:bg-slate-50 text-slate-500 transition-colors shadow-sm shrink-0"
+          >
+            <ArrowLeft className="h-5 w-5" />
+          </Button>
+          <div>
+            <h1 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1D1E2C]">Services & Reports</h1>
+            <p className="text-sm text-[#8a8d97] font-medium">Manage user services and view reports</p>
+          </div>
+        </div>
       </div>
 
       <div className="flex items-center gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-        <div className="h-14 w-14 rounded-full bg-[#FFF0EC] text-[#FF6B4A] flex items-center justify-center font-bold text-lg shadow-inner shrink-0">
-          <Users className="h-7 w-7 text-[#FF6B4A]" />
+        <div className="h-14 w-14 rounded-full bg-[#eff6ff] text-[#1106de] flex items-center justify-center font-bold text-xl shadow-inner border border-blue-100/80 shrink-0 tracking-wider">
+          {getCustomerInitials(selectedCustomer.name || selectedCustomer.customer_name || selectedCustomer.company_name)}
         </div>
         <div>
-          <h2 className="text-xl font-bold text-slate-900">{selectedCustomer.name}</h2>
+          <h2 className="text-xl font-bold text-slate-900">{selectedCustomer.name || selectedCustomer.customer_name || selectedCustomer.company_name}</h2>
           <p className="text-xs text-slate-400 mt-1 font-semibold">
-            ID : {selectedCustomer.id} <span className="px-2 text-[#000000]/60">|</span> Phone : {selectedCustomer.phone}
+            ID : {selectedCustomer.id} <span className="px-2 text-slate-300">|</span> Phone : {selectedCustomer.phone || selectedCustomer.phone_no}
           </p>
         </div>
       </div>
@@ -226,12 +248,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 setViewingRectifyMoneyReport(null);
                 localStorage.removeItem("selected_itr_report_id");
               }}
-              className={`pb-3 text-sm font-bold transition-all relative ${isActive ? "text-[#FF6B4A]" : "text-slate-400 hover:text-slate-600"
+              className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${isActive ? "text-[#1106de]" : "text-slate-400 hover:text-slate-600"
                 }`}
             >
               {labels[tab]}
               {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#FF6B4A] rounded-full animate-fade-in" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1106de] rounded-full animate-fade-in" />
               )}
             </button>
           );
@@ -245,7 +267,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 variant="outline"
                 onClick={() => setViewingBsaReport(null)}
-                className="flex items-center gap-2 border-[#1D1E2C] text-[#1D1E2C] hover:bg-[#1D1E2C]/5 font-bold rounded-xl h-9 text-xs"
+                className="flex items-center gap-2 border-[#1106de] text-[#1106de] hover:bg-[#1106de]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" /> Back to BSA Reports List
               </Button>
@@ -266,12 +288,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                   <button
                     key={tab}
                     onClick={() => setBsaDetailTab(tab)}
-                    className={`pb-2 text-xs font-bold transition-all relative ${isActive ? "text-[#FF6B4A]" : "text-slate-400 hover:text-slate-600"
+                    className={`pb-2 text-xs font-bold transition-all relative cursor-pointer ${isActive ? "text-[#1106de]" : "text-slate-400 hover:text-slate-600"
                       }`}
                   >
                     {labels[tab]}
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#FF6B4A] rounded-full animate-fade-in" />
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1106de] rounded-full animate-fade-in" />
                     )}
                   </button>
                 );
@@ -304,7 +326,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 />
               )}
             </div>
-
+            <Button
+              onClick={() => setIsBsaModalOpen(true)}
+              className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+            >
+              + Create New BSA Report
+            </Button>
           </div>
         ) : (
           <div className="space-y-6 animate-in fade-in duration-200">
@@ -340,7 +367,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={6} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -369,7 +396,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                   onClick={() => {
                                     setViewingBsaReport(report);
                                   }}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -404,7 +431,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               </div>
               <Button
                 onClick={() => setIsGstModalOpen(true)}
-                className="bg-[#000000] hover:bg-[#000060] text-white"
+                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
                 + Create New GST Report
               </Button>
@@ -430,7 +457,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={8} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -467,7 +494,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_gst_from_date", report.gstFromDate || '');
                                     localStorage.setItem("selected_gst_to_date", report.gstToDate || '');
                                   }}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -505,7 +532,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               </div>
               <Button
                 onClick={() => setIsItrModalOpen(true)}
-                className="bg-[#000000] hover:bg-[#000060] text-white"
+                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
                 + Create New ITR Report
               </Button>
@@ -529,7 +556,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={5} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -564,7 +591,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_itr_report_id", report.reportId);
                                     setViewingItrReport(report);
                                   }}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -599,7 +626,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               </div>
               <Button
                 onClick={() => setIsCibilModalOpen(true)}
-                className="bg-[#000000] hover:bg-[#000060] text-white"
+                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
                 + Create New CIBIL Report
               </Button>
@@ -622,7 +649,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -651,7 +678,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                 <button
                                   type="button"
                                   onClick={() => setViewingCibilReport(report)}
-                                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-slate-200 text-xs font-semibold text-[#1D1E2C] hover:border-[#1D1E2C] hover:bg-[#1D1E2C]/5 transition-colors shadow-sm bg-white"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />

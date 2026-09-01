@@ -106,7 +106,7 @@ const getTableColumns = (rows: ReportRecord[]) => {
   return columns;
 };
 
-export function SectionFrame({
+export function SectionCard({
   title,
   description,
   children,
@@ -118,10 +118,10 @@ export function SectionFrame({
   className?: string;
 }) {
   return (
-    <section className={cn('overflow-hidden rounded-md border border-slate-200 bg-white shadow-sm', className)}>
-      <div className="border-b border-slate-200 bg-black px-4 py-3 text-white">
+    <section className={cn('overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm', className)}>
+      <div className="border-b border-blue-900/30 bg-[#1106de] px-4 py-3 text-white">
         <h3 className="text-sm font-semibold uppercase tracking-wide">{title}</h3>
-        {description ? <p className="mt-1 text-xs text-white/75">{description}</p> : null}
+        {description ? <p className="mt-1 text-xs text-white/85">{description}</p> : null}
       </div>
       <div className="p-4">{children}</div>
     </section>
@@ -130,7 +130,7 @@ export function SectionFrame({
 
 export function EmptyReportState({ message = 'No data returned for this section.' }: { message?: string }) {
   return (
-    <div className="rounded-md border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
+    <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
       {message}
     </div>
   );
@@ -138,8 +138,8 @@ export function EmptyReportState({ message = 'No data returned for this section.
 
 export function LoadingState({ label = 'Loading report section...' }: { label?: string }) {
   return (
-    <div className="flex min-h-64 items-center justify-center rounded-md border border-slate-200 bg-white">
-      <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#000000] animate-spin" />
+    <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white">
+      <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#1106de] animate-spin" />
       <span className="text-sm font-medium text-slate-600">{label}</span>
     </div>
   );
@@ -147,7 +147,7 @@ export function LoadingState({ label = 'Loading report section...' }: { label?: 
 
 export function ErrorState({ message }: { message: string }) {
   return (
-    <div className="rounded-md border border-red-200 bg-red-50 px-4 py-8 text-center text-sm font-medium text-red-700">
+    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-8 text-center text-sm font-medium text-red-700">
       {message}
     </div>
   );
@@ -161,12 +161,12 @@ export function MetricGrid({ items }: { items: MetricItem[] }) {
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {visibleItems.map((item) => (
-        <div key={item.label} className="rounded-md border border-slate-200 bg-slate-50 p-4">
+        <div key={item.label} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</p>
           <p
             className={cn(
-              'mt-2 break-words text-base font-semibold text-[#000000]',
-              item.tone === 'strong' && 'text-[#000000]',
+              'mt-2 break-words text-base font-semibold text-slate-900',
+              item.tone === 'strong' && 'text-[#1106de]',
               item.tone === 'danger' && 'text-red-600'
             )}
           >
@@ -186,9 +186,9 @@ export function KeyValueGrid({ data }: { data: Array<{ label: string; value: unk
   return (
     <dl className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {visibleData.map((item) => (
-        <div key={item.label} className="rounded-md border border-slate-200 bg-white p-3">
+        <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-3">
           <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</dt>
-          <dd className="mt-1 break-words text-sm font-medium text-[#000000]">{formatValue(item.value)}</dd>
+          <dd className="mt-1 break-words text-sm font-semibold text-slate-900">{formatValue(item.value)}</dd>
         </div>
       ))}
     </dl>
