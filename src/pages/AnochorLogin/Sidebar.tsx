@@ -3,7 +3,7 @@ import {
   ChevronLeft,
   Anchor as AnchorIcon,
   Users,
-  LogOut
+  LogOut,
 } from 'lucide-react';
 import { getAnchorBrand } from '@/lib/brandLogo';
 
@@ -112,6 +112,7 @@ export default function Sidebar({
             {!sidebarCollapsed && <span>Customer</span>}
           </button>
         )}
+
       </nav>
 
       {/* Sidebar Footer - Profile Card */}

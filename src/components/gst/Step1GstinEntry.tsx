@@ -23,10 +23,10 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
       const gstinVal = Array.isArray(rawGst)
         ? rawGst[0]
         : typeof rawGst === "string"
-        ? rawGst.split(",")[0]
-        : "";
+          ? rawGst.split(",")[0]
+          : "";
 
-      const cleanGstin = gstinVal?.trim() || "";
+      const cleanGstin = typeof gstinVal === 'string' ? gstinVal.trim() : String(gstinVal || "").trim();
       if (cleanGstin) {
         setGstinInput(cleanGstin);
         onNext(cleanGstin);
@@ -47,7 +47,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
     e.preventDefault();
     const gstin = gstinInput.toUpperCase().trim();
     const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
-    
+
     if (gstin.length !== 15) {
       toast.error("GSTIN must be exactly 15 characters long");
       return;
@@ -75,7 +75,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
       <p className="text-gray-500 mb-6 text-sm">
         Please provide your Goods and Services Tax Identification Number (GSTIN) to proceed.
       </p>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label htmlFor="gstin" className="block text-sm font-medium text-gray-700 mb-1">
@@ -95,7 +95,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
             maxLength={15}
           />
         </div>
-        
+
         <button
           type="submit"
           disabled={updateMutation.isPending}

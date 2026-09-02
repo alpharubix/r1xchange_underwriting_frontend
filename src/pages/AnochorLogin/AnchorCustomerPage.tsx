@@ -772,8 +772,11 @@ export default function AnchorCustomerPage() {
                                 key={cust.id}
                                 className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                                 onClick={() => {
-                                  setSelectedCustomer(cust);
-                                  setActiveTab("reports");
+                                  setSearchParams(prev => {
+                                    prev.set("customerId", String(cust.id));
+                                    prev.set("tab", "reports");
+                                    return prev;
+                                  });
                                   toast.info(`Viewing reports for ${cust.name}`);
                                 }}
                               >
@@ -920,7 +923,6 @@ export default function AnchorCustomerPage() {
               )}
             </div>
           )}
-
         </div>
       </main>
 

@@ -20,7 +20,11 @@ import ItrReportPage from "./itr/ItrReportPage";
 import CibilReportView from "./cibil/ViewReport";
 import SaveMoneyReportView from "./money/SaveMoneyReportView";
 import RectifyMoneyReportView from "./money/RectifyMoneyReportView";
+import AccessMoneyReportView from "./money/AccessMoneyReportView";
+import { getWalletBalance } from '@/api/payment';
+import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
+import PaymentModal from "@/components/PaymentModal";
 import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
 
 
@@ -99,7 +103,7 @@ const formatDateOnly = (dateString: string) => {
 };
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
-  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money">("bsa");
+  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
@@ -113,6 +117,52 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
   const [viewingSaveMoneyReport, setViewingSaveMoneyReport] = useState<any | null>(null);
   const [viewingRectifyMoneyReport, setViewingRectifyMoneyReport] = useState<any | null>(null);
 
+  const [paymentModalConfig, setPaymentModalConfig] = useState<{
+    isOpen: boolean;
+    moduleName: string;
+    serviceId: string;
+    amount: number;
+    onSuccess: () => void;
+  }>({
+    isOpen: false,
+    moduleName: '',
+    serviceId: '',
+    amount: 0,
+    onSuccess: () => {}
+  });
+
+  const [isCheckingWallet, setIsCheckingWallet] = useState(false);
+
+  const handleCreateReport = async (moduleName: string, serviceId: string, amount: number, onSuccess: () => void) => {
+    try {
+      setIsCheckingWallet(true);
+      const res = await getWalletBalance(serviceId, selectedCustomer.id);
+      
+      if (res.data.is_balance_available) {
+        onSuccess();
+      } else {
+        setPaymentModalConfig({
+          isOpen: true,
+          moduleName,
+          serviceId,
+          amount,
+          onSuccess
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to check wallet balance. Proceeding to payment.");
+      setPaymentModalConfig({
+        isOpen: true,
+        moduleName,
+        serviceId,
+        amount,
+        onSuccess
+      });
+    } finally {
+      setIsCheckingWallet(false);
+    }
+  };
   useEffect(() => {
     if (selectedCustomer?.id) {
       localStorage.setItem("selected_cust_id", selectedCustomer.id);
@@ -225,14 +275,15 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       </div>
 
       <div className="flex border-b border-slate-100 gap-6">
-        {(["bsa", "gst", "itr", "cibil", "save_money", "rectify_money"] as const).map((tab) => {
-          const labels: Record<string, string> = {
-            bsa: "BSA Report",
-            gst: "GST Analysis",
-            itr: "ITR Analysis",
-            cibil: "CIBIL Report",
+        {(["bsa", "gst", "itr", "cibil", "save_money", "rectify_money", "access_money"] as const).map((tab) => {
+          const tabLabels: Record<string, string> = {
+            bsa: "BSA",
+            gst: "GST",
+            itr: "ITR",
+            cibil: "CIBIL",
             save_money: "Save Money",
             rectify_money: "Rectify Money",
+            access_money: "Access Money"
           };
           const isActive = reportsSubTab === tab;
           return (
@@ -251,7 +302,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${isActive ? "text-[#1106de]" : "text-slate-400 hover:text-slate-600"
                 }`}
             >
-              {labels[tab]}
+              {tabLabels[tab]}
               {isActive && (
                 <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1106de] rounded-full animate-fade-in" />
               )}
@@ -327,9 +378,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               )}
             </div>
             <Button
-              onClick={() => setIsBsaModalOpen(true)}
+              onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
+              disabled={isCheckingWallet}
               className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
             >
+              {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               + Create New BSA Report
             </Button>
           </div>
@@ -341,9 +394,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
               </div>
               <Button
-                onClick={() => setIsBsaModalOpen(true)}
+                onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
+                disabled={isCheckingWallet}
                 className="bg-[#000000] hover:bg-[#000060] text-white"
               >
+                {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New BSA Report
               </Button>
             </div>
@@ -430,9 +485,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <p className="text-xs text-slate-500 mt-0.5">Goods and Services Tax Reports & Filings</p>
               </div>
               <Button
-                onClick={() => setIsGstModalOpen(true)}
+                onClick={() => handleCreateReport('GST', 'GST', 561, () => setIsGstModalOpen(true))}
+                disabled={isCheckingWallet}
                 className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
+                {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New GST Report
               </Button>
             </div>
@@ -531,9 +588,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <p className="text-xs text-slate-500 mt-0.5">Income Tax Return Statements</p>
               </div>
               <Button
-                onClick={() => setIsItrModalOpen(true)}
+                onClick={() => handleCreateReport('ITR', 'ITR', 525, () => setIsItrModalOpen(true))}
+                disabled={isCheckingWallet}
                 className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
+                {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New ITR Report
               </Button>
             </div>
@@ -625,9 +684,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 <p className="text-xs text-slate-500 mt-0.5">Credit Bureau Score & Report Details</p>
               </div>
               <Button
-                onClick={() => setIsCibilModalOpen(true)}
+                onClick={() => handleCreateReport('CIBIL', 'CIBIL', 643, () => setIsCibilModalOpen(true))}
+                disabled={isCheckingWallet}
                 className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
+                {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New CIBIL Report
               </Button>
             </div>
@@ -861,6 +922,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           </div>
         )
       )}
+      
+      {reportsSubTab === "access_money" && (
+        <AccessMoneyReportView 
+          selectedCustomer={selectedCustomer} 
+        />
+      )}
 
       <BsaUploadModal
         isOpen={isBsaModalOpen}
@@ -880,6 +947,19 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       <CibilUploadModal
         isOpen={isCibilModalOpen}
         onClose={() => setIsCibilModalOpen(false)}
+        custId={selectedCustomer.id}
+      />
+      
+      <PaymentModal
+        isOpen={paymentModalConfig.isOpen}
+        onClose={() => setPaymentModalConfig(prev => ({ ...prev, isOpen: false }))}
+        moduleName={paymentModalConfig.moduleName}
+        serviceId={paymentModalConfig.serviceId}
+        amount={paymentModalConfig.amount}
+        onSuccess={() => {
+          setPaymentModalConfig(prev => ({ ...prev, isOpen: false }));
+          paymentModalConfig.onSuccess();
+        }}
         custId={selectedCustomer.id}
       />
     </div>

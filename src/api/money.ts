@@ -60,3 +60,18 @@ export async function submitRectifyMoneySelections(custId: string, data: SubmitS
   const response = await apiClient.post<{ message: string }>(`/rectify/${encodeURIComponent(custId)}/submit-selections`, data);
   return response.data;
 }
+
+export interface RequestLoanPayload {
+  cust_id: string;
+  loan_type: string;
+  amount: number;
+}
+
+export interface RequestLoanResponse {
+  message: string;
+}
+
+export async function requestLoan(payload: RequestLoanPayload): Promise<RequestLoanResponse> {
+  const response = await apiClient.post<RequestLoanResponse>(`/access-money/loan-request`, payload);
+  return response.data;
+}
