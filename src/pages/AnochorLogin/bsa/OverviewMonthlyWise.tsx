@@ -1041,7 +1041,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
             </div>
           ) : data ? (
             <div className="overflow-x-auto w-full">
-              <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
+              <table className="w-full text-sm text-left border-collapse">
                 <thead>
                   <tr className="bg-[#1106de] text-white text-xs">
                     <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap min-w-[300px] sticky left-0 bg-[#1106de] z-20">

@@ -164,6 +164,10 @@ export function useAnchorLogin() {
         queryClient.setQueryData(["user", "me"], fullUser);
         localStorage.setItem("user_role", role);
       }
+      
+      // Set flag to trigger the cinematic intro ONLY after a successful login
+      sessionStorage.setItem("show_anchor_intro", "true");
+      
       navigate("/anchors/dashboard");
     },
   });

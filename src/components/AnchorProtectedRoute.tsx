@@ -1,8 +1,13 @@
+import { useState } from "react";
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "@/contexts/AuthContext";
+import AnchorViewIntro from "./AnchorViewIntro";
 
 export default function AnchorProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
+  const [showIntro, setShowIntro] = useState(() => {
+    return sessionStorage.getItem("show_anchor_intro") === "true";
+  });
 
   if (isLoading) {
     return (
@@ -30,5 +35,15 @@ export default function AnchorProtectedRoute() {
     return <Navigate to="/anchors/login" replace />;
   }
 
-  return <Outlet />;
+  const handleIntroComplete = () => {
+    sessionStorage.removeItem("show_anchor_intro");
+    setShowIntro(false);
+  };
+
+  return (
+    <>
+      {showIntro && <AnchorViewIntro onComplete={handleIntroComplete} />}
+      <Outlet />
+    </>
+  );
 }
