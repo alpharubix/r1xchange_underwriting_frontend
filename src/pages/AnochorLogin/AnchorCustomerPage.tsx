@@ -1102,9 +1102,17 @@ export default function AnchorCustomerPage() {
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-5 h-10 shadow-md shadow-[#1106de]/20 cursor-pointer"
+                    disabled={registerMutation.isPending}
+                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-5 h-10 shadow-md shadow-[#1106de]/20 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                   >
-                    Create Customer
+                    {registerMutation.isPending ? (
+                      <span className="flex items-center gap-2">
+                        <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin" />
+                        Registering...
+                      </span>
+                    ) : (
+                      "Create Customer"
+                    )}
                   </Button>
                 </div>
               </form>

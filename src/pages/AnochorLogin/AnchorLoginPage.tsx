@@ -117,7 +117,7 @@ export default function AnchorLoginPage() {
         </div>
 
         <div className="relative z-10 flex items-center gap-4">
-          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-10 w-auto object-contain select-none" />
+          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-32 w-auto object-contain select-none" />
         </div>
 
         {/* Center Text Branding */}
@@ -125,7 +125,7 @@ export default function AnchorLoginPage() {
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-[1.12] tracking-tight">
             Welcome To
             <br />
-            R1Xchange
+            CRISP
             <br />
             Underwriting Platform
           </h1>
@@ -133,7 +133,7 @@ export default function AnchorLoginPage() {
 
         {/* Footer Credit */}
         <div className="relative z-10 text-xs text-white/40 font-medium tracking-wide">
-          © 2026 Foconis Payment. All rights reserved.
+          © 2025 R1Xchange. All rights reserved.
         </div>
       </div>
 

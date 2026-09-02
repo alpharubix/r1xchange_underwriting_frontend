@@ -4,6 +4,7 @@ import { Loader2, X, Wallet, CheckCircle2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from 'framer-motion';
+import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
 import { useAuthContext } from "@/contexts/AuthContext";
 
@@ -75,8 +76,14 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
     }
   };
 
-  const features = getFeatures(moduleName);
   const pricing = getPricingDetails(moduleName, amount);
+  
+  const periodFeature = pricing.period !== 'N/A' 
+    ? pricing.period === 'Latest Report' ? 'Latest Report' : `${pricing.period} Analysis` 
+    : null;
+    
+  const baseFeatures = getFeatures(moduleName);
+  const features = periodFeature ? [periodFeature, ...baseFeatures] : baseFeatures;
 
   const handlePay = async () => {
     try {
@@ -101,11 +108,12 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
       const orderData = orderRes.data;
 
       const options = {
-        key: 'rzp_test_TV7hB4PLNUBB63',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_zHNDtCgD3q3o5e",
         amount: orderData.amount,
         currency: orderData.currency,
-        name: "R1Xchange",
-        description: `${moduleName} Payment`,
+        name: "R1Xchange Underwriting",
+        description: `Payment for ${moduleName} report`,
+        image: window.location.origin + r1xchangeLogoWhiteWebView,
         order_id: orderData.order_id,
         handler: async function (response: any) {
           try {
@@ -200,10 +208,6 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
               </div>
 
               <div className="w-full bg-slate-50 border border-slate-100 rounded-2xl p-5 mb-6 shadow-sm space-y-3">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="font-medium text-slate-500">Period</span>
-                  <span className="font-semibold text-slate-700">{pricing.period}</span>
-                </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="font-medium text-slate-500">Service Amount</span>
                   <span className="font-semibold text-slate-700">₹{pricing.base}</span>
