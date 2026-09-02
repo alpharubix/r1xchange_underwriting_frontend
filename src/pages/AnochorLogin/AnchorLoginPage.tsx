@@ -147,8 +147,8 @@ export default function AnchorLoginPage() {
         >
           {/* Card Form */}
           <Card className="border-0 bg-white shadow-xl shadow-black/5 rounded-2xl overflow-hidden">
-            <CardContent className="p-8">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" autoComplete="off">
+            <CardContent className="p-6 md:p-7">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" autoComplete="off">
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight text-gray-900">
                     Login
@@ -158,7 +158,7 @@ export default function AnchorLoginPage() {
                   </p>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="id">
                     ID
                   </Label>
@@ -168,7 +168,7 @@ export default function AnchorLoginPage() {
                       id="id"
                       type="text"
                       placeholder="ID"
-                      className="h-12 pl-11 pr-4 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-4 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="off"
                       {...register("id")}
                     />
@@ -180,7 +180,7 @@ export default function AnchorLoginPage() {
                   )}
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   <Label htmlFor="password">
                     Password
                   </Label>
@@ -190,7 +190,7 @@ export default function AnchorLoginPage() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
-                      className="h-12 pl-11 pr-11 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-11 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="new-password"
                       {...register("password")}
                     />
@@ -216,7 +216,7 @@ export default function AnchorLoginPage() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full h-12 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#000000]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
+                  className="w-full h-11 mt-2 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#000000]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
                 >
                   {loginMutation.isPending ? (
                     <>
