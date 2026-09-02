@@ -245,7 +245,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Company Type" />
                       </SelectTrigger>
-                      <SelectContent className="z-[200]">
+                      <SelectContent style={{ zIndex: 99999 }}>
                         <SelectGroup>
                           <SelectLabel>Company Type</SelectLabel>
                           <SelectItem value="Individual">Individual</SelectItem>
@@ -273,7 +273,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Account Type" />
                       </SelectTrigger>
-                      <SelectContent className="z-[200]">
+                      <SelectContent style={{ zIndex: 99999 }}>
                         <SelectGroup>
                           <SelectLabel>Account Type</SelectLabel>
                           <SelectItem value="CURRENT">CURRENT</SelectItem>
@@ -311,7 +311,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder={isLoadingBanks ? "Loading banks..." : "Select a bank"} />
                     </SelectTrigger>
-                    <SelectContent className="z-[200]">
+                    <SelectContent style={{ zIndex: 99999 }}>
                       <SelectGroup>
                         <SelectLabel>Available Banks</SelectLabel>
                         {!isLoadingBanks && banks?.map((bank, idx) => (
