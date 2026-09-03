@@ -39,7 +39,7 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
     onSuccess: () => {
       toast.success("Selections submitted successfully!");
       const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-      const newSubmitted = [...submitted, ...submitMutation.variables];
+      const newSubmitted = [...submitted, ...(submitMutation.variables || [])];
       localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
       queryClient.invalidateQueries({ queryKey: ["reports", "rectify_money", custId, referenceId] });
     },
@@ -128,7 +128,7 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
               <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
                 {report.accounts.map((account, idx) => {
                   const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-                  const isBlocked = account.check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+                  const isBlocked = (account as any).check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
                   const isChecked = account.check_box || isBlocked;
                   return (
                   <tr key={idx} className="hover:bg-slate-50/20 transition-colors">

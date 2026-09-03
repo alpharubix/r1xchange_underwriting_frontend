@@ -60,7 +60,7 @@ export default function MoneyToolsReportView({ selectedCustomer }: { selectedCus
                 <p className="text-sm text-slate-500 text-center py-4">No loan requests submitted.</p>
               ) : (
                 <ul className="space-y-4">
-                  {accessData.map((req, idx) => (
+                  {accessData.map((req: any, idx: number) => (
                     <li key={idx} className="border-b border-slate-100 pb-3 last:border-0 last:pb-0">
                       <div className="flex justify-between items-start">
                         <div>
@@ -96,7 +96,7 @@ export default function MoneyToolsReportView({ selectedCustomer }: { selectedCus
                 <p className="text-sm text-slate-500 text-center py-4">No accounts selected.</p>
               ) : (
                 <ul className="space-y-4">
-                  {saveData.map((acc, idx) => (
+                  {saveData.map((acc: any, idx: number) => (
                     <li key={idx} className="border-b border-slate-100 pb-3 last:border-0 last:pb-0 flex gap-3 items-start">
                       <CheckCircle2 className="h-4 w-4 text-[#2E9B5C] mt-0.5 shrink-0" />
                       <div>
@@ -125,7 +125,7 @@ export default function MoneyToolsReportView({ selectedCustomer }: { selectedCus
                 <p className="text-sm text-slate-500 text-center py-4">No accounts selected.</p>
               ) : (
                 <ul className="space-y-4">
-                  {rectifyData.map((acc, idx) => (
+                  {rectifyData.map((acc: any, idx: number) => (
                     <li key={idx} className="border-b border-slate-100 pb-3 last:border-0 last:pb-0 flex gap-3 items-start">
                       <CheckCircle2 className="h-4 w-4 text-[#FF6B4A] mt-0.5 shrink-0" />
                       <div>
