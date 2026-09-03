@@ -222,8 +222,8 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
             <table className="w-full text-left border-collapse text-sm whitespace-nowrap">
               <thead>
                 <tr className="border-b border-[#F0F1F5] text-[#A0A3AD] font-bold text-[10.5px] uppercase tracking-wider bg-[#F6F6F8]/30">
-                  <th className="py-3 px-4 font-bold text-[#A0A3AD]">Anchor Name</th>
-                  <th className="py-3 px-4 font-bold text-[#A0A3AD]">Anchor Code</th>
+                  <th className="py-3 px-4 font-bold text-[#A0A3AD]">User Name</th>
+                  <th className="py-3 px-4 font-bold text-[#A0A3AD]">User Code</th>
                   <th className="py-3 px-4 font-bold text-[#A0A3AD]">Login ID</th>
                   <th className="py-3 px-4 font-bold text-[#A0A3AD]">Status</th>
                   <th className="py-3 px-4 font-bold text-[#A0A3AD]">Role</th>
