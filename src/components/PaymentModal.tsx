@@ -108,7 +108,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
       const orderData = orderRes.data;
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_zHNDtCgD3q3o5e",
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TV7hB4PLNUBB63",
         amount: orderData.amount,
         currency: orderData.currency,
         name: "R1Xchange Underwriting",
