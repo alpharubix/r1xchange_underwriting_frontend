@@ -66,22 +66,31 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
     }
   };
 
+  // const getPricingDetails = (module: string, currentAmount: number) => {
+  //   switch (module.toUpperCase()) {
+  //     case 'ITR': return { base: 445, gst: 80, total: 525, period: '1 Year' };
+  //     case 'BSA': return { base: 479, gst: 86, total: 565, period: '1 Year' };
+  //     case 'CIBIL': return { base: 545, gst: 98, total: 643, period: 'Latest Report' };
+  //     case 'GST': return { base: 475, gst: 86, total: 561, period: '1 Year' };
+  //     default: return { base: currentAmount, gst: 0, total: currentAmount, period: 'N/A' };
+  //   }
+  // };
   const getPricingDetails = (module: string, currentAmount: number) => {
     switch (module.toUpperCase()) {
-      case 'ITR': return { base: 445, gst: 80, total: 525, period: '1 Year' };
-      case 'BSA': return { base: 479, gst: 86, total: 565, period: '1 Year' };
-      case 'CIBIL': return { base: 545, gst: 98, total: 643, period: 'Latest Report' };
-      case 'GST': return { base: 475, gst: 86, total: 561, period: '1 Year' };
+      case 'ITR': return { base: 1, gst: 1, total: 1, period: '1 Year' };
+      case 'BSA': return { base: 1, gst: 1, total: 1, period: '1 Year' };
+      case 'CIBIL': return { base: 1, gst: 1, total: 1, period: 'Latest Report' };
+      case 'GST': return { base: 1, gst: 1, total: 1, period: '1 Year' };
       default: return { base: currentAmount, gst: 0, total: currentAmount, period: 'N/A' };
     }
   };
 
   const pricing = getPricingDetails(moduleName, amount);
-  
-  const periodFeature = pricing.period !== 'N/A' 
-    ? pricing.period === 'Latest Report' ? 'Latest Report' : `${pricing.period} Analysis` 
+
+  const periodFeature = pricing.period !== 'N/A'
+    ? pricing.period === 'Latest Report' ? 'Latest Report' : `${pricing.period} Analysis`
     : null;
-    
+
   const baseFeatures = getFeatures(moduleName);
   const features = periodFeature ? [periodFeature, ...baseFeatures] : baseFeatures;
 
@@ -108,7 +117,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
       const orderData = orderRes.data;
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TV7hB4PLNUBB63",
+        key: import.meta.env.VITE_RAZOR_PAY_KEY_ID,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "R1Xchange Underwriting",
@@ -145,7 +154,6 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
         }
       };
 
-      // @ts-ignore
       const rzp = new window.Razorpay(options);
       rzp.open();
 
