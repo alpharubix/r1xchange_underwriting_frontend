@@ -607,7 +607,7 @@ export default function AnchorCustomerPage() {
                     className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
                   >
                     <Plus className="h-4 w-4 stroke-[3]" />
-                    New User
+                    New Customer
                   </button>
                 </Tooltip>
               </div>
@@ -652,10 +652,10 @@ export default function AnchorCustomerPage() {
 
                         {/* Customer Name */}
                         <div className="space-y-1.5">
-                          <Label htmlFor="filter-custname" className="text-xs font-semibold text-gray-700">User Name</Label>
+                          <Label htmlFor="filter-custname" className="text-xs font-semibold text-gray-700">Customer Name</Label>
                           <Input
                             id="filter-custname"
-                            placeholder="Search User Name..."
+                            placeholder="Search Customer Name..."
                             value={filterCustomerName}
                             onChange={(e) => setFilterCustomerName(e.target.value)}
                             className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
@@ -744,7 +744,7 @@ export default function AnchorCustomerPage() {
                         <thead>
                           <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider">
                             <th className="py-3 px-4 font-bold text-gray-400">ACCOUNT ID</th>
-                            <th className="py-3 px-4 font-bold text-gray-400">USER NAME</th>
+                            <th className="py-3 px-4 font-bold text-gray-400">CUSTOMER NAME</th>
                             <th className="py-3 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
                             <th className="py-3 px-4 font-bold text-gray-400">COMPANY NAME</th>
                             <th className="py-3 px-4 font-bold text-gray-400">GST NO</th>

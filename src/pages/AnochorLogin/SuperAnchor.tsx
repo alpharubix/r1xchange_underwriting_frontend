@@ -1,4 +1,4 @@
-﻿import { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -305,7 +305,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
             >
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900">Add New Anchor</h2>
+                  <h2 className="text-xl font-bold text-slate-900">Add new User</h2>
                   <p className="text-xs text-slate-400 mt-0.5 font-medium">Create a new anchor organization profile</p>
                 </div>
                 <button

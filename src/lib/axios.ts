@@ -97,16 +97,20 @@ apiClient.interceptors.response.use(
 
     if (error.config.url === "/user/me") {    
       window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+      if (error.response?.status === 401 || error.response?.status === 403) {
+        return Promise.reject(error);
+      }
+    } else if (error.response?.status === 401) {
+      // Dispatch unauthorized for any 401 to ensure the user gets logged out if their session expires
+      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
     }
-
-    
 
     if (!error.config?.skipErrorToast) {
       const serverMessage = extractErrorMessage(error);
       console.log("Extracted server error message:", serverMessage);
 
       const errorMessage = serverMessage || error.config?.errorMessage;
-      if (errorMessage) {
+      if (errorMessage && !errorMessage.toLowerCase().includes("unauthorized access")) {
         toast.error(errorMessage);
       }
     }

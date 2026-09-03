@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -21,7 +21,7 @@ import CibilReportView from "./cibil/ViewReport";
 import SaveMoneyReportView from "./money/SaveMoneyReportView";
 import RectifyMoneyReportView from "./money/RectifyMoneyReportView";
 import AccessMoneyReportView from "./money/AccessMoneyReportView";
-import MoneyToolsReportView from "./money/MoneyToolsReportView";
+
 import { getWalletBalance } from '@/api/payment';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
@@ -106,7 +106,7 @@ const formatDateOnly = (dateString: string) => {
 };
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
-  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money" | "money_tools">("bsa");
+  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
@@ -309,7 +309,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       </div>
 
       <div className="flex border-b border-slate-100 gap-6">
-        {(["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money", "money_tools"] as const).map((tab) => {
+        {(["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money"] as const).map((tab) => {
           const tabLabels: Record<string, string> = {
             bsa: "BSA",
             gst: "GST",
@@ -317,8 +317,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
             cibil: "CIBIL",
             access_money: "Access Money",
             save_money: "Save Money",
-            rectify_money: "Rectify Money",
-            money_tools: "Money Tools"
+            rectify_money: "Rectify Money"
           };
           const isActive = reportsSubTab === tab;
           return (
@@ -964,11 +963,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         />
       )}
 
-      {reportsSubTab === "money_tools" && (
-        <MoneyToolsReportView 
-          selectedCustomer={selectedCustomer}
-        />
-      )}
+
 
       <BsaUploadModal
         isOpen={isBsaModalOpen}

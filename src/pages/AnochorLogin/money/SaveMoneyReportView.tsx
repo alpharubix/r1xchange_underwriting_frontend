@@ -165,7 +165,11 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
         <div className="flex justify-end pt-2">
           <Button 
             onClick={handleSubmit} 
-            disabled={submitMutation.isPending}
+            disabled={submitMutation.isPending || !report.accounts.some((acc: any) => {
+              const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
+              const isBlocked = (acc as any).check_box_initial || submitted.some((s: any) => s.account_number === acc.account_number && s.lender_name === acc.lender_name);
+              return acc.check_box && !isBlocked;
+            })}
             className="bg-[#FF6B4A] hover:bg-[#E55A39] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
           >
             {submitMutation.isPending ? (
