@@ -130,7 +130,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     moduleName: '',
     serviceId: '',
     amount: 0,
-    onSuccess: () => {}
+    onSuccess: () => { }
   });
 
   const [payerSelectionConfig, setPayerSelectionConfig] = useState<{
@@ -144,7 +144,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     moduleName: '',
     serviceId: '',
     amount: 0,
-    onSuccess: () => {}
+    onSuccess: () => { }
   });
 
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
@@ -153,7 +153,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     try {
       setIsCheckingWallet(true);
       const res = await getWalletBalance(serviceId, selectedCustomer.id);
-      
+
       if (res.data.is_balance_available) {
         onSuccess();
       } else {
@@ -290,7 +290,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           </Button>
           <div>
             <h1 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1D1E2C]">Services & Reports</h1>
-            <p className="text-sm text-[#8a8d97] font-medium">Manage user services and view reports</p>
+            <p className="text-sm text-[#8a8d97] font-medium">Manage Customer services and view reports</p>
           </div>
         </div>
       </div>
@@ -955,10 +955,10 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           </div>
         )
       )}
-      
+
       {reportsSubTab === "access_money" && (
-        <AccessMoneyReportView 
-          selectedCustomer={selectedCustomer} 
+        <AccessMoneyReportView
+          selectedCustomer={selectedCustomer}
         />
       )}
 
@@ -982,7 +982,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         onClose={() => setIsCibilModalOpen(false)}
         custId={selectedCustomer.id}
       />
-      
+
       <PaymentModal
         isOpen={paymentModalConfig.isOpen}
         onClose={() => setPaymentModalConfig(prev => ({ ...prev, isOpen: false }))}
@@ -995,7 +995,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         }}
         custId={selectedCustomer.id}
       />
-      
+
       <PayerSelectionModal
         isOpen={payerSelectionConfig.isOpen}
         onClose={() => setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }))}

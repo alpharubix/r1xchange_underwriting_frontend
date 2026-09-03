@@ -4,8 +4,10 @@ import {
   Anchor as AnchorIcon,
   Users,
   LogOut,
+  CloudCog,
 } from 'lucide-react';
 import { getAnchorBrand } from '@/lib/brandLogo';
+import { useEffect } from 'react';
 
 interface SidebarProps {
   sidebarCollapsed: boolean;
@@ -17,6 +19,7 @@ interface SidebarProps {
   user: any;
   handleLogout: () => void;
 }
+
 
 export default function Sidebar({
   sidebarCollapsed,
@@ -33,11 +36,11 @@ export default function Sidebar({
   const displayRole = userRole.replace("_", " ").toLowerCase();
   const initialLetter = brand.initial;
 
+
   return (
     <aside
-      className={`relative flex flex-col h-full bg-[#f4f6fa] p-5 text-gray-800 transition-all duration-300 ease-in-out shrink-0 z-20 gap-4 ${
-        sidebarCollapsed ? "w-20 p-3" : "w-72"
-      }`}
+      className={`relative flex flex-col h-full bg-[#f4f6fa] p-5 text-gray-800 transition-all duration-300 ease-in-out shrink-0 z-20 gap-4 ${sidebarCollapsed ? "w-20 p-3" : "w-72"
+        }`}
     >
       {/* Toggle Button */}
       <button
@@ -74,7 +77,7 @@ export default function Sidebar({
             <div className="mt-3.5 flex justify-center w-full">
               <span className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#eff6ff] text-[#1106de] w-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#1106de]" />
-                {isSuperAnchor ? "Super Anchor View" : "Anchor View"}
+                {isSuperAnchor ? "Anchor View" : "User View"}
               </span>
             </div>
           )}
@@ -86,11 +89,10 @@ export default function Sidebar({
         {isSuperAnchor && (
           <button
             onClick={() => setActiveTab("anchor")}
-            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${
-              activeTab === "anchor"
-                ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
-                : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
-            } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "anchor"
+              ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
+              : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
+              } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
             title="Anchors"
           >
             <AnchorIcon className="h-5 w-5 shrink-0" />
@@ -101,11 +103,10 @@ export default function Sidebar({
         {!isSuperAnchor && (
           <button
             onClick={() => setActiveTab("customer")}
-            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${
-              activeTab === "customer"
-                ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
-                : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
-            } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "customer"
+              ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
+              : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
+              } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
             title="Customer"
           >
             <Users className="h-5 w-5 shrink-0" />
@@ -136,8 +137,9 @@ export default function Sidebar({
               <div className="font-bold text-sm text-[#0f172a] truncate capitalize">
                 {displayName}
               </div>
+
               <div className="text-xs text-gray-400 font-medium truncate mt-0.5 capitalize">
-                {displayRole}
+                {userRole.toLowerCase() == "super_anchor" ? "Anchor" : "User"}
               </div>
             </div>
           </div>

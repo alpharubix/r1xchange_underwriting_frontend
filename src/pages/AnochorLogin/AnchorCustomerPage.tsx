@@ -567,7 +567,7 @@ export default function AnchorCustomerPage() {
                           className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
                         >
                           <Eye className="h-5 w-5" />
-                          View Users under Anchor
+                          View Customers under User
                         </Button>
                       </div>
                     </CardContent>
@@ -597,7 +597,7 @@ export default function AnchorCustomerPage() {
                   )}
                   <div>
                     <h1 className="text-3xl font-bold text-[#0f172a] tracking-tight">Customer</h1>
-                    <p className="text-sm text-gray-500 font-normal mt-1">Manage your users and their services</p>
+                    <p className="text-sm text-gray-500 font-normal mt-1">Manage your Customers and their services</p>
                   </div>
                 </div>
 
