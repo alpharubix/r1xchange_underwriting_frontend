@@ -4,10 +4,9 @@ import {
   Anchor as AnchorIcon,
   Users,
   LogOut,
-  CloudCog,
 } from 'lucide-react';
 import { getAnchorBrand } from '@/lib/brandLogo';
-import { useEffect } from 'react';
+
 
 interface SidebarProps {
   sidebarCollapsed: boolean;
@@ -33,7 +32,6 @@ export default function Sidebar({
 }: SidebarProps) {
   const brand = getAnchorBrand(user);
   const displayName = brand.name;
-  const displayRole = userRole.replace("_", " ").toLowerCase();
   const initialLetter = brand.initial;
 
 
