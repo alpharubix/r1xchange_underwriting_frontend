@@ -49,7 +49,7 @@ export default function AnchorLoginPage() {
   return (
     <div className="flex min-h-screen w-full bg-[#f4f5f9] text-[#1a1a1a]">
       {/* Left Branding Panel */}
-      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-[#2f1ecc] via-[#1c0f99] to-[#0e0758] p-12 text-white md:flex overflow-hidden">
+      <div className="relative hidden w-1/2 flex-col justify-between bg-gradient-to-br from-[#003da6] via-[#002366] to-[#000a1f] p-12 text-white md:flex overflow-hidden">
         {/* Visual Graphic Elements */}
         <div className="absolute inset-0 pointer-events-none select-none overflow-hidden">
           {/* Ambient Glow behind the orb */}
@@ -63,7 +63,7 @@ export default function AnchorLoginPage() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="absolute -right-24 top-[15%] w-[600px] h-[600px] rounded-full bg-[#5839f5]/25 blur-[120px]"
+            className="absolute -right-24 top-[15%] w-[600px] h-[600px] rounded-full bg-[#0047cc]/25 blur-[120px]"
           />
 
           {/* Glowing Orb/Sphere */}
@@ -77,7 +77,7 @@ export default function AnchorLoginPage() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="absolute -right-24 top-[20%] w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#4027db] to-[#120760] opacity-90 border-t border-l border-white/20 shadow-[inset_15px_15px_40px_rgba(255,255,255,0.22),_0_0_80px_rgba(83,69,211,0.25)]"
+            className="absolute -right-24 top-[20%] w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#0047cc] to-[#001333] opacity-90 border-t border-l border-white/20 shadow-[inset_15px_15px_40px_rgba(255,255,255,0.22),_0_0_80px_rgba(0,35,102,0.25)]"
           />
 
           {/* Diagonal Glassmorphic Overlay */}
@@ -171,7 +171,7 @@ export default function AnchorLoginPage() {
                       id="id"
                       type="text"
                       placeholder="ID"
-                      className="h-11 pl-11 pr-4 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-4 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="off"
                       {...register("id")}
                     />
@@ -193,7 +193,7 @@ export default function AnchorLoginPage() {
                       id="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Password"
-                      className="h-11 pl-11 pr-11 border-gray-200 focus:border-[#4c3cbd] focus:ring-[#4c3cbd] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-11 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="new-password"
                       {...register("password")}
                     />
@@ -219,7 +219,7 @@ export default function AnchorLoginPage() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full h-11 mt-2 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#002366]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
+                  className="w-full h-11 mt-2 text-base font-semibold bg-[#002366] hover:bg-[#001845]/80 hover:border-[#002366]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#002366]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
                 >
                   {loginMutation.isPending ? (
                     <>
@@ -245,7 +245,7 @@ export default function AnchorLoginPage() {
                 e.preventDefault();
                 toast.info("Please contact system administrator to retrieve your credentials.");
               }}
-              className="text-sm font-semibold text-gray-500 hover:text-[#4c3cbd] transition-colors"
+              className="text-sm font-semibold text-gray-500 hover:text-[#002366] transition-colors"
             >
               Having problems signing in?
             </a>

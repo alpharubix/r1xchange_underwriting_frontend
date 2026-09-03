@@ -1,4 +1,4 @@
-﻿import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
@@ -497,7 +497,7 @@ export default function AnchorCustomerPage() {
                     <Button
                       variant="outline"
                       onClick={() => setSuperAnchorViewMode("list")}
-                      className="p-2.5 h-10 w-10 border-slate-200 rounded-xl hover:bg-slate-50 text-slate-500 transition-colors shadow-sm"
+                      className="p-2.5 h-10 w-10 border-2 border-[#002366] bg-white rounded-xl hover:bg-[#002366] hover:text-white text-[#002366] transition-all shadow-sm shadow-[#002366]/20"
                     >
                       <ArrowLeft className="h-5 w-5" />
                     </Button>
