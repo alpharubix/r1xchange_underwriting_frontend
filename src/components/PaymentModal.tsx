@@ -4,8 +4,7 @@ import { Loader2, X, Wallet, CheckCircle2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from 'framer-motion';
-
-import r1xchangeFavicon from "@/assets/favicon.png";
+import { logoBase64 } from "@/assets/logoBase64";
 
 import { useAuthContext } from "@/contexts/AuthContext";
 
@@ -69,7 +68,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
 
   const getPricingDetails = (module: string, currentAmount: number) => {
     switch (module.toUpperCase()) {
-      case 'ITR': return { base: 445, gst: 80, total: 525, period: '1 Year' };
+      case 'ITR': return { base: 445, gst: 80, total: 525, period: '2 Years' };
       case 'BSA': return { base: 479, gst: 86, total: 565, period: '1 Year' };
       case 'CIBIL': return { base: 545, gst: 98, total: 643, period: 'Latest Report' };
       case 'GST': return { base: 475, gst: 86, total: 561, period: '1 Year' };
@@ -115,7 +114,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
         currency: orderData.currency,
         name: "R1Xchange Underwriting",
         description: `Payment for ${moduleName} report`,
-        image: window.location.origin + r1xchangeFavicon,
+        image: logoBase64,
         order_id: orderData.order_id,
         handler: async function (response: any) {
           try {

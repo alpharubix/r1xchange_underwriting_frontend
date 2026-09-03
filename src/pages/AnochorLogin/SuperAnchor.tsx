@@ -255,7 +255,9 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                         </span>
                       )}
                     </td>
-                    <td className="py-4 px-4 text-xs font-semibold text-[#A0A3AD] uppercase">{anc.role}</td>
+                    <td className="py-4 px-4 text-xs font-semibold text-[#A0A3AD] uppercase">
+                      {anc.role === "SUPER_ANCHOR" ? "Anchor" : anc.role === "ANCHOR" ? "Users" : anc.role}
+                    </td>
                     <td className="py-4 px-4 text-[#3A3C46] text-xs">
                       {anc.created_at ? new Date(anc.created_at).toLocaleString() : "-"}
                     </td>

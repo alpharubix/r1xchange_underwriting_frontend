@@ -429,7 +429,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
                 disabled={isCheckingWallet}
-                className="bg-[#000000] hover:bg-[#000060] text-white"
+                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
               >
                 {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New BSA Report
@@ -445,7 +445,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <th className="py-3 px-4 font-semibold text-slate-500">Report Id</th>
                         <th className="py-3 px-4 font-semibold text-slate-500">BSA From Date</th>
                         <th className="py-3 px-4 font-semibold text-slate-500">BSA To Date</th>
-                        <th className="py-3 px-4 font-semibold text-slate-500">Tenure</th>
+
                         <th className="py-3 px-4 font-semibold text-slate-500">Generated On</th>
                         <th className="py-3 px-4 font-semibold text-center text-slate-500">Actions</th>
                       </tr>
@@ -475,7 +475,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                             <td className="py-4 px-4 text-slate-500">{report.ReportId}</td>
                             <td className="py-4 px-4 font-bold text-slate-800">{formatDateOnly(report.bsaFromDate)}</td>
                             <td className="py-4 px-4 text-slate-600">{formatDateOnly(report.bsaToDate)}</td>
-                            <td className="py-4 px-4 text-slate-500">{report.tenure}</td>
+
                             <td className="py-4 px-4 text-slate-800">{formatDateTime(report.generatedOn)}</td>
                             <td className="py-4 px-4 text-center">
                               <div className="flex items-center justify-center gap-2">
@@ -673,7 +673,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                               </span>
                             </td>
                             <td className="py-4 px-4 text-slate-600">
-                              {report.itrFromDate && report.itrToDate ? `${formatDateOnly(report.itrFromDate)} - ${formatDateOnly(report.itrToDate)}` : 'N/A'}
+                              2 Years
                             </td>
                             <td className="py-4 px-4 text-center">
                               <div className="flex items-center justify-center gap-2">
