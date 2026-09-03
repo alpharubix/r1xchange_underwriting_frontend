@@ -5,7 +5,7 @@ import type { PendingPayment } from "@/api/payment";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { CreditCard, Loader2, IndianRupee, Clock, ArrowRight, FileText, PieChart, ShieldCheck, Building2 } from "lucide-react";
+import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2 } from "lucide-react";
 import { toast } from "sonner";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
@@ -45,7 +45,7 @@ export default function CustomerPaymentsPage() {
       console.log("Checking wallet balance, user object:", user);
       const toastId = toast.loading(`Checking wallet balance for ${service}...`);
       const userId = user?.user_id || user?._id || user?.id || (user as any)?.data?.user_id || (user as any)?.data?._id || "";
-      
+
       const res = await getWalletBalance(service, userId);
       toast.dismiss(toastId);
 
@@ -86,8 +86,8 @@ export default function CustomerPaymentsPage() {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              user_id: user?._id || user?.id,
-              userId: user?._id || user?.id,
+              user_id: ((user as any)?._id || (user as any)?.id) as string | undefined,
+              userId: ((user as any)?._id || (user as any)?.id) as string | undefined,
             });
 
             toast.success("Payment successful!");

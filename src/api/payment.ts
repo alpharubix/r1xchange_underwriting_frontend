@@ -46,7 +46,7 @@ export interface ValidatePaymentPayload {
   razorpay_payment_id: string;
   razorpay_order_id: string;
   razorpay_signature: string;
-  user_id?: string;
+  user_id?: string | undefined;
   userId?: string;
 }
 
