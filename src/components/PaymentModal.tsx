@@ -154,7 +154,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
         }
       };
 
-      const rzp = new window.Razorpay(options);
+      const rzp = new (window as any).Razorpay(options);
       rzp.open();
 
     } catch (err: any) {
