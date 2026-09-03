@@ -285,7 +285,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           <Button
             variant="outline"
             onClick={onBack}
-            className="p-2.5 h-10 w-10 border-slate-200 rounded-xl hover:bg-slate-50 text-slate-500 transition-colors shadow-sm shrink-0"
+            className="p-2.5 h-10 w-10 border-2 border-[#002366] bg-white rounded-xl hover:bg-[#002366] hover:text-white text-[#002366] transition-all shadow-sm shadow-[#002366]/20 shrink-0"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>

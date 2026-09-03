@@ -82,9 +82,9 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
           variant="outline"
           size="icon"
           onClick={onBack}
-          className="h-10 w-10 rounded-xl border-slate-200 hover:bg-slate-50 shrink-0"
+          className="h-10 w-10 border-2 border-[#002366] bg-white rounded-xl hover:bg-[#002366] hover:text-white text-[#002366] transition-all shadow-sm shadow-[#002366]/20 shrink-0"
         >
-          <ArrowLeft className="h-4 w-4 text-slate-600" />
+          <ArrowLeft className="h-5 w-5" />
         </Button>
         <div className="flex flex-col">
           <div className="flex items-center gap-4">

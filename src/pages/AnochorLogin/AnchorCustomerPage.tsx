@@ -584,14 +584,7 @@ export default function AnchorCustomerPage() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                   {isSuperAnchor && selectedAnchorFilter && (
-                    <Button
-                      variant="outline"
-                      onClick={() => {
-                        setActiveTab("anchor");
-                        setSuperAnchorViewMode("details");
-                      }}
-                      className="p-2.5 h-10 w-10 border-slate-200 rounded-xl hover:bg-slate-50 text-slate-500 transition-colors shadow-sm shrink-0"
-                    >
+                    <Button variant="outline" onClick={() => setActiveTab('anchor')} className="p-2.5 h-10 w-10 border-2 border-[#002366] bg-white rounded-xl hover:bg-[#002366] hover:text-white text-[#002366] transition-all shadow-sm shadow-[#002366]/20 shrink-0">
                       <ArrowLeft className="h-5 w-5" />
                     </Button>
                   )}

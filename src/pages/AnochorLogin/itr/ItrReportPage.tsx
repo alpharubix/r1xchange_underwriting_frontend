@@ -1,4 +1,4 @@
-﻿import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronLeft, FileText } from "lucide-react";
 import TaxCalculation from "./TaxCalculation";
 import BalanceSheet from "./BalanceSheet";
@@ -33,9 +33,9 @@ export default function ItrReportPage({ itrReportId, onBack }: ItrReportPageProp
           {onBack && (
             <button
               onClick={onBack}
-              className="p-2 bg-white border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors shadow-sm cursor-pointer"
+              className="p-2 border-2 border-[#002366] bg-white rounded-xl hover:bg-[#002366] hover:text-white text-[#002366] transition-all shadow-sm shadow-[#002366]/20 cursor-pointer flex items-center justify-center"
             >
-              <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-[#002366]" />
+              <ChevronLeft className="w-5 h-5" />
             </button>
           )}
           <div>
