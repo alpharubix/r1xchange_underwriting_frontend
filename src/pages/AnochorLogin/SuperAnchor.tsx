@@ -306,7 +306,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
               <div className="flex items-center justify-between pb-4 border-b border-slate-100">
                 <div>
                   <h2 className="text-xl font-bold text-slate-900">Add new User</h2>
-                  <p className="text-xs text-slate-400 mt-0.5 font-medium">Create a new anchor organization profile</p>
+                  <p className="text-xs text-slate-400 mt-0.5 font-medium">Create a new user organization profile</p>
                 </div>
                 <button
                   onClick={() => setIsNewAnchorModalOpen(false)}
@@ -320,7 +320,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-1">
                     <Label htmlFor="anc-name" className="text-xs font-semibold text-slate-600">
-                      Anchor Name *
+                      User Name *
                     </Label>
                     <Input
                       id="anc-name"
@@ -426,7 +426,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
                     type="submit"
                     className="bg-[#002366] hover:bg-[#001744] text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm shadow-[#002366]/20 cursor-pointer"
                   >
-                    Create Anchor
+                    Create User
                   </Button>
                 </div>
               </form>
