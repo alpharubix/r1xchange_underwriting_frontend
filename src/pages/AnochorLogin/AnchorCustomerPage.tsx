@@ -966,7 +966,7 @@ export default function AnchorCustomerPage() {
                 {isSuperAnchor && (
                   <div className="space-y-1">
                     <Label htmlFor="cust-anchor" className="text-xs font-semibold text-slate-600">
-                      Select Anchor *
+                      Select User *
                     </Label>
                     <Select
                       value={newCustomerForm.anchor_id}
@@ -974,7 +974,7 @@ export default function AnchorCustomerPage() {
                       required
                     >
                       <SelectTrigger id="cust-anchor" className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#002366] outline-none">
-                        <SelectValue placeholder="Select an Anchor Organization" />
+                        <SelectValue placeholder="Select User Organization" />
                       </SelectTrigger>
                       <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
                         {anchorsList.map((anc) => (
