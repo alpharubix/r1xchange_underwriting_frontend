@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -326,8 +326,8 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
-                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#002366] font-bold',
                         nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
@@ -397,8 +397,8 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#1106de] text-white hover:bg-[#0e05b5] hover:text-white focus:bg-[#1106de] focus:text-white',
-                        day_today: 'bg-blue-50 text-[#1106de] font-bold',
+                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_today: 'bg-blue-50 text-[#002366] font-bold',
                         nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
@@ -442,7 +442,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
               <div className="flex gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-[#1106de] hover:bg-[#0e05b5] text-white gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                  className="bg-[#002366] hover:bg-[#001744] text-white gap-2 shadow-sm shadow-[#002366]/20 cursor-pointer"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
@@ -503,7 +503,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-              <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
               <p>Loading summary data...</p>
             </div>
           ) : isError ? (
@@ -522,9 +522,9 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
           ) : data ? (
             <div className="overflow-x-auto pb-4">
               <table className="w-full text-sm text-left border-collapse border border-gray-300">
-                <thead className="text-xs text-white bg-[#1106de]">
+                <thead className="text-xs text-white bg-[#002366]">
                   <tr>
-                    <th className="px-4 py-3 font-semibold border border-blue-900/30 w-48 sticky left-0 bg-[#1106de] z-20">
+                    <th className="px-4 py-3 font-semibold border border-blue-900/30 w-48 sticky left-0 bg-[#002366] z-20">
                       Months
                     </th>
                     <th className="px-4 py-3 font-semibold text-right border border-blue-900/30 min-w-[120px]">
@@ -541,7 +541,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   </tr>
                 </thead>
                 <tbody className="bg-white">
-                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
+                  <tr className="bg-[#eff6ff] text-[#002366] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
                       className="px-4 py-1.5 font-bold text-center border border-blue-100"
@@ -593,7 +593,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
+                  <tr className="bg-[#eff6ff] text-[#002366] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
                       className="px-4 py-1.5 font-bold text-center border border-blue-100"
@@ -654,7 +654,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
+                  <tr className="bg-[#eff6ff] text-[#002366] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
                       className="px-4 py-1.5 font-bold text-center border border-blue-100"
@@ -710,7 +710,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                     true
                   )}
 
-                  <tr className="bg-[#eff6ff] text-[#1106de] font-bold">
+                  <tr className="bg-[#eff6ff] text-[#002366] font-bold">
                     <td
                       colSpan={expectedMonths.length + 2}
                       className="px-4 py-1.5 font-bold text-center border border-blue-100"
@@ -779,7 +779,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">
-              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#1106de] mb-4" />
+              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#002366] mb-4" />
               <p className="text-gray-500">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

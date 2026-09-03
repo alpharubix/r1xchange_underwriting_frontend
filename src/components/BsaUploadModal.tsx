@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -221,12 +221,12 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
           <>
             <CardHeader>
               <CardTitle className="text-2xl text-slate-900 flex items-center gap-2">
-                <UploadCloud className="h-6 w-6 text-[#1106de]" />
+                <UploadCloud className="h-6 w-6 text-[#002366]" />
                 Upload Bank Statement
               </CardTitle>
               <CardDescription>
                 Provide details and upload your bank statement for analysis
-                {custId && <span className="block mt-1 text-[#1106de] font-semibold">Creating for Customer: {custId}</span>}
+                {custId && <span className="block mt-1 text-[#002366] font-semibold">Creating for Customer: {custId}</span>}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -341,7 +341,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                           e.target.value = '';
                         }
                       }}
-                      className="cursor-pointer file:cursor-pointer file:bg-[#eff6ff] file:text-[#1106de] file:font-semibold file:border-0 file:rounded-md file:mr-4 file:px-4 file:py-1 hover:file:bg-blue-100 transition-all"
+                      className="cursor-pointer file:cursor-pointer file:bg-[#eff6ff] file:text-[#002366] file:font-semibold file:border-0 file:rounded-md file:mr-4 file:px-4 file:py-1 hover:file:bg-blue-100 transition-all"
                     />
 
                     {selectedFiles.length > 0 && (
@@ -379,7 +379,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
 
                 <Button
                   type="submit"
-                  className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white shadow-sm shadow-[#1106de]/20 mt-6 cursor-pointer"
+                  className="w-full bg-[#002366] hover:bg-[#001744] text-white shadow-sm shadow-[#002366]/20 mt-6 cursor-pointer"
                   disabled={uploadMutation.isPending}
                 >
                   {uploadMutation.isPending ? (
@@ -400,7 +400,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
           <>
             <CardHeader>
               <CardTitle className="text-2xl text-slate-900 flex items-center gap-2">
-                <FileCheck2 className="h-6 w-6 text-[#1106de]" />
+                <FileCheck2 className="h-6 w-6 text-[#002366]" />
                 Confirm Statement Details
               </CardTitle>
               <CardDescription>
@@ -414,7 +414,7 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                   className="rounded-xl border border-blue-100 bg-[#eff6ff]/40 p-4 space-y-3"
                 >
                   <div className="flex items-center gap-2">
-                    <FileText className="h-4 w-4 text-[#1106de] shrink-0" />
+                    <FileText className="h-4 w-4 text-[#002366] shrink-0" />
                     <span className="text-sm font-semibold text-slate-900 truncate">
                       {file.name}
                     </span>
@@ -422,14 +422,14 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
 
                   <div className="flex items-center gap-6 pl-1">
                     <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                      <CalendarDays className="h-4 w-4 text-[#1106de]/60 shrink-0" />
+                      <CalendarDays className="h-4 w-4 text-[#002366]/60 shrink-0" />
                       <span className="font-medium text-gray-500">From:</span>
                       <span className="font-semibold text-gray-800">
                         {file.starting_date}
                       </span>
                     </div>
                     <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                      <CalendarDays className="h-4 w-4 text-[#1106de]/60 shrink-0" />
+                      <CalendarDays className="h-4 w-4 text-[#002366]/60 shrink-0" />
                       <span className="font-medium text-gray-500">To:</span>
                       <span className="font-semibold text-gray-800">
                         {file.ending_date}
@@ -447,11 +447,11 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                   onClick={() => setModalStep('form')}
                   disabled={confirmMutation.isPending}
                 >
-                  ← Go Back
+                  â† Go Back
                 </Button>
                 <Button
                   type="button"
-                  className="flex-1 bg-[#1106de] hover:bg-[#0e05b5] text-white shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                  className="flex-1 bg-[#002366] hover:bg-[#001744] text-white shadow-sm shadow-[#002366]/20 cursor-pointer"
                   onClick={() => confirmMutation.mutate(uploadResult.upload_ref_id)}
                   disabled={confirmMutation.isPending}
                 >

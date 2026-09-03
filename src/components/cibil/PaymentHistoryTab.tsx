@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Calendar, Landmark, Info } from 'lucide-react';
 import type { CibilPaymentHistoryData } from '@/api/cibil';
 
@@ -87,7 +87,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
               key={segment}
               onClick={() => setHistorySegment(segment)}
               className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all cursor-pointer ${historySegment === segment
-                  ? 'bg-[#1106de] text-white shadow-md shadow-[#1106de]/20'
+                  ? 'bg-[#002366] text-white shadow-md shadow-[#002366]/20'
                   : 'text-slate-500 hover:text-slate-800'
                 }`}
             >
@@ -113,7 +113,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
                 {/* Header card for the account */}
                 <div className="flex flex-col md:flex-row items-start md:items-center justify-between border-b border-slate-100 pb-4 gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="rounded-lg bg-blue-50/50 p-2 text-[#1106de]">
+                    <div className="rounded-lg bg-blue-50/50 p-2 text-[#002366]">
                       <Landmark className="h-5 w-5" />
                     </div>
                     <div>
@@ -196,7 +196,7 @@ export default function PaymentHistoryTab({ data }: { data: CibilPaymentHistoryD
 
       {/* Visual Glossary / Appendix Legend */}
       <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h4 className="text-sm font-semibold uppercase tracking-wider text-[#000000] border-b border-slate-100 pb-3 mb-4">
+        <h4 className="text-sm font-semibold uppercase tracking-wider text-[#002366] border-b border-slate-100 pb-3 mb-4">
           CIBIL Legend & Abbreviations
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

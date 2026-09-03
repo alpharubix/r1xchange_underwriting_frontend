@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,13 +28,21 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
 
     try {
       setIsSubmitting(true);
-      const res = await requestLoan({
+      const payload = {
         cust_id: selectedCustomer.id,
         loan_type: finalLoanType,
         amount: Number(amount)
-      });
+      };
+      const res = await requestLoan(payload);
       toast.success(res.message || 'Loan request submitted successfully!');
+      
+      const storageKey = `submitted_access_${selectedCustomer.id}`;
+      const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      const newSubmitted = [...submitted, { ...payload, timestamp: new Date().toISOString() }];
+      localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
+
       setAmount('');
+      setLoanType('Personal Loan');
       setCustomLoanType('');
     } catch (error: any) {
       console.error(error);
@@ -55,7 +63,7 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
       <Card className="max-w-md border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-            
+
             <div className="space-y-2">
               <Label htmlFor="loanType" className="text-sm font-medium text-slate-700">Loan Type</Label>
               <select
@@ -64,11 +72,11 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
                 onChange={(e) => setLoanType(e.target.value)}
                 className="w-full flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                <option value="Personal Loan">Personal Loan</option>
-                <option value="Business Loan">Business Loan</option>
-                <option value="Working Capital">Working Capital</option>
-                <option value="Term Loan">Term Loan</option>
-                <option value="Equipment Finance">Equipment Finance</option>
+                <option value="anchor_channel_fin">Anchor Channel Fin</option>
+                <option value="open_channel_fin">Open Channel Fin</option>
+                <option value="unsecured_od">Unsecured OD</option>
+                <option value="unsecured_tl">Unsecured TL</option>
+                <option value="vehicle_loan">Vehicle Loan</option>
                 <option value="Others">Others</option>
               </select>
             </div>
@@ -100,9 +108,9 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
               />
             </div>
 
-            <Button 
-              type="submit" 
-              className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl"
+            <Button
+              type="submit"
+              className="w-full bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl"
               disabled={isSubmitting}
             >
               {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}

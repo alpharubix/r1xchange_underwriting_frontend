@@ -1,4 +1,4 @@
-import { Navigate, Outlet } from "react-router-dom";
+﻿import { Navigate, Outlet } from "react-router-dom";
 import { useAuthContext } from "@/contexts/AuthContext";
 
 export default function PublicRoute() {
@@ -8,7 +8,7 @@ export default function PublicRoute() {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+          <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
         </div>
       </div>
     );

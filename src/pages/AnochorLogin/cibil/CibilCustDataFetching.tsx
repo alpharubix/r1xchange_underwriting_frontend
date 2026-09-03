@@ -1,4 +1,4 @@
-import CibilWorkflow from './index';
+﻿import CibilWorkflow from './index';
 
 export default function CibilCustDataFetching() {
 
@@ -16,7 +16,7 @@ export default function CibilCustDataFetching() {
             <p className="text-gray-500 mt-1">
               Authenticate customer consent and process CIBIL report data
             </p>
-            <button className="mt-4 px-4 py-2 bg-[#1106de] text-white rounded-xl hover:bg-[#0e05b5] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#1106de] shadow-sm shadow-[#1106de]/20 cursor-pointer" onClick={handleReports}>
+            <button className="mt-4 px-4 py-2 bg-[#002366] text-white rounded-xl hover:bg-[#001744] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366] shadow-sm shadow-[#002366]/20 cursor-pointer" onClick={handleReports}>
               View Previous Reports
             </button>
           </div>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import apiClient, { extractErrorMessage } from '@/lib/axios';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -330,7 +330,7 @@ export default function DashboardPage() {
     {
       title: 'Bank Statement Analysis',
       description: 'Upload & Analysis',
-      icon: <Building2 className="h-8 w-8 text-[#000000]" />,
+      icon: <Building2 className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
         setModalStep('form');
         setIsModalOpen(true);
@@ -340,7 +340,7 @@ export default function DashboardPage() {
     {
       title: 'GSTR Analysis',
       description: 'Analysis GSTR',
-      icon: <FileText className="h-8 w-8 text-[#000000]" />,
+      icon: <FileText className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
         navigate('/gst/analysis');
       },
@@ -349,7 +349,7 @@ export default function DashboardPage() {
     {
       title: 'ITR',
       description: 'Income Tax Return',
-      icon: <PieChart className="h-8 w-8 text-[#000000]" />,
+      icon: <PieChart className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
         setIsItrModalOpen(true);
@@ -358,7 +358,7 @@ export default function DashboardPage() {
     {
       title: 'KYC',
       description: 'Identity Verification',
-      icon: <ShieldCheck className="h-8 w-8 text-[#000000]" />,
+      icon: <ShieldCheck className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
         setIsKycModalOpen(true);
@@ -367,7 +367,7 @@ export default function DashboardPage() {
     {
       title: 'CIBIL Score',
       description: 'Credit Report',
-      icon: <CreditCard className="h-8 w-8 text-[#000000]" />,
+      icon: <CreditCard className="h-8 w-8 text-[#002366]" />,
       disabled: true,
     },
   ];
@@ -375,7 +375,7 @@ export default function DashboardPage() {
   return (
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-[#000000] mb-2">Dashboard</h1>
+        <h1 className="text-3xl font-bold text-[#002366] mb-2">Dashboard</h1>
         <p className="text-gray-600">
           Access your financial documents and analysis tools
         </p>
@@ -388,7 +388,7 @@ export default function DashboardPage() {
             className={`transition-all duration-300 ${
               item.disabled
                 ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#000000]/20 hover:border-[#000000]/50 bg-white'
+                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
             }`}
             onClick={!item.disabled ? item.onClick : undefined}
           >
@@ -405,7 +405,7 @@ export default function DashboardPage() {
             </CardHeader>
             <CardContent>
               {!item.disabled && (
-                <div className="mt-4 flex items-center text-sm font-medium text-[#000000]">
+                <div className="mt-4 flex items-center text-sm font-medium text-[#002366]">
                   Click to proceed <span className="ml-2">→</span>
                 </div>
               )}
@@ -429,7 +429,7 @@ export default function DashboardPage() {
             {modalStep === 'form' && (
               <>
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#000000] flex items-center gap-2">
+                  <CardTitle className="text-2xl text-[#002366] flex items-center gap-2">
                     <UploadCloud className="h-6 w-6" />
                     Upload Bank Statement
                   </CardTitle>
@@ -563,7 +563,7 @@ export default function DashboardPage() {
                               e.target.value = ''; // Reset input to allow selecting the same file again if removed
                             }
                           }}
-                          className="cursor-pointer file:cursor-pointer file:bg-[#000000]/5 file:text-[#000000] file:border-0 file:rounded-md file:mr-4 file:px-4 file:py-1 hover:file:bg-[#000000]/10 transition-all"
+                          className="cursor-pointer file:cursor-pointer file:bg-[#002366]/5 file:text-[#002366] file:border-0 file:rounded-md file:mr-4 file:px-4 file:py-1 hover:file:bg-[#002366]/10 transition-all"
                         />
 
                         {selectedFiles.length > 0 && (
@@ -601,7 +601,7 @@ export default function DashboardPage() {
 
                     <Button
                       type="submit"
-                      className="w-full bg-[#000000] hover:bg-[#000060] mt-6"
+                      className="w-full bg-[#002366] hover:bg-[#001744] mt-6"
                       disabled={uploadMutation.isPending}
                     >
                       {uploadMutation.isPending ? (
@@ -622,7 +622,7 @@ export default function DashboardPage() {
             {modalStep === 'confirmation' && uploadResult && (
               <>
                 <CardHeader>
-                  <CardTitle className="text-2xl text-[#000000] flex items-center gap-2">
+                  <CardTitle className="text-2xl text-[#002366] flex items-center gap-2">
                     <FileCheck2 className="h-6 w-6" />
                     Confirm Statement Details
                   </CardTitle>
@@ -635,12 +635,12 @@ export default function DashboardPage() {
                   {uploadResult.files.map((file, idx) => (
                     <div
                       key={idx}
-                      className="rounded-lg border border-[#000000]/20 bg-blue-50/40 p-4 space-y-3"
+                      className="rounded-lg border border-[#002366]/20 bg-blue-50/40 p-4 space-y-3"
                     >
                       {/* File name */}
                       <div className="flex items-center gap-2">
-                        <FileText className="h-4 w-4 text-[#000000] shrink-0" />
-                        <span className="text-sm font-semibold text-[#000000] truncate">
+                        <FileText className="h-4 w-4 text-[#002366] shrink-0" />
+                        <span className="text-sm font-semibold text-[#002366] truncate">
                           {file.name}
                         </span>
                       </div>
@@ -648,7 +648,7 @@ export default function DashboardPage() {
                       {/* Date range */}
                       <div className="flex items-center gap-6 pl-1">
                         <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                          <CalendarDays className="h-4 w-4 text-[#000000]/60 shrink-0" />
+                          <CalendarDays className="h-4 w-4 text-[#002366]/60 shrink-0" />
                           <span className="font-medium text-gray-500">
                             From:
                           </span>
@@ -657,7 +657,7 @@ export default function DashboardPage() {
                           </span>
                         </div>
                         <div className="flex items-center gap-1.5 text-sm text-gray-600">
-                          <CalendarDays className="h-4 w-4 text-[#000000]/60 shrink-0" />
+                          <CalendarDays className="h-4 w-4 text-[#002366]/60 shrink-0" />
                           <span className="font-medium text-gray-500">To:</span>
                           <span className="font-semibold text-gray-800">
                             {file.ending_date}
@@ -672,15 +672,15 @@ export default function DashboardPage() {
                     <Button
                       type="button"
                       variant="outline"
-                      className="flex-1 border-[#000000]/30 text-[#000000] hover:bg-[#000000]/5"
+                      className="flex-1 border-[#002366]/30 text-[#002366] hover:bg-[#002366]/5"
                       onClick={() => setModalStep('form')}
                       disabled={confirmMutation.isPending}
                     >
-                      ← Go Back
+                      â† Go Back
                     </Button>
                     <Button
                       type="button"
-                      className="flex-1 bg-[#000000] hover:bg-[#000060]"
+                      className="flex-1 bg-[#002366] hover:bg-[#001744]"
                       onClick={() =>
                         confirmMutation.mutate(uploadResult.upload_ref_id)
                       }
@@ -718,7 +718,7 @@ export default function DashboardPage() {
             </button>
 
             <CardHeader>
-              <CardTitle className="text-2xl text-[#000000] flex items-center gap-2">
+              <CardTitle className="text-2xl text-[#002366] flex items-center gap-2">
                 <PieChart className="h-6 w-6" />
                 Income Tax Return
               </CardTitle>
@@ -729,7 +729,7 @@ export default function DashboardPage() {
             <CardContent className="space-y-4">
               {itrState === 'INITIALIZING' && (
                 <div className="flex flex-col items-center justify-center py-8">
-                  <Loader2 className="h-8 w-8 animate-spin text-[#000000] mb-4" />
+                  <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
                   <p className="text-gray-600">Checking ITR status...</p>
                 </div>
               )}
@@ -747,7 +747,7 @@ export default function DashboardPage() {
                     />
                   </div>
                   <Button
-                    className="w-full bg-[#000000] hover:bg-[#000060]"
+                    className="w-full bg-[#002366] hover:bg-[#001744]"
                     onClick={() => generateItrLinkMutation.mutate(itrEmail)}
                     disabled={generateItrLinkMutation.isPending || !itrEmail}
                   >
@@ -762,9 +762,9 @@ export default function DashboardPage() {
               {itrState === 'AWAITING_CREDENTIAL_SUBMISSION' && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="p-4 bg-blue-50 rounded-full mb-2">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
                   </div>
-                  <p className="text-center font-medium text-[#000000]">
+                  <p className="text-center font-medium text-[#002366]">
                     Verification email sent successfully.
                   </p>
                   <p className="text-center text-sm text-gray-500 mb-4">
@@ -777,9 +777,9 @@ export default function DashboardPage() {
               {itrState === 'PROCESSING' && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="p-4 bg-blue-50 rounded-full mb-2">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
                   </div>
-                  <p className="text-center font-medium text-[#000000]">
+                  <p className="text-center font-medium text-[#002366]">
                     Analyzing your ITR data...
                   </p>
                   <p className="text-center text-sm text-gray-500">

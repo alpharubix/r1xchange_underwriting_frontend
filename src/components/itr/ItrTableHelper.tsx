@@ -1,4 +1,4 @@
-export const renderYearlyTable = (title: string, dataArray: any[]) => {
+﻿export const renderYearlyTable = (title: string, dataArray: any[]) => {
   if (!dataArray || dataArray.length === 0) return null;
 
   const years = Array.from(
@@ -20,12 +20,12 @@ export const renderYearlyTable = (title: string, dataArray: any[]) => {
 
   return (
     <div className="mb-6 overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-sm animate-in fade-in duration-500">
-      <div className="bg-[#1106de] px-4 py-3 text-center text-lg font-semibold tracking-wide text-white">
+      <div className="bg-[#002366] px-4 py-3 text-center text-lg font-semibold tracking-wide text-white">
         {title}
       </div>
 
       <table className="w-full border-collapse text-sm">
-        <thead className="bg-[#1106de] text-white">
+        <thead className="bg-[#002366] text-white">
           <tr>
             <th className="border border-blue-900/30 px-4 py-3 text-left font-semibold">
               Particulars
@@ -105,7 +105,7 @@ export const renderDataTable = (title: string, dataArray: any[]) => {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-slate-100 mb-6 overflow-x-auto animate-in fade-in duration-500">
-      <div className="bg-[#1106de] text-white px-4 py-2.5 text-center font-semibold border-b border-blue-900/30">
+      <div className="bg-[#002366] text-white px-4 py-2.5 text-center font-semibold border-b border-blue-900/30">
         {title}
       </div>
 

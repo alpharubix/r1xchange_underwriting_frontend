@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -161,7 +161,7 @@ export default function CashFlow() {
             <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
                 <div className="flex items-center gap-4 mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-[#000000] mb-2">Cash Flow</h1>
+                        <h1 className="text-3xl font-bold text-[#002366] mb-2">Cash Flow</h1>
                         <p className="text-gray-600">
                             Monthwise cash flow statement analysis
                         </p>
@@ -171,7 +171,7 @@ export default function CashFlow() {
                 {accountDetails && <BankAccountDetails />}
                 {/* Date Filter Card */}
                 {dateRangeData && (
-                    <Card className="mb-8 shadow-sm border-[#000000]/10 bg-white">
+                    <Card className="mb-8 shadow-sm border-[#002366]/10 bg-white">
                         <CardContent className="p-4">
                             <div className="flex flex-col md:flex-row gap-4 items-end">
                                 <div className="flex-1 space-y-1">
@@ -304,7 +304,7 @@ export default function CashFlow() {
                                 <div className="flex gap-2">
                                     <Button
                                         onClick={handleApply}
-                                        className="bg-[#000000] text-black hover:bg-[#000000]/90 text-white gap-2"
+                                        className="bg-[#002366] text-black hover:bg-[#002366]/90 text-white gap-2"
                                     >
                                         <Filter className="w-4 h-4" /> Apply Filter
                                     </Button>
@@ -336,10 +336,10 @@ export default function CashFlow() {
                     </Card>
                 )}
 
-                <Card className="shadow-lg border-[#000000]/10 bg-white overflow-hidden">
+                <Card className="shadow-lg border-[#002366]/10 bg-white overflow-hidden">
                     <CardHeader className="flex flex-row items-center justify-between bg-gray-100 border-b pb-4">
                         <div>
-                            <CardTitle className="text-xl text-[#000000]">
+                            <CardTitle className="text-xl text-[#002366]">
                                 Cash Flow Statement
                             </CardTitle>
                             <CardDescription>
@@ -373,7 +373,7 @@ export default function CashFlow() {
                     <CardContent className="p-0">
                         {isLoading ? (
                             <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-                                <Loader2 className="h-8 w-8 animate-spin text-[#000000] mb-4" />
+                                <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
                                 <p>Loading cash flow data...</p>
                             </div>
                         ) : isError ? (
@@ -393,8 +393,8 @@ export default function CashFlow() {
                             <div className="overflow-x-auto w-full">
                                 <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
                                     <thead>
-                                        <tr className="bg-[#000000] text-white text-xs">
-                                            <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#000000] z-20">
+                                        <tr className="bg-[#002366] text-white text-xs">
+                                            <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#002366] z-20">
                                                 Particulars
                                             </th>
                                             <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right">
@@ -484,7 +484,7 @@ export default function CashFlow() {
                             </div>
                         ) : (
                             <div className="p-8 text-center text-gray-500">
-                                <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#000000] mb-4" />
+                                <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#002366] mb-4" />
                                 <p className="text-gray-500">
                                     No data available yet. Please upload a bank statement, or wait
                                     while your uploaded statement is being processed.

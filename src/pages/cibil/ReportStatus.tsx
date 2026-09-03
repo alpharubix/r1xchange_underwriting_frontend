@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -128,7 +128,7 @@ export default function ReportStatus({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-[#000000] mb-2">
+          <h2 className="text-2xl font-bold text-[#002366] mb-2">
             Status Check Failed
           </h2>
           <p className="text-gray-500 mb-6">
@@ -146,7 +146,7 @@ export default function ReportStatus({
               type="button"
               onClick={handleRetry}
               disabled={isFetching}
-              className="bg-[#000000] text-white px-6 py-2 rounded-md hover:bg-[#000000]/50 transition-colors"
+              className="bg-[#002366] text-white px-6 py-2 rounded-md hover:bg-[#002366]/50 transition-colors"
             >
               {isFetching ? 'Retrying...' : 'Retry'}
             </button>
@@ -159,7 +159,7 @@ export default function ReportStatus({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-[#000000] mb-2">
+          <h2 className="text-2xl font-bold text-[#002366] mb-2">
             Report Generation Failed
           </h2>
           <p className="text-gray-500 mb-6">
@@ -168,7 +168,7 @@ export default function ReportStatus({
           <button
             type="button"
             onClick={onBack}
-            className="bg-[#000000] text-white px-6 py-2 rounded-md hover:bg-[#000000]/50 transition-colors"
+            className="bg-[#002366] text-white px-6 py-2 rounded-md hover:bg-[#002366]/50 transition-colors"
           >
             Back to OTP
           </button>
@@ -180,7 +180,7 @@ export default function ReportStatus({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-[#000000] mb-2">
+          <h2 className="text-2xl font-bold text-[#002366] mb-2">
             Report Ready
           </h2>
           <p className="text-gray-500 mb-6">
@@ -189,7 +189,7 @@ export default function ReportStatus({
           <button
             type="button"
             onClick={() => onViewReport(data?.reference_id)}
-            className="bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-md"
+            className="bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-6 rounded-md transition-colors shadow-md"
           >
             View Report
           </button>
@@ -201,7 +201,7 @@ export default function ReportStatus({
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-[#000000] mb-2">
+          <h2 className="text-2xl font-bold text-[#002366] mb-2">
             Taking Longer Than Expected
           </h2>
           <p className="text-gray-500 mb-6">
@@ -220,7 +220,7 @@ export default function ReportStatus({
               type="button"
               onClick={handleRetry}
               disabled={isFetching}
-              className="bg-[#000000] text-white px-6 py-2 rounded-md hover:bg-[#000000]/50 transition-colors"
+              className="bg-[#002366] text-white px-6 py-2 rounded-md hover:bg-[#002366]/50 transition-colors"
             >
               {isFetching ? 'Checking...' : 'Retry'}
             </button>
@@ -230,12 +230,12 @@ export default function ReportStatus({
         <div className="animate-in fade-in duration-300">
           <div className="relative mx-auto w-24 h-24 mb-6">
             <div className="absolute inset-0 rounded-full border-4 border-gray-100" />
-            <div className="absolute inset-0 rounded-full border-4 border-[#000000] border-t-transparent animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center text-[#000000] font-semibold text-sm">
+            <div className="absolute inset-0 rounded-full border-4 border-[#002366] border-t-transparent animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center text-[#002366] font-semibold text-sm">
               {Math.min(90, Math.round((pollCount / MAX_POLLS) * 100))}%
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-[#000000] mb-2">
+          <h2 className="text-2xl font-bold text-[#002366] mb-2">
             Waiting for Report
           </h2>
           <p className="text-gray-500 mb-2">
@@ -251,7 +251,7 @@ export default function ReportStatus({
             type="button"
             onClick={handleRetry}
             disabled={isFetching}
-            className="text-sm text-[#000000] hover:underline disabled:text-gray-400"
+            className="text-sm text-[#002366] hover:underline disabled:text-gray-400"
           >
             {isFetching ? 'Checking...' : 'Check status now'}
           </button>

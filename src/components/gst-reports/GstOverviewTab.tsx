@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { getGstOverview } from '@/api/gst';
 import {
   PieChart,
@@ -34,7 +34,7 @@ export default function GstOverviewTab({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+        <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function GstOverviewTab({
     : [];
 
   const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-lg font-semibold text-white bg-[#000000] px-4 py-2 rounded-t-md">
+    <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md">
       {children}
     </h3>
   );
@@ -91,12 +91,12 @@ export default function GstOverviewTab({
       {/* Account Details */}
       {accountDetails && (
         <div className="bg-white rounded-md shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-white bg-[#000000] px-4 py-2 rounded-t-md text-center">
+          <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md text-center">
             Customer Profile
           </h3>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-center">
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 Company Name
               </span>
               <span className="text-gray-700">
@@ -104,19 +104,19 @@ export default function GstOverviewTab({
               </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 GSTIN
               </span>
               <span className="text-gray-700">{accountDetails['GSTIN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 PAN
               </span>
               <span className="text-gray-700">{accountDetails['PAN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 State
               </span>
               <span className="text-gray-700">
@@ -128,7 +128,7 @@ export default function GstOverviewTab({
               </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 Period From
               </span>
               <span className="text-gray-700">
@@ -136,7 +136,7 @@ export default function GstOverviewTab({
               </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">
+              <span className="font-semibold text-[#002366] block mb-1">
                 Period To
               </span>
               <span className="text-gray-700">
@@ -154,7 +154,7 @@ export default function GstOverviewTab({
             <SectionTitle>Overview of GST Returns</SectionTitle>
             <div className="p-0">
               <table className="w-full text-sm text-left">
-                <thead className="bg-[#000000]/70 text-white">
+                <thead className="bg-[#002366]/70 text-white">
                   <tr>
                     <th className="px-4 py-2 border border-right border-t-0 border-b-0  w-2/3">
                       Particulars
@@ -188,7 +188,7 @@ export default function GstOverviewTab({
                           return (
                             <tr key={i} className="hover:bg-gray-50">
                               <td
-                                className={`px-4 py-2 border border-gray-200 ${key.startsWith('Gross') || key.startsWith('Profit') || key.includes('Liability') || key.includes('Available') ? 'font-semibold text-[#000000]' : 'text-gray-700'}`}
+                                className={`px-4 py-2 border border-gray-200 ${key.startsWith('Gross') || key.startsWith('Profit') || key.includes('Liability') || key.includes('Available') ? 'font-semibold text-[#002366]' : 'text-gray-700'}`}
                               >
                                 {key}
                               </td>
@@ -214,7 +214,7 @@ export default function GstOverviewTab({
               <SectionTitle>Comparison with GSTR 3B</SectionTitle>
               <div className="p-0">
                 <table className="w-full text-sm text-left">
-                  <thead className="bg-[#000000]/70 text-white">
+                  <thead className="bg-[#002366]/70 text-white">
                     <tr>
                       <th className="px-4 py-2 border border-right border-t-0 border-b-0  w-2/3">
                         Particulars
@@ -230,10 +230,10 @@ export default function GstOverviewTab({
                       const sectionData = section[sectionName];
                       return (
                         <React.Fragment key={idx}>
-                          <tr className="bg-[#000000] text-white opacity-90 font-semibold">
+                          <tr className="bg-[#002366] text-white opacity-90 font-semibold">
                             <td
                               colSpan={2}
-                              className="px-4 py-1 text-center border border-[#000000]"
+                              className="px-4 py-1 text-center border border-[#002366]"
                             >
                               {sectionName}
                             </td>
@@ -273,12 +273,12 @@ export default function GstOverviewTab({
           {averages && (
             <div className="bg-white rounded-md shadow-sm border border-gray-200">
               <table className="w-full text-sm text-left">
-                <thead className="bg-[#000000] text-white">
+                <thead className="bg-[#002366] text-white">
                   <tr>
-                    <th className="px-4 py-2 border border-[#000000] text-center">
+                    <th className="px-4 py-2 border border-[#002366] text-center">
                       Averages
                     </th>
-                    <th className="px-4 py-2 border border-[#000000] text-right">
+                    <th className="px-4 py-2 border border-[#002366] text-right">
                       Value
                     </th>
                   </tr>
@@ -315,7 +315,7 @@ export default function GstOverviewTab({
         {/* Business Breakup */}
         {businessBreakup && (
           <div className="bg-white rounded-md shadow-sm border border-gray-200 h-fit">
-            <div className="flex bg-[#000000] text-white rounded-t-md">
+            <div className="flex bg-[#002366] text-white rounded-t-md">
               <h3 className="text-lg font-semibold px-4 py-2 w-2/3 border-r border-[#d35400] text-center">
                 Business Breakup
               </h3>
@@ -332,10 +332,10 @@ export default function GstOverviewTab({
                     const cleanTitle = sectionName.split(' (')[0]; // E.g., Sales
                     return (
                       <React.Fragment key={idx}>
-                        <tr className="bg-[#000000] text-white font-semibold">
+                        <tr className="bg-[#002366] text-white font-semibold">
                           <td
                             colSpan={2}
-                            className="px-4 py-1 text-center border border-[#000000]"
+                            className="px-4 py-1 text-center border border-[#002366]"
                           >
                             {cleanTitle}
                           </td>

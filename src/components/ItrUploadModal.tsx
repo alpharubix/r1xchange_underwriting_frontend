@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion } from 'framer-motion';
 import { useMutation, useQuery } from '@tanstack/react-query';
@@ -180,18 +180,18 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
 
         <CardHeader>
           <CardTitle className="text-2xl text-slate-900 flex items-center gap-2">
-            <PieChart className="h-6 w-6 text-[#1106de]" />
+            <PieChart className="h-6 w-6 text-[#002366]" />
             Income Tax Return
           </CardTitle>
           <CardDescription>
             Fetch and analyze your ITR data securely
-            {custId && <span className="block mt-1 text-[#1106de] font-semibold">Creating for Customer: {custId}</span>}
+            {custId && <span className="block mt-1 text-[#002366] font-semibold">Creating for Customer: {custId}</span>}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           {itrState === 'INITIALIZING' && (
             <div className="flex flex-col items-center justify-center py-8">
-              <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
               <p className="text-gray-600">Checking ITR status...</p>
             </div>
           )}
@@ -209,7 +209,7 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
                 />
               </div>
               <Button
-                className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="w-full bg-[#002366] hover:bg-[#001744] text-white shadow-sm shadow-[#002366]/20 cursor-pointer"
                 onClick={() => generateItrLinkMutation.mutate(itrEmail)}
                 disabled={generateItrLinkMutation.isPending || !itrEmail}
               >
@@ -224,7 +224,7 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
           {itrState === 'AWAITING_CREDENTIAL_SUBMISSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                <Loader2 className="h-8 w-8 animate-spin text-[#1106de]" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               </div>
               <p className="text-center font-medium text-slate-900">
                 Verification email sent successfully.
@@ -238,7 +238,7 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
           {itrState === 'PROCESSING' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                <Loader2 className="h-8 w-8 animate-spin text-[#1106de]" />
+                <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               </div>
               <p className="text-center font-medium text-slate-900">
                 Analyzing your ITR data...
@@ -282,7 +282,7 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
                 Verification session expired
               </p>
               <Button
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white shadow-sm shadow-[#002366]/20 cursor-pointer"
                 onClick={() => {
                   setItrReferenceId(null);
                   setItrEmail('');

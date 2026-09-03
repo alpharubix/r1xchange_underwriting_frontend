@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { createPaymentOrder, validatePayment } from '@/api/payment';
 import { Loader2, X, Wallet, CheckCircle2 } from 'lucide-react';
 import { Button } from "@/components/ui/button";
@@ -142,7 +142,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
           }
         },
         theme: {
-          color: "#1106de"
+          color: "#002366"
         }
       };
 
@@ -175,7 +175,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10"
           >
-            <div className="bg-[#1106de] p-6 pb-8 text-white relative">
+            <div className="bg-[#002366] p-6 pb-8 text-white relative">
               <div
                 className="absolute top-4 right-4 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
                 onClick={() => !isProcessing && onClose()}
@@ -200,7 +200,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
                 <ul className="space-y-2.5">
                   {features.map((feature, idx) => (
                     <li key={idx} className="flex items-start gap-2.5">
-                      <CheckCircle2 className="h-4 w-4 text-[#1106de] mt-0.5 shrink-0" />
+                      <CheckCircle2 className="h-4 w-4 text-[#002366] mt-0.5 shrink-0" />
                       <span className="text-sm font-medium text-slate-600 leading-tight">{feature}</span>
                     </li>
                   ))}
@@ -219,7 +219,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
                 <div className="h-px w-full bg-slate-200 my-1"></div>
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-bold text-slate-700 uppercase tracking-wider">Total Amount</span>
-                  <span className="text-xl font-black text-[#1106de]">₹{pricing.total}</span>
+                  <span className="text-xl font-black text-[#002366]">₹{pricing.total}</span>
                 </div>
               </div>
 
@@ -227,7 +227,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
                 <Button
                   onClick={handlePay}
                   disabled={isProcessing}
-                  className="w-full h-12 rounded-xl bg-[#1106de] hover:bg-blue-700 text-white font-bold text-base shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                  className="w-full h-12 rounded-xl bg-[#002366] hover:bg-blue-700 text-white font-bold text-base shadow-sm shadow-[#002366]/20 cursor-pointer"
                 >
                   {isProcessing ? (
                     <><Loader2 className="h-5 w-5 animate-spin mr-2" /> Processing...</>

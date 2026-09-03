@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 
 import IdentityForm from './IdentityForm';
 import OTPVerification from './OTPVerification';
@@ -56,15 +56,15 @@ export default function CibilWorkflow() {
                   className={`w-full h-1 ${step === 1
                     ? 'bg-transparent'
                     : currentStep >= step
-                      ? 'bg-[#1106de]'
+                      ? 'bg-[#002366]'
                       : 'bg-gray-200'
                     }`}
                 />
                 <div
                   className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step
-                    ? 'border-[#1106de] bg-[#1106de] text-white shadow-md shadow-[#1106de]/30'
+                    ? 'border-[#002366] bg-[#002366] text-white shadow-md shadow-[#002366]/30'
                     : currentStep > step
-                      ? 'border-[#1106de] bg-[#1106de] text-white'
+                      ? 'border-[#002366] bg-[#002366] text-white'
                       : 'border-gray-300 bg-white text-gray-500'
                     } font-semibold text-sm transition-colors duration-300`}
                 >
@@ -90,13 +90,13 @@ export default function CibilWorkflow() {
                   className={`w-full h-1 ${step === 4
                     ? 'bg-transparent'
                     : currentStep > step
-                      ? 'bg-[#1106de]'
+                      ? 'bg-[#002366]'
                       : 'bg-gray-200'
                     }`}
                 />
               </div>
               <span
-                className={`text-xs mt-2 font-medium ${currentStep >= step ? 'text-[#1106de] font-semibold' : 'text-gray-400'
+                className={`text-xs mt-2 font-medium ${currentStep >= step ? 'text-[#002366] font-semibold' : 'text-gray-400'
                   }`}
               >
                 {stepLabels[step]}

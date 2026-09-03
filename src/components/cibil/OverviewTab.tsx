@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+﻿import { useMemo } from 'react';
 import {
   User, Calendar, ShieldCheck, Mail, Briefcase,
   IndianRupee, CreditCard, AlertOctagon, Landmark,
@@ -348,7 +348,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
       {/* Primary KPI Grid (Balance, Sanctioned, etc.) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Outstanding Balance */}
-        <div className="rounded-xl border border-slate-200 bg-[#1106de] p-5 text-white shadow-sm flex flex-col justify-between">
+        <div className="rounded-xl border border-slate-200 bg-[#002366] p-5 text-white shadow-sm flex flex-col justify-between">
           <div>
             <span className="inline-flex items-center rounded bg-white/10 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wide text-white/95">
               Outstanding Debt
@@ -401,7 +401,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Lenders Table */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <Landmark className="h-5 w-5 text-[#1106de]" />
+            <Landmark className="h-5 w-5 text-[#002366]" />
             <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Lender Distribution
             </h4>
@@ -442,7 +442,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Obligations Summary */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <AlertOctagon className="h-5 w-5 text-[#1106de]" />
+            <AlertOctagon className="h-5 w-5 text-[#002366]" />
             <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Repayment & Obligations
             </h4>
@@ -505,7 +505,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Account Types Distribution */}
         <div className="lg:col-span-2 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <CreditCard className="h-5 w-5 text-[#1106de]" />
+            <CreditCard className="h-5 w-5 text-[#002366]" />
             <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Account Types Breakdown
             </h4>
@@ -537,7 +537,7 @@ export default function OverviewTab({ data }: { data: CibilOverviewData }) {
         {/* Enquiries Box */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2 border-b border-slate-100 pb-3 mb-4">
-            <Search className="h-5 w-5 text-[#1106de]" />
+            <Search className="h-5 w-5 text-[#002366]" />
             <h4 className="text-sm font-bold uppercase tracking-wider text-slate-900">
               Bureau Enquiries
             </h4>

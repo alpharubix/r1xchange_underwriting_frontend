@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import {
   Card,
   CardContent,
@@ -308,7 +308,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
           <X className="h-4 w-4" />
         </Button>
         <CardHeader>
-          <CardTitle className="text-xl text-[#000000] flex items-center gap-2">
+          <CardTitle className="text-xl text-[#002366] flex items-center gap-2">
             <ShieldCheck className="h-6 w-6" />
             Identity Verification
           </CardTitle>
@@ -319,7 +319,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
         <CardContent className="overflow-y-auto">
           {state === 'INITIALIZING' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
-              <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Checking verification status...
               </p>
@@ -350,7 +350,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-[#000000] hover:bg-[#000060]"
+                className="w-full bg-[#002366] hover:bg-[#001744]"
                 disabled={aadhaarNumber.length !== 12}
               >
                 Generate OTP
@@ -383,7 +383,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
               </div>
               <Button
                 type="submit"
-                className="w-full bg-[#000000] hover:bg-[#000060]"
+                className="w-full bg-[#002366] hover:bg-[#001744]"
                 disabled={otp.length !== 6}
               >
                 Validate OTP
@@ -393,7 +393,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'CHECK_DIGILOCKER_SESSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in">
-              <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Initializing DigiLocker session...
               </p>
@@ -402,7 +402,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'POLLING_SESSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               <div className="space-y-2">
                 <p className="font-medium text-gray-900">
                   Awaiting your consent
@@ -428,7 +428,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'FETCHING_DOCUMENTS' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in">
-              <Loader2 className="h-8 w-8 animate-spin text-[#000000]" />
+              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Retrieving documents from DigiLocker...
               </p>
@@ -450,7 +450,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
                       className="flex items-center justify-between p-3 border rounded-lg bg-gray-50/50"
                     >
                       <div className="flex items-center gap-3">
-                        <FileCheck2 className="h-8 w-8 text-[#000000]" />
+                        <FileCheck2 className="h-8 w-8 text-[#002366]" />
                         <div>
                           <p className="font-medium text-sm">
                             {documentLabels[doc.documentType] ??
@@ -475,7 +475,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
               )}
               <Button
                 onClick={onClose}
-                className="w-full bg-[#000000] hover:bg-[#000060]"
+                className="w-full bg-[#002366] hover:bg-[#001744]"
               >
                 Done
               </Button>
@@ -497,7 +497,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
                 </Button>
                 <Button
                   onClick={startFlow}
-                  className="flex-1 bg-[#000000] hover:bg-[#000060]"
+                  className="flex-1 bg-[#002366] hover:bg-[#001744]"
                 >
                   Retry
                 </Button>

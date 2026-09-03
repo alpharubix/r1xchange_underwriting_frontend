@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -143,7 +143,7 @@ export default function ReportStatus({
               type="button"
               onClick={handleRetry}
               disabled={isFetching}
-              className="bg-[#1106de] hover:bg-[#0e05b5] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors cursor-pointer"
+              className="bg-[#002366] hover:bg-[#001744] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors cursor-pointer"
             >
               {isFetching ? 'Retrying...' : 'Retry'}
             </button>
@@ -165,7 +165,7 @@ export default function ReportStatus({
           <button
             type="button"
             onClick={onBack}
-            className="bg-[#1106de] hover:bg-[#0e05b5] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors cursor-pointer"
+            className="bg-[#002366] hover:bg-[#001744] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors cursor-pointer"
           >
             Back to OTP
           </button>
@@ -186,7 +186,7 @@ export default function ReportStatus({
           <button
             type="button"
             onClick={() => onViewReport(data?.reference_id)}
-            className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-6 rounded-xl shadow-md shadow-[#1106de]/20 transition-colors cursor-pointer"
+            className="bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-6 rounded-xl shadow-md shadow-[#002366]/20 transition-colors cursor-pointer"
           >
             View Report
           </button>
@@ -217,7 +217,7 @@ export default function ReportStatus({
               type="button"
               onClick={handleRetry}
               disabled={isFetching}
-              className="bg-[#1106de] hover:bg-[#0e05b5] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors cursor-pointer"
+              className="bg-[#002366] hover:bg-[#001744] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors cursor-pointer"
             >
               {isFetching ? 'Checking...' : 'Retry'}
             </button>
@@ -227,8 +227,8 @@ export default function ReportStatus({
         <div className="animate-in fade-in duration-300">
           <div className="relative mx-auto w-24 h-24 mb-6">
             <div className="absolute inset-0 rounded-full border-4 border-gray-100" />
-            <div className="absolute inset-0 rounded-full border-4 border-[#1106de] border-t-transparent animate-spin" />
-            <div className="absolute inset-0 flex items-center justify-center text-[#1106de] font-semibold text-sm">
+            <div className="absolute inset-0 rounded-full border-4 border-[#002366] border-t-transparent animate-spin" />
+            <div className="absolute inset-0 flex items-center justify-center text-[#002366] font-semibold text-sm">
               {Math.min(90, Math.round((pollCount / MAX_POLLS) * 100))}%
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function ReportStatus({
             type="button"
             onClick={handleRetry}
             disabled={isFetching}
-            className="text-sm font-semibold text-[#1106de] hover:underline disabled:text-gray-400 cursor-pointer"
+            className="text-sm font-semibold text-[#002366] hover:underline disabled:text-gray-400 cursor-pointer"
           >
             {isFetching ? 'Checking...' : 'Check status now'}
           </button>

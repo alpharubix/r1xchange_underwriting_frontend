@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { validateOtp, submitGst, generateOtp } from "@/api/gst";
 import { toast } from "sonner";
@@ -93,7 +93,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-100">
       <div className="flex items-center mb-6">
         <button onClick={onBack} className="text-gray-500 hover:text-gray-800 mr-3" disabled={isValidated || submitMutation.isPending}>
-          ← Back
+          â† Back
         </button>
         <h2 className="text-2xl font-semibold text-gray-800">
           {!otpReferenceId ? "GST Username" : isValidated ? "Start Analysis" : "Enter OTP"}
@@ -113,7 +113,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             <input
               id="userName"
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de]"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#002366] focus:border-[#002366]"
               placeholder="e.g. your_username"
               value={userName}
               onChange={(e) => setUserName(e.target.value)}
@@ -124,7 +124,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
           <button
             type="submit"
             disabled={otpMutation.isPending}
-            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+            className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {otpMutation.isPending ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -145,7 +145,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             <input
               id="otp"
               type="text"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] text-center tracking-widest text-lg"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#002366] focus:border-[#002366] text-center tracking-widest text-lg"
               placeholder="••••••"
               value={otp}
               onChange={(e) => setOtp(e.target.value)}
@@ -157,7 +157,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
           <button
             type="submit"
             disabled={validateMutation.isPending || submitMutation.isPending}
-            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+            className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {(validateMutation.isPending || submitMutation.isPending) ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -170,7 +170,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
               type="button"
               onClick={handleResend}
               disabled={otpMutation.isPending}
-              className="text-sm text-[#1106de] font-semibold hover:underline disabled:text-gray-400 cursor-pointer"
+              className="text-sm text-[#002366] font-semibold hover:underline disabled:text-gray-400 cursor-pointer"
             >
               {otpMutation.isPending ? "Resending..." : "Didn't receive code? Resend"}
             </button>
@@ -187,7 +187,7 @@ export default function Step3OtpValidation({ gstin, fromMonth, toMonth, onNext, 
             type="button"
             onClick={handleManualSubmit}
             disabled={submitMutation.isPending}
-            className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-3 px-4 rounded-xl shadow-md shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+            className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-3 px-4 rounded-xl shadow-md shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {submitMutation.isPending ? (
               <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

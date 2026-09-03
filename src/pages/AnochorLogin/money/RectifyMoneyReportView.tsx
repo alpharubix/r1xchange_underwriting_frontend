@@ -26,6 +26,7 @@ const safeFormatDate = (dateStr: string) => {
 
 export default function RectifyMoneyReportView({ custId, referenceId, onBack }: RectifyMoneyReportViewProps) {
   const queryClient = useQueryClient();
+  const storageKey = `submitted_rectify_${referenceId}`;
 
   const { data: report, isLoading, isError } = useQuery({
     queryKey: ["reports", "rectify_money", custId, referenceId],
@@ -37,6 +38,9 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
       submitRectifyMoneySelections(custId, { reference_id: referenceId, selected_accounts: selectedAccounts }),
     onSuccess: () => {
       toast.success("Selections submitted successfully!");
+      const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
+      const newSubmitted = [...submitted, ...submitMutation.variables];
+      localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
       queryClient.invalidateQueries({ queryKey: ["reports", "rectify_money", custId, referenceId] });
     },
     onError: () => {
@@ -45,6 +49,11 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
   });
 
   const toggleCheckbox = (account: any) => {
+    const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
+    const isPermanentlyBlocked = account.check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+    
+    if (isPermanentlyBlocked) return;
+
     queryClient.setQueryData(["reports", "rectify_money", custId, referenceId], (old: any) => {
       if (!old || !old.accounts) return old;
       return {
@@ -117,7 +126,11 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
-                {report.accounts.map((account, idx) => (
+                {report.accounts.map((account, idx) => {
+                  const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
+                  const isBlocked = account.check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+                  const isChecked = account.check_box || isBlocked;
+                  return (
                   <tr key={idx} className="hover:bg-slate-50/20 transition-colors">
                     <td className="py-4 px-6 font-bold text-slate-900">{account.lender_name || "N/A"}</td>
                     <td className="py-4 px-6 text-slate-600">{account.account_number || "N/A"}</td>
@@ -143,14 +156,15 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
                         <button 
                           onClick={() => toggleCheckbox(account)}
                           type="button"
-                          className={`h-6 w-6 rounded-md flex items-center justify-center transition-colors border shadow-sm ${account.check_box ? 'bg-[#2E9B5C] border-[#2E9B5C] text-white' : 'bg-white border-slate-300 text-transparent hover:border-slate-400'}`}
+                          disabled={isBlocked}
+                          className={`h-6 w-6 rounded-md flex items-center justify-center transition-colors border shadow-sm ${isChecked ? (isBlocked ? 'bg-slate-400 border-slate-400 text-white cursor-not-allowed' : 'bg-[#2E9B5C] border-[#2E9B5C] text-white') : 'bg-white border-slate-300 text-transparent hover:border-slate-400'}`}
                         >
                           <Check className="h-4 w-4" strokeWidth={3} />
                         </button>
                       </div>
                     </td>
                   </tr>
-                ))}
+                )})}
               </tbody>
             </table>
           </div>

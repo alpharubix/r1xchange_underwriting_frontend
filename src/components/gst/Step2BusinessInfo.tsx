@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+﻿import { useState, useEffect, useMemo } from "react";
 import { useQuery, useMutation, useQueries } from "@tanstack/react-query";
 import { fetchBasicInfo, submitGst, getGstin, addNewGstin } from "@/api/gst";
 import { toast } from "sonner";
@@ -241,7 +241,7 @@ return (
           setNewGstin("");
           setIsModalOpen(true);
         }}
-        className="px-4 py-2 text-sm font-semibold text-white bg-[#1106de] hover:bg-[#0e05b5] rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors flex items-center gap-1.5 cursor-pointer"
+        className="px-4 py-2 text-sm font-semibold text-white bg-[#002366] hover:bg-[#001744] rounded-xl shadow-sm shadow-[#002366]/20 transition-colors flex items-center gap-1.5 cursor-pointer"
       >
         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -260,7 +260,7 @@ return (
           <div
             key={itemGstin}
             className={`border-2 rounded-xl transition-all overflow-hidden ${isSelected
-                ? "border-[#1106de] shadow-sm bg-white"
+                ? "border-[#002366] shadow-sm bg-white"
                 : "border-slate-100 hover:border-slate-300 bg-slate-50/20 cursor-pointer"
               }`}
             onClick={() => {
@@ -275,7 +275,7 @@ return (
               <div className="flex items-center gap-3">
                 {/* Selector Circle Indicator */}
                 <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all ${isSelected
-                    ? "border-[#1106de] bg-[#1106de]"
+                    ? "border-[#002366] bg-[#002366]"
                     : "border-slate-300 bg-white"
                   }`}>
                   {isSelected && (
@@ -286,7 +286,7 @@ return (
                   <div className="flex items-center gap-2">
                     <span className="font-bold text-slate-800 tracking-wide uppercase">{itemGstin}</span>
                     {isLoading && (
-                      <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
+                      <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
                     )}
                   </div>
                   {data && (
@@ -367,7 +367,7 @@ return (
                             <input
                               id="fromMonth"
                               type="text"
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1106de]/20 focus:border-[#1106de] outline-none text-slate-800 placeholder-slate-300"
+                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#002366]/20 focus:border-[#002366] outline-none text-slate-800 placeholder-slate-300"
                               placeholder="MMYYYY"
                               value={fromMonth}
                               onChange={(e) => setFromMonth(e.target.value)}
@@ -382,7 +382,7 @@ return (
                             <input
                               id="toMonth"
                               type="text"
-                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#1106de]/20 focus:border-[#1106de] outline-none text-slate-800 placeholder-slate-300"
+                              className="w-full px-4 py-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-[#002366]/20 focus:border-[#002366] outline-none text-slate-800 placeholder-slate-300"
                               placeholder="MMYYYY"
                               value={toMonth}
                               onChange={(e) => setToMonth(e.target.value)}
@@ -402,7 +402,7 @@ return (
                             <button
                               type="button"
                               onClick={() => onRequiresAuth(fromMonth, toMonth)}
-                              className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-3 px-6 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors flex justify-center items-center cursor-pointer"
+                              className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-3 px-6 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors flex justify-center items-center cursor-pointer"
                             >
                               Authenticate with OTP
                             </button>
@@ -411,7 +411,7 @@ return (
                           <button
                             type="submit"
                             disabled={submitMutation.isPending}
-                            className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+                            className="bg-[#002366] hover:bg-[#001744] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                           >
                             {submitMutation.isPending ? (
                               <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
@@ -426,7 +426,7 @@ return (
                   <div className="flex justify-center py-4">
                     {isLoading ? (
                       <div className="flex items-center gap-2 text-slate-500">
-                        <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
+                        <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
                         <span>Fetching business details...</span>
                       </div>
                     ) : (
@@ -458,7 +458,7 @@ return (
               <input
                 id="newGstin"
                 type="text"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] uppercase"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#002366] focus:border-[#002366] uppercase"
                 placeholder="e.g. 27AAAPL1234C1Z5"
                 value={newGstin}
                 onChange={(e) => {
@@ -483,7 +483,7 @@ return (
               <button
                 type="submit"
                 disabled={addNewGstinMutation.isPending}
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white text-sm font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white text-sm font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
               >
                 {addNewGstinMutation.isPending ? (
                   <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

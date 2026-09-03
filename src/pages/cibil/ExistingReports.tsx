@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listCibilReports } from "@/api/cibil";
 import type { CibilReportListItem } from "@/api/cibil";
@@ -39,7 +39,7 @@ function ExistingReports() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-lg px-6 py-5 flex items-center gap-3 border border-slate-200">
-          <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#000000] animate-spin" />
+          <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
           <p className="text-sm font-medium text-slate-700">Loading reports...</p>
         </div>
       </div>
@@ -55,7 +55,7 @@ function ExistingReports() {
               !
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-[#000000]">Something went wrong</h2>
+              <h2 className="text-lg font-semibold text-[#002366]">Something went wrong</h2>
               <p className="text-sm text-slate-600 mt-1">{error}</p>
             </div>
           </div>
@@ -68,7 +68,7 @@ function ExistingReports() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-5xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-3xl sm:text-4xl font-bold text-[#000000] tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-bold text-[#002366] tracking-tight">
             Existing CIBIL Reports
           </h1>
           <p className="mt-3 text-slate-600 max-w-2xl">
@@ -80,9 +80,9 @@ function ExistingReports() {
           {reports.length === 0 ? (
             <div className="p-10 text-center">
               <div className="mx-auto h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-2xl">
-                ◌
+                ○
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-[#000000]">No reports found</h2>
+              <h2 className="mt-4 text-lg font-semibold text-[#002366]">No reports found</h2>
               <p className="mt-2 text-sm text-slate-600">
                 There are no CIBIL reports available right now.
               </p>
@@ -100,7 +100,7 @@ function ExistingReports() {
                         <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
                           Report Reference ID
                         </p>
-                        <p className="text-base font-semibold text-[#000000]">
+                        <p className="text-base font-semibold text-[#002366]">
                           {report.reference_id}
                         </p>
                       </div>
@@ -114,7 +114,7 @@ function ExistingReports() {
 
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#000000] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#000000]/80 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#000000] focus:ring-offset-2"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#002366] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#002366]/80 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#002366] focus:ring-offset-2"
                       onClick={() => handleViewReport(report.reference_id)}
                     >
                       View Report

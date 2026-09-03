@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -93,7 +93,7 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-6">
-                <div className="h-32 w-32 md:h-40 md:w-40 rounded-[2rem] bg-white text-[#1106de] flex items-center justify-center font-black text-6xl md:text-7xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] shrink-0 tracking-tighter">
+                <div className="h-32 w-32 md:h-40 md:w-40 rounded-[2rem] bg-white text-[#002366] flex items-center justify-center font-black text-6xl md:text-7xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] shrink-0 tracking-tighter">
                   {brand.initial}
                 </div>
                 <div className="text-white/90 font-extrabold tracking-[0.25em] text-2xl md:text-3xl uppercase mt-2">

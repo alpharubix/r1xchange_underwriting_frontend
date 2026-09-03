@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
@@ -27,7 +27,7 @@ export default function HomeIntro() {
     <AnimatePresence>
       {show && (
         <motion.div
-          className="fixed inset-0 z-[9999] flex items-center justify-center bg-black border-b-[6px] border-white"
+          className="fixed inset-0 z-[9999] flex items-center justify-center bg-[#002366] border-b-[6px] border-white"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{

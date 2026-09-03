@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Mail,
@@ -192,7 +192,7 @@ export default function HelpCenter() {
       {/* Page Header */}
       <div className="mb-8 flex items-center justify-between border-b pb-6 border-slate-200">
         <div>
-          <h1 className="text-3xl font-extrabold text-[#000000] tracking-tight">
+          <h1 className="text-3xl font-extrabold text-[#002366] tracking-tight">
             Help & Support Center
           </h1>
           <p className="text-slate-500 mt-1.5 text-sm md:text-base max-w-2xl">
@@ -203,7 +203,7 @@ export default function HelpCenter() {
           <Button
             onClick={() => setActiveTab("home")}
             variant="outline"
-            className="flex items-center gap-2 border-[#000000]/30 text-[#000000] hover:bg-[#000000]/5 hover:text-[#000000] transition-all duration-200 shadow-sm"
+            className="flex items-center gap-2 border-[#002366]/30 text-[#002366] hover:bg-[#002366]/5 hover:text-[#002366] transition-all duration-200 shadow-sm"
           >
             <ArrowLeft className="h-4 w-4" />
             Back
@@ -228,9 +228,9 @@ export default function HelpCenter() {
 
               {/* Option A: Email Support (Static Info Card) */}
               <Card className="relative border border-slate-200 bg-white/75 backdrop-blur-md overflow-hidden shadow-sm hover:shadow-md transition-all duration-300 rounded-2xl">
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#000000] to-[#000000]" />
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-gradient-to-b from-[#002366] to-[#002366]" />
                 <CardHeader className="flex flex-row items-center gap-5 pb-2">
-                  <div className="p-4 rounded-2xl bg-blue-50 text-[#000000] shadow-inner">
+                  <div className="p-4 rounded-2xl bg-blue-50 text-[#002366] shadow-inner">
                     <Mail className="h-7 w-7" />
                   </div>
                   <div>
@@ -243,7 +243,7 @@ export default function HelpCenter() {
                     Have general queries or custom requirements? Shoot an email directly to our support inbox. We will respond within 24 business hours.
                   </p> */}
                   <div className="pt-2 flex items-center justify-between bg-slate-50 border border-slate-100 rounded-xl px-4 py-3">
-                    <span className="font-mono text-base font-bold text-[#000000] tracking-wide select-all">
+                    <span className="font-mono text-base font-bold text-[#002366] tracking-wide select-all">
                       support@r1xchange.com
                     </span>
                     <Button
@@ -296,7 +296,7 @@ export default function HelpCenter() {
             <div className="pt-4 space-y-4">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5">
-                  <div className="p-2 rounded-lg bg-[#000000]/5 text-[#000000]">
+                  <div className="p-2 rounded-lg bg-[#002366]/5 text-[#002366]">
                     <Clock className="h-5 w-5" />
                   </div>
                   <h2 className="text-xl font-bold text-slate-800">Support Ticket History</h2>
@@ -328,7 +328,7 @@ export default function HelpCenter() {
                       <tbody className="divide-y divide-slate-100">
                         {tickets.map((t) => (
                           <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
-                            <td className="p-4 font-mono text-sm text-[#000000] font-semibold">{t.id}</td>
+                            <td className="p-4 font-mono text-sm text-[#002366] font-semibold">{t.id}</td>
                             <td className="p-4">
                               <p className="text-sm font-semibold text-slate-800">{t.title}</p>
                               <p className="text-xs text-slate-400 line-clamp-1 mt-0.5">{t.describe}</p>
@@ -385,7 +385,7 @@ export default function HelpCenter() {
             className="max-w-2xl mx-auto"
           >
             <Card className="shadow-2xl border border-slate-200/80 overflow-hidden rounded-2xl bg-white/95 backdrop-blur-md">
-              <div className="bg-gradient-to-r from-[#000000] to-[#000000] text-white p-6 relative">
+              <div className="bg-gradient-to-r from-[#002366] to-[#002366] text-white p-6 relative">
                 <div className="absolute top-0 right-0 w-48 h-48 bg-white/5 rounded-full -mr-12 -mt-12 blur-2xl pointer-events-none" />
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-white/10 rounded-xl">
@@ -443,7 +443,7 @@ export default function HelpCenter() {
                       placeholder="Briefly state your query or problem"
                       value={ticketTitle}
                       onChange={(e) => setTicketTitle(e.target.value)}
-                      className="bg-slate-50/50 hover:bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#000000]/10 focus:border-[#000000] transition-all"
+                      className="bg-slate-50/50 hover:bg-slate-50 border-slate-200 focus:ring-2 focus:ring-[#002366]/10 focus:border-[#002366] transition-all"
                       required
                     />
                   </div>
@@ -453,7 +453,7 @@ export default function HelpCenter() {
                     <textarea
                       id="ticket-describe"
                       rows={5}
-                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#000000]/10 focus:border-[#000000] text-slate-800 text-sm placeholder:text-slate-400 transition-all duration-200"
+                      className="w-full px-4 py-3 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-[#002366]/10 focus:border-[#002366] text-slate-800 text-sm placeholder:text-slate-400 transition-all duration-200"
                       placeholder="Please details what error message or mismatch you found. Provide reference codes if possible to expedite resolution."
                       value={ticketDescribe}
                       onChange={(e) => setTicketDescribe(e.target.value)}
@@ -473,7 +473,7 @@ export default function HelpCenter() {
                     </Button>
                     <Button
                       type="submit"
-                      className="flex-1 bg-[#000000] hover:bg-[#000060] text-white flex items-center justify-center gap-2 shadow-md transition-colors"
+                      className="flex-1 bg-[#002366] hover:bg-[#001744] text-white flex items-center justify-center gap-2 shadow-md transition-colors"
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? (
@@ -514,7 +514,7 @@ export default function HelpCenter() {
                 <CheckCircle2 className="h-10 w-10 animate-bounce" />
               </div>
 
-              <h3 className="text-2xl font-bold text-[#000000] mb-2">{backendStatus}</h3>
+              <h3 className="text-2xl font-bold text-[#002366] mb-2">{backendStatus}</h3>
               <p className="text-slate-500 text-sm mb-6 leading-relaxed">
                 {backendMessage}
               </p>
@@ -544,7 +544,7 @@ export default function HelpCenter() {
                     setIsSuccessModalOpen(false);
                     setActiveTab("home");
                   }}
-                  className="w-full bg-[#000000] hover:bg-[#000060] text-white py-2 rounded-xl transition-all"
+                  className="w-full bg-[#002366] hover:bg-[#001744] text-white py-2 rounded-xl transition-all"
                 >
                   View Ticket History
                 </Button>

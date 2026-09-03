@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getItrTaxCalculation } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
@@ -22,7 +22,7 @@ export default function TaxCalculation({ custId, reportId }: TaxCalculationProps
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#1106de]" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#002366]" />
       </div>
     );
   }
@@ -46,7 +46,7 @@ export default function TaxCalculation({ custId, reportId }: TaxCalculationProps
 
       {tax_calculation["Tax Deducted At Source"] && Object.keys(tax_calculation["Tax Deducted At Source"]).length > 0 && (
         <div className="bg-white rounded-xl shadow-sm border border-slate-100 mb-6 overflow-hidden animate-in fade-in duration-500">
-          <div className="bg-[#1106de] text-white px-4 py-2.5 text-center rounded-t-xl font-semibold">
+          <div className="bg-[#002366] text-white px-4 py-2.5 text-center rounded-t-xl font-semibold">
             Tax Deducted At Source
           </div>
           <div className="p-0">

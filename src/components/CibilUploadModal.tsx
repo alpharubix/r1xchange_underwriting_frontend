@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+﻿import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText } from 'lucide-react';
@@ -44,11 +44,11 @@ export default function CibilUploadModal({ isOpen, onClose, custId }: CibilUploa
 
           <div className="p-6 pb-0">
             <h2 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-              <FileText className="h-6 w-6 text-[#1106de]" />
+              <FileText className="h-6 w-6 text-[#002366]" />
               CIBIL Score
             </h2>
             <p className="text-gray-500 mt-1 font-medium">Authenticate customer consent and process CIBIL report data</p>
-            {custId && <p className="text-gray-700 mt-1 font-medium text-sm">Target Customer ID: <span className="text-[#1106de] font-semibold">{custId}</span></p>}
+            {custId && <p className="text-gray-700 mt-1 font-medium text-sm">Target Customer ID: <span className="text-[#002366] font-semibold">{custId}</span></p>}
           </div>
 
           <div className="p-6 pt-0">

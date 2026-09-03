@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -201,7 +201,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
   };
 
   const getInputClassName = (field: CibilGenerateOtpField) => {
-    return `w-full px-4 py-2 border rounded-md focus:ring-[#000000] focus:border-[#000000] ${
+    return `w-full px-4 py-2 border rounded-md focus:ring-[#002366] focus:border-[#002366] ${
       fieldErrors[field] ? 'border-red-400' : 'border-gray-300'
     }`;
   };
@@ -218,7 +218,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-100">
-      <h2 className="text-2xl font-semibold mb-2 text-[#000000]">
+      <h2 className="text-2xl font-semibold mb-2 text-[#002366]">
         Identity Details
       </h2>
       <p className="text-gray-500 mb-6 text-sm">
@@ -429,7 +429,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
         <button
           type="submit"
           disabled={identityMutation.isPending}
-          className="w-full bg-[#000000] hover:bg-[#000000]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          className="w-full bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />

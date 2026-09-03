@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
@@ -216,7 +216,7 @@ export default function AnchorLoginPage() {
                 <Button
                   type="submit"
                   disabled={loginMutation.isPending}
-                  className="w-full h-11 mt-2 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#000000]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
+                  className="w-full h-11 mt-2 text-base font-semibold bg-[#4c3cbd] hover:bg-[#3f32a3]/80 hover:border-[#002366]/20 hover:tracking-[0.08em] active:scale-[0.90] text-white rounded-xl shadow-md shadow-[#4c3cbd]/20 transition-all ease-in-out duration-200 flex items-center justify-center gap-2"
                 >
                   {loginMutation.isPending ? (
                     <>

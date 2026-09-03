@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+﻿import React, { createContext, useContext, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   LogOut,
@@ -122,7 +122,7 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "relative flex flex-col h-screen bg-black text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0",
+        "relative flex flex-col h-screen bg-[#002366] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0",
         collapsed ? "w-[68px]" : "w-64"
       )}
     >

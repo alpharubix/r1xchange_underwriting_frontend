@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { getGstTopSuppliersCustomers } from "@/api/gst";
 
 export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstReferenceId: string }) {
@@ -11,7 +11,7 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+        <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
       </div>
     );
   }
@@ -31,7 +31,7 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
   const customers = majorData?.find((item: any) => item["10 Major Customers"])?.["10 Major Customers"] || [];
 
   const SectionTitle = ({ children }: { children: React.ReactNode }) => (
-    <h3 className="text-lg font-semibold text-white bg-[#000000] px-4 py-2 rounded-t-md text-center">
+    <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md text-center">
       {children}
     </h3>
   );
@@ -55,10 +55,10 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
         <SectionTitle>{title}</SectionTitle>
         <div className="p-0 overflow-x-auto">
           <table className="w-full text-sm text-left whitespace-nowrap">
-            <thead className="bg-[#000000]/60 text-white">
+            <thead className="bg-[#002366]/60 text-white">
               <tr>
                 {headers.map((header) => (
-                  <th key={header} className="px-4 py-2 border border-[#000000]/30 font-semibold text-center">
+                  <th key={header} className="px-4 py-2 border border-[#002366]/30 font-semibold text-center">
                     {header}
                   </th>
                 ))}
@@ -91,32 +91,32 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
       {/* Account Details */}
       {accountDetails && (
         <div className="bg-white rounded-md shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-white bg-[#000000] px-4 py-2 rounded-t-md text-center">
+          <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md text-center">
             Customer Profile
           </h3>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-center">
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">Company Name</span>
+              <span className="font-semibold text-[#002366] block mb-1">Company Name</span>
               <span className="text-gray-700">{accountDetails["GSTR Analysis Report  - "] || "N/A"}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">GSTIN</span>
+              <span className="font-semibold text-[#002366] block mb-1">GSTIN</span>
               <span className="text-gray-700">{accountDetails["GSTIN"]}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">PAN</span>
+              <span className="font-semibold text-[#002366] block mb-1">PAN</span>
               <span className="text-gray-700">{accountDetails["PAN"]}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">State</span>
+              <span className="font-semibold text-[#002366] block mb-1">State</span>
               <span className="text-gray-700">{accountDetails["State of Operations(based on max. gross sales)"]}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">Period From</span>
+              <span className="font-semibold text-[#002366] block mb-1">Period From</span>
               <span className="text-gray-700">{accountDetails["periodFrom"]}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#000000] block mb-1">Period To</span>
+              <span className="font-semibold text-[#002366] block mb-1">Period To</span>
               <span className="text-gray-700">{accountDetails["periodTo"]}</span>
             </div>
           </div>

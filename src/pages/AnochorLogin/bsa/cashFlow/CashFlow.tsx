@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -366,7 +366,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                             <div className="flex gap-2">
                                 <Button
                                     onClick={handleApply}
-                                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                                    className="bg-[#002366] hover:bg-[#001744] text-white gap-2 shadow-sm shadow-[#002366]/20 cursor-pointer"
                                 >
                                     <Filter className="w-4 h-4" /> Apply Filter
                                 </Button>
@@ -429,7 +429,7 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                 <CardContent className="p-0">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-                            <Loader2 className="h-8 w-8 animate-spin text-[#1106de] mb-4" />
+                            <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
                             <p>Loading cash flow data...</p>
                         </div>
                     ) : isError ? (
@@ -449,8 +449,8 @@ export default function CashFlow({ custId, reportId, fromDate: propFromDate, toD
                         <div className="overflow-x-auto w-full">
                             <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
                                 <thead>
-                                    <tr className="bg-[#1106de] text-white text-xs">
-                                        <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap min-w-[200px] sticky left-0 bg-[#1106de] z-20">
+                                    <tr className="bg-[#002366] text-white text-xs">
+                                        <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap min-w-[200px] sticky left-0 bg-[#002366] z-20">
                                             Particulars
                                         </th>
                                         <th className="px-4 py-3 border border-blue-900/30 font-semibold whitespace-nowrap text-right">

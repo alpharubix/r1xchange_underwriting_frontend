@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getItrRatioAnalysis } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
@@ -22,7 +22,7 @@ export default function RatioAnalysis({ custId, reportId }: RatioAnalysisProps =
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#1106de]" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#002366]" />
       </div>
     );
   }

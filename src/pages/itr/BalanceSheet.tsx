@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { getItrBalanceSheet } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
 import { renderYearlyTable } from '@/components/itr/ItrTableHelper';
@@ -21,7 +21,7 @@ export default function BalanceSheet({ custId, reportId }: BalanceSheetProps = {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#000000]" />
+        <Loader2 className="h-10 w-10 animate-spin text-[#002366]" />
       </div>
     );
   }

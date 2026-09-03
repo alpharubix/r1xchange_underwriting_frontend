@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getGstin, updateGstin } from "@/api/gst";
 import { toast } from "sonner";
@@ -64,7 +64,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   if (isLoadingGstin) {
     return (
       <div className="flex justify-center p-8">
-        <span className="h-8 w-8 rounded-full border-4 border-[#1106de]/20 border-t-[#1106de] animate-spin" />
+        <span className="h-8 w-8 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
       </div>
     );
   }
@@ -84,7 +84,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
           <input
             id="gstin"
             type="text"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#1106de] focus:border-[#1106de] uppercase"
+            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-[#002366] focus:border-[#002366] uppercase"
             placeholder="e.g. 27AAAPL1234C1Z5"
             value={gstinInput}
             onChange={(e) => {
@@ -99,7 +99,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
         <button
           type="submit"
           disabled={updateMutation.isPending}
-          className="w-full bg-[#1106de] hover:bg-[#0e05b5] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#1106de]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+          className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {updateMutation.isPending ? (
             <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />

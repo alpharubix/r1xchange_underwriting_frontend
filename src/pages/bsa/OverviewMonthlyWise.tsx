@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+﻿import { useState, useEffect, useRef } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -771,7 +771,7 @@ export default function OverviewMonthlyWise() {
     {showScrollHint && (
       <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
         <p className="text-sm text-gray-500">
-          ↑ Scroll up to view <span className="font-medium">Monthly Overview</span>
+          â†‘ Scroll up to view <span className="font-medium">Monthly Overview</span>
         </p>
       </div>
     )}
@@ -909,7 +909,7 @@ export default function OverviewMonthlyWise() {
               <div className="flex gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-black hover:bg-black/90 text-white gap-2"
+                  className="bg-[#002366] hover:bg-[#001744] text-white gap-2"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
@@ -998,8 +998,8 @@ export default function OverviewMonthlyWise() {
             <div className="overflow-x-auto w-full">
               <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
                 <thead>
-                  <tr className="bg-black text-white text-xs">
-                    <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[300px] sticky left-0 bg-black z-20">
+                  <tr className="bg-[#002366] text-white text-xs">
+                    <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[300px] sticky left-0 bg-[#002366] z-20">
                       Particulars
                     </th>
                     <th className="px-4 py-3 border border-black/20 font-bold whitespace-nowrap text-right">
@@ -1019,7 +1019,7 @@ export default function OverviewMonthlyWise() {
                   {ROWS.map((row, index) => {
                     if (row.isSeparator) {
                       return (
-                        <tr key={index} className="h-1.5 bg-black">
+                        <tr key={index} className="h-1.5 bg-[#002366]">
                           <td colSpan={expectedMonths.length + 2}></td>
                         </tr>
                       );

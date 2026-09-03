@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { listCibilReports } from "@/api/cibil";
 import type { CibilReportListItem } from "@/api/cibil";
@@ -39,7 +39,7 @@ function ExistingReports() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-lg px-6 py-5 flex items-center gap-3 border border-slate-200">
-          <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
+          <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
           <p className="text-sm font-medium text-slate-700">Loading reports...</p>
         </div>
       </div>
@@ -80,7 +80,7 @@ function ExistingReports() {
           {reports.length === 0 ? (
             <div className="p-10 text-center">
               <div className="mx-auto h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-2xl">
-                ◌
+                ○
               </div>
               <h2 className="mt-4 text-lg font-semibold text-slate-900">No reports found</h2>
               <p className="mt-2 text-sm text-slate-600">
@@ -114,7 +114,7 @@ function ExistingReports() {
 
                     <button
                       type="button"
-                      className="inline-flex items-center justify-center rounded-xl bg-[#1106de] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#0e05b5] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#1106de] focus:ring-offset-2 cursor-pointer"
+                      className="inline-flex items-center justify-center rounded-xl bg-[#002366] px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-[#001744] hover:shadow-md focus:outline-none focus:ring-2 focus:ring-[#002366] focus:ring-offset-2 cursor-pointer"
                       onClick={() => handleViewReport(report.reference_id)}
                     >
                       View Report

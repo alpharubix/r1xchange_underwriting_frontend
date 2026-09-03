@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
@@ -48,7 +48,7 @@ function App() {
             <ErrorBoundary>
               <Suspense
                 fallback={
-                  <div className="flex h-screen items-center justify-center bg-black">
+                  <div className="flex h-screen items-center justify-center bg-[#002366]">
                     <span className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin" />
                   </div>
                 }

@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+﻿import { useState, useMemo } from 'react';
 import { ChevronDown, ChevronUp, AlertCircle, Info, Landmark, Calendar, Clock, DollarSign } from 'lucide-react';
 
 // Helper to format values
@@ -124,7 +124,7 @@ export default function AccountSummaryTab({ data }: { data: any }) {
                 setExpandedAccounts({});
               }}
               className={`rounded-lg px-6 py-2.5 text-sm font-bold transition-all ${activeSegment === segment
-                  ? 'bg-[#1106de] text-white shadow-md'
+                  ? 'bg-[#002366] text-white shadow-md'
                   : 'text-slate-500 hover:text-slate-800'
                 }`}
             >

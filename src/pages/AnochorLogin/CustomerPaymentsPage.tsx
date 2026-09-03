@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
@@ -105,7 +105,7 @@ export default function CustomerPaymentsPage() {
           contact: user?.mobile_number || "9999999999"
         },
         theme: {
-          color: "#1106de"
+          color: "#002366"
         }
       };
 
@@ -132,7 +132,7 @@ export default function CustomerPaymentsPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-[#1106de]" />
+        <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
       </div>
     );
   }
@@ -141,7 +141,7 @@ export default function CustomerPaymentsPage() {
     <div className="p-8 max-w-5xl mx-auto space-y-10 animate-fade-in pb-20">
       <div>
         <h1 className="text-3xl font-bold tracking-tight text-gray-900 flex items-center gap-3">
-          <CreditCard className="h-8 w-8 text-[#1106de]" />
+          <CreditCard className="h-8 w-8 text-[#002366]" />
           Payments Dashboard
         </h1>
         <p className="mt-2 text-gray-500">
@@ -157,10 +157,10 @@ export default function CustomerPaymentsPage() {
             <button
               key={mod.id}
               onClick={() => handleCheckWalletBalance(mod.id)}
-              className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border-2 border-slate-100 hover:border-[#1106de] hover:shadow-lg transition-all group"
+              className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl border-2 border-slate-100 hover:border-[#002366] hover:shadow-lg transition-all group"
             >
-              <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-[#1106de]/10 transition-colors">
-                <mod.icon className="h-6 w-6 text-slate-500 group-hover:text-[#1106de]" />
+              <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-[#002366]/10 transition-colors">
+                <mod.icon className="h-6 w-6 text-slate-500 group-hover:text-[#002366]" />
               </div>
               <span className="font-semibold text-slate-700">{mod.label}</span>
             </button>
@@ -173,7 +173,7 @@ export default function CustomerPaymentsPage() {
         {pendingPayments.length === 0 ? (
           <Card className="border-0 shadow-sm bg-slate-50 overflow-hidden">
             <CardContent className="flex flex-col items-center justify-center py-16 text-center">
-              <div className="h-16 w-16 bg-blue-50 text-[#1106de] rounded-full flex items-center justify-center mb-4">
+              <div className="h-16 w-16 bg-blue-50 text-[#002366] rounded-full flex items-center justify-center mb-4">
                 <CreditCard className="h-8 w-8" />
               </div>
               <h3 className="text-lg font-bold text-gray-900">No Pending Payments</h3>
@@ -185,20 +185,20 @@ export default function CustomerPaymentsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingPayments.map((payment) => (
-              <Card key={payment._id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#1106de]/5 transition-all group">
-                <div className="h-2 bg-[#1106de]" />
+              <Card key={payment._id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
+                <div className="h-2 bg-[#002366]" />
                 <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <div className="text-xs font-bold text-[#1106de] uppercase tracking-wider mb-1">
+                      <div className="text-xs font-bold text-[#002366] uppercase tracking-wider mb-1">
                         {payment.service} REPORT
                       </div>
-                      <div className="text-xs font-semibold text-[#1106de] bg-[#1106de]/10 px-2 py-1 rounded-full w-fit mt-2">
+                      <div className="text-xs font-semibold text-[#002366] bg-[#002366]/10 px-2 py-1 rounded-full w-fit mt-2">
                         1 Year Analysis
                       </div>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#1106de]/10 transition-colors">
-                      <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#1106de]" />
+                    <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#002366]/10 transition-colors">
+                      <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#002366]" />
                     </div>
                   </div>
 
@@ -209,7 +209,7 @@ export default function CustomerPaymentsPage() {
                     <Button
                       onClick={() => handlePay(payment)}
                       disabled={processingId !== null}
-                      className="w-full h-11 bg-[#1106de] hover:bg-[#3f32a3]/80 hover:tracking-[0.05em] text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                      className="w-full h-11 bg-[#002366] hover:bg-[#3f32a3]/80 hover:tracking-[0.05em] text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                     >
                       {processingId === payment.id ? (
                         <>

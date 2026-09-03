@@ -1,4 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
+﻿import { motion, AnimatePresence } from "framer-motion";
 import { X, User, Building2, CreditCard } from "lucide-react";
 
 interface PayerSelectionModalProps {
@@ -34,7 +34,7 @@ export default function PayerSelectionModal({
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10"
           >
-            <div className="bg-[#1106de] p-6 pb-8 text-white relative">
+            <div className="bg-[#002366] p-6 pb-8 text-white relative">
               <div
                 className="absolute top-4 right-4 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
                 onClick={onClose}
@@ -55,9 +55,9 @@ export default function PayerSelectionModal({
             <div className="p-6 pb-8 -mt-4 bg-white rounded-t-3xl relative flex flex-col items-center gap-4">
               <button
                 onClick={onUserPay}
-                className="w-full text-left p-4 rounded-2xl border-2 border-slate-100 hover:border-[#1106de] hover:bg-slate-50 transition-all group flex items-start gap-4"
+                className="w-full text-left p-4 rounded-2xl border-2 border-slate-100 hover:border-[#002366] hover:bg-slate-50 transition-all group flex items-start gap-4"
               >
-                <div className="h-10 w-10 rounded-full bg-blue-50 text-[#1106de] flex items-center justify-center shrink-0 group-hover:bg-[#1106de] group-hover:text-white transition-colors">
+                <div className="h-10 w-10 rounded-full bg-blue-50 text-[#002366] flex items-center justify-center shrink-0 group-hover:bg-[#002366] group-hover:text-white transition-colors">
                   <Building2 className="h-5 w-5" />
                 </div>
                 <div>
@@ -70,9 +70,9 @@ export default function PayerSelectionModal({
 
               <button
                 onClick={onCustomerPay}
-                className="w-full text-left p-4 rounded-2xl border-2 border-slate-100 hover:border-[#1106de] hover:bg-slate-50 transition-all group flex items-start gap-4"
+                className="w-full text-left p-4 rounded-2xl border-2 border-slate-100 hover:border-[#002366] hover:bg-slate-50 transition-all group flex items-start gap-4"
               >
-                <div className="h-10 w-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 group-hover:bg-[#1106de] group-hover:text-white transition-colors">
+                <div className="h-10 w-10 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center shrink-0 group-hover:bg-[#002366] group-hover:text-white transition-colors">
                   <User className="h-5 w-5" />
                 </div>
                 <div>

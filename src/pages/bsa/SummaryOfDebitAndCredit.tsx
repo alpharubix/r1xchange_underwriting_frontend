@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -275,7 +275,7 @@ export default function SummaryOfDebitAndCredit() {
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-black text-white hover:bg-black hover:text-white focus:bg-black focus:text-white',
+                        day_selected: 'bg-[#002366] text-white hover:bg-[#002366] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-gray-100 text-black',
                         nav_button: 'border border-black text-black hover:bg-gray-100',
                         chevron: 'text-black',
@@ -385,7 +385,7 @@ export default function SummaryOfDebitAndCredit() {
               <div className="flex gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-black hover:bg-black/90 text-white gap-2"
+                  className="bg-[#002366] hover:bg-[#001744] text-white gap-2"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
@@ -470,9 +470,9 @@ export default function SummaryOfDebitAndCredit() {
           ) : data ? (
             <div className="overflow-x-auto pb-4">
               <table className="w-full text-sm text-left border-collapse border border-gray-300">
-                <thead className="text-xs text-white bg-black">
+                <thead className="text-xs text-white bg-[#002366]">
                   <tr>
-                    <th className="px-4 py-3 font-semibold border border-gray-400 w-48 sticky left-0 bg-black z-20">
+                    <th className="px-4 py-3 font-semibold border border-gray-400 w-48 sticky left-0 bg-[#002366] z-20">
                       Months
                     </th>
                     <th className="px-4 py-3 font-semibold text-right border border-gray-400 min-w-[120px]">

@@ -1,4 +1,4 @@
-import { ArrowLeft, Home } from "lucide-react";
+﻿import { ArrowLeft, Home } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/r1xchangeLogoWhiteWebView.svg";
 
@@ -6,7 +6,7 @@ export default function NotF() {
   const navigate = useNavigate();
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black flex items-center justify-center px-6">
+    <main className="relative min-h-screen overflow-hidden bg-[#002366] flex items-center justify-center px-6">
       {/* ================= Background Pattern ================= */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-15 animate-[moveRight_10s_both_infinite_alternate_ease]">
         <div className="grid grid-cols-6 gap-2 rotate-[-10deg] scale-125">

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+﻿import { useQuery } from '@tanstack/react-query';
 import { getGstHistory } from '@/api/gst';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
@@ -29,7 +29,7 @@ export default function GstHistoryPage() {
           </div>
           <button
             onClick={() => navigate('/gst/analysis')}
-            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#000000] hover:bg-[#000000]/50 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#000000]"
+            className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-[#002366] hover:bg-[#002366]/50 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366]"
           >
             <svg
               className="-ml-1 mr-2 h-5 w-5"
@@ -50,7 +50,7 @@ export default function GstHistoryPage() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
-            <span className="h-10 w-10 rounded-full border-4 border-[#000000]/20 border-t-[#000000] animate-spin" />
+            <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
           </div>
         ) : isError ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12 text-center">
@@ -77,7 +77,7 @@ export default function GstHistoryPage() {
             </p>
             <button
               onClick={() => navigate('/gst/analysis')}
-              className="text-[#000000] font-medium hover:underline"
+              className="text-[#002366] font-medium hover:underline"
             >
               Start your first analysis
             </button>
@@ -155,7 +155,7 @@ export default function GstHistoryPage() {
                               state: { gst_reference_id: item.reference_id },
                             })
                           }
-                          className="text-[#000000] hover:text-[#000060]"
+                          className="text-[#002366] hover:text-[#001744]"
                         >
                           View Report
                         </button>

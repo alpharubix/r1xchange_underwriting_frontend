@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChevronRight,
   ChevronLeft,
   Anchor as AnchorIcon,
@@ -43,7 +43,7 @@ export default function Sidebar({
       {/* Toggle Button */}
       <button
         onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-        className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white border-2 border-[#1106de] text-[#1106de] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
+        className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white border-2 border-[#002366] text-[#002366] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110 cursor-pointer"
         aria-label="Toggle sidebar"
       >
         {sidebarCollapsed ? (
@@ -57,12 +57,12 @@ export default function Sidebar({
       <div className="bg-white rounded-3xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80">
         <div className={`flex flex-col ${sidebarCollapsed ? "items-center" : ""}`}>
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#1106de] text-white flex items-center justify-center font-black text-xl shadow-md shadow-[#1106de]/25 shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center font-black text-xl shadow-md shadow-[#002366]/25 shrink-0">
               C
             </div>
             {!sidebarCollapsed && (
               <div className="leading-tight">
-                <div className="font-['Space_Grotesk'] text-2xl font-black text-[#1106de] tracking-tight">
+                <div className="font-['Space_Grotesk'] text-2xl font-black text-[#002366] tracking-tight">
                   CRISP
                 </div>
                 <div className="text-[9.5px] uppercase font-bold text-gray-400 tracking-[0.2em] mt-0.5">
@@ -73,8 +73,8 @@ export default function Sidebar({
           </div>
           {!sidebarCollapsed && (
             <div className="mt-3.5 flex justify-center w-full">
-              <span className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#eff6ff] text-[#1106de] w-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#1106de]" />
+              <span className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#eff6ff] text-[#002366] w-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#002366]" />
                 {isSuperAnchor ? "Anchor View" : "User View"}
               </span>
             </div>
@@ -88,7 +88,7 @@ export default function Sidebar({
           <button
             onClick={() => setActiveTab("anchor")}
             className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "anchor"
-              ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
+              ? "bg-[#002366] text-white shadow-md shadow-[#002366]/25"
               : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
               } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
             title="Anchors"
@@ -102,7 +102,7 @@ export default function Sidebar({
           <button
             onClick={() => setActiveTab("customer")}
             className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "customer"
-              ? "bg-[#1106de] text-white shadow-md shadow-[#1106de]/25"
+              ? "bg-[#002366] text-white shadow-md shadow-[#002366]/25"
               : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
               } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
             title="Customer"
@@ -126,7 +126,7 @@ export default function Sidebar({
                   className="h-full w-full object-contain"
                 />
               ) : (
-                <div className="h-full w-full rounded-lg bg-[#eff6ff] text-[#1106de] flex items-center justify-center font-bold text-sm">
+                <div className="h-full w-full rounded-lg bg-[#eff6ff] text-[#002366] flex items-center justify-center font-bold text-sm">
                   {initialLetter}
                 </div>
               )}

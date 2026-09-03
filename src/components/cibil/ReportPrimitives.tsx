@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+﻿import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -119,7 +119,7 @@ export function SectionCard({
 }) {
   return (
     <section className={cn('overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm', className)}>
-      <div className="border-b border-blue-900/30 bg-[#1106de] px-4 py-3 text-white">
+      <div className="border-b border-blue-900/30 bg-[#002366] px-4 py-3 text-white">
         <h3 className="text-sm font-semibold uppercase tracking-wide">{title}</h3>
         {description ? <p className="mt-1 text-xs text-white/85">{description}</p> : null}
       </div>
@@ -139,7 +139,7 @@ export function EmptyReportState({ message = 'No data returned for this section.
 export function LoadingState({ label = 'Loading report section...' }: { label?: string }) {
   return (
     <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white">
-      <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#1106de] animate-spin" />
+      <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#002366] animate-spin" />
       <span className="text-sm font-medium text-slate-600">{label}</span>
     </div>
   );
@@ -166,7 +166,7 @@ export function MetricGrid({ items }: { items: MetricItem[] }) {
           <p
             className={cn(
               'mt-2 break-words text-base font-semibold text-slate-900',
-              item.tone === 'strong' && 'text-[#1106de]',
+              item.tone === 'strong' && 'text-[#002366]',
               item.tone === 'danger' && 'text-red-600'
             )}
           >

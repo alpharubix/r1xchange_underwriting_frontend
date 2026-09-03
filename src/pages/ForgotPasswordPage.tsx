@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -101,7 +101,7 @@ function EmailStep({
       <div className="space-y-2">
         <Label htmlFor="forgot-email">Email Address</Label>
         <div className="relative">
-          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]" />
+          <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]" />
           <Input
             id="forgot-email"
             type="email"
@@ -139,7 +139,7 @@ function EmailStep({
 
       <p className="text-center text-sm text-gray-600">
         Remembered it?{" "}
-        <Link to="/login" className="font-semibold text-[#000000] hover:underline">
+        <Link to="/login" className="font-semibold text-[#002366] hover:underline">
           Back to Sign In
         </Link>
       </p>
@@ -192,15 +192,15 @@ function OtpStep({
       )}
 
       {/* Email badge */}
-      <div className="rounded-lg bg-blue-50 border border-[#000000]/0 px-4 py-3 flex items-center gap-3">
-        <Mail className="h-4 w-4 text-[#000000] shrink-0" />
-        <p className="text-sm text-[#000000] font-medium truncate">{email}</p>
+      <div className="rounded-lg bg-blue-50 border border-[#002366]/0 px-4 py-3 flex items-center gap-3">
+        <Mail className="h-4 w-4 text-[#002366] shrink-0" />
+        <p className="text-sm text-[#002366] font-medium truncate">{email}</p>
       </div>
 
       <div className="space-y-2">
         <Label htmlFor="forgot-otp">One-Time Password (OTP)</Label>
         <div className="relative">
-          <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]/40" />
+          <KeyRound className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
           <Input
             id="forgot-otp"
             type="text"
@@ -217,7 +217,7 @@ function OtpStep({
           </p>
         )}
         <p className="text-xs text-gray-400">
-          Check your inbox — OTP may take a few seconds to arrive.
+          Check your inbox â€” OTP may take a few seconds to arrive.
         </p>
       </div>
 
@@ -243,7 +243,7 @@ function OtpStep({
       <button
         type="button"
         onClick={onBack}
-        className="w-full flex items-center justify-center gap-1.5 text-sm text-gray-500 hover:text-[#000000] transition-colors"
+        className="w-full flex items-center justify-center gap-1.5 text-sm text-gray-500 hover:text-[#002366] transition-colors"
       >
         <ArrowLeft className="h-3.5 w-3.5" />
         Change email
@@ -290,7 +290,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
       <div className="space-y-2">
         <Label htmlFor="reset-password">New Password</Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]/40" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
           <Input
             id="reset-password"
             type={showPassword ? "text" : "password"}
@@ -302,7 +302,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#000000]/40 hover:text-[#000000] transition-colors"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[#002366]/40 hover:text-[#002366] transition-colors"
             aria-label="Toggle password visibility"
           >
             {showPassword ? (
@@ -365,7 +365,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
       <div className="space-y-2">
         <Label htmlFor="reset-confirm">Confirm New Password</Label>
         <div className="relative">
-          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]/40" />
+          <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
           <Input
             id="reset-confirm"
             type={showPassword ? "text" : "password"}
@@ -415,7 +415,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex">
       {/* Left Panel */}
-      <div className="hidden lg:flex w-1/2 bg-[#000000] flex-col items-center justify-center p-12 relative overflow-hidden">
+      <div className="hidden lg:flex w-1/2 bg-[#002366] flex-col items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/5" />
           <div className="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-white/5" />
@@ -445,7 +445,7 @@ export default function ForgotPasswordPage() {
                 <div
                   className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
                     step === s
-                      ? "bg-white text-[#000000]"
+                      ? "bg-white text-[#002366]"
                       : STEP_META[s].step < meta.step
                         ? "bg-white/30 text-white"
                         : "bg-white/10 text-white/40"
@@ -492,7 +492,7 @@ export default function ForgotPasswordPage() {
                 <div
                   className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
                     step === s
-                      ? "bg-[#000000] text-white"
+                      ? "bg-[#002366] text-white"
                       : STEP_META[s].step < meta.step
                         ? "bg-green-500 text-white"
                         : "bg-gray-200 text-grey-400"
@@ -515,11 +515,11 @@ export default function ForgotPasswordPage() {
             ))}
           </div>
 
-          <Card className="shadow-2xl border-0 ring-1 ring-[#000000]/10">
+          <Card className="shadow-2xl border-0 ring-1 ring-[#002366]/10">
             <CardHeader className="space-y-2 pb-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#000000]/10">
-                  <ShieldCheck className="h-5 w-5 text-[#000000]" />
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#002366]/10">
+                  <ShieldCheck className="h-5 w-5 text-[#002366]" />
                 </div>
                 <div>
                   <CardTitle className="text-2xl">{meta.title}</CardTitle>

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+﻿import { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
@@ -427,14 +427,14 @@ export default function AnchorCustomerPage() {
         {/* Top Header Block */}
         <header className="mx-6 mt-6 mb-2 bg-white rounded-3xl h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-sm border border-gray-100/80 transition-all">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-[#1106de] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0">
+            <div className="h-9 w-9 rounded-xl bg-[#002366] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0">
               C
             </div>
-            <span className="font-['Space_Grotesk'] text-2xl font-black text-[#1106de] tracking-tight flex items-center">
+            <span className="font-['Space_Grotesk'] text-2xl font-black text-[#002366] tracking-tight flex items-center">
               CRISP
             </span>
             <div className="h-6 w-[1px] bg-gray-200 mx-1"></div>
-            <span className="text-xs font-semibold text-[#1106de] bg-[#eff6ff] px-3.5 py-1.5 rounded-full flex items-center gap-2">
+            <span className="text-xs font-semibold text-[#002366] bg-[#eff6ff] px-3.5 py-1.5 rounded-full flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4cd15b] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#4cd15b]"></span>
@@ -454,7 +454,7 @@ export default function AnchorCustomerPage() {
                     className="h-full w-full object-contain"
                   />
                 ) : (
-                  <div className="h-full w-full rounded-full bg-[#1106de] text-white flex items-center justify-center font-bold text-sm">
+                  <div className="h-full w-full rounded-full bg-[#002366] text-white flex items-center justify-center font-bold text-sm">
                     {brand.initial}
                   </div>
                 )}
@@ -516,7 +516,7 @@ export default function AnchorCustomerPage() {
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Anchor Code</span>
-                          <span className="text-base font-mono font-extrabold text-[#1106de] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
+                          <span className="text-base font-mono font-extrabold text-[#002366] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Login ID</span>
@@ -564,7 +564,7 @@ export default function AnchorCustomerPage() {
                             setSelectedAnchorFilter(selectedAnchor?._id || selectedAnchor?.anchor_code || null);
                             setActiveTab("customer");
                           }}
-                          className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                          className="bg-[#002366] hover:bg-[#001744] text-white font-semibold transition-all rounded-xl h-11 px-6 flex items-center gap-2 shadow-sm shadow-[#002366]/20 cursor-pointer"
                         >
                           <Eye className="h-5 w-5" />
                           View Customers under User
@@ -614,8 +614,8 @@ export default function AnchorCustomerPage() {
 
               {isSuperAnchor && !selectedAnchorFilter ? (
                 <div className="flex flex-col items-center justify-center p-12 text-center bg-white border border-gray-100 rounded-3xl space-y-4 shadow-sm min-h-[350px]">
-                  <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center text-[#1106de] shadow-inner">
-                    <Users className="h-8 w-8 text-[#1106de]" />
+                  <div className="h-16 w-16 rounded-full bg-blue-50 flex items-center justify-center text-[#002366] shadow-inner">
+                    <Users className="h-8 w-8 text-[#002366]" />
                   </div>
                   <div className="max-w-md space-y-2">
                     <h3 className="text-lg font-bold text-slate-900">No Anchor Selected</h3>
@@ -625,7 +625,7 @@ export default function AnchorCustomerPage() {
                   </div>
                   <Button
                     onClick={() => setActiveTab("anchor")}
-                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#1106de]/20"
+                    className="bg-[#002366] hover:bg-[#001744] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#002366]/20"
                   >
                     Go to Anchors List
                   </Button>
@@ -646,7 +646,7 @@ export default function AnchorCustomerPage() {
                             placeholder="Search Account ID..."
                             value={filterUserId}
                             onChange={(e) => setFilterUserId(e.target.value)}
-                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
@@ -658,7 +658,7 @@ export default function AnchorCustomerPage() {
                             placeholder="Search User Name..."
                             value={filterCustomerName}
                             onChange={(e) => setFilterCustomerName(e.target.value)}
-                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
@@ -670,7 +670,7 @@ export default function AnchorCustomerPage() {
                             placeholder="Search Mobile Number..."
                             value={filterPhoneNo}
                             onChange={(e) => setFilterPhoneNo(e.target.value)}
-                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
@@ -682,7 +682,7 @@ export default function AnchorCustomerPage() {
                             placeholder="Search Company..."
                             value={filterCompanyName}
                             onChange={(e) => setFilterCompanyName(e.target.value)}
-                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
 
@@ -694,7 +694,7 @@ export default function AnchorCustomerPage() {
                             placeholder="Search GST No..."
                             value={filterGSTNo}
                             onChange={(e) => setFilterGSTNo(e.target.value)}
-                            className="h-10 text-xs border border-gray-200/90 focus:border-[#1106de] focus:ring-[#1106de] rounded-xl shadow-none bg-white placeholder:text-gray-400"
+                            className="h-10 text-xs border border-gray-200/90 focus:border-[#002366] focus:ring-[#002366] rounded-xl shadow-none bg-white placeholder:text-gray-400"
                           />
                         </div>
                       </div>
@@ -707,7 +707,7 @@ export default function AnchorCustomerPage() {
                             value={filterStatus || "all"}
                             onValueChange={(val) => setFilterStatus(val === "all" ? "" : val)}
                           >
-                            <SelectTrigger className="w-full h-10 px-3 border border-gray-200/90 rounded-xl text-xs font-medium text-gray-700 bg-white focus:ring-[#1106de] outline-none shadow-none">
+                            <SelectTrigger className="w-full h-10 px-3 border border-gray-200/90 rounded-xl text-xs font-medium text-gray-700 bg-white focus:ring-[#002366] outline-none shadow-none">
                               <SelectValue placeholder="All Statuses" />
                             </SelectTrigger>
                             <SelectContent className="z-[110] rounded-xl border-gray-100 shadow-xl overflow-hidden bg-white">
@@ -761,7 +761,7 @@ export default function AnchorCustomerPage() {
                             <tr>
                               <td colSpan={11} className="py-12 text-center text-gray-400 font-bold">
                                 <div className="flex justify-center items-center gap-3">
-                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#1106de] animate-spin" />
+                                  <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
                                   <span>Loading users list...</span>
                                 </div>
                               </td>
@@ -886,7 +886,7 @@ export default function AnchorCustomerPage() {
                           key={page}
                           onClick={() => setCurrentPage(page)}
                           className={`h-9 w-9 rounded-xl border text-sm font-semibold transition-all cursor-pointer ${currentPage === page
-                            ? 'bg-[#1106de] border-[#1106de] text-white shadow-sm shadow-[#1106de]/20'
+                            ? 'bg-[#002366] border-[#002366] text-white shadow-sm shadow-[#002366]/20'
                             : 'border-gray-200 hover:bg-gray-50 text-gray-600'
                             }`}
                         >
@@ -973,7 +973,7 @@ export default function AnchorCustomerPage() {
                       onValueChange={(val) => setNewCustomerForm({ ...newCustomerForm, anchor_id: val })}
                       required
                     >
-                      <SelectTrigger id="cust-anchor" className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#1106de] outline-none">
+                      <SelectTrigger id="cust-anchor" className="w-full h-10 px-3 border border-slate-200 rounded-xl text-xs font-medium text-slate-700 bg-white focus:ring-[#002366] outline-none">
                         <SelectValue placeholder="Select an Anchor Organization" />
                       </SelectTrigger>
                       <SelectContent className="z-[110] rounded-xl border-slate-200 shadow-xl overflow-hidden bg-white">
@@ -1002,7 +1002,7 @@ export default function AnchorCustomerPage() {
                       placeholder="Enter Customer Name"
                       value={newCustomerForm.name}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, name: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#002366] focus:ring-[#002366] shadow-none"
                       autoComplete="off"
                     />
                   </div>
@@ -1019,7 +1019,7 @@ export default function AnchorCustomerPage() {
                         placeholder="E.g., 9876543210"
                         value={newCustomerForm.phone}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, phone: e.target.value })}
-                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
+                        className="h-10 pl-9 rounded-xl border-slate-200 focus:border-[#002366] focus:ring-[#002366] shadow-none"
                         autoComplete="off"
                       />
                     </div>
@@ -1035,7 +1035,7 @@ export default function AnchorCustomerPage() {
                     placeholder="E.g., ABC Pvt Ltd"
                     value={newCustomerForm.company_name}
                     onChange={(e) => setNewCustomerForm({ ...newCustomerForm, company_name: e.target.value })}
-                    className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
+                    className="h-10 rounded-xl border-slate-200 focus:border-[#002366] focus:ring-[#002366] shadow-none"
                     autoComplete="off"
                   />
                 </div>
@@ -1052,7 +1052,7 @@ export default function AnchorCustomerPage() {
                       placeholder="E.g., name@domain.com"
                       value={newCustomerForm.email_id}
                       onChange={(e) => setNewCustomerForm({ ...newCustomerForm, email_id: e.target.value })}
-                      className="h-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
+                      className="h-10 rounded-xl border-slate-200 focus:border-[#002366] focus:ring-[#002366] shadow-none"
                       autoComplete="new-email"
                     />
                   </div>
@@ -1069,7 +1069,7 @@ export default function AnchorCustomerPage() {
                         placeholder="Enter account password"
                         value={newCustomerForm.password}
                         onChange={(e) => setNewCustomerForm({ ...newCustomerForm, password: e.target.value })}
-                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#1106de] focus:ring-[#1106de] shadow-none"
+                        className="h-10 pr-10 rounded-xl border-slate-200 focus:border-[#002366] focus:ring-[#002366] shadow-none"
                         autoComplete="new-password"
                       />
                       <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
@@ -1103,7 +1103,7 @@ export default function AnchorCustomerPage() {
                   <Button
                     type="submit"
                     disabled={registerMutation.isPending}
-                    className="bg-[#1106de] hover:bg-[#0e05b5] text-white rounded-xl px-5 h-10 shadow-md shadow-[#1106de]/20 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="bg-[#002366] hover:bg-[#001744] text-white rounded-xl px-5 h-10 shadow-md shadow-[#002366]/20 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {registerMutation.isPending ? (
                       <span className="flex items-center gap-2">

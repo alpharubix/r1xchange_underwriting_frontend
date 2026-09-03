@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,7 +44,7 @@ export default function LoginPage() {
       )} */}
       <div className="min-h-screen flex">
         {/* Left Panel */}
-        <div className="hidden lg:flex w-1/2 bg-[#000000] flex-col items-center justify-center p-12 relative overflow-hidden">
+        <div className="hidden lg:flex w-1/2 bg-[#002366] flex-col items-center justify-center p-12 relative overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-24 -left-24 w-80 h-80 rounded-full bg-white/5" />
           <div className="absolute -bottom-32 -right-16 w-96 h-96 rounded-full bg-white/5" />
@@ -102,7 +102,7 @@ export default function LoginPage() {
                     Email Address
                   </Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]/40" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
                     <Input
                       id="login-email"
                       type="email"
@@ -129,13 +129,13 @@ export default function LoginPage() {
                     <Label htmlFor="login-password" className="text-black">Password</Label>
                     <Link
                       to="/forgot-password"
-                      className="text-xs text-[#000000] hover:underline font-medium"
+                      className="text-xs text-[#002366] hover:underline font-medium"
                     >
                       Forgot password?
                     </Link>
                   </div>
                   <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#000000]/40" />
+                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
                     <Input
                       id="login-password"
                       type={showPassword ? "text" : "password"}
@@ -151,7 +151,7 @@ export default function LoginPage() {
                     <button
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#000000]/40 hover:text-[#000000] transition-colors"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#002366]/40 hover:text-[#002366] transition-colors"
                       aria-label="Toggle password visibility"
                     >
                       {showPassword ? (
@@ -171,7 +171,7 @@ export default function LoginPage() {
                 {/* Submit */}
                 <Button
                   type="submit"
-                  className=" group w-full h-12 text-base gap-2 bg-[#000000] hover:bg-[#000000]/85 text-white font-semibold flex items-center justify-center "
+                  className=" group w-full h-12 text-base gap-2 bg-[#002366] hover:bg-[#002366]/85 text-white font-semibold flex items-center justify-center "
                   disabled={loginMutation.isPending}
                   id="login-submit"
                 >
@@ -203,7 +203,7 @@ export default function LoginPage() {
                   Don't have an account?{" "}
                   <Link
                     to="/signup"
-                    className="font-semibold text-[#000000] hover:underline"
+                    className="font-semibold text-[#002366] hover:underline"
                     id="goto-signup"
                   >
                     Create account

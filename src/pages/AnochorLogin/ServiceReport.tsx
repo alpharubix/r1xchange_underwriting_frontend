@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -21,6 +21,7 @@ import CibilReportView from "./cibil/ViewReport";
 import SaveMoneyReportView from "./money/SaveMoneyReportView";
 import RectifyMoneyReportView from "./money/RectifyMoneyReportView";
 import AccessMoneyReportView from "./money/AccessMoneyReportView";
+import MoneyToolsReportView from "./money/MoneyToolsReportView";
 import { getWalletBalance } from '@/api/payment';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
@@ -105,7 +106,7 @@ const formatDateOnly = (dateString: string) => {
 };
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
-  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
+  const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money" | "money_tools">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
@@ -296,7 +297,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       </div>
 
       <div className="flex items-center gap-4 bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-        <div className="h-14 w-14 rounded-full bg-[#eff6ff] text-[#1106de] flex items-center justify-center font-bold text-xl shadow-inner border border-blue-100/80 shrink-0 tracking-wider">
+        <div className="h-14 w-14 rounded-full bg-[#eff6ff] text-[#002366] flex items-center justify-center font-bold text-xl shadow-inner border border-blue-100/80 shrink-0 tracking-wider">
           {getCustomerInitials(selectedCustomer.name || selectedCustomer.customer_name || selectedCustomer.company_name)}
         </div>
         <div>
@@ -308,15 +309,16 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       </div>
 
       <div className="flex border-b border-slate-100 gap-6">
-        {(["bsa", "gst", "itr", "cibil", "save_money", "rectify_money", "access_money"] as const).map((tab) => {
+        {(["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money", "money_tools"] as const).map((tab) => {
           const tabLabels: Record<string, string> = {
             bsa: "BSA",
             gst: "GST",
             itr: "ITR",
             cibil: "CIBIL",
+            access_money: "Access Money",
             save_money: "Save Money",
             rectify_money: "Rectify Money",
-            access_money: "Access Money"
+            money_tools: "Money Tools"
           };
           const isActive = reportsSubTab === tab;
           return (
@@ -332,12 +334,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                 setViewingRectifyMoneyReport(null);
                 localStorage.removeItem("selected_itr_report_id");
               }}
-              className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${isActive ? "text-[#1106de]" : "text-slate-400 hover:text-slate-600"
+              className={`pb-3 text-sm font-bold transition-all relative cursor-pointer ${isActive ? "text-[#002366]" : "text-slate-400 hover:text-slate-600"
                 }`}
             >
               {tabLabels[tab]}
               {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1106de] rounded-full animate-fade-in" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#002366] rounded-full animate-fade-in" />
               )}
             </button>
           );
@@ -351,7 +353,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 variant="outline"
                 onClick={() => setViewingBsaReport(null)}
-                className="flex items-center gap-2 border-[#1106de] text-[#1106de] hover:bg-[#1106de]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
+                className="flex items-center gap-2 border-[#002366] text-[#002366] hover:bg-[#002366]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
               >
                 <ArrowLeft className="h-4 w-4" /> Back to BSA Reports List
               </Button>
@@ -372,12 +374,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                   <button
                     key={tab}
                     onClick={() => setBsaDetailTab(tab)}
-                    className={`pb-2 text-xs font-bold transition-all relative cursor-pointer ${isActive ? "text-[#1106de]" : "text-slate-400 hover:text-slate-600"
+                    className={`pb-2 text-xs font-bold transition-all relative cursor-pointer ${isActive ? "text-[#002366]" : "text-slate-400 hover:text-slate-600"
                       }`}
                   >
                     {labels[tab]}
                     {isActive && (
-                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#1106de] rounded-full animate-fade-in" />
+                      <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#002366] rounded-full animate-fade-in" />
                     )}
                   </button>
                 );
@@ -413,7 +415,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
             <Button
               onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
               disabled={isCheckingWallet}
-              className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+              className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
             >
               {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
               + Create New BSA Report
@@ -429,7 +431,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
                 disabled={isCheckingWallet}
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
               >
                 {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New BSA Report
@@ -455,7 +457,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={6} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -484,7 +486,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                   onClick={() => {
                                     setViewingBsaReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -520,7 +522,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 onClick={() => handleCreateReport('GST', 'GST', 561, () => setIsGstModalOpen(true))}
                 disabled={isCheckingWallet}
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
               >
                 {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New GST Report
@@ -547,7 +549,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={8} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -584,7 +586,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_gst_from_date", report.gstFromDate || '');
                                     localStorage.setItem("selected_gst_to_date", report.gstToDate || '');
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -623,7 +625,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 onClick={() => handleCreateReport('ITR', 'ITR', 525, () => setIsItrModalOpen(true))}
                 disabled={isCheckingWallet}
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
               >
                 {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New ITR Report
@@ -648,7 +650,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={5} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -683,7 +685,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_itr_report_id", report.reportId);
                                     setViewingItrReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -719,7 +721,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
               <Button
                 onClick={() => handleCreateReport('CIBIL', 'CIBIL', 643, () => setIsCibilModalOpen(true))}
                 disabled={isCheckingWallet}
-                className="bg-[#1106de] hover:bg-[#0e05b5] text-white font-semibold rounded-xl shadow-sm shadow-[#1106de]/20 cursor-pointer"
+                className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
               >
                 {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                 + Create New CIBIL Report
@@ -743,7 +745,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                         <tr>
                           <td colSpan={4} className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10">
                             <div className="flex flex-col items-center justify-center gap-2">
-                              <Loader2 className="h-8 w-8 text-[#1106de] animate-spin" />
+                              <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                               <span>Loading reports...</span>
                             </div>
                           </td>
@@ -772,7 +774,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                 <button
                                   type="button"
                                   onClick={() => setViewingCibilReport(report)}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#1106de] hover:border-[#1106de] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -958,6 +960,12 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
 
       {reportsSubTab === "access_money" && (
         <AccessMoneyReportView
+          selectedCustomer={selectedCustomer}
+        />
+      )}
+
+      {reportsSubTab === "money_tools" && (
+        <MoneyToolsReportView 
           selectedCustomer={selectedCustomer}
         />
       )}

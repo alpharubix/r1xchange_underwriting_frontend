@@ -1,4 +1,4 @@
-import * as React from "react"
+﻿import * as React from "react"
 import {
   ChevronDownIcon,
   ChevronLeftIcon,
@@ -102,11 +102,11 @@ function Calendar({
           defaultClassNames.day
         ),
         range_start: cn(
-          "bg-black text-white rounded-l-md",
+          "bg-[#002366] text-white rounded-l-md",
           defaultClassNames.range_start
         ),
         range_middle: cn("rounded-none bg-gray-200 text-black", defaultClassNames.range_middle),
-        range_end: cn("bg-black text-white rounded-r-md", defaultClassNames.range_end),
+        range_end: cn("bg-[#002366] text-white rounded-r-md", defaultClassNames.range_end),
         today: cn(
           "bg-gray-200 text-black rounded-md data-[selected=true]:rounded-none",
           defaultClassNames.today
@@ -199,7 +199,7 @@ function CalendarDayButton({
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
       className={cn(
-        "data-[selected-single=true]:bg-black data-[selected-single=true]:text-white data-[range-middle=true]:bg-gray-200 data-[range-middle=true]:text-black data-[range-start=true]:bg-black data-[range-start=true]:text-white data-[range-end=true]:bg-black data-[range-end=true]:text-white group-data-[focused=true]/day:border-black group-data-[focused=true]/day:ring-black/50 flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70 hover:bg-gray-100",
+        "data-[selected-single=true]:bg-[#002366] data-[selected-single=true]:text-white data-[range-middle=true]:bg-gray-200 data-[range-middle=true]:text-black data-[range-start=true]:bg-[#002366] data-[range-start=true]:text-white data-[range-end=true]:bg-[#002366] data-[range-end=true]:text-white group-data-[focused=true]/day:border-black group-data-[focused=true]/day:ring-black/50 flex aspect-square h-auto w-full min-w-[--cell-size] flex-col gap-1 font-normal leading-none data-[range-end=true]:rounded-md data-[range-middle=true]:rounded-none data-[range-start=true]:rounded-md group-data-[focused=true]/day:relative group-data-[focused=true]/day:z-10 group-data-[focused=true]/day:ring-[3px] [&>span]:text-xs [&>span]:opacity-70 hover:bg-gray-100",
         defaultClassNames.day,
         className
       )}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import {
@@ -53,7 +53,7 @@ export default function DashboardPage() {
     {
       title: 'Bank Statement Analysis',
       description: 'Upload & Analysis',
-      icon: <Building2 className="h-8 w-8 text-[#000000]" />,
+      icon: <Building2 className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
         setIsModalOpen(true);
       },
@@ -62,7 +62,7 @@ export default function DashboardPage() {
     {
       title: 'GSTR Analysis',
       description: 'Analysis GSTR',
-      icon: <FileText className="h-8 w-8 text-[#000000]" />,
+      icon: <FileText className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
         navigate('/gst/analysis');
       },
@@ -71,7 +71,7 @@ export default function DashboardPage() {
     {
       title: 'ITR',
       description: 'Income Tax Return',
-      icon: <PieChart className="h-8 w-8 text-[#000000]" />,
+      icon: <PieChart className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
         setIsItrModalOpen(true);
@@ -80,7 +80,7 @@ export default function DashboardPage() {
     {
       title: 'KYC',
       description: 'Identity Verification',
-      icon: <ShieldCheck className="h-8 w-8 text-[#000000]" />,
+      icon: <ShieldCheck className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
         setIsKycModalOpen(true);
@@ -89,7 +89,7 @@ export default function DashboardPage() {
     {
       title: 'CIBIL Score',
       description: 'Credit Report',
-      icon: <CreditCard className="h-8 w-8 text-[#000000]" />,
+      icon: <CreditCard className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
         navigate('/cibil');
@@ -108,7 +108,7 @@ export default function DashboardPage() {
       <div className="p-8 pb-4 animate-fade-in relative min-h-screen flex flex-col">
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-[#000000] mb-2">Dashboard</h1>
+            <h1 className="text-3xl font-bold text-[#002366] mb-2">Dashboard</h1>
             <p className="text-gray-600">
               Access your financial documents and analysis tools
             </p>
@@ -116,9 +116,9 @@ export default function DashboardPage() {
           <Button
             onClick={() => navigate('/help-center')}
             variant="outline"
-            className="flex items-center gap-2 border-[#000000]/30 text-[#000000] hover:bg-[#000000]/5 px-4 py-2 font-semibold shadow-sm"
+            className="flex items-center gap-2 border-[#002366]/30 text-[#002366] hover:bg-[#002366]/5 px-4 py-2 font-semibold shadow-sm"
           >
-            <HelpCircle className="h-4 w-4 text-[#000000]" />
+            <HelpCircle className="h-4 w-4 text-[#002366]" />
             Help Center
           </Button>
         </div>
@@ -129,7 +129,7 @@ export default function DashboardPage() {
               key={index}
               className={`transition-all duration-300 ${item.disabled
                 ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#000000]/20 hover:border-[#000000]/50 bg-white'
+                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
                 }`}
               onClick={!item.disabled ? item.onClick : undefined}
             >
@@ -146,7 +146,7 @@ export default function DashboardPage() {
               </CardHeader>
               <CardContent>
                 {!item.disabled && (
-                  <div className="mt-4 flex items-center text-sm font-medium text-[#000000]">
+                  <div className="mt-4 flex items-center text-sm font-medium text-[#002366]">
                     Click to proceed <span className="ml-2">→</span>
                   </div>
                 )}
@@ -159,7 +159,7 @@ export default function DashboardPage() {
         <ItrUploadModal isOpen={isItrModalOpen} onClose={() => setIsItrModalOpen(false)} />
 
         <div className="flex items-center justify-center gap-4 text-sm mt-auto pt-8 pb-0">
-          <div className="w-20 h-px bg-black" />
+          <div className="w-20 h-px bg-[#002366]" />
           <span className="text-black">///</span>
 
           <span className="font-semibold text-gray-800">
@@ -173,7 +173,7 @@ export default function DashboardPage() {
           </span>
 
           <span className="text-black">///</span>
-          <div className="w-20 h-px bg-black" />
+          <div className="w-20 h-px bg-[#002366]" />
         </div>
         {/* Kyc Modal */}
         <KycModal isOpen={isKycModalOpen} onClose={() => setIsKycModalOpen(false)} />

@@ -65,6 +65,16 @@ export const getUserItrReports = async (id: string): Promise<any[]> => {
   return response.data?.data ?? response.data ?? [];
 };
 
+export const getCibilReportsMetadata = async (id: string) => {
+  const response = await apiClient.get(`/anchor/get-user-reports/cibil?cust_id=${encodeURIComponent(id)}`);
+  return response.data;
+};
+
+export const getMoneyToolsData = async (module: string, id: string) => {
+  const response = await apiClient.get(`/anchor/money-tools/${encodeURIComponent(module)}/${encodeURIComponent(id)}`);
+  return response.data;
+};
+
 export const getUserCibilReports = async (id: string): Promise<any[]> => {
   const response = await apiClient.get(`/anchor/get-user-reports/cibil?cust_id=${encodeURIComponent(id)}`);
   return response.data?.data ?? response.data ?? [];

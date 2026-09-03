@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+﻿import React, { useMemo, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 
@@ -115,7 +115,7 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
             <TabsTrigger
               key={tab.value}
               value={tab.value}
-              className="gap-2 rounded-xl px-4 py-2 data-[state=active]:bg-[#1106de] data-[state=active]:text-white font-semibold text-slate-700 data-[state=active]:shadow-sm shadow-[#1106de]/20 cursor-pointer"
+              className="gap-2 rounded-xl px-4 py-2 data-[state=active]:bg-[#002366] data-[state=active]:text-white font-semibold text-slate-700 data-[state=active]:shadow-sm shadow-[#002366]/20 cursor-pointer"
             >
               {tab.label}
               {tabStatuses[tab.value] ? (
