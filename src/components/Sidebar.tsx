@@ -11,6 +11,7 @@ import {
   FileText,
   PieChart,
   ShieldCheck,
+  CreditCard,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useMe } from "@/hooks/useUser";
@@ -75,6 +76,11 @@ const navItems = [
       { label: "Existing Reports", path: "/cibil/reports" }
     ]
   },
+  {
+    icon: CreditCard,
+    label: "Payments",
+    path: "/payments"
+  }
 ];
 
 function getInitials(name?: string): string {

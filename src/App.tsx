@@ -36,7 +36,7 @@ const ITRRatioAnalysisPage = lazy(() => import("@/pages/itr/RatioAnalysis"));
 const HelpCenterPage = lazy(() => import("@/pages/HelpCenter"));
 const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
 const ProfileManagement = lazy(()=>import("@/pages/ProfileManagement"))
-
+const CustomerPaymentsPage = lazy(() => import("@/pages/AnochorLogin/CustomerPaymentsPage"));
 
 
 function App() {
@@ -121,6 +121,7 @@ function App() {
                       <Route path="/cibil" element={<CibilCustDataFetching />} />
                       <Route path="/cibil/reports" element={<ExistingReports />} />
                       <Route path="/cibil/view-report/:reference_id" element={<ViewReport />} />
+                      <Route path="/payments" element={<CustomerPaymentsPage />} />
                       <Route path="/help-center" element={<HelpCenterPage />} />
                     </Route>
                   </Route>

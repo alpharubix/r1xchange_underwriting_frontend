@@ -25,6 +25,8 @@ import { getWalletBalance } from '@/api/payment';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from "@/components/PaymentModal";
+import PayerSelectionModal from '@/components/PayerSelectionModal';
+import { createPaymentOrder } from '@/api/payment';
 import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
 
 
@@ -131,6 +133,20 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
     onSuccess: () => {}
   });
 
+  const [payerSelectionConfig, setPayerSelectionConfig] = useState<{
+    isOpen: boolean;
+    moduleName: string;
+    serviceId: string;
+    amount: number;
+    onSuccess: () => void;
+  }>({
+    isOpen: false,
+    moduleName: '',
+    serviceId: '',
+    amount: 0,
+    onSuccess: () => {}
+  });
+
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
 
   const handleCreateReport = async (moduleName: string, serviceId: string, amount: number, onSuccess: () => void) => {
@@ -141,7 +157,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       if (res.data.is_balance_available) {
         onSuccess();
       } else {
-        setPaymentModalConfig({
+        setPayerSelectionConfig({
           isOpen: true,
           moduleName,
           serviceId,
@@ -151,8 +167,8 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to check wallet balance. Proceeding to payment.");
-      setPaymentModalConfig({
+      toast.error("Failed to check wallet balance. Proceeding to payer selection.");
+      setPayerSelectionConfig({
         isOpen: true,
         moduleName,
         serviceId,
@@ -161,6 +177,23 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       });
     } finally {
       setIsCheckingWallet(false);
+    }
+  };
+
+  const handleCustomerPay = async () => {
+    const config = payerSelectionConfig;
+    try {
+      await createPaymentOrder({
+        user_id: selectedCustomer.id,
+        userId: selectedCustomer.id,
+        service: config.serviceId,
+        amount: config.amount,
+        currency: 'INR'
+      });
+      toast.success(`Payment order created. The customer can now pay for ${config.moduleName} from their dashboard.`);
+      setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail || "Failed to create pending payment");
     }
   };
   useEffect(() => {
@@ -961,6 +994,20 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
           paymentModalConfig.onSuccess();
         }}
         custId={selectedCustomer.id}
+      />
+      
+      <PayerSelectionModal
+        isOpen={payerSelectionConfig.isOpen}
+        onClose={() => setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }))}
+        moduleName={payerSelectionConfig.moduleName}
+        onUserPay={() => {
+          setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
+          setPaymentModalConfig({
+            ...payerSelectionConfig,
+            isOpen: true
+          });
+        }}
+        onCustomerPay={handleCustomerPay}
       />
     </div>
   );

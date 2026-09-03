@@ -63,3 +63,23 @@ export async function validatePayment(payload: ValidatePaymentPayload): Promise<
   const response = await apiClient.post<ValidatePaymentResponse>(`/payments/validate-payment`, payload);
   return response.data;
 }
+
+export interface PendingPayment {
+  _id: string;
+  id: string;
+  amount: number;
+  currency: string;
+  service: string;
+  created_at: string;
+}
+
+export interface PendingPaymentsResponse {
+  message: string;
+  data: PendingPayment[];
+}
+
+export async function getPendingPayments(service?: string): Promise<PendingPaymentsResponse> {
+  const url = service ? `/payments/pending?service=${service}` : `/payments/pending`;
+  const response = await apiClient.get<PendingPaymentsResponse>(url);
+  return response.data;
+}
