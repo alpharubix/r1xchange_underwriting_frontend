@@ -511,11 +511,11 @@ export default function AnchorCustomerPage() {
                     <CardContent className="p-8 space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Anchor Name</span>
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">User Name --</span>
                           <span className="text-base font-bold text-slate-900 mt-1 block">{selectedAnchor?.anchor_name || "-"}</span>
                         </div>
                         <div>
-                          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">Anchor Code</span>
+                          <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">User Code</span>
                           <span className="text-base font-mono font-extrabold text-[#002366] mt-1 block">{selectedAnchor?.anchor_code || "-"}</span>
                         </div>
                         <div>

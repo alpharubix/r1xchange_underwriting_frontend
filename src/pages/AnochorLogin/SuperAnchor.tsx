@@ -115,8 +115,8 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
     <div className="space-y-6 animate-in fade-in duration-200">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1D1E2C]">Anchors Directory</h1>
-          <p className="text-sm text-[#8a8d97] font-medium mt-0.5">Manage and view all registered Anchor organizations</p>
+          <h1 className="font-['Space_Grotesk'] text-2xl font-bold text-[#1D1E2C]">Users Directory</h1>
+          <p className="text-sm text-[#8a8d97] font-medium mt-0.5">Manage and view all registered User organizations</p>
         </div>
         <button
           onClick={() => setIsNewAnchorModalOpen(true)}
@@ -130,12 +130,12 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
       {/* Advanced Filters Block */}
       <div className="bg-[#F6F6F8] rounded-[18px] p-5 space-y-4">
         <div className="text-xs font-bold text-[#1D1E2C] tracking-wide uppercase pb-2 border-b border-[#F0F1F5]">
-          Filter Anchors
+          Filter Users
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {/* Anchor Name */}
           <div className="space-y-1.5">
-            <Label htmlFor="filter-name" className="text-xs font-semibold text-slate-600">Anchor Name</Label>
+            <Label htmlFor="filter-name" className="text-xs font-semibold text-slate-600">User Name</Label>
             <Input
               id="filter-name"
               placeholder="Search Name..."
@@ -147,7 +147,7 @@ export default function SuperAnchor({ anchorsList, onViewCustomers, onSelectAnch
 
           {/* Anchor Code */}
           <div className="space-y-1.5">
-            <Label htmlFor="filter-code" className="text-xs font-semibold text-slate-600">Anchor Code</Label>
+            <Label htmlFor="filter-code" className="text-xs font-semibold text-slate-600">User Code</Label>
             <Input
               id="filter-code"
               placeholder="Search Code..."
