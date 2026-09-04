@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -124,6 +125,7 @@ const tabVariants = {
 
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
   const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
+  const [slideDirection, setSlideDirection] = useState(0);
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
