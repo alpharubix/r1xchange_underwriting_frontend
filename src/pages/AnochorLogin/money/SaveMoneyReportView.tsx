@@ -64,9 +64,18 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
 
   const handleSubmit = () => {
     if (!report || !report.accounts) return;
+
+    const newSelections = report.accounts.filter((acc: any) => acc.check_box && !acc.check_box_initial);
+    
+    if (newSelections.length === 0) {
+      toast.info("There are no new changes to submit");
+      return;
+    }
+
     const selected = report.accounts
       .filter((acc: any) => acc.check_box)
       .map((acc: any) => ({ account_number: acc.account_number, lender_name: acc.lender_name }));
+      
     submitMutation.mutate(selected);
   };
 
