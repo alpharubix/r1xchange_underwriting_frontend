@@ -105,6 +105,23 @@ const formatDateOnly = (dateString: string) => {
   });
 };
 
+const tabVariants = {
+  enter: (direction: number) => ({
+    x: direction > 0 ? 30 : -30,
+    opacity: 0,
+  }),
+  center: {
+    zIndex: 1,
+    x: 0,
+    opacity: 1,
+  },
+  exit: (direction: number) => ({
+    zIndex: 0,
+    x: direction < 0 ? 30 : -30,
+    opacity: 0,
+  }),
+};
+
 export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
   const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
@@ -324,6 +341,10 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
             <button
               key={tab}
               onClick={() => {
+                const tabsList = ["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money"];
+                const newIndex = tabsList.indexOf(tab);
+                const oldIndex = tabsList.indexOf(reportsSubTab);
+                setSlideDirection(newIndex > oldIndex ? 1 : -1);
                 setReportsSubTab(tab);
                 setViewingBsaReport(null);
                 setViewingGstReport(null);
@@ -345,6 +366,18 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         })}
       </div>
 
+
+      <div className="relative overflow-hidden w-full">
+        <AnimatePresence mode="wait" custom={slideDirection} initial={false}>
+          <motion.div
+            key={reportsSubTab}
+            custom={slideDirection}
+            variants={tabVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+          >
       {reportsSubTab === "bsa" && (
         viewingBsaReport ? (
           <div className="space-y-6 animate-in fade-in duration-200">
@@ -485,7 +518,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                   onClick={() => {
                                     setViewingBsaReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -585,7 +618,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_gst_from_date", report.gstFromDate || '');
                                     localStorage.setItem("selected_gst_to_date", report.gstToDate || '');
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -684,7 +717,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                     localStorage.setItem("selected_itr_report_id", report.reportId);
                                     setViewingItrReport(report);
                                   }}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -773,7 +806,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
                                 <button
                                   type="button"
                                   onClick={() => setViewingCibilReport(report)}
-                                  className="p-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
+                                  className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
                                   title="View Report"
                                 >
                                   <Eye className="h-3.5 w-3.5" />
@@ -964,6 +997,11 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       )}
 
 
+
+
+          </motion.div>
+        </AnimatePresence>
+      </div>
 
       <BsaUploadModal
         isOpen={isBsaModalOpen}

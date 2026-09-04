@@ -173,7 +173,7 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
               const isBlocked = (acc as any).check_box_initial;
               return acc.check_box && !isBlocked;
             })}
-            className="bg-[#FF6B4A] hover:bg-[#E55A39] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
+            className="bg-[#002366] hover:bg-[#001744] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
           >
             {submitMutation.isPending ? (
               <Loader2 className="h-4 w-4 animate-spin mr-2" />

@@ -313,9 +313,9 @@ export default function AnchorCustomerPage() {
       const matchesUserId = !filterUserId || c.id.toLowerCase().includes(filterUserId.toLowerCase());
       const matchesCustomerName = !filterCustomerName || (c.name || c.customer_name || "").toLowerCase().includes(filterCustomerName.toLowerCase());
       const matchesCustomerPhone = !filterPhoneNo || (c.phone || c.phone_no || "").toLowerCase().includes(filterPhoneNo.toLowerCase());
-      const matchesCompanyName = !filterCompanyName || c.company_name.toLowerCase().includes(filterCompanyName.toLowerCase());
-      const matchesGstNo = !filterGSTNo || c.gst_no.toLowerCase().includes(filterGSTNo.toLowerCase());
-      const matchesStatus = !filterStatus || c.status.toLowerCase().includes(filterStatus.toLowerCase());
+      const matchesCompanyName = !filterCompanyName || (c.company_name || "").toLowerCase().includes(filterCompanyName.toLowerCase());
+      const matchesGstNo = !filterGSTNo || (c.gst_no || "").toLowerCase().includes(filterGSTNo.toLowerCase());
+      const matchesStatus = !filterStatus || (c.status || "").toLowerCase().includes(filterStatus.toLowerCase());
 
       // 2. Anchor filter
       const matchesAnchor = !isSuperAnchor || !effectiveAnchorFilter || c.anchor_id === effectiveAnchorFilter || c.anchor_code === effectiveAnchorFilter;
