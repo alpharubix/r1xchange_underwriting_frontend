@@ -1,8 +1,15 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2 } from "lucide-react";
 import { toast } from 'sonner';
 import { requestLoan } from '@/api/money';
@@ -66,19 +73,19 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
 
             <div className="space-y-2">
               <Label htmlFor="loanType" className="text-sm font-medium text-slate-700">Loan Type</Label>
-              <select
-                id="loanType"
-                value={loanType}
-                onChange={(e) => setLoanType(e.target.value)}
-                className="w-full flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                <option value="anchor_channel_fin">Anchor Channel Fin</option>
-                <option value="open_channel_fin">Open Channel Fin</option>
-                <option value="unsecured_od">Unsecured OD</option>
-                <option value="unsecured_tl">Unsecured TL</option>
-                <option value="vehicle_loan">Vehicle Loan</option>
-                <option value="Others">Others</option>
-              </select>
+              <Select value={loanType} onValueChange={setLoanType}>
+                <SelectTrigger id="loanType" className="w-full h-10">
+                  <SelectValue placeholder="Select a loan type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="anchor_channel_fin">Anchor Channel Fin</SelectItem>
+                  <SelectItem value="open_channel_fin">Open Channel Fin</SelectItem>
+                  <SelectItem value="unsecured_od">Unsecured OD</SelectItem>
+                  <SelectItem value="unsecured_tl">Unsecured TL</SelectItem>
+                  <SelectItem value="vehicle_loan">Vehicle Loan</SelectItem>
+                  <SelectItem value="Others">Others</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             {loanType === 'Others' && (
