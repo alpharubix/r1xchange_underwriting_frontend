@@ -26,7 +26,6 @@ const safeFormatDate = (dateStr: string) => {
 
 export default function RectifyMoneyReportView({ custId, referenceId, onBack }: RectifyMoneyReportViewProps) {
   const queryClient = useQueryClient();
-  const storageKey = `submitted_rectify_${referenceId}`;
 
   const { data: report, isLoading, isError } = useQuery({
     queryKey: ["reports", "rectify_money", custId, referenceId],
@@ -38,9 +37,6 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
       submitRectifyMoneySelections(custId, { reference_id: referenceId, selected_accounts: selectedAccounts }),
     onSuccess: () => {
       toast.success("Selections submitted successfully!");
-      const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-      const newSubmitted = [...submitted, ...(submitMutation.variables || [])];
-      localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
       queryClient.invalidateQueries({ queryKey: ["reports", "rectify_money", custId, referenceId] });
     },
     onError: () => {
@@ -49,8 +45,7 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
   });
 
   const toggleCheckbox = (account: any) => {
-    const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    const isPermanentlyBlocked = account.check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+    const isPermanentlyBlocked = account.check_box_initial;
     
     if (isPermanentlyBlocked) return;
 
@@ -126,9 +121,8 @@ export default function RectifyMoneyReportView({ custId, referenceId, onBack }: 
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
-                {report.accounts.map((account, idx) => {
-                  const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-                  const isBlocked = (account as any).check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+                {report.accounts.map((account: any, idx: number) => {
+                  const isBlocked = account.check_box_initial;
                   const isChecked = account.check_box || isBlocked;
                   return (
                   <tr key={idx} className="hover:bg-slate-50/20 transition-colors">

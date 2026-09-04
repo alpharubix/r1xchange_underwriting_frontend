@@ -26,7 +26,6 @@ const safeFormatDate = (dateStr: string) => {
 
 export default function SaveMoneyReportView({ custId, referenceId, onBack }: SaveMoneyReportViewProps) {
   const queryClient = useQueryClient();
-  const storageKey = `submitted_save_${referenceId}`;
 
   const { data: report, isLoading, isError } = useQuery({
     queryKey: ["reports", "save_money", custId, referenceId],
@@ -38,9 +37,6 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
       submitSaveMoneySelections(custId, { reference_id: referenceId, selected_accounts: selectedAccounts }),
     onSuccess: () => {
       toast.success("Selections submitted successfully!");
-      const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-      const newSubmitted = [...submitted, ...(submitMutation.variables || [])];
-      localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
       queryClient.invalidateQueries({ queryKey: ["reports", "save_money", custId, referenceId] });
     },
     onError: () => {
@@ -49,8 +45,7 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
   });
 
   const toggleCheckbox = (account: any) => {
-    const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    const isPermanentlyBlocked = account.check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+    const isPermanentlyBlocked = account.check_box_initial;
     
     if (isPermanentlyBlocked) return;
 
@@ -122,9 +117,8 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
-                {report.accounts.map((account, idx) => {
-                  const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-                  const isBlocked = (account as any).check_box_initial || submitted.some((s: any) => s.account_number === account.account_number && s.lender_name === account.lender_name);
+                {report.accounts.map((account: any, idx: number) => {
+                  const isBlocked = account.check_box_initial;
                   const isChecked = account.check_box || isBlocked;
                   return (
                   <tr key={idx} className="hover:bg-slate-50/20 transition-colors">
@@ -166,8 +160,7 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
           <Button 
             onClick={handleSubmit} 
             disabled={submitMutation.isPending || !report.accounts.some((acc: any) => {
-              const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-              const isBlocked = (acc as any).check_box_initial || submitted.some((s: any) => s.account_number === acc.account_number && s.lender_name === acc.lender_name);
+              const isBlocked = (acc as any).check_box_initial;
               return acc.check_box && !isBlocked;
             })}
             className="bg-[#FF6B4A] hover:bg-[#E55A39] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
