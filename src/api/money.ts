@@ -31,6 +31,12 @@ export async function getSaveMoneyReports(custId: string, referenceId: string): 
   const response = await apiClient.get<SaveMoneyResponse>(`/save-money/${encodeURIComponent(custId)}`, {
     params: { reference_id: referenceId }
   });
+  if (response.data && response.data.accounts) {
+    response.data.accounts = response.data.accounts.map(acc => ({
+      ...acc,
+      check_box_initial: acc.check_box
+    }));
+  }
   return response.data;
 }
 
@@ -38,6 +44,12 @@ export async function getRectifyMoneyReports(custId: string, referenceId: string
   const response = await apiClient.get<RectifyMoneyResponse>(`/rectify/${encodeURIComponent(custId)}`, {
     params: { reference_id: referenceId }
   });
+  if (response.data && response.data.accounts) {
+    response.data.accounts = response.data.accounts.map(acc => ({
+      ...acc,
+      check_box_initial: acc.check_box
+    }));
+  }
   return response.data;
 }
 
