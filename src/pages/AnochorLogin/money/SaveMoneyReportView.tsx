@@ -33,7 +33,7 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
   });
 
   const submitMutation = useMutation({
-    mutationFn: (selectedAccounts: { account_number: string, lender_name: string }[]) => 
+    mutationFn: (selectedAccounts: { account_number: string, lender_name: string }[]) =>
       submitSaveMoneySelections(custId, { reference_id: referenceId, selected_accounts: selectedAccounts }),
     onSuccess: () => {
       toast.success("Selections submitted successfully!");
@@ -46,16 +46,16 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
 
   const toggleCheckbox = (account: any) => {
     const isPermanentlyBlocked = account.check_box_initial;
-    
+
     if (isPermanentlyBlocked) return;
 
     queryClient.setQueryData(["reports", "save_money", custId, referenceId], (old: any) => {
       if (!old || !old.accounts) return old;
       return {
         ...old,
-        accounts: old.accounts.map((acc: any) => 
-          (acc.account_number === account.account_number && acc.lender_name === account.lender_name) 
-            ? { ...acc, check_box: !acc.check_box } 
+        accounts: old.accounts.map((acc: any) =>
+          (acc.account_number === account.account_number && acc.lender_name === account.lender_name)
+            ? { ...acc, check_box: !acc.check_box }
             : acc
         )
       };
@@ -121,44 +121,45 @@ export default function SaveMoneyReportView({ custId, referenceId, onBack }: Sav
                   const isBlocked = account.check_box_initial;
                   const isChecked = account.check_box || isBlocked;
                   return (
-                  <tr key={idx} className="hover:bg-slate-50/20 transition-colors">
-                    <td className="py-4 px-6 font-bold text-slate-900">{account.lender_name || "N/A"}</td>
-                    <td className="py-4 px-6 text-slate-600">{account.account_number || "N/A"}</td>
-                    <td className="py-4 px-6 text-slate-600">
-                      {safeFormatDate(account.opened_date)}
-                    </td>
-                    <td className="py-4 px-6 text-right font-bold text-[#1D1E2C]">
-                      {account.current_balance ? (
-                        <span className="flex items-center justify-end gap-1">
-                          <IndianRupee className="h-3 w-3" />
-                          {Number(account.current_balance).toLocaleString('en-IN')}
-                        </span>
-                      ) : "N/A"}
-                    </td>
-                    <td className="py-4 px-6 text-center">
-                      <div className="flex justify-center">
-                        <button 
-                          onClick={() => toggleCheckbox(account)}
-                          type="button"
-                          disabled={isBlocked}
-                          className={`h-6 w-6 rounded-md flex items-center justify-center transition-colors border shadow-sm ${isChecked ? (isBlocked ? 'bg-slate-400 border-slate-400 text-white cursor-not-allowed' : 'bg-[#2E9B5C] border-[#2E9B5C] text-white') : 'bg-white border-slate-300 text-transparent hover:border-slate-400'}`}
-                        >
-                          <Check className="h-4 w-4" strokeWidth={3} />
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                )})}
+                    <tr key={idx} className="hover:bg-slate-50/20 transition-colors">
+                      <td className="py-4 px-6 font-bold text-slate-900">{account.lender_name || "N/A"}</td>
+                      <td className="py-4 px-6 text-slate-600">{account.account_number || "N/A"}</td>
+                      <td className="py-4 px-6 text-slate-600">
+                        {safeFormatDate(account.opened_date)}
+                      </td>
+                      <td className="py-4 px-6 text-right font-bold text-[#1D1E2C]">
+                        {account.current_balance ? (
+                          <span className="flex items-center justify-end gap-1">
+                            <IndianRupee className="h-3 w-3" />
+                            {Number(account.current_balance).toLocaleString('en-IN')}
+                          </span>
+                        ) : "N/A"}
+                      </td>
+                      <td className="py-4 px-6 text-center">
+                        <div className="flex justify-center">
+                          <button
+                            onClick={() => toggleCheckbox(account)}
+                            type="button"
+                            disabled={isBlocked}
+                            className={`h-6 w-6 rounded-md flex items-center justify-center transition-colors border shadow-sm ${isChecked ? (isBlocked ? 'bg-slate-400 border-slate-400 text-white cursor-not-allowed' : 'bg-[#2E9B5C] border-[#2E9B5C] text-white') : 'bg-white border-slate-300 text-transparent hover:border-slate-400'}`}
+                          >
+                            <Check className="h-4 w-4" strokeWidth={3} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
         )}
       </div>
-      
+
       {report?.accounts && report.accounts.length > 0 && (
         <div className="flex justify-end pt-2">
-          <Button 
-            onClick={handleSubmit} 
+          <Button
+            onClick={handleSubmit}
             disabled={submitMutation.isPending || !report.accounts.some((acc: any) => {
               const isBlocked = (acc as any).check_box_initial;
               return acc.check_box && !isBlocked;
