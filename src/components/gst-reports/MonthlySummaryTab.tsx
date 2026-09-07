@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getGstMonthlySummary } from "@/api/gst";
 
 export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: string }) {

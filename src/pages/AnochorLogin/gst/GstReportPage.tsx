@@ -6,6 +6,7 @@ import MonthlySummaryTab from "@/components/gst-reports/MonthlySummaryTab";
 
 interface GstReportPageProps {
   gstReferenceId?: string;
+  custId?: string;
   onBack?: () => void;
 }
 
