@@ -24,7 +24,7 @@ import {
   Code,
 } from "lucide-react";
 import { getLogsList } from "@/api/logs";
-import type { LogItem, LogFilters } from "@/api/logs";
+import type { LogItem, LogFilters, LogsResponse } from "@/api/logs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -208,7 +208,7 @@ export default function AdminLogsPage() {
     user_id: debouncedUserId || undefined,
   };
 
-  const { data, isLoading, isFetching, refetch } = useQuery({
+  const { data, isLoading, isFetching, refetch } = useQuery<LogsResponse>({
     queryKey: [
       "admin",
       "logs",
@@ -221,8 +221,8 @@ export default function AdminLogsPage() {
       debouncedUserId,
     ],
     queryFn: () => getLogsList(queryParams),
-    keepPreviousData: true,
-  } as any);
+    placeholderData: (previousData) => previousData,
+  });
 
   const logsList: LogItem[] = data?.logs || data?.["page-info"]?.logs || [];
   const totalPages = data?.total_pages || data?.["page-info"]?.total_pages || 1;

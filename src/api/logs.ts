@@ -67,6 +67,7 @@ export interface LogsResponse {
   total_logs: number;
   total_pages: number;
   logs: LogItem[];
+  total_records?: number;
   "page-info"?: {
     page: number;
     limit: number;
