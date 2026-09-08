@@ -63,7 +63,7 @@ export default function PayerSelectionModal({
                 <div>
                   <h3 className="font-bold text-slate-800 text-lg">I will pay</h3>
                   <p className="text-sm text-slate-500 mt-0.5">
-                    Deduct from your organization's wallet or pay immediately.
+                    Pay immediately.
                   </p>
                 </div>
               </button>
