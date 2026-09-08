@@ -51,8 +51,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const handle = () => {
       clearAuth();
-      if (window.location.pathname.toLowerCase().includes("/anchors")) {
+      const path = window.location.pathname.toLowerCase();
+      if (path.includes("/anchors")) {
         navigate("/anchors/login");
+      } else if (path.includes("/admins")) {
+        navigate("/admins/login");
       } else {
         navigate("/login");
       }

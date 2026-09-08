@@ -9,6 +9,7 @@ import {
   LogOut,
   ChevronLeft,
   ChevronRight,
+  Activity,
 } from "lucide-react";
 
 export default function AdminSidebar() {
@@ -20,13 +21,13 @@ export default function AdminSidebar() {
 
   const activeTab = useMemo(() => {
     const t = tab?.toLowerCase();
-    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors") {
-      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor");
+    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors" || t === "logs") {
+      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor" | "logs");
     }
     return "user";
   }, [tab]);
 
-  const handleTabChange = (targetTab: "user" | "admin" | "anchor") => {
+  const handleTabChange = (targetTab: "user" | "admin" | "anchor" | "logs") => {
     const isCapital = window.location.pathname.startsWith("/Admins");
     const tabSegment = targetTab === "anchor" ? "anchors" : targetTab;
     const targetUrl = `${isCapital ? "/Admins" : "/admins"}/${tabSegment}`;
@@ -147,6 +148,30 @@ export default function AdminSidebar() {
             style={{ color: activeTab === "anchor" ? "#000080" : "" }}
           />
           {!sidebarCollapsed && <span className="text-sm">Anchors</span>}
+        </button>
+
+        <button
+          onClick={() => handleTabChange("logs" as any)}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${
+            activeTab === "logs"
+              ? "bg-white shadow-lg shadow-blue-950/20"
+              : "text-blue-100 hover:bg-white/10 hover:text-white border border-transparent"
+          }`}
+          style={{ color: activeTab === "logs" ? "#000080" : "" }}
+        >
+          <div
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${
+              activeTab === "logs" ? "h-2/5" : "h-0 bg-transparent"
+            }`}
+            style={{ backgroundColor: activeTab === "logs" ? "#000080" : "" }}
+          />
+          <Activity
+            className={`h-5 w-5 shrink-0 transition-colors ${
+              activeTab === "logs" ? "" : "text-blue-200 group-hover:text-white"
+            }`}
+            style={{ color: activeTab === "logs" ? "#000080" : "" }}
+          />
+          {!sidebarCollapsed && <span className="text-sm">System Logs</span>}
         </button>
       </nav>
 

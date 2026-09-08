@@ -15,6 +15,7 @@ import { getUsersList } from "@/api/user";
 import AdminSidebar from "./sidebarpage";
 import AdminAdminsPage from "./AdminAdminsPage";
 import AdminAnchorsPage from "./AdminAnchorsPage";
+import AdminLogsPage from "./AdminLogsPage";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,15 +95,15 @@ export default function AdminDashboardPage() {
 
   const activeTab = useMemo(() => {
     const t = tab?.toLowerCase();
-    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors") {
-      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor");
+    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors" || t === "logs") {
+      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor" | "logs");
     }
     return "user";
   }, [tab]);
 
   console.log("RENDER - tab param:", tab, "activeTab derived:", activeTab);
 
-  const handleTabChange = (targetTab: "user" | "admin" | "anchor") => {
+  const handleTabChange = (targetTab: "user" | "admin" | "anchor" | "logs") => {
     const isCapital = window.location.pathname.startsWith("/Admins");
     const tabSegment = targetTab === "anchor" ? "anchors" : targetTab;
     const targetUrl = `${isCapital ? "/Admins" : "/admins"}/${tabSegment}`;
@@ -113,7 +114,7 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const t = tab?.toLowerCase();
     console.log("useEffect tab check - t:", t);
-    if (!t || (t !== "user" && t !== "admin" && t !== "anchor" && t !== "anchors")) {
+    if (!t || (t !== "user" && t !== "admin" && t !== "anchor" && t !== "anchors" && t !== "logs")) {
       console.log("Redirecting undefined/invalid tab to user");
       handleTabChange("user");
     }
@@ -233,6 +234,8 @@ export default function AdminDashboardPage() {
         <AdminAdminsPage />
       ) : activeTab === "anchor" ? (
         <AdminAnchorsPage />
+      ) : activeTab === "logs" ? (
+        <AdminLogsPage />
       ) : (
         <>
           {/* ─── MAIN CONTENT AREA ─── */}
