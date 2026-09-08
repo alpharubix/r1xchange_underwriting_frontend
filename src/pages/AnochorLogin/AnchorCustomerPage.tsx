@@ -594,15 +594,15 @@ export default function AnchorCustomerPage() {
                   </div>
                 </div>
 
-                <Tooltip content="Create New User">
+              
                   <button
                     onClick={() => setIsNewCustomerModalOpen(true)}
-                    className="bg-[#1D1E2C] hover:bg-[#1D1E2C]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
+                    className="bg-[#002366] hover:bg-[#002366]/90 text-white font-bold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-[0_8px_20px_rgba(29,30,44,0.2)] border-none text-xs"
                   >
                     <Plus className="h-4 w-4 stroke-[3]" />
                     New Customer
                   </button>
-                </Tooltip>
+                
               </div>
 
               {isSuperAnchor && !selectedAnchorFilter ? (
@@ -845,7 +845,7 @@ export default function AnchorCustomerPage() {
                                         });
                                         toast.info(`Viewing reports for ${cust.name}`);
                                       }}
-                                      className="p-1.5 rounded-lg bg-[#FF6B4A]/10 text-[#FF6B4A] hover:bg-[#FF6B4A] hover:text-white transition-all shadow-sm group"
+                                      className="p-1.5 rounded-lg bg-[#002366]/10 text-[#002366] hover:bg-[#002366] hover:text-white transition-all shadow-sm group"
                                     >
                                       <Eye className="h-4 w-4" />
                                     </button>

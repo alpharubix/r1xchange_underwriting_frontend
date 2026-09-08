@@ -1,4 +1,4 @@
-﻿import {
+import {
   ChevronRight,
   ChevronLeft,
   Anchor as AnchorIcon,
@@ -115,7 +115,13 @@ export default function Sidebar({
       </nav>
 
       {/* Sidebar Footer - Profile Card */}
-      <div className="bg-white rounded-3xl p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80 mt-auto">
+      <div
+        className={`bg-white rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80 mt-auto flex flex-col transition-all duration-300 ${
+          sidebarCollapsed
+            ? "py-5 px-2 items-center justify-center"
+            : "p-4 items-stretch"
+        }`}
+      >
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
             <div className="h-9 w-9 rounded-xl bg-white border border-gray-200/80 flex items-center justify-center font-bold text-sm shrink-0 overflow-hidden p-1 shadow-sm">
@@ -137,16 +143,21 @@ export default function Sidebar({
               </div>
 
               <div className="text-xs text-gray-400 font-medium truncate mt-0.5 capitalize">
-                {userRole.toLowerCase() == "super_anchor" ? "Anchor" : "User"}
+                {userRole?.toLowerCase() == "super_anchor" ? "Anchor" : "User"}
               </div>
             </div>
           </div>
         )}
         <button
           onClick={handleLogout}
-          className="mt-3.5 w-full bg-[#f8fafc] hover:bg-gray-100 text-gray-600 hover:text-gray-900 py-2 px-3 rounded-xl text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+          title={sidebarCollapsed ? "Log out" : undefined}
+          className={`flex items-center justify-center transition-colors cursor-pointer bg-[#f8fafc] hover:bg-gray-100 text-gray-600 hover:text-gray-900 ${
+            sidebarCollapsed
+              ? "h-10 w-10 rounded-xl"
+              : "mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-semibold gap-2"
+          }`}
         >
-          <LogOut className="h-3.5 w-3.5 shrink-0 text-gray-500" />
+          <LogOut className="h-4 w-4 shrink-0 text-gray-500" />
           {!sidebarCollapsed && <span>Log out</span>}
         </button>
       </div>

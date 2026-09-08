@@ -1,4 +1,4 @@
-﻿import { useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { getGstTopSuppliersCustomers } from "@/api/gst";
 
 export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstReferenceId: string }) {

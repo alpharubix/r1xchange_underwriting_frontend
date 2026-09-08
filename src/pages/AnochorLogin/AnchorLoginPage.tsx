@@ -121,12 +121,13 @@ export default function AnchorLoginPage() {
         </div>
 
         {/* Center Text Branding */}
-        <div className="relative z-10 my-auto max-w-lg select-none">
+        <div className="relative z-10 my-auto max-w-2xl select-none">
           <h1 className="text-5xl md:text-6xl font-bold text-white leading-[1.12] tracking-tight">
             Welcome To
             <br />
             CRISP
-            <span className="inline-flex items-center px-4 py-1.5 ml-4 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md text-sm md:text-lg font-medium tracking-wide text-white/90 whitespace-nowrap align-middle shadow-lg">
+            <br />
+            <span className="inline-flex items-center px-4 py-1.5 mt-3 rounded-xl bg-white/10 border border-white/20 backdrop-blur-md text-sm md:text-lg font-medium tracking-wide text-white/90 whitespace-nowrap shadow-lg">
               Credit & Receivables Intelligence Scoring Platform
             </span>
             <br />
