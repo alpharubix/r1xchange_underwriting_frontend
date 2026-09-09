@@ -24,7 +24,6 @@ import ItrUploadModal from '@/components/ItrUploadModal';
 import PaymentModal from '@/components/PaymentModal';
 import { getPricingDetails } from '@/components/PaymentModal';
 import { getWalletBalance } from '@/api/payment';
-import { useAuthContext } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 export default function DashboardPage() {
@@ -49,9 +48,6 @@ export default function DashboardPage() {
   });
 
   const navigate = useNavigate();
-  const { user } = useAuthContext() as any;
-
-  const userId = user?.user_id || user?._id || user?.id || user?.data?.user_id || user?.data?._id || '';
 
   const openModulePayment = (moduleName: string, serviceId: string, onSuccess: () => void) => {
     const pricing = getPricingDetails(moduleName, 0);
@@ -65,14 +61,9 @@ export default function DashboardPage() {
   };
 
   const handlePaidModule = async (moduleName: string, serviceId: string, onSuccess: () => void) => {
-    if (!userId) {
-      toast.error('User ID is missing. Unable to check wallet balance.');
-      return;
-    }
-
     try {
       setIsCheckingWallet(true);
-      const response = await getWalletBalance(serviceId, userId);
+      const response = await getWalletBalance(serviceId);
 
       if (response.data?.is_balance_available) {
         onSuccess();

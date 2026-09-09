@@ -10,11 +10,9 @@ export interface WalletBalanceResponse {
   };
 }
 
-export async function getWalletBalance(service: string, userId: string): Promise<WalletBalanceResponse> {
-  const response = await apiClient.post<WalletBalanceResponse>(`/wallet/balance/${encodeURIComponent(service)}`, {
-    user_id: userId,
-    userId: userId
-  });
+export async function getWalletBalance(service: string, userId?: string): Promise<WalletBalanceResponse> {
+  const payload = userId ? { user_id: userId, userId } : {};
+  const response = await apiClient.post<WalletBalanceResponse>(`/wallet/balance/${encodeURIComponent(service)}`, payload);
   return response.data;
 }
 

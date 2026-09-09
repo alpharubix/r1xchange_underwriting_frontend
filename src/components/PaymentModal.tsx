@@ -113,21 +113,21 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
         return;
       }
 
-      const resolvedUserId = custId || localStorage.getItem('selected_cust_id') || user?._id || user?.id || localStorage.getItem('user_id');
-
-      if (!resolvedUserId) {
-        toast.error("User ID is missing. Cannot create payment order.");
-        setIsProcessing(false);
-        return;
-      }
-
-      const orderRes = await createPaymentOrder({
-        user_id: resolvedUserId,
-        userId: resolvedUserId,
+      const resolvedUserId = custId || localStorage.getItem('selected_cust_id') || user?._id || user?.id || user?.data?.user_id || user?.data?._id || localStorage.getItem('user_id');
+      const orderPayload = {
         service: serviceId,
         amount: amount,
         currency: 'INR'
-      });
+      } as Parameters<typeof createPaymentOrder>[0];
+
+      // Customer payments use the authenticated request identity. Anchors must
+      // include the selected customer's ID because they pay on the customer's behalf.
+      if (custId && resolvedUserId) {
+        orderPayload.user_id = resolvedUserId;
+        orderPayload.userId = resolvedUserId;
+      }
+
+      const orderRes = await createPaymentOrder(orderPayload);
 
       const orderData = orderRes.data;
 
@@ -141,13 +141,18 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
         order_id: orderData.order_id,
         handler: async function (response: any) {
           try {
-            await validatePayment({
+            const validationPayload = {
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_order_id: response.razorpay_order_id,
-              razorpay_signature: response.razorpay_signature,
-              user_id: resolvedUserId,
-              userId: resolvedUserId
-            });
+              razorpay_signature: response.razorpay_signature
+            } as Parameters<typeof validatePayment>[0];
+
+            if (custId && resolvedUserId) {
+              validationPayload.user_id = resolvedUserId;
+              validationPayload.userId = resolvedUserId;
+            }
+
+            await validatePayment(validationPayload);
 
             toast.success(`${moduleName} successfully unlocked!`);
             setIsProcessing(false);
