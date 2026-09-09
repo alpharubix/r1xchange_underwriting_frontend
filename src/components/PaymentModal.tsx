@@ -222,7 +222,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
               </div>
             </div>
 
-            <div className="relative min-h-0 flex-1 overflow-y-auto rounded-t-3xl bg-white p-6 pb-6 -mt-4">
+            <div className="relative min-h-0 flex-1 overflow-y-auto rounded-t-3xl bg-white p-6 pt-4 pb-6 -mt-4">
 
               <div className="w-full mb-6">
                 <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">What's Included</h3>
