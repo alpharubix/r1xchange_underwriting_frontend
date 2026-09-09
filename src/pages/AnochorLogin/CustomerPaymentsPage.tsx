@@ -1,5 +1,6 @@
 ﻿import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,6 +13,13 @@ import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
   const [processingId, setProcessingId] = useState<string | null>(null);
+  const razorpayRef = useRef<any>(null);
+
+  const resetPaymentProcessing = () => {
+    razorpayRef.current?.close?.();
+    razorpayRef.current = null;
+    setProcessingId(null);
+  };
 
   const modules = [
     { id: "BSA", label: "BSA", icon: Building2 },
@@ -109,7 +117,7 @@ export default function CustomerPaymentsPage() {
       const razorpayKey = import.meta.env.VITE_RAZOR_PAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID;
       if (!razorpayKey) {
         toast.error("Razorpay live key is not configured. Please contact system administration.");
-        setProcessingId(null);
+        resetPaymentProcessing();
         return;
       }
 
@@ -132,12 +140,13 @@ export default function CustomerPaymentsPage() {
             });
 
             toast.success("Payment successful!");
+            resetPaymentProcessing();
             refetch();
           } catch (err: any) {
             console.error("Payment verification failed", err);
             toast.error(err.response?.data?.detail || "Payment verification failed");
           } finally {
-            setProcessingId(null);
+            resetPaymentProcessing();
           }
         },
         prefill: {
@@ -147,7 +156,7 @@ export default function CustomerPaymentsPage() {
         },
         modal: {
           ondismiss: function () {
-            setProcessingId(null);
+            resetPaymentProcessing();
             toast.info("Payment cancelled.");
           }
         },
@@ -157,17 +166,18 @@ export default function CustomerPaymentsPage() {
       };
 
       const razorpay = new (window as any).Razorpay(options);
+      razorpayRef.current = razorpay;
       razorpay.on('payment.failed', function (response: any) {
         console.error("Payment failed", response.error);
         toast.error(`Payment failed: ${response.error.description}`);
-        setProcessingId(null);
+        resetPaymentProcessing();
       });
 
       razorpay.open();
     } catch (err: any) {
       console.error("Payment initiation failed", err);
       toast.error(err.response?.data?.detail || "Failed to initiate payment");
-      setProcessingId(null);
+      resetPaymentProcessing();
     }
   };
 
@@ -273,14 +283,20 @@ export default function CustomerPaymentsPage() {
                       <span className="text-3xl font-bold text-gray-900">₹{(payment.amount / 100).toLocaleString('en-IN')}</span>
                     </div>
                     <Button
-                      onClick={() => handlePay(payment)}
-                      disabled={processingId !== null}
+                      onClick={() => {
+                        if (processingId === payment.id) {
+                          resetPaymentProcessing();
+                          return;
+                        }
+                        void handlePay(payment);
+                      }}
+                      disabled={processingId !== null && processingId !== payment.id}
                       className="w-full h-11 bg-[#002366] hover:bg-[#3f32a3]/80 hover:tracking-[0.05em] text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
                     >
                       {processingId === payment.id ? (
                         <>
                           <Loader2 className="h-4 w-4 animate-spin" />
-                          Processing...
+                          Cancel Payment
                         </>
                       ) : (
                         <>
