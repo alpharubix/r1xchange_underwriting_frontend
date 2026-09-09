@@ -13,6 +13,34 @@ export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
   const [processingId, setProcessingId] = useState<string | null>(null);
 
+  const modules = [
+    { id: "BSA", label: "BSA", icon: Building2 },
+    { id: "GST", label: "GST", icon: FileText },
+    { id: "ITR", label: "ITR", icon: PieChart },
+    { id: "CIBIL", label: "CIBIL", icon: ShieldCheck },
+  ];
+
+  const userId = user?.user_id || user?._id || user?.id || (user as any)?.data?.user_id || (user as any)?.data?._id || "";
+
+  const {
+    data: walletBalances = {},
+    isLoading: isWalletLoading,
+    refetch: refetchWalletBalances,
+  } = useQuery({
+    queryKey: ["wallet-balances", userId],
+    queryFn: async () => {
+      const balances = await Promise.all(
+        modules.map(async (module) => {
+          const response = await getWalletBalance(module.id, userId);
+          return [module.id, response.data.available_balance] as const;
+        })
+      );
+
+      return Object.fromEntries(balances) as Record<string, number>;
+    },
+    enabled: Boolean(userId),
+  });
+
   const { data: paymentsRes, isLoading, refetch } = useQuery({
     queryKey: ["pending-payments-all"],
     queryFn: async () => {
@@ -42,12 +70,11 @@ export default function CustomerPaymentsPage() {
 
   const handleCheckWalletBalance = async (service: string) => {
     try {
-      console.log("Checking wallet balance, user object:", user);
       const toastId = toast.loading(`Checking wallet balance for ${service}...`);
-      const userId = user?.user_id || user?._id || user?.id || (user as any)?.data?.user_id || (user as any)?.data?._id || "";
 
       const res = await getWalletBalance(service, userId);
       toast.dismiss(toastId);
+      await refetchWalletBalances();
 
       if (res.data?.is_balance_available) {
         toast.success(`${service} Balance Available: ₹${res.data.available_balance}`);
@@ -60,13 +87,6 @@ export default function CustomerPaymentsPage() {
       console.error(err);
     }
   };
-
-  const modules = [
-    { id: "BSA", label: "BSA", icon: Building2 },
-    { id: "GST", label: "GST", icon: FileText },
-    { id: "ITR", label: "ITR", icon: PieChart },
-    { id: "CIBIL", label: "CIBIL", icon: ShieldCheck },
-  ];
 
   const handlePay = async (payment: PendingPayment) => {
     try {
@@ -170,6 +190,9 @@ export default function CustomerPaymentsPage() {
                 <mod.icon className="h-6 w-6 text-slate-500 group-hover:text-[#002366]" />
               </div>
               <span className="font-semibold text-slate-700">{mod.label}</span>
+              <span className="mt-2 text-lg font-bold text-[#002366]">
+                {isWalletLoading ? "Loading..." : `₹${walletBalances[mod.id] ?? 0}`}
+              </span>
             </button>
           ))}
         </div>
