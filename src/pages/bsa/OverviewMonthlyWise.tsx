@@ -1,4 +1,4 @@
-﻿import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -21,6 +21,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import BankAccountDetails from './BankAccountDetails';
+import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 interface MonthlyBreakdown {
   Month: string;
@@ -608,7 +609,7 @@ export default function OverviewMonthlyWise() {
     return () => container.removeEventListener("scroll", handleScroll);
   }, []);
 
-  
+
   const handleApply = () => {
     if (!fromDate || !toDate) {
       toast.error('Please select both From and To dates');
@@ -757,7 +758,7 @@ export default function OverviewMonthlyWise() {
 
   return (
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)] bg-white">
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-black mb-2">
             Month-Wise Overview
@@ -766,15 +767,19 @@ export default function OverviewMonthlyWise() {
             Detailed month-wise analysis of transactions
           </p>
         </div>
+        <BsaDownloadButton
+          fromDate={appliedFromDate || fromDate}
+          toDate={appliedToDate || toDate}
+        />
       </div>
-    {accountDetails && <BankAccountDetails/>}
-    {showScrollHint && (
-      <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
-        <p className="text-sm text-gray-500">
-          â†‘ Scroll up to view <span className="font-medium">Monthly Overview</span>
-        </p>
-      </div>
-    )}
+      {accountDetails && <BankAccountDetails />}
+      {showScrollHint && (
+        <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+          <p className="text-sm text-gray-500">
+            â†‘ Scroll up to view <span className="font-medium">Monthly Overview</span>
+          </p>
+        </div>
+      )}
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/20 bg-white">
           <CardContent className="p-4">
@@ -906,7 +911,7 @@ export default function OverviewMonthlyWise() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={handleApply}
                   className="bg-[#002366] hover:bg-[#001744] text-white gap-2"
@@ -920,6 +925,7 @@ export default function OverviewMonthlyWise() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
+
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">

@@ -25,11 +25,11 @@ export default function CustomerPaymentsPage() {
         ]);
         return {
           data: [
-            ...(Array.isArray(bsa) ? bsa : bsa?.data || []),
-            ...(Array.isArray(gst) ? gst : gst?.data || []),
-            ...(Array.isArray(itr) ? itr : itr?.data || []),
-            ...(Array.isArray(cibil) ? cibil : cibil?.data || [])
-          ]
+            bsa.data?.pending_order,
+            gst.data?.pending_order,
+            itr.data?.pending_order,
+            cibil.data?.pending_order
+          ].filter((payment): payment is PendingPayment => Boolean(payment))
         };
       } catch (err) {
         console.error("Error fetching pending payments:", err);
@@ -75,7 +75,7 @@ export default function CustomerPaymentsPage() {
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_TV7hB4PLNUBB63",
         amount: Math.round(payment.amount * 100),
-        currency: payment.currency,
+        currency: payment.currency || "INR",
         name: "R1Xchange Underwriting",
         description: `Payment for ${payment.service} report`,
         image: window.location.origin + r1xchangeLogoWhiteWebView,

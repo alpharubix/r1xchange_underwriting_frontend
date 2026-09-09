@@ -68,18 +68,26 @@ export interface PendingPayment {
   _id: string;
   id: string;
   amount: number;
-  currency: string;
+  currency?: string;
   service: string;
   created_at: string;
 }
 
-export interface PendingPaymentsResponse {
-  message: string;
-  data: PendingPayment[];
+export interface PendingOrderResponse {
+  pending_order: PendingPayment | null;
+  is_pending_payment_found: boolean;
 }
 
-export async function getPendingPayments(service?: string): Promise<PendingPaymentsResponse> {
-  const url = service ? `/payments/pending?service=${service}` : `/payments/pending`;
+export interface PendingPaymentsResponse {
+  message: string;
+  data: PendingOrderResponse;
+}
+
+export async function getPendingPayments(service: string, custId?: string): Promise<PendingPaymentsResponse> {
+  const params = new URLSearchParams({ service });
+  if (custId) params.set('cust_id', custId);
+
+  const url = `/payments/pending?${params.toString()}`;
   const response = await apiClient.get<PendingPaymentsResponse>(url);
   return response.data;
 }

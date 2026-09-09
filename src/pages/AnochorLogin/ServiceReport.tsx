@@ -28,7 +28,7 @@ import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from "@/components/PaymentModal";
 import PayerSelectionModal from '@/components/PayerSelectionModal';
-import { createPaymentOrder } from '@/api/payment';
+import { createPaymentOrder, getPendingPayments } from '@/api/payment';
 import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
 
 
@@ -203,6 +203,17 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
   const handleCustomerPay = async () => {
     const config = payerSelectionConfig;
     try {
+      const pendingResponse = await getPendingPayments(config.serviceId, selectedCustomer.id);
+      const pendingOrder = pendingResponse.data?.pending_order;
+
+      if (pendingResponse.data?.is_pending_payment_found && pendingOrder) {
+        setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
+        toast.warning(
+          `A pending ${config.moduleName} payment order already exists for this customer. If the customer is facing an issue with the current order, please contact the system administrator to request another order.`
+        );
+        return;
+      }
+
       await createPaymentOrder({
         user_id: selectedCustomer.id,
         userId: selectedCustomer.id,
@@ -213,7 +224,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       toast.success(`Payment order created. The customer can now pay for ${config.moduleName} from their dashboard.`);
       setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || "Failed to create pending payment");
+      toast.error(error.response?.data?.message || error.response?.data?.detail || "Failed to create pending payment");
     }
   };
   useEffect(() => {

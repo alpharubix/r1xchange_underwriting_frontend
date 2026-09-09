@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -23,6 +23,7 @@ import { Calendar } from '@/components/ui/calendar';
 import type { CashFlowData } from './cashFlowType';
 import rows from './cashflowtablerow';
 import BankAccountDetails from '../BankAccountDetails';
+import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 export default function CashFlow() {
     const [fromDate, setFromDate] = useState('');
@@ -157,342 +158,347 @@ export default function CashFlow() {
         return num < 0 ? 'text-red-600' : '';
     };
 
-            return (
-            <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
-                <div className="flex items-center gap-4 mb-8">
-                    <div>
-                        <h1 className="text-3xl font-bold text-[#002366] mb-2">Cash Flow</h1>
-                        <p className="text-gray-600">
-                            Monthwise cash flow statement analysis
-                        </p>
-                    </div>
+    return (
+        <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 className="text-3xl font-bold text-[#002366] mb-2">Cash Flow</h1>
+                    <p className="text-gray-600">
+                        Monthwise cash flow statement analysis
+                    </p>
                 </div>
+                <BsaDownloadButton
+                    fromDate={appliedFromDate || fromDate}
+                    toDate={appliedToDate || toDate}
+                />
+            </div>
 
-                {accountDetails && <BankAccountDetails />}
-                {/* Date Filter Card */}
-                {dateRangeData && (
-                    <Card className="mb-8 shadow-sm border-[#002366]/10 bg-white">
-                        <CardContent className="p-4">
-                            <div className="flex flex-col md:flex-row gap-4 items-end">
-                                <div className="flex-1 space-y-1">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        From Date
-                                    </label>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant={'outline'}
-                                                className={cn(
-                                                    'w-full justify-start text-left font-normal bg-background border-input text-black',
-                                                    !fromDate && 'text-muted-foreground'
-                                                )}
-                                            >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {fromDate ? (
-                                                    format(new Date(fromDate + 'T00:00:00'), 'PPP')
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                captionLayout="dropdown"
-                                                startMonth={
-                                                    dateRangeData?.from_date
-                                                        ? new Date(dateRangeData.from_date + 'T00:00:00')
-                                                        : new Date(1990, 0)
-                                                }
-                                                endMonth={
-                                                    dateRangeData?.to_date
-                                                        ? new Date(dateRangeData.to_date + 'T00:00:00')
-                                                        : new Date(2100, 11)
-                                                }
-                                                selected={
-                                                    fromDate ? new Date(fromDate + 'T00:00:00') : undefined
-                                                }
-                                                defaultMonth={
-                                                    fromDate ? new Date(fromDate + 'T00:00:00') : undefined
-                                                }
-                                                onSelect={(date) =>
-                                                    setFromDate(date ? format(date, 'yyyy-MM-dd') : '')
-                                                }
-                                                disabled={(date) => {
-                                                    if (
-                                                        !dateRangeData?.from_date ||
-                                                        !dateRangeData?.to_date
-                                                    )
-                                                        return false;
-                                                    const from = new Date(
-                                                        dateRangeData.from_date + 'T00:00:00'
-                                                    );
-                                                    from.setHours(0, 0, 0, 0);
-                                                    const to = new Date(
-                                                        dateRangeData.to_date + 'T00:00:00'
-                                                    );
-                                                    to.setHours(23, 59, 59, 999);
-                                                    return date < from || date > to;
-                                                }}
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                <div className="flex-1 space-y-1">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        To Date
-                                    </label>
-                                    <Popover>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant={'outline'}
-                                                className={cn(
-                                                    'w-full justify-start text-black text-left font-normal bg-background border-input',
-                                                    !toDate && 'text-muted-foreground'
-                                                )}
-                                            >
-                                                <CalendarIcon className="mr-2 h-4 w-4" />
-                                                {toDate ? (
-                                                    format(new Date(toDate + 'T00:00:00'), 'PPP')
-                                                ) : (
-                                                    <span>Pick a date</span>
-                                                )}
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                captionLayout="dropdown"
-                                                startMonth={
-                                                    dateRangeData?.from_date
-                                                        ? new Date(dateRangeData.from_date + 'T00:00:00')
-                                                        : new Date(1990, 0)
-                                                }
-                                                endMonth={
-                                                    dateRangeData?.to_date
-                                                        ? new Date(dateRangeData.to_date + 'T00:00:00')
-                                                        : new Date(2100, 11)
-                                                }
-                                                selected={
-                                                    toDate ? new Date(toDate + 'T00:00:00') : undefined
-                                                }
-                                                onSelect={(date) =>
-                                                    setToDate(date ? format(date, 'yyyy-MM-dd') : '')
-                                                }
-                                                disabled={(date) => {
-                                                    if (
-                                                        !dateRangeData?.from_date ||
-                                                        !dateRangeData?.to_date
-                                                    )
-                                                        return false;
-                                                    const from = new Date(
-                                                        dateRangeData.from_date + 'T00:00:00'
-                                                    );
-                                                    from.setHours(0, 0, 0, 0);
-                                                    const to = new Date(
-                                                        dateRangeData.to_date + 'T00:00:00'
-                                                    );
-                                                    to.setHours(23, 59, 59, 999);
-                                                    return date < from || date > to;
-                                                }}
-                                                initialFocus
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button
-                                        onClick={handleApply}
-                                        className="bg-[#002366] text-black hover:bg-[#002366]/90 text-white gap-2"
-                                    >
-                                        <Filter className="w-4 h-4" /> Apply Filter
-                                    </Button>
-                                    <Button
-                                        onClick={handleClear}
-                                        variant="outline"
-                                        className="gap-2 text-black"
-                                    >
-                                        <X className="w-4 h-4" /> Clear
-                                    </Button>
-                                </div>
+            {accountDetails && <BankAccountDetails />}
+            {/* Date Filter Card */}
+            {dateRangeData && (
+                <Card className="mb-8 shadow-sm border-[#002366]/10 bg-white">
+                    <CardContent className="p-4">
+                        <div className="flex flex-col md:flex-row gap-4 items-end">
+                            <div className="flex-1 space-y-1">
+                                <label className="text-sm font-medium text-gray-700">
+                                    From Date
+                                </label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant={'outline'}
+                                            className={cn(
+                                                'w-full justify-start text-left font-normal bg-background border-input text-black',
+                                                !fromDate && 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {fromDate ? (
+                                                format(new Date(fromDate + 'T00:00:00'), 'PPP')
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            captionLayout="dropdown"
+                                            startMonth={
+                                                dateRangeData?.from_date
+                                                    ? new Date(dateRangeData.from_date + 'T00:00:00')
+                                                    : new Date(1990, 0)
+                                            }
+                                            endMonth={
+                                                dateRangeData?.to_date
+                                                    ? new Date(dateRangeData.to_date + 'T00:00:00')
+                                                    : new Date(2100, 11)
+                                            }
+                                            selected={
+                                                fromDate ? new Date(fromDate + 'T00:00:00') : undefined
+                                            }
+                                            defaultMonth={
+                                                fromDate ? new Date(fromDate + 'T00:00:00') : undefined
+                                            }
+                                            onSelect={(date) =>
+                                                setFromDate(date ? format(date, 'yyyy-MM-dd') : '')
+                                            }
+                                            disabled={(date) => {
+                                                if (
+                                                    !dateRangeData?.from_date ||
+                                                    !dateRangeData?.to_date
+                                                )
+                                                    return false;
+                                                const from = new Date(
+                                                    dateRangeData.from_date + 'T00:00:00'
+                                                );
+                                                from.setHours(0, 0, 0, 0);
+                                                const to = new Date(
+                                                    dateRangeData.to_date + 'T00:00:00'
+                                                );
+                                                to.setHours(23, 59, 59, 999);
+                                                return date < from || date > to;
+                                            }}
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
                             </div>
-                            <div className="mt-2 text-xs text-gray-500">
-                                * You can select a maximum date range of 12 months.
-                                {dateRangeData && (
-                                    <span className="ml-1">
-                                        Available data range:{' '}
-                                        {format(
-                                            new Date(dateRangeData.from_date + 'T00:00:00'),
-                                            'PPP'
-                                        )}{' '}
-                                        to{' '}
-                                        {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
-                                        .
-                                    </span>
-                                )}
+                            <div className="flex-1 space-y-1">
+                                <label className="text-sm font-medium text-gray-700">
+                                    To Date
+                                </label>
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button
+                                            variant={'outline'}
+                                            className={cn(
+                                                'w-full justify-start text-black text-left font-normal bg-background border-input',
+                                                !toDate && 'text-muted-foreground'
+                                            )}
+                                        >
+                                            <CalendarIcon className="mr-2 h-4 w-4" />
+                                            {toDate ? (
+                                                format(new Date(toDate + 'T00:00:00'), 'PPP')
+                                            ) : (
+                                                <span>Pick a date</span>
+                                            )}
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-auto p-0" align="start">
+                                        <Calendar
+                                            mode="single"
+                                            captionLayout="dropdown"
+                                            startMonth={
+                                                dateRangeData?.from_date
+                                                    ? new Date(dateRangeData.from_date + 'T00:00:00')
+                                                    : new Date(1990, 0)
+                                            }
+                                            endMonth={
+                                                dateRangeData?.to_date
+                                                    ? new Date(dateRangeData.to_date + 'T00:00:00')
+                                                    : new Date(2100, 11)
+                                            }
+                                            selected={
+                                                toDate ? new Date(toDate + 'T00:00:00') : undefined
+                                            }
+                                            onSelect={(date) =>
+                                                setToDate(date ? format(date, 'yyyy-MM-dd') : '')
+                                            }
+                                            disabled={(date) => {
+                                                if (
+                                                    !dateRangeData?.from_date ||
+                                                    !dateRangeData?.to_date
+                                                )
+                                                    return false;
+                                                const from = new Date(
+                                                    dateRangeData.from_date + 'T00:00:00'
+                                                );
+                                                from.setHours(0, 0, 0, 0);
+                                                const to = new Date(
+                                                    dateRangeData.to_date + 'T00:00:00'
+                                                );
+                                                to.setHours(23, 59, 59, 999);
+                                                return date < from || date > to;
+                                            }}
+                                            initialFocus
+                                        />
+                                    </PopoverContent>
+                                </Popover>
                             </div>
-                        </CardContent>
-                    </Card>
-                )}
-
-                <Card className="shadow-lg border-[#002366]/10 bg-white overflow-hidden">
-                    <CardHeader className="flex flex-row items-center justify-between bg-gray-100 border-b pb-4">
-                        <div>
-                            <CardTitle className="text-xl text-[#002366]">
-                                Cash Flow Statement
-                            </CardTitle>
-                            <CardDescription>
-                                {dateRangeData?.from_date && dateRangeData?.to_date && (
-                                    <>
-                                        From{' '}
-                                        {format(
-                                            new Date(dateRangeData.from_date + 'T00:00:00'),
-                                            'PPP'
-                                        )}{' '}
-                                        To{' '}
-                                        {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
-                                    </>
-                                )}
-                            </CardDescription>
-                        </div>
-                        {dateRangeData && (
-                            <Button
-                                variant="outline"
-                                onClick={() => refetch()}
-                                disabled={isLoading}
-                                className="gap-2 text-black"
-                            >
-                                <RefreshCcw
-                                    className={`h-4 w-4 text-black  ${isLoading ? 'animate-spin' : ''}`}
-                                />
-                                Refresh
-                            </Button>
-                        )}
-                    </CardHeader>
-                    <CardContent className="p-0">
-                        {isLoading ? (
-                            <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-                                <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
-                                <p>Loading cash flow data...</p>
-                            </div>
-                        ) : isError ? (
-                            <div className="p-8 text-center text-red-500">
-                                <p>
-                                    Error loading data: {(error as any)?.message || 'Unknown error'}
-                                </p>
+                            <div className="flex flex-wrap gap-2">
                                 <Button
-                                    onClick={() => refetch()}
-                                    variant="outline"
-                                    className="mt-4 text-black"
+                                    onClick={handleApply}
+                                    className="bg-[#002366] text-black hover:bg-[#002366]/90 text-white gap-2"
                                 >
-                                    Try Again
+                                    <Filter className="w-4 h-4" /> Apply Filter
                                 </Button>
+                                <Button
+                                    onClick={handleClear}
+                                    variant="outline"
+                                    className="gap-2 text-black"
+                                >
+                                    <X className="w-4 h-4" /> Clear
+                                </Button>
+
                             </div>
-                        ) : data ? (
-                            <div className="overflow-x-auto w-full">
-                                <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
-                                    <thead>
-                                        <tr className="bg-[#002366] text-white text-xs">
-                                            <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#002366] z-20">
-                                                Particulars
-                                            </th>
-                                            <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right">
-                                                Overall/Total
-                                            </th>
-                                            {expectedMonths.map((month) => (
-                                                <th
-                                                    key={month}
-                                                    className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right capitalize"
-                                                >
-                                                    {month}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {rows.map((row, index) => (
-                                            <tr
-                                                key={index}
-                                                className={cn(
-                                                    'border-b border-black/10 bg-white hover:bg-gray-50 transition-colors',
-                                                    row.rowClass
-                                                )}
-                                            >
-                                                <td
-                                                    className={cn(
-                                                        'px-4 py-2.5 border border-black/20 whitespace-nowrap sticky left-0 z-10 bg-white',
-                                                        row.labelClass
-                                                    )}
-                                                >
-                                                    {row.label}
-                                                </td>
-                                                <td
-                                                    className={cn(
-                                                        'px-4 py-2.5 border border-black/20 text-right',
-                                                        row.valueClass,
-                                                        row.summaryKey
-                                                            ? getValueColorClass(
-                                                                data.summary[row.summaryKey] as number
-                                                            )
-                                                            : ''
-                                                    )}
-                                                >
-                                                    {row.summaryKey
-                                                        ? formatCurrency(
-                                                            data.summary[row.summaryKey] as number
-                                                        )
-                                                        : ''}
-                                                </td>
-                                                {expectedMonths.map((month, monthIndex) => {
-                                                    const monthData = data.monthly_breakdown[monthIndex];
-                                                    let cellContent = '-';
-                                                    if (monthData && row.monthKey) {
-                                                        const rawVal = monthData[row.monthKey];
-                                                        if (row.isPercent) {
-                                                            cellContent =
-                                                                rawVal !== undefined && rawVal !== null
-                                                                    ? `${rawVal}%`
-                                                                    : '-';
-                                                        } else {
-                                                            cellContent = formatCurrency(rawVal as number);
-                                                        }
-                                                    }
-                                                    return (
-                                                        <td
-                                                            key={month}
-                                                            className={cn(
-                                                                'px-4 py-2.5 border border-black/20 text-right',
-                                                                row.valueClass,
-                                                                !row.isPercent && monthData
-                                                                    ? getValueColorClass(monthData[row.monthKey!])
-                                                                    : ''
-                                                            )}
-                                                        >
-                                                            {cellContent}
-                                                        </td>
-                                                    );
-                                                })}
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        ) : dateRangeData ? (
-                            <div className="p-8 text-center text-gray-500">
-                                Select date range and apply filter
-                            </div>
-                        ) : (
-                            <div className="p-8 text-center text-gray-500">
-                                <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#002366] mb-4" />
-                                <p className="text-gray-500">
-                                    No data available yet. Please upload a bank statement, or wait
-                                    while your uploaded statement is being processed.
-                                </p>
-                            </div>
-                        )}
+                        </div>
+                        <div className="mt-2 text-xs text-gray-500">
+                            * You can select a maximum date range of 12 months.
+                            {dateRangeData && (
+                                <span className="ml-1">
+                                    Available data range:{' '}
+                                    {format(
+                                        new Date(dateRangeData.from_date + 'T00:00:00'),
+                                        'PPP'
+                                    )}{' '}
+                                    to{' '}
+                                    {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                                    .
+                                </span>
+                            )}
+                        </div>
                     </CardContent>
                 </Card>
-            </div>
-            );
+            )}
+
+            <Card className="shadow-lg border-[#002366]/10 bg-white overflow-hidden">
+                <CardHeader className="flex flex-row items-center justify-between bg-gray-100 border-b pb-4">
+                    <div>
+                        <CardTitle className="text-xl text-[#002366]">
+                            Cash Flow Statement
+                        </CardTitle>
+                        <CardDescription>
+                            {dateRangeData?.from_date && dateRangeData?.to_date && (
+                                <>
+                                    From{' '}
+                                    {format(
+                                        new Date(dateRangeData.from_date + 'T00:00:00'),
+                                        'PPP'
+                                    )}{' '}
+                                    To{' '}
+                                    {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                                </>
+                            )}
+                        </CardDescription>
+                    </div>
+                    {dateRangeData && (
+                        <Button
+                            variant="outline"
+                            onClick={() => refetch()}
+                            disabled={isLoading}
+                            className="gap-2 text-black"
+                        >
+                            <RefreshCcw
+                                className={`h-4 w-4 text-black  ${isLoading ? 'animate-spin' : ''}`}
+                            />
+                            Refresh
+                        </Button>
+                    )}
+                </CardHeader>
+                <CardContent className="p-0">
+                    {isLoading ? (
+                        <div className="flex flex-col items-center justify-center p-12 text-gray-500">
+                            <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
+                            <p>Loading cash flow data...</p>
+                        </div>
+                    ) : isError ? (
+                        <div className="p-8 text-center text-red-500">
+                            <p>
+                                Error loading data: {(error as any)?.message || 'Unknown error'}
+                            </p>
+                            <Button
+                                onClick={() => refetch()}
+                                variant="outline"
+                                className="mt-4 text-black"
+                            >
+                                Try Again
+                            </Button>
+                        </div>
+                    ) : data ? (
+                        <div className="overflow-x-auto w-full">
+                            <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
+                                <thead>
+                                    <tr className="bg-[#002366] text-white text-xs">
+                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#002366] z-20">
+                                            Particulars
+                                        </th>
+                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right">
+                                            Overall/Total
+                                        </th>
+                                        {expectedMonths.map((month) => (
+                                            <th
+                                                key={month}
+                                                className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right capitalize"
+                                            >
+                                                {month}
+                                            </th>
+                                        ))}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {rows.map((row, index) => (
+                                        <tr
+                                            key={index}
+                                            className={cn(
+                                                'border-b border-black/10 bg-white hover:bg-gray-50 transition-colors',
+                                                row.rowClass
+                                            )}
+                                        >
+                                            <td
+                                                className={cn(
+                                                    'px-4 py-2.5 border border-black/20 whitespace-nowrap sticky left-0 z-10 bg-white',
+                                                    row.labelClass
+                                                )}
+                                            >
+                                                {row.label}
+                                            </td>
+                                            <td
+                                                className={cn(
+                                                    'px-4 py-2.5 border border-black/20 text-right',
+                                                    row.valueClass,
+                                                    row.summaryKey
+                                                        ? getValueColorClass(
+                                                            data.summary[row.summaryKey] as number
+                                                        )
+                                                        : ''
+                                                )}
+                                            >
+                                                {row.summaryKey
+                                                    ? formatCurrency(
+                                                        data.summary[row.summaryKey] as number
+                                                    )
+                                                    : ''}
+                                            </td>
+                                            {expectedMonths.map((month, monthIndex) => {
+                                                const monthData = data.monthly_breakdown[monthIndex];
+                                                let cellContent = '-';
+                                                if (monthData && row.monthKey) {
+                                                    const rawVal = monthData[row.monthKey];
+                                                    if (row.isPercent) {
+                                                        cellContent =
+                                                            rawVal !== undefined && rawVal !== null
+                                                                ? `${rawVal}%`
+                                                                : '-';
+                                                    } else {
+                                                        cellContent = formatCurrency(rawVal as number);
+                                                    }
+                                                }
+                                                return (
+                                                    <td
+                                                        key={month}
+                                                        className={cn(
+                                                            'px-4 py-2.5 border border-black/20 text-right',
+                                                            row.valueClass,
+                                                            !row.isPercent && monthData
+                                                                ? getValueColorClass(monthData[row.monthKey!])
+                                                                : ''
+                                                        )}
+                                                    >
+                                                        {cellContent}
+                                                    </td>
+                                                );
+                                            })}
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    ) : dateRangeData ? (
+                        <div className="p-8 text-center text-gray-500">
+                            Select date range and apply filter
+                        </div>
+                    ) : (
+                        <div className="p-8 text-center text-gray-500">
+                            <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#002366] mb-4" />
+                            <p className="text-gray-500">
+                                No data available yet. Please upload a bank statement, or wait
+                                while your uploaded statement is being processed.
+                            </p>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        </div>
+    );
 }

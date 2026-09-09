@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { useDateRange } from '@/hooks/useDateRange';
@@ -21,6 +21,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import BankAccountDetails from './BankAccountDetails';
+import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 // import { useNavigate } from "react-router-dom";
 
 interface MonthlyBreakdown {
@@ -129,11 +130,11 @@ export default function SummaryOfDebitAndCredit() {
             'Failed to load summary of debit and credit. Please try again.',
         }
       );
-      const acc_data= response.data.data.account_details;
-      
+      const acc_data = response.data.data.account_details;
+
       setAccountDetails(acc_data);
       console.log("Setting:", accountDetails)
-      sessionStorage.setItem("account_details",JSON.stringify(acc_data));
+      sessionStorage.setItem("account_details", JSON.stringify(acc_data));
 
       return response.data?.data as SummaryData;
     },
@@ -230,7 +231,7 @@ export default function SummaryOfDebitAndCredit() {
 
   return (
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-black mb-2">
             Summary of Debit and Credit
@@ -239,12 +240,16 @@ export default function SummaryOfDebitAndCredit() {
             Monthwise breakdown of inflows and outflows
           </p>
         </div>
+        <BsaDownloadButton
+          fromDate={appliedFromDate || fromDate}
+          toDate={appliedToDate || toDate}
+        />
       </div>
 
       {
-        accountDetails && <BankAccountDetails/>
+        accountDetails && <BankAccountDetails />
       }
-      
+
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">
           <CardContent className="p-4">
@@ -382,7 +387,7 @@ export default function SummaryOfDebitAndCredit() {
                   </PopoverContent>
                 </Popover>
               </div>
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={handleApply}
                   className="bg-[#002366] hover:bg-[#001744] text-white gap-2"
@@ -396,6 +401,7 @@ export default function SummaryOfDebitAndCredit() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
+
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
