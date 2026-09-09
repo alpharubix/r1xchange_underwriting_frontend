@@ -23,6 +23,9 @@ import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
 import PaymentModal from '@/components/PaymentModal';
 import { getPricingDetails } from '@/components/PaymentModal';
+import { getWalletBalance } from '@/api/payment';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +33,7 @@ export default function DashboardPage() {
   
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
+  const [isCheckingWallet, setIsCheckingWallet] = useState(false);
   const [paymentModal, setPaymentModal] = useState<{
     isOpen: boolean;
     moduleName: string;
@@ -45,6 +49,9 @@ export default function DashboardPage() {
   });
 
   const navigate = useNavigate();
+  const { user } = useAuthContext() as any;
+
+  const userId = user?.user_id || user?._id || user?.id || user?.data?.user_id || user?.data?._id || '';
 
   const openModulePayment = (moduleName: string, serviceId: string, onSuccess: () => void) => {
     const pricing = getPricingDetails(moduleName, 0);
@@ -55,6 +62,28 @@ export default function DashboardPage() {
       amount: pricing.total,
       onSuccess,
     });
+  };
+
+  const handlePaidModule = async (moduleName: string, serviceId: string, onSuccess: () => void) => {
+    if (!userId) {
+      toast.error('User ID is missing. Unable to check wallet balance.');
+      return;
+    }
+
+    try {
+      setIsCheckingWallet(true);
+      const response = await getWalletBalance(serviceId, userId);
+
+      if (response.data?.is_balance_available) {
+        onSuccess();
+      } else {
+        openModulePayment(moduleName, serviceId, onSuccess);
+      }
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || 'Failed to check wallet balance.');
+    } finally {
+      setIsCheckingWallet(false);
+    }
   };
 
   useEffect(() => {
@@ -81,7 +110,7 @@ export default function DashboardPage() {
       description: 'Upload & Analysis',
       icon: <Building2 className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        openModulePayment('BSA', 'BSA', () => setIsModalOpen(true));
+        void handlePaidModule('BSA', 'BSA', () => setIsModalOpen(true));
       },
       disabled: false,
     },
@@ -90,7 +119,7 @@ export default function DashboardPage() {
       description: 'Analysis GSTR',
       icon: <FileText className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        openModulePayment('GST', 'GST', () => navigate('/gst/analysis'));
+        void handlePaidModule('GST', 'GST', () => navigate('/gst/analysis'));
       },
       disabled: false,
     },
@@ -100,7 +129,7 @@ export default function DashboardPage() {
       icon: <PieChart className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        openModulePayment('ITR', 'ITR', () => setIsItrModalOpen(true));
+        void handlePaidModule('ITR', 'ITR', () => setIsItrModalOpen(true));
       },
     },
     {
@@ -118,7 +147,7 @@ export default function DashboardPage() {
       icon: <CreditCard className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        openModulePayment('CIBIL', 'CIBIL', () => navigate('/cibil'));
+        void handlePaidModule('CIBIL', 'CIBIL', () => navigate('/cibil'));
       }
     },
 
@@ -158,6 +187,7 @@ export default function DashboardPage() {
                 : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
                 }`}
               onClick={!item.disabled ? item.onClick : undefined}
+              aria-busy={isCheckingWallet}
             >
               <CardHeader className="flex flex-row items-center gap-4 pb-2">
                 <div
