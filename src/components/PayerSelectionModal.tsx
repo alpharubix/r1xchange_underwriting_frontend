@@ -25,7 +25,7 @@ export default function PayerSelectionModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            className="absolute inset-0 bg-red backdrop-blur-sm"
           />
 
           <motion.div

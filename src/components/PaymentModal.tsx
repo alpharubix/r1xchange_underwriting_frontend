@@ -85,7 +85,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
 
   const getPricingDetails = (module: string, currentAmount: number) => {
     switch (module.toUpperCase()) {
-      case 'BSA': return { base: 479, gst: 86, total: 565, period: '1 Year' };
+      case 'BSA': return { base: 479, gst: 86, total: 565, period: 'N/A' };
       case 'GST': return { base: 475, gst: 86, total: 561, period: '1 Year' };
       case 'ITR': return { base: 445, gst: 80, total: 525, period: '2 Years' };
       case 'CIBIL': return { base: 545, gst: 98, total: 643, period: 'Latest Report' };
@@ -187,7 +187,8 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div> 
+        <div className="fixed inset-0 z-50 flex items-center justify-center ">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
@@ -202,7 +203,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative z-10 flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="relative z-10 flex max-h-full w-full max-w-md flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
           >
             <div className="relative shrink-0 bg-[#002366] p-6 pb-8 text-white">
               <div
@@ -267,6 +268,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
               </div>
             </div>
           </motion.div>
+        </div>
         </div>
       )}
     </AnimatePresence>
