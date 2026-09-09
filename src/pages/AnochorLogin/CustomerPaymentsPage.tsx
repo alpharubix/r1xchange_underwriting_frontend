@@ -5,7 +5,7 @@ import type { PendingPayment } from "@/api/payment";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2 } from "lucide-react";
+import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound, CalendarClock } from "lucide-react";
 import { toast } from "sonner";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
@@ -67,6 +67,20 @@ export default function CustomerPaymentsPage() {
   });
 
   const pendingPayments = paymentsRes?.data || [];
+
+  const formatRequestedAt = (createdAt?: string) => {
+    if (!createdAt) return "Date unavailable";
+    const date = new Date(createdAt);
+    if (Number.isNaN(date.getTime())) return "Date unavailable";
+    return date.toLocaleString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+  };
 
   const handleCheckWalletBalance = async (service: string) => {
     try {
@@ -131,6 +145,12 @@ export default function CustomerPaymentsPage() {
           email: user?.email_id || "customer@example.com",
           contact: user?.mobile_number || "9999999999"
         },
+        modal: {
+          ondismiss: function () {
+            setProcessingId(null);
+            toast.info("Payment cancelled.");
+          }
+        },
         theme: {
           color: "#002366"
         }
@@ -140,11 +160,6 @@ export default function CustomerPaymentsPage() {
       razorpay.on('payment.failed', function (response: any) {
         console.error("Payment failed", response.error);
         toast.error(`Payment failed: ${response.error.description}`);
-        setProcessingId(null);
-      });
-
-      // Handle modal close without success/failure
-      razorpay.on('payment.modal.closed', function () {
         setProcessingId(null);
       });
 
@@ -214,8 +229,11 @@ export default function CustomerPaymentsPage() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {pendingPayments.map((payment) => (
-              <Card key={payment._id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
+            {pendingPayments.map((payment) => {
+              const requestedByYou = Boolean(payment.user_id && String(payment.user_id) === String(userId));
+
+              return (
+              <Card key={payment.id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
                 <div className="h-2 bg-[#002366]" />
                 <CardContent className="p-6 flex flex-col h-full">
                   <div className="flex justify-between items-start mb-4">
@@ -229,6 +247,24 @@ export default function CustomerPaymentsPage() {
                     </div>
                     <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#002366]/10 transition-colors">
                       <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#002366]" />
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-3 space-y-2 text-xs text-slate-600">
+                    <div className="flex items-center gap-2">
+                      <UserRound className="h-4 w-4 text-[#002366]" />
+                      <span>Requested by</span>
+                      <span className="font-bold text-[#002366]">{requestedByYou ? "You" : "Anchor"}</span>
+                    </div>
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className="font-semibold text-slate-500 shrink-0">User ID</span>
+                      <span className="font-mono text-[11px] truncate" title={payment.user_id || "Unavailable"}>
+                        {payment.user_id || "Unavailable"}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <CalendarClock className="h-4 w-4 text-slate-400" />
+                      <span>Requested {formatRequestedAt(payment.created_at)}</span>
                     </div>
                   </div>
 
@@ -256,7 +292,8 @@ export default function CustomerPaymentsPage() {
                   </div>
                 </CardContent>
               </Card>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
