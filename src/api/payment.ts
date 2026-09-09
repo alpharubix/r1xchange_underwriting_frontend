@@ -88,20 +88,18 @@ export interface PendingPaymentsResponse {
 }
 
 export async function getPendingPayments(service: string, custId?: string): Promise<PendingPaymentsResponse> {
-  const params = new URLSearchParams({ service });
-  if (custId) params.set('cust_id', custId);
-
-  const url = `/payments/pending?${params.toString()}`;
-  const response = await apiClient.get<PendingPaymentsApiResponse | PendingPayment[]>(url);
-  const payload = response.data;
-  const orders = Array.isArray(payload)
-    ? payload
-    : Array.isArray(payload.data)
-      ? payload.data
-      : payload.data?.pending_orders || (payload.data?.pending_order ? [payload.data.pending_order] : []);
+  const payload = { service, custId };
+  const url = `/payments/pending`;
+  const response = await apiClient.post<PendingPaymentsApiResponse | PendingPayment[]>(url, payload);
+  const data = response.data;
+  const orders = Array.isArray(data)
+    ? data
+    : Array.isArray(data.data)
+      ? data.data
+      : data.data?.pending_orders || (data.data?.pending_order ? [data.data.pending_order] : []);
 
   return {
-    message: Array.isArray(payload) ? 'Pending orders retrieved successfully' : payload.message || 'Pending orders retrieved successfully',
+    message: Array.isArray(data) ? 'Pending orders retrieved successfully' : data.message || 'Pending orders retrieved successfully',
     data: {
       pending_order: orders[0] || null,
       pending_orders: orders,
