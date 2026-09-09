@@ -202,9 +202,9 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden z-10"
+            className="relative z-10 flex max-h-[calc(100dvh-2rem)] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
           >
-            <div className="bg-[#002366] p-6 pb-8 text-white relative">
+            <div className="relative shrink-0 bg-[#002366] p-6 pb-8 text-white">
               <div
                 className="absolute top-4 right-4 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
                 onClick={() => !isProcessing && onClose()}
@@ -222,7 +222,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
               </div>
             </div>
 
-            <div className="p-6 pb-8 -mt-4 bg-white rounded-t-3xl relative flex flex-col items-center">
+            <div className="relative min-h-0 flex-1 overflow-y-auto rounded-t-3xl bg-white p-6 pb-6 -mt-4">
 
               <div className="w-full mb-6">
                 <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">What's Included</h3>
@@ -252,7 +252,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
                 </div>
               </div>
 
-              <div className="w-full flex flex-col gap-3">
+              <div className="sticky bottom-0 w-full bg-white pt-1">
                 <Button
                   onClick={handlePay}
                   disabled={isProcessing}
