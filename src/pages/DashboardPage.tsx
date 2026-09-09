@@ -21,6 +21,8 @@ import { KycModal } from '@/components/KycModal';
 import HomeIntro from '@/components/HomeIntro';
 import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
+import PaymentModal from '@/components/PaymentModal';
+import { getPricingDetails } from '@/components/PaymentModal';
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -28,8 +30,32 @@ export default function DashboardPage() {
   
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
+  const [paymentModal, setPaymentModal] = useState<{
+    isOpen: boolean;
+    moduleName: string;
+    serviceId: string;
+    amount: number;
+    onSuccess: () => void;
+  }>({
+    isOpen: false,
+    moduleName: '',
+    serviceId: '',
+    amount: 0,
+    onSuccess: () => {},
+  });
 
   const navigate = useNavigate();
+
+  const openModulePayment = (moduleName: string, serviceId: string, onSuccess: () => void) => {
+    const pricing = getPricingDetails(moduleName, 0);
+    setPaymentModal({
+      isOpen: true,
+      moduleName,
+      serviceId,
+      amount: pricing.total,
+      onSuccess,
+    });
+  };
 
   useEffect(() => {
     console.log("Company name " + companyName)
@@ -55,7 +81,7 @@ export default function DashboardPage() {
       description: 'Upload & Analysis',
       icon: <Building2 className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        setIsModalOpen(true);
+        openModulePayment('BSA', 'BSA', () => setIsModalOpen(true));
       },
       disabled: false,
     },
@@ -64,7 +90,7 @@ export default function DashboardPage() {
       description: 'Analysis GSTR',
       icon: <FileText className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        navigate('/gst/analysis');
+        openModulePayment('GST', 'GST', () => navigate('/gst/analysis'));
       },
       disabled: false,
     },
@@ -74,7 +100,7 @@ export default function DashboardPage() {
       icon: <PieChart className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        setIsItrModalOpen(true);
+        openModulePayment('ITR', 'ITR', () => setIsItrModalOpen(true));
       },
     },
     {
@@ -92,7 +118,7 @@ export default function DashboardPage() {
       icon: <CreditCard className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        navigate('/cibil');
+        openModulePayment('CIBIL', 'CIBIL', () => navigate('/cibil'));
       }
     },
 
@@ -157,6 +183,19 @@ export default function DashboardPage() {
 
         <BsaUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <ItrUploadModal isOpen={isItrModalOpen} onClose={() => setIsItrModalOpen(false)} />
+
+        <PaymentModal
+          isOpen={paymentModal.isOpen}
+          onClose={() => setPaymentModal((prev) => ({ ...prev, isOpen: false }))}
+          moduleName={paymentModal.moduleName}
+          serviceId={paymentModal.serviceId}
+          amount={paymentModal.amount}
+          onSuccess={() => {
+            const onSuccess = paymentModal.onSuccess;
+            setPaymentModal((prev) => ({ ...prev, isOpen: false }));
+            onSuccess();
+          }}
+        />
 
         <div className="flex items-center justify-center gap-4 text-sm mt-auto pt-8 pb-0">
           <div className="w-20 h-px bg-[#002366]" />
