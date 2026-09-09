@@ -91,7 +91,7 @@ export async function getPendingPayments(service: string, custId?: string): Prom
   const params = new URLSearchParams({ service });
   if (custId) params.set('cust_id', custId);
 
-  const response = await apiClient.get<PendingPaymentsApiResponse | PendingPayment[]>(`/payments/pending?${params.toString()}`);
+  const response = await apiClient.post<PendingPaymentsApiResponse | PendingPayment[]>(`/payments/pending?${params.toString()}`);
   const data = response.data;
   const orders = Array.isArray(data)
     ? data
