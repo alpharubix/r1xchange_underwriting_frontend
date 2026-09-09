@@ -207,11 +207,9 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
       const pendingOrder = pendingResponse.data?.pending_order;
 
       if (pendingResponse.data?.is_pending_payment_found && pendingOrder) {
-        setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
-        toast.warning(
-          `A pending ${config.moduleName} payment order already exists for this customer. If the customer is facing an issue with the current order, please contact the system administrator to request another order.`
+        toast.info(
+          `A pending ${config.moduleName} payment order already exists. Proceeding to create an additional order as requested.`
         );
-        return;
       }
 
       await createPaymentOrder({

@@ -66,6 +66,7 @@ export interface PendingPayment {
   _id: string;
   id: string;
   user_id?: string;
+  role?: string;
   amount: number;
   currency?: string;
   service: string;

@@ -9,7 +9,7 @@ import PaymentModal, { getPricingDetails } from "@/components/PaymentModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound, CalendarClock } from "lucide-react";
+import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound } from "lucide-react";
 import { toast } from "sonner";
 import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
@@ -92,20 +92,6 @@ export default function CustomerPaymentsPage() {
   });
 
   const pendingPayments = paymentsRes?.data || [];
-
-  const formatRequestedAt = (createdAt?: string) => {
-    if (!createdAt) return "Date unavailable";
-    const date = new Date(createdAt);
-    if (Number.isNaN(date.getTime())) return "Date unavailable";
-    return date.toLocaleString("en-IN", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
 
   const handleCheckWalletBalance = async (service: string) => {
     try {
@@ -258,6 +244,13 @@ export default function CustomerPaymentsPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingPayments.map((payment) => {
               const requestedByYou = Boolean(payment.user_id && String(payment.user_id) === String(userId));
+              const requestedBy = payment.role?.trim()
+                ? payment.role.trim().toLowerCase() === "customer" && requestedByYou
+                  ? "You"
+                  : payment.role.trim().charAt(0).toUpperCase() + payment.role.trim().slice(1).toLowerCase()
+                : requestedByYou
+                  ? "You"
+                  : "Anchor";
 
               return (
               <Card key={payment.id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
@@ -268,9 +261,7 @@ export default function CustomerPaymentsPage() {
                       <div className="text-xs font-bold text-[#002366] uppercase tracking-wider mb-1">
                         {payment.service} REPORT
                       </div>
-                      <div className="text-xs font-semibold text-[#002366] bg-[#002366]/10 px-2 py-1 rounded-full w-fit mt-2">
-                        1 Year Analysis
-                      </div>
+            
                     </div>
                     <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#002366]/10 transition-colors">
                       <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#002366]" />
@@ -281,7 +272,8 @@ export default function CustomerPaymentsPage() {
                     <div className="flex items-center gap-2">
                       <UserRound className="h-4 w-4 text-[#002366]" />
                       <span>Requested by</span>
-                      <span className="font-bold text-[#002366]">{requestedByYou ? "You" : "Anchor"}</span>
+                      
+                      <span className="font-bold text-[#002366]">{requestedBy}</span>
                     </div>
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-semibold text-slate-500 shrink-0">User ID</span>
@@ -289,10 +281,7 @@ export default function CustomerPaymentsPage() {
                         {payment.user_id || "Unavailable"}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <CalendarClock className="h-4 w-4 text-slate-400" />
-                      <span>Requested {formatRequestedAt(payment.created_at)}</span>
-                    </div>
+                   
                   </div>
 
                   <div className="mt-auto pt-6">
