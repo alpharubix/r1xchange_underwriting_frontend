@@ -1,8 +1,11 @@
 ﻿import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRef } from "react";
 import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
+import PaymentModal, { getPricingDetails } from "@/components/PaymentModal";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -12,8 +15,22 @@ import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
 
 export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [processingId, setProcessingId] = useState<string | null>(null);
   const razorpayRef = useRef<any>(null);
+  const requestedService = searchParams.get("service")?.toUpperCase() || "";
+  const returnTo = searchParams.get("returnTo");
+  const requestedModule = ["BSA", "GST", "ITR", "CIBIL"].includes(requestedService)
+    ? requestedService
+    : "";
+  const [isRequestedPaymentOpen, setIsRequestedPaymentOpen] = useState(Boolean(requestedModule));
+
+  useEffect(() => {
+    if (requestedModule) {
+      setIsRequestedPaymentOpen(true);
+    }
+  }, [requestedModule]);
 
   const resetPaymentProcessing = () => {
     razorpayRef.current?.close?.();
@@ -313,6 +330,22 @@ export default function CustomerPaymentsPage() {
           </div>
         )}
       </div>
+
+      {requestedModule && (
+        <PaymentModal
+          isOpen={isRequestedPaymentOpen}
+          onClose={() => setIsRequestedPaymentOpen(false)}
+          moduleName={requestedModule}
+          serviceId={requestedModule}
+          amount={getPricingDetails(requestedModule, 0).total}
+          onSuccess={() => {
+            setIsRequestedPaymentOpen(false);
+            if (returnTo) {
+              navigate(returnTo);
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

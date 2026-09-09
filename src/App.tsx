@@ -37,6 +37,7 @@ const HelpCenterPage = lazy(() => import("@/pages/HelpCenter"));
 const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
 const ProfileManagement = lazy(()=>import("@/pages/ProfileManagement"))
 const CustomerPaymentsPage = lazy(() => import("@/pages/AnochorLogin/CustomerPaymentsPage"));
+const WalletProtectedComponent = lazy(() => import("@/components/WalletProtectedComponent"));
 
 
 function App() {
@@ -89,38 +90,20 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route element={<DashboardLayout />}>
                       <Route path="/home/dashboard" element={<DashboardPage />} />
-                      <Route
-                        path="/bsa/summary-of-debit-and-credit"
-                        element={<SummeryOfDebitAndCredit />}
-                      />
-                      <Route path="/bsa/cash-flow" element={<CashFlow />} />
-                      <Route
-                        path="/bsa/overview-monthly-wise"
-                        element={<OverviewMonthlyWise />}
-                      />
-                      <Route path="/gst/analysis" element={<GstAnalysisPage />} />
-                      <Route path="/gst/history" element={<GstHistoryPage />} />
-                      <Route path="/gst/reports" element={<GstReportPage />} />
-                      <Route
-                        path="/itr/itr-tax-calculation"
-                        element={<ITRTaxCalculationPage />}
-                      />
-                      <Route
-                        path="/itr/balance-sheet"
-                        element={<ITRBalanceSheetPage />}
-                      />
-                      <Route
-                        path="/itr/profit-and-loss-statement"
-                        element={<ITRProfitAndLossStatementPage />}
-                      />
-                      <Route
-                        path="/itr/ratio-analysis"
-                        element={<ITRRatioAnalysisPage />}
-                      />
+                      <Route path="/bsa/summary-of-debit-and-credit" element={<WalletProtectedComponent service="BSA"><SummeryOfDebitAndCredit /></WalletProtectedComponent>} />
+                      <Route path="/bsa/cash-flow" element={<WalletProtectedComponent service="BSA"><CashFlow /></WalletProtectedComponent>} />
+                      <Route path="/bsa/overview-monthly-wise" element={<WalletProtectedComponent service="BSA"><OverviewMonthlyWise /></WalletProtectedComponent>} />
+                      <Route path="/gst/analysis" element={<WalletProtectedComponent service="GST"><GstAnalysisPage /></WalletProtectedComponent>} />
+                      <Route path="/gst/history" element={<WalletProtectedComponent service="GST"><GstHistoryPage /></WalletProtectedComponent>} />
+                      <Route path="/gst/reports" element={<WalletProtectedComponent service="GST"><GstReportPage /></WalletProtectedComponent>} />
+                      <Route path="/itr/itr-tax-calculation" element={<WalletProtectedComponent service="ITR"><ITRTaxCalculationPage /></WalletProtectedComponent>} />
+                      <Route path="/itr/balance-sheet" element={<WalletProtectedComponent service="ITR"><ITRBalanceSheetPage /></WalletProtectedComponent>} />
+                      <Route path="/itr/profit-and-loss-statement" element={<WalletProtectedComponent service="ITR"><ITRProfitAndLossStatementPage /></WalletProtectedComponent>} />
+                      <Route path="/itr/ratio-analysis" element={<WalletProtectedComponent service="ITR"><ITRRatioAnalysisPage /></WalletProtectedComponent>} />
                       <Route path="/profile" element={<ProfileManagement />} />
-                      <Route path="/cibil" element={<CibilCustDataFetching />} />
-                      <Route path="/cibil/reports" element={<ExistingReports />} />
-                      <Route path="/cibil/view-report/:reference_id" element={<ViewReport />} />
+                      <Route path="/cibil" element={<WalletProtectedComponent service="CIBIL"><CibilCustDataFetching /></WalletProtectedComponent>} />
+                      <Route path="/cibil/reports" element={<WalletProtectedComponent service="CIBIL"><ExistingReports /></WalletProtectedComponent>} />
+                      <Route path="/cibil/view-report/:reference_id" element={<WalletProtectedComponent service="CIBIL"><ViewReport /></WalletProtectedComponent>} />
                       <Route path="/payments" element={<CustomerPaymentsPage />} />
                       <Route path="/help-center" element={<HelpCenterPage />} />
                     </Route>
