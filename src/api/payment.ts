@@ -75,7 +75,13 @@ export interface PendingPayment {
 
 export interface PendingOrderResponse {
   pending_order: PendingPayment | null;
+  pending_orders: PendingPayment[];
   is_pending_payment_found: boolean;
+}
+
+interface PendingPaymentsApiResponse {
+  message?: string;
+  data?: PendingOrderResponse | PendingPayment[];
 }
 
 export interface PendingPaymentsResponse {
@@ -88,6 +94,20 @@ export async function getPendingPayments(service: string, custId?: string): Prom
   if (custId) params.set('cust_id', custId);
 
   const url = `/payments/pending?${params.toString()}`;
-  const response = await apiClient.get<PendingPaymentsResponse>(url);
-  return response.data;
+  const response = await apiClient.get<PendingPaymentsApiResponse | PendingPayment[]>(url);
+  const payload = response.data;
+  const orders = Array.isArray(payload)
+    ? payload
+    : Array.isArray(payload.data)
+      ? payload.data
+      : payload.data?.pending_orders || (payload.data?.pending_order ? [payload.data.pending_order] : []);
+
+  return {
+    message: Array.isArray(payload) ? 'Pending orders retrieved successfully' : payload.message || 'Pending orders retrieved successfully',
+    data: {
+      pending_order: orders[0] || null,
+      pending_orders: orders,
+      is_pending_payment_found: orders.length > 0,
+    },
+  };
 }

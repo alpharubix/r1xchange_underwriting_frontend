@@ -25,11 +25,11 @@ export default function CustomerPaymentsPage() {
         ]);
         return {
           data: [
-            bsa.data?.pending_order,
-            gst.data?.pending_order,
-            itr.data?.pending_order,
-            cibil.data?.pending_order
-          ].filter((payment): payment is PendingPayment => Boolean(payment))
+            ...bsa.data.pending_orders,
+            ...gst.data.pending_orders,
+            ...itr.data.pending_orders,
+            ...cibil.data.pending_orders
+          ]
         };
       } catch (err) {
         console.error("Error fetching pending payments:", err);
