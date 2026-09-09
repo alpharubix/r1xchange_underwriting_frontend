@@ -72,8 +72,15 @@ export default function CustomerPaymentsPage() {
     try {
       setProcessingId(payment.id);
 
+      const razorpayKey = import.meta.env.VITE_RAZOR_PAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID;
+      if (!razorpayKey) {
+        toast.error("Razorpay live key is not configured. Please contact system administration.");
+        setProcessingId(null);
+        return;
+      }
+
       const options = {
-        key: import.meta.env.RAZORPAY_KEY_ID || "rzp_test_TV7hB4PLNUBB63",
+        key: razorpayKey,
         amount: Math.round(payment.amount * 100),
         currency: payment.currency || "INR",
         name: "R1Xchange Underwriting",

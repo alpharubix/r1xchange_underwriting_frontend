@@ -90,6 +90,13 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
     try {
       setIsProcessing(true);
 
+      const razorpayKey = import.meta.env.VITE_RAZOR_PAY_KEY_ID || import.meta.env.VITE_RAZORPAY_KEY_ID;
+      if (!razorpayKey) {
+        toast.error("Razorpay live key is not configured. Please contact system administration.");
+        setIsProcessing(false);
+        return;
+      }
+
       const resolvedUserId = custId || localStorage.getItem('selected_cust_id') || user?._id || user?.id || localStorage.getItem('user_id');
 
       if (!resolvedUserId) {
@@ -109,7 +116,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
       const orderData = orderRes.data;
 
       const options = {
-        key: import.meta.env.RAZOR_PAY_KEY_ID,
+        key: razorpayKey,
         amount: orderData.amount,
         currency: orderData.currency,
         name: "R1Xchange Underwriting",
