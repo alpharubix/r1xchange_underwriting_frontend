@@ -167,10 +167,10 @@ export default function CashFlow() {
                         Monthwise cash flow statement analysis
                     </p>
                 </div>
-                <BsaDownloadButton
+                {/* <BsaDownloadButton
                     fromDate={appliedFromDate || fromDate}
                     toDate={appliedToDate || toDate}
-                />
+                /> */}
             </div>
 
             {accountDetails && <BankAccountDetails />}

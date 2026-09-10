@@ -158,7 +158,7 @@ export function AppSidebar() {
         )} */}
       </div>
 
-      <nav className="flex-1 overflow-y-auto overflow-x-hidden px-2 py-4 space-y-1">
+      <nav className="sidebar-scrollbar-hidden flex-1 overflow-y-auto overflow-x-hidden px-2 py-4 space-y-1">
         {!collapsed && (
           <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-widest text-white/40">
             Main Menu

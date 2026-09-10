@@ -240,10 +240,10 @@ export default function SummaryOfDebitAndCredit() {
             Monthwise breakdown of inflows and outflows
           </p>
         </div>
-        <BsaDownloadButton
+        {/* <BsaDownloadButton
           fromDate={appliedFromDate || fromDate}
           toDate={appliedToDate || toDate}
-        />
+        /> */}
       </div>
 
       {

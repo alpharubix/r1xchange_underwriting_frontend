@@ -243,6 +243,7 @@ export default function CustomerPaymentsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingPayments.map((payment) => {
+              console.log("Rendering payment:", payment); // Debugging log
               const requestedByYou = Boolean(payment.user_id && String(payment.user_id) === String(userId));
               const requestedBy = payment.role?.trim()
                 ? payment.role.trim().toLowerCase() === "customer" && requestedByYou
@@ -278,7 +279,7 @@ export default function CustomerPaymentsPage() {
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-semibold text-slate-500 shrink-0">User ID</span>
                       <span className="font-mono text-[11px] truncate" title={payment.user_id || "Unavailable"}>
-                        {payment.user_id || "Unavailable"}
+                        {payment.notes.user_id || "Unavailable"}
                       </span>
                     </div>
                    

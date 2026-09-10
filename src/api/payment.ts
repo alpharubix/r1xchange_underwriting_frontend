@@ -1,4 +1,5 @@
 import apiClient from '@/lib/axios';
+import { string } from 'zod';
 
 export interface WalletBalanceResponse {
   message: string;
@@ -70,6 +71,7 @@ export interface PendingPayment {
   amount: number;
   currency?: string;
   service: string;
+  notes:any
   created_at?: string;
 }
 

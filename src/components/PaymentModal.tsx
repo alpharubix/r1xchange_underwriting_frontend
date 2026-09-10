@@ -203,27 +203,29 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            className="relative z-10 flex max-h-full w-full max-w-md flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
+            className="relative z-10 flex max-h-full h-[92vh] w-full max-w-md flex-col overflow-hidden rounded-3xl bg-white shadow-2xl"
           >
-            <div className="relative shrink-0 bg-[#002366] p-6 pb-8 text-white">
+            <div className="relative shrink-0 bg-[#002366] p-6 pb-2 text-white">
               <div
                 className="absolute top-4 right-4 cursor-pointer opacity-70 hover:opacity-100 transition-opacity"
                 onClick={() => !isProcessing && onClose()}
               >
-                <X className="h-5 w-5" />
+                <X className="h-5 w-5 hover:text-red-500" />
               </div>
-              <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center mb-4 backdrop-blur-sm">
-                <Wallet className="h-6 w-6 text-white" />
+              <div className="mb-4 flex items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
+                  <Wallet className="h-6 w-6 text-white" />
+                </div>
+                <h2 className="text-2xl font-bold text-white tracking-tight">{moduleName} Payment</h2>
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">{moduleName} Payment</h2>
                 <p className="text-blue-100 font-medium text-sm mt-1">
                   Unlock access to generate this report.
                 </p>
               </div>
             </div>
 
-            <div className="relative min-h-0 flex-1 overflow-y-auto bg-white p-6 pt-4 pb-6">
+            <div className="payment-modal-scrollbar-hidden relative min-h-0 flex-1 overflow-y-auto bg-white p-6 pt-4 pb-6">
 
               <div className="w-full mb-6">
                 <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider">What's Included</h3>
@@ -257,7 +259,7 @@ export default function PaymentModal({ isOpen, onClose, moduleName, serviceId, a
                 <Button
                   onClick={handlePay}
                   disabled={isProcessing}
-                  className="w-full h-12 rounded-xl bg-[#002366] hover:bg-blue-700 text-white font-bold text-base shadow-sm shadow-[#002366]/20 cursor-pointer"
+                  className="w-full h-12 rounded-xl bg-[#002366] hover:bg-[#002366]/80  hover:border hover:border-[#002366] hover:border-2 text-white font-bold text-base shadow-sm shadow-[#002366]/20 cursor-pointer"
                 >
                   {isProcessing ? (
                     <><Loader2 className="h-5 w-5 animate-spin mr-2" /> Processing...</>
