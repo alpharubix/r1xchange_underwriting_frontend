@@ -2,7 +2,7 @@
 function pay() {
 
     const options = {
-        key: "rzp_test_TV7hB4PLNUBB63",
+        key: "rzp_live_TXTGinLAY7wEIM",
 
         amount: 52500,
 
