@@ -19,7 +19,7 @@ import {
 } from 'lucide-react';
 import { KycModal } from '@/components/KycModal';
 import HomeIntro from '@/components/HomeIntro';
-// import BsaUploadModal from '@/components/BsaUploadModal';
+import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
 import PaymentModal from '@/components/PaymentModal';
 import { getPricingDetails } from '@/components/PaymentModal';
@@ -202,7 +202,7 @@ export default function DashboardPage() {
           ))}
         </div>
 
-        {/* <BsaUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> */}
+        <BsaUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <ItrUploadModal isOpen={isItrModalOpen} onClose={() => setIsItrModalOpen(false)} />
 
         <PaymentModal

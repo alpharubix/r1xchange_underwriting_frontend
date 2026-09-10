@@ -1069,11 +1069,17 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         onClose={() => setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }))}
         moduleName={payerSelectionConfig.moduleName}
         onUserPay={() => {
+          const config = payerSelectionConfig;
           setPayerSelectionConfig(prev => ({ ...prev, isOpen: false }));
-          setPaymentModalConfig({
-            ...payerSelectionConfig,
-            isOpen: true
-          });
+          window.setTimeout(() => {
+            setPaymentModalConfig({
+              isOpen: true,
+              moduleName: config.moduleName,
+              serviceId: config.serviceId,
+              amount: config.amount,
+              onSuccess: config.onSuccess,
+            });
+          }, 300);
         }}
         onCustomerPay={handleCustomerPay}
       />
