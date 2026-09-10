@@ -32,10 +32,13 @@ export default function CustomerPaymentsPage() {
     }
   }, [requestedModule]);
 
-  const resetPaymentProcessing = () => {
-    razorpayRef.current?.close?.();
+  const resetPaymentProcessing = (closeCheckout = true) => {
+    const razorpay = razorpayRef.current;
     razorpayRef.current = null;
     setProcessingId(null);
+    if (closeCheckout) {
+      razorpay?.close?.();
+    }
   };
 
   const modules = [
@@ -160,7 +163,7 @@ export default function CustomerPaymentsPage() {
         },
         modal: {
           ondismiss: function () {
-            resetPaymentProcessing();
+            resetPaymentProcessing(false);
             toast.info("Payment cancelled.");
           }
         },
@@ -174,7 +177,7 @@ export default function CustomerPaymentsPage() {
       razorpay.on('payment.failed', function (response: any) {
         console.error("Payment failed", response.error);
         toast.error(`Payment failed: ${response.error.description}`);
-        resetPaymentProcessing();
+        resetPaymentProcessing(false);
       });
 
       razorpay.open();
