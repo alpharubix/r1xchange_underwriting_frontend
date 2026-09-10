@@ -23,7 +23,7 @@ import { Calendar } from '@/components/ui/calendar';
 import type { CashFlowData } from './cashFlowType';
 import rows from './cashflowtablerow';
 import BankAccountDetails from '../BankAccountDetails';
-import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
+// import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 export default function CashFlow() {
     const [fromDate, setFromDate] = useState('');
