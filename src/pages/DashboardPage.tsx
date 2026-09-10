@@ -16,6 +16,9 @@ import {
   PieChart,
   ShieldCheck,
   HelpCircle,
+  Minus,
+  Plus,
+  ShoppingCart,
 } from 'lucide-react';
 import { KycModal } from '@/components/KycModal';
 import HomeIntro from '@/components/HomeIntro';
@@ -24,6 +27,7 @@ import ItrUploadModal from '@/components/ItrUploadModal';
 import PaymentModal from '@/components/PaymentModal';
 import { getPricingDetails } from '@/components/PaymentModal';
 import { getWalletBalance } from '@/api/payment';
+import type { ServiceBreakup } from '@/api/payment';
 import { toast } from 'sonner';
 
 export default function DashboardPage() {
@@ -33,43 +37,67 @@ export default function DashboardPage() {
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
-  const [paymentModal, setPaymentModal] = useState<{
-    isOpen: boolean;
-    moduleName: string;
-    serviceId: string;
-    amount: number;
-    onSuccess: () => void;
-  }>({
-    isOpen: false,
-    moduleName: '',
-    serviceId: '',
-    amount: 0,
-    onSuccess: () => {},
+  const [cartTouched, setCartTouched] = useState(false);
+  const [checkoutOpen, setCheckoutOpen] = useState(false);
+  const [quantities, setQuantities] = useState<Record<string, number>>({
+    BSA: 1,
+    GST: 1,
+    ITR: 1,
+    CIBIL: 1,
   });
-
   const navigate = useNavigate();
 
-  const openModulePayment = (moduleName: string, serviceId: string, onSuccess: () => void) => {
-    const pricing = getPricingDetails(moduleName, 0);
-    setPaymentModal({
-      isOpen: true,
-      moduleName,
-      serviceId,
-      amount: pricing.total,
-      onSuccess,
-    });
+  const updateQuantity = (service: string, change: number) => {
+    setCartTouched(true);
+    setQuantities((current) => ({
+      ...current,
+      [service]: Math.min(10, Math.max(0, (current[service] || 0) + change)),
+    }));
   };
 
-  const handlePaidModule = async (moduleName: string, serviceId: string, onSuccess: () => void) => {
+  const cartItems = [
+    { service: 'BSA', label: 'Bank Statement Analysis', pricing: getPricingDetails('BSA', 1) },
+    { service: 'GST', label: 'Goods & Services Tax', pricing: getPricingDetails('GST', 1) },
+    { service: 'ITR', label: 'Income Tax Returns', pricing: getPricingDetails('ITR', 1) },
+    { service: 'CIBIL', label: 'CIBIL Credit Report', pricing: getPricingDetails('CIBIL', 1) },
+  ].map((item) => ({
+    ...item,
+    qty: quantities[item.service] || 0,
+  }));
+
+  const selectedCartItems = cartItems.filter((item) => item.qty > 0);
+  const cartSubtotal = selectedCartItems.reduce((sum, item) => sum + item.pricing.base * item.qty, 0);
+  const cartIgst = Number((cartSubtotal * 0.18).toFixed(2));
+  const cartTotal = Number((cartSubtotal + cartIgst).toFixed(2));
+  const cartSelection: ServiceBreakup[] = cartItems.map((item) => ({
+    service: item.service,
+    qty: item.qty,
+  }));
+  const cartBreakup: ServiceBreakup[] = selectedCartItems.map((item) => ({
+    service: item.service,
+    qty: item.qty,
+  }));
+
+  const openCartPayment = () => {
+    if (cartBreakup.length === 0) {
+      toast.error('Select at least one service before checkout.');
+      return;
+    }
+    setCheckoutOpen(true);
+  };
+
+  const handleModuleClick = async (serviceId: string, onWalletAvailable: () => void) => {
     try {
       setIsCheckingWallet(true);
       const response = await getWalletBalance(serviceId);
 
       if (response.data?.is_balance_available) {
-        onSuccess();
-      } else {
-        openModulePayment(moduleName, serviceId, onSuccess);
+        onWalletAvailable();
+        return;
       }
+
+      setCartTouched(true);
+      toast.info(`Please add credits to analyze the ${serviceId} reports`);
     } catch (error: any) {
       toast.error(error?.response?.data?.message || 'Failed to check wallet balance.');
     } finally {
@@ -98,29 +126,32 @@ export default function DashboardPage() {
   const dashboardItems = [
     {
       title: 'Bank Statement Analysis',
-      description: 'Upload & Analysis',
+      description: '12 month period for 1 Bank Acc.',
+      moduleId: 'BSA',
       icon: <Building2 className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        void handlePaidModule('BSA', 'BSA', () => setIsModalOpen(true));
+        void handleModuleClick('BSA', () => setIsModalOpen(true));
       },
       disabled: false,
     },
     {
       title: 'GSTR Analysis',
-      description: 'Analysis GSTR',
+      description: '12 month period for 1 GST No.',
+      moduleId: 'GST',
       icon: <FileText className="h-8 w-8 text-[#002366]" />,
       onClick: () => {
-        void handlePaidModule('GST', 'GST', () => navigate('/gst/analysis'));
+        void handleModuleClick('GST', () => navigate('/gst/analysis'));
       },
       disabled: false,
     },
     {
       title: 'ITR',
-      description: 'Income Tax Return',
+      description: '2 Financial Years for 1 Business',
+      moduleId: 'ITR',
       icon: <PieChart className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        void handlePaidModule('ITR', 'ITR', () => setIsItrModalOpen(true));
+        void handleModuleClick('ITR', () => setIsItrModalOpen(true));
       },
     },
     {
@@ -134,12 +165,13 @@ export default function DashboardPage() {
     },
     {
       title: 'CIBIL Score',
-      description: 'Credit Report',
+      description: 'Credit Bureau Records till date',
+      moduleId: 'CIBIL',
       icon: <CreditCard className="h-8 w-8 text-[#002366]" />,
       disabled: false,
       onClick: () => {
-        void handlePaidModule('CIBIL', 'CIBIL', () => navigate('/cibil'));
-      }
+        void handleModuleClick('CIBIL', () => navigate('/cibil'));
+      },
     },
 
   ];
@@ -169,52 +201,86 @@ export default function DashboardPage() {
           </Button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {dashboardItems.map((item, index) => (
-            <Card
-              key={index}
-              className={`transition-all duration-300 ${item.disabled
-                ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
+        <div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {dashboardItems.map((item, index) => (
+              <Card
+                key={index}
+                className={`transition-all duration-300 ${item.disabled
+                  ? 'opacity-60 cursor-not-allowed bg-gray-50'
+                  : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
                 }`}
-              onClick={!item.disabled ? item.onClick : undefined}
-              aria-busy={isCheckingWallet}
-            >
-              <CardHeader className="flex flex-row items-center gap-4 pb-2">
-                <div
-                  className={`p-3 rounded-xl ${item.disabled ? 'bg-gray-200' : 'bg-blue-50'}`}
-                >
-                  {item.icon}
-                </div>
-                <div>
-                  <CardTitle className="text-xl">{item.title}</CardTitle>
-                  <CardDescription>{item.description}</CardDescription>
-                </div>
-              </CardHeader>
-              <CardContent>
-                {!item.disabled && (
-                  <div className="mt-4 flex items-center text-sm font-medium text-[#002366]">
-                    Click to proceed <span className="ml-2">→</span>
+                onClick={!item.disabled ? item.onClick : undefined}
+                aria-busy={isCheckingWallet}
+              >
+                <CardHeader className="flex flex-row items-center gap-4 pb-2">
+                  <div className={`rounded-xl p-3 ${item.disabled ? 'bg-gray-200' : 'bg-blue-50'}`}>
+                    {item.icon}
                   </div>
-                )}
-              </CardContent>
-            </Card>
-          ))}
+                  <div>
+                    <CardTitle className="text-xl">{item.title}</CardTitle>
+                  <CardDescription className="whitespace-pre-line">{item.description}</CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  {!item.disabled && (
+                    <div className="mt-4 flex items-center justify-between gap-3 text-sm font-medium text-[#002366]">
+                      <span>Click to proceed <span className="ml-2">→</span></span>
+                      {item.moduleId && (
+                        <div className="flex items-center gap-2 rounded-lg border border-slate-200 bg-slate-50 p-1" onClick={(event) => event.stopPropagation()}>
+                          <button
+                            type="button"
+                            aria-label={`Decrease ${item.moduleId} quantity`}
+                            onClick={() => updateQuantity(item.moduleId!, -1)}
+                            disabled={(quantities[item.moduleId] || 0) === 0}
+                            className="flex h-7 w-7 items-center justify-center rounded-md text-[#002366] hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="min-w-5 text-center text-sm font-bold text-slate-700">{quantities[item.moduleId] || 0}</span>
+                          <button
+                            type="button"
+                            aria-label={`Increase ${item.moduleId} quantity`}
+                            onClick={() => updateQuantity(item.moduleId!, 1)}
+                            disabled={(quantities[item.moduleId] || 0) === 10}
+                            className="flex h-7 w-7 items-center justify-center rounded-md text-[#002366] hover:bg-white disabled:cursor-not-allowed disabled:opacity-40"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {cartTouched && (
+            <div className="mt-2 flex justify-end">
+              <Button onClick={openCartPayment} disabled={selectedCartItems.length === 0} className="h-11 rounded-xl bg-[#002366] px-6 font-bold text-white hover:bg-[#002366]/90">
+                <ShoppingCart className="mr-2 h-4 w-4" />
+                Go to Checkout
+              </Button>
+            </div>
+          )}
         </div>
 
         <BsaUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         <ItrUploadModal isOpen={isItrModalOpen} onClose={() => setIsItrModalOpen(false)} />
 
         <PaymentModal
-          isOpen={paymentModal.isOpen}
-          onClose={() => setPaymentModal((prev) => ({ ...prev, isOpen: false }))}
-          moduleName={paymentModal.moduleName}
-          serviceId={paymentModal.serviceId}
-          amount={paymentModal.amount}
+          isOpen={checkoutOpen}
+          onClose={() => setCheckoutOpen(false)}
+          moduleName="Checkout"
+          serviceId="BSA"
+          amount={cartTotal}
+          servicesBreakup={cartSelection}
+          onQuantityChange={updateQuantity}
           onSuccess={() => {
-            const onSuccess = paymentModal.onSuccess;
-            setPaymentModal((prev) => ({ ...prev, isOpen: false }));
-            onSuccess();
+            setCheckoutOpen(false);
+            setQuantities({ BSA: 1, GST: 1, ITR: 1, CIBIL: 1 });
+            setCartTouched(false);
           }}
         />
 

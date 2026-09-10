@@ -215,6 +215,7 @@ export default function ServiceReport({ selectedCustomer, onBack }: ServiceRepor
         user_id: selectedCustomer.id,
         userId: selectedCustomer.id,
         service: config.serviceId,
+        services_breakup: [{ service: config.serviceId, qty: 1 }],
         amount: config.amount,
         currency: 'INR'
       });

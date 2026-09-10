@@ -17,10 +17,16 @@ export async function getWalletBalance(service: string, userId?: string): Promis
   return response.data;
 }
 
+export interface ServiceBreakup {
+  service: string;
+  qty: number;
+}
+
 export interface CreateOrderPayload {
   user_id?: string;
   userId?: string;
   service: string;
+  services_breakup: ServiceBreakup[];
   amount: number;
   currency: string;
 }
