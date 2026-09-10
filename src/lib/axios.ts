@@ -100,10 +100,11 @@ apiClient.interceptors.response.use(
       if (error.response?.status === 401 || error.response?.status === 403) {
         return Promise.reject(error);
       }
-    } else if (error.response?.status === 401) {
-      // Dispatch unauthorized for any 401 to ensure the user gets logged out if their session expires
-      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
-    }
+    } 
+    // else if (error.response?.status === 401) {
+    //   // Dispatch unauthorized for any 401 to ensure the user gets logged out if their session expires
+    //   window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+    // }
 
     if (!error.config?.skipErrorToast) {
       const serverMessage = extractErrorMessage(error);
