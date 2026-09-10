@@ -90,12 +90,12 @@ export default function LoginPage() {
                 id="login-form"
               >
                 {/* API Error */}
-                {loginMutation.isError && (
+                {/* {loginMutation.isError && (
                   <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 animate-fade-in">
                     {getApiError(loginMutation.error)}
                   </div>
-                )}
-
+                )} */}
+  
                 {/* Email */}
                 <div className="space-y-2 text-black">
                   <Label htmlFor="login-email" className="text-black">

@@ -32,7 +32,9 @@ function extractRoleFromMessage(message?: string): string | null {
 // Helper to extract a readable error message from Axios errors
 function getApiError(error: unknown): string {
   if (axios.isAxiosError(error)) {
+    
     return (
+      error.response?.status == 404 && "User not found | Please register" ||
       error.response?.data?.message ||
       error.response?.data?.error ||
       error.message ||
