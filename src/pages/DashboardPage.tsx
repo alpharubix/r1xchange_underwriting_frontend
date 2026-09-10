@@ -88,6 +88,7 @@ export default function DashboardPage() {
 
   const handleModuleClick = async (serviceId: string, onWalletAvailable: () => void) => {
     try {
+      console.log("Cart touched ",cartTouched);
       setIsCheckingWallet(true);
       const response = await getWalletBalance(serviceId);
 
@@ -256,14 +257,14 @@ export default function DashboardPage() {
             ))}
           </div>
 
-          {cartTouched && (
+          
             <div className="mt-2 flex justify-end">
               <Button onClick={openCartPayment} disabled={selectedCartItems.length === 0} className="h-11 rounded-xl bg-[#002366] px-6 font-bold text-white hover:bg-[#002366]/90">
                 <ShoppingCart className="mr-2 h-4 w-4" />
                 Go to Checkout
               </Button>
             </div>
-          )}
+          
         </div>
 
         <BsaUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
