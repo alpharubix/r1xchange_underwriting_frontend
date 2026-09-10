@@ -20,7 +20,7 @@ import AccountSummaryTab from './AccountSummaryTab';
 import PaymentHistoryTab from './PaymentHistoryTab';
 import AnalysisTab from './AnalysisTab';
 
-type TabValue = 'overview' | 'account-summary' | 'payements-history' | 'analysis';
+type TabValue = 'overview' | 'account-summary' | 'Payments-history' | 'analysis';
 
 type QueryState<T> = {
   data?: T;
@@ -32,14 +32,14 @@ type QueryState<T> = {
 const reportTabs: Array<{ value: TabValue; label: string }> = [
   { value: 'overview', label: 'Overview' },
   { value: 'account-summary', label: 'Account Summary' },
-  { value: 'payements-history', label: 'Payements History' },
+  { value: 'Payments-history', label: 'Payments History' },
   { value: 'analysis', label: 'Analysis' },
 ];
 
 const tabIndices: Record<TabValue, number> = {
   'overview': 0,
   'account-summary': 1,
-  'payements-history': 2,
+  'Payments-history': 2,
   'analysis': 3,
 };
 
@@ -87,7 +87,7 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
     () => ({
       overview: overviewQuery.isFetching,
       'account-summary': accountSummaryQuery.isFetching,
-      'payements-history': paymentHistoryQuery.isFetching,
+      'Payments-history': paymentHistoryQuery.isFetching,
       analysis: analysisQuery.isFetching,
     }),
     [
@@ -156,11 +156,11 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
         </QueryBoundary>
       </TabsContent>
 
-      <TabsContent value="payements-history" forceMount className="data-[state=inactive]:hidden">
+      <TabsContent value="Payments-history" forceMount className="data-[state=inactive]:hidden">
         <QueryBoundary query={{ data: paymentHistoryQuery.data?.data, isLoading: paymentHistoryQuery.isLoading, isError: paymentHistoryQuery.isError, error: paymentHistoryQuery.error }}>
           {(data) => (
             <motion.div
-              key={`history-${activeTab === 'payements-history' ? 'active' : 'inactive'}`}
+              key={`history-${activeTab === 'Payments-history' ? 'active' : 'inactive'}`}
               initial={{ x: initialX, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ type: 'spring', stiffness: 200, damping: 25 }}
