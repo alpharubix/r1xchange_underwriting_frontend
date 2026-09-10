@@ -93,11 +93,11 @@ export interface PendingPaymentsResponse {
 
 export async function getPendingPayments(service: string, custId?: string): Promise<PendingPaymentsResponse> {
   const params = new URLSearchParams({ service });
-  if (custId) params.set('cust_id', custId);
+  const payload = custId ? { cust_id: custId } : {};
 
   const response = await apiClient.post<PendingPaymentsApiResponse | PendingPayment[]>(
     `/payments/pending?${params.toString()}`,
-    {},
+    payload,
     {
       headers: {
         'Content-Type': 'application/json',
