@@ -126,7 +126,8 @@ export default function CustomerPaymentsPage() {
 
       const options = {
         key: razorpayKey,
-        amount: Math.round(payment.amount * 100),
+        // Pending orders already contain Razorpay's amount in paise.
+        amount: payment.amount,
         currency: payment.currency || "INR",
         name: "R1Xchange Underwriting",
         description: `Payment for ${payment.service} report`,
