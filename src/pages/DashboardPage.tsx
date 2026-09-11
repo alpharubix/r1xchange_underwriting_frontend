@@ -29,7 +29,7 @@ import { getPricingDetails } from '@/components/PaymentModal';
 import { getWalletBalance } from '@/api/payment';
 import type { ServiceBreakup } from '@/api/payment';
 import { toast } from 'sonner';
-
+import { useLocation } from 'react-router-dom';
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [companyName, setCompanyName] = useState<string>('');
@@ -46,6 +46,8 @@ export default function DashboardPage() {
     CIBIL: 1,
   });
   const navigate = useNavigate();
+
+  const location = useLocation();
 
   const updateQuantity = (service: string, change: number) => {
     setCartTouched(true);
@@ -65,6 +67,8 @@ export default function DashboardPage() {
     qty: quantities[item.service] || 0,
   }));
 
+  const [highlightedService, setHighlightedService] = useState<string | undefined>(undefined);
+  const [showHomeIntro, setShowHomeIntro] = useState(false);
   const selectedCartItems = cartItems.filter((item) => item.qty > 0);
   const cartSubtotal = selectedCartItems.reduce((sum, item) => sum + item.pricing.base * item.qty, 0);
   const cartIgst = Number((cartSubtotal * 0.18).toFixed(2));
@@ -107,10 +111,33 @@ export default function DashboardPage() {
   };
 
   useEffect(() => {
-    console.log("Company name " + companyName)
+    setCompanyName(sessionStorage.getItem("company_name") ?? "");
+    console.log("Welcome ",companyName);
+    const shouldShowIntro = sessionStorage.getItem("show_home_intro");
 
-    setCompanyName(sessionStorage.getItem('company_name') ?? '');
-  }, [])
+    if (shouldShowIntro === "true") {
+      setShowHomeIntro(true);
+
+      // Consume the flag so it doesn't show again
+      sessionStorage.removeItem("show_home_intro");
+    }
+  }, []);
+
+
+    useEffect(() => {
+      const service = location.state?.highlight as string ;
+      console.log("Service is ",service);
+
+      if (!service) return;
+
+      setHighlightedService(service);
+
+      const timer = setTimeout(() => {
+        setHighlightedService(undefined);
+      }, 2000);
+
+      return () => clearTimeout(timer);
+    }, [location.state]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -181,10 +208,8 @@ export default function DashboardPage() {
 
     <>
 
-      {companyName && (
-        <HomeIntro />
-      )}
-      <div className="p-8 pb-4 animate-fade-in relative min-h-screen flex flex-col">
+      {showHomeIntro && <HomeIntro />}
+      <div className={`${highlightedService ? 'p-8 pb-4 animate-fade-in relative min-h-screen flex flex-col ' : 'p-8 pb-4 animate-fade-in relative min-h-screen flex flex-col '}`}>
         <div className="mb-8 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-[#002366] mb-2">Dashboard</h1>
@@ -206,11 +231,16 @@ export default function DashboardPage() {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {dashboardItems.map((item, index) => (
               <Card
-                key={index}
-                className={`transition-all duration-300 ${item.disabled
-                  ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                  : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
-                }`}
+                  key={index}
+                  className={`transition-all duration-500 ${
+                    item.disabled
+                      ? 'opacity-60 cursor-not-allowed bg-gray-50'
+                      : highlightedService
+                        ? highlightedService === item.moduleId
+                          ? 'relative z-20 cursor-pointer border-3 border-[#002366] bg-white shadow-[0_0_40px_rgba(0,35,102,0.85)] scale-[1.42]'
+                          : 'blur-sm opacity-40 pointer-events-none'
+                        : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
+                  }`}
                 onClick={!item.disabled ? item.onClick : undefined}
                 aria-busy={isCheckingWallet}
               >

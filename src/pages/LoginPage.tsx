@@ -14,9 +14,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { loginSchema, type LoginFormValues } from "@/lib/zod-schemas";
-import { useLogin, getApiError } from "@/hooks/useAuth";
+// import { useLogin, getApiError } from "@/hooks/useAuth";
 import r1xchangeLogoBlackWebView from "../assets/r1xchangeLogoBlackWebView.svg";
 import r1xchangeLogoWhiteWebView from "../assets/r1xchangeLogoWhiteWebView.svg";
+import { useLogin } from "@/hooks/useAuth";
 // import HomeIntro from "@/components/HomeIntro";
 
 export default function LoginPage() {
@@ -33,6 +34,7 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  sessionStorage.setItem("show_home_intro", "true");
   const onSubmit = (values: LoginFormValues) => {
     loginMutation.mutate(values);
   };
@@ -95,7 +97,7 @@ export default function LoginPage() {
                     {getApiError(loginMutation.error)}
                   </div>
                 )} */}
-  
+
                 {/* Email */}
                 <div className="space-y-2 text-black">
                   <Label htmlFor="login-email" className="text-black">

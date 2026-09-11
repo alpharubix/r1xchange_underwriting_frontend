@@ -35,6 +35,7 @@ function getApiError(error: unknown): string {
     
     return (
       error.response?.status == 404 && "User not found | Please register" ||
+      error.response?.status == 401 && "Invalid Credentials" ||
       error.response?.data?.message ||
       error.response?.data?.error ||
       error.message ||
