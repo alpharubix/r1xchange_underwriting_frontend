@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isKycModalOpen, setIsKycModalOpen] = useState(false);
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
-  const [cartTouched, setCartTouched] = useState(false);
+  // const [cartTouched, setCartTouched] = useState(false);
   const [checkoutOpen, setCheckoutOpen] = useState(false);
 
   const [quantities, setQuantities] = useState<Record<string, number>>({

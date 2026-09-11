@@ -776,7 +776,7 @@ export default function OverviewMonthlyWise() {
       {showScrollHint && (
         <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
           <p className="text-sm text-gray-500">
-            â†‘ Scroll up to view <span className="font-medium">Monthly Overview</span>
+             Scroll up to view <span className="font-medium">Monthly Overview</span>
           </p>
         </div>
       )}

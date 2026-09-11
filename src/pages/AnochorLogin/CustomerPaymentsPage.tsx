@@ -60,7 +60,7 @@ export default function CustomerPaymentsPage() {
       const balances = await Promise.all(
         modules.map(async (module) => {
           const response = await getWalletBalance(module.id, userId);
-          return [module.id, response.data.available_balance] as const;
+          return [module.id, response.data.available_balance ?? 0] as const;
         })
       );
 
@@ -211,13 +211,17 @@ export default function CustomerPaymentsPage() {
       {/* Module Wallet Checkers */}
       <div >
         <h2 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wider text-sm">Wallet Balances</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
           {modules.map((mod) => (
             <button
-              key={mod.id}
-              onClick={() => handleCheckWalletBalance(mod.id)}
-              className="flex flex-col items-center justify-center p-3 bg-white rounded-2xl border-2 border-slate-100 hover:border-[#002366] hover:shadow-lg transition-all group"
-            >
+            key={mod.id}
+            onClick={() => handleCheckWalletBalance(mod.id)}
+            className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 ${
+              walletBalances[mod.id] === 0
+                ? ""
+                : ""
+            } hover:shadow-lg transition-all group`}
+          >
               <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-[#002366]/10 transition-colors">
                 <mod.icon className="h-6 w-6 text-slate-500 group-hover:text-[#002366]" />
               </div>

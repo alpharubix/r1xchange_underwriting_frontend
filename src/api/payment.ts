@@ -7,7 +7,7 @@ export interface WalletBalanceResponse {
     user_id?: string;
     service: string;
     is_balance_available: boolean;
-    available_balance: number;
+    available_balance: number ;
   };
 }
 
