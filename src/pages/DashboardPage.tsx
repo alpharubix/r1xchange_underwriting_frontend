@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { BriefcaseBusiness } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -20,7 +20,8 @@ import { KycModal } from '@/components/KycModal';
 import HomeIntro from '@/components/HomeIntro';
 import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
-import PaymentModal, { getPricingDetails } from '@/components/PaymentModal';
+import PaymentModal from '@/components/PaymentModal';
+import { getPricingDetails } from '@/lib/paymentUtils';
 
 import { getWalletBalance } from '@/api/payment';
 import type { ServiceBreakup } from '@/api/payment';

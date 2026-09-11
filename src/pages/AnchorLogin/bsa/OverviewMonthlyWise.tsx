@@ -803,7 +803,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
 
   return (
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)] bg-white">
-      <div className="flex items-center gap-4 mb-8">
+      <div className="flex items-center gap-4 mb-8 ">
         <div>
           <h1 className="text-3xl font-bold text-slate-900 mb-2">
             Month-Wise Overview
@@ -992,7 +992,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
         </Card>
       )}
 
-      <Card className="shadow-lg border-slate-100 bg-white overflow-hidden rounded-2xl">
+      <Card className="shadow-lg border-slate-100 bg-white overflow-hidden rounded-2xl ">
         <CardHeader className="flex flex-row items-center justify-between bg-slate-50/70 border-b pb-4">
           <div>
             <CardTitle className="text-xl text-slate-900 font-bold">

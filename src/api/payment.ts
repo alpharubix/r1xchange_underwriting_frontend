@@ -77,32 +77,34 @@ export interface PendingPayment {
   amount: number;
   currency?: string;
   service: string;
-  notes:any
   created_at?: string;
+  notes?:{
+    user_id:string,
+    services_breakup?:ServiceBreakup[]
+  }
 }
 
 export interface PendingOrderResponse {
   pending_order: PendingPayment | null;
-  pending_orders: PendingPayment[];
   is_pending_payment_found: boolean;
 }
 
-interface PendingPaymentsApiResponse {
-  message?: string;
-  data?: PendingOrderResponse | PendingPayment[];
-}
+// interface PendingPaymentsApiResponse {
+//   message?: string;
+//   data?: PendingOrderResponse | PendingPayment[];
+// }
 
 export interface PendingPaymentsResponse {
   message: string;
   data: PendingOrderResponse;
 }
 
-export async function getPendingPayments(service: string, custId?: string): Promise<PendingPaymentsResponse> {
-  const params = new URLSearchParams({ service });
+export async function getPendingPayments(custId?: string): Promise<PendingPaymentsResponse> {
+  // const params = new URLSearchParams({ service });
   const payload = custId ? { cust_id: custId } : {};
 
-  const response = await apiClient.post<PendingPaymentsApiResponse | PendingPayment[]>(
-    `/payments/pending?${params.toString()}`,
+  const response = await apiClient.post<PendingPaymentsResponse >(
+    `/payments/pending`,
     payload,
     {
       headers: {
@@ -111,18 +113,7 @@ export async function getPendingPayments(service: string, custId?: string): Prom
     },
   );
   const data = response.data;
-  const orders = Array.isArray(data)
-    ? data
-    : Array.isArray(data.data)
-      ? data.data
-      : data.data?.pending_orders || (data.data?.pending_order ? [data.data.pending_order] : []);
-
-  return {
-    message: Array.isArray(data) ? 'Pending orders retrieved successfully' : data.message || 'Pending orders retrieved successfully',
-    data: {
-      pending_order: orders[0] || null,
-      pending_orders: orders,
-      is_pending_payment_found: orders.length > 0,
-    },
-  };
+  console.log("Pending payment response : ",data);
+  
+  return response.data;
 }

@@ -1,11 +1,12 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useRef } from "react";
 import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
-import PaymentModal, { getPricingDetails } from "@/components/PaymentModal";
+import PaymentModal from "@/components/PaymentModal";
+import { getPricingDetails } from "@/lib/paymentUtils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
@@ -73,20 +74,9 @@ export default function CustomerPaymentsPage() {
     queryKey: ["pending-payments-all"],
     queryFn: async () => {
       try {
-        const [bsa, gst, itr, cibil] = await Promise.all([
-          getPendingPayments("BSA"),
-          getPendingPayments("GST"),
-          getPendingPayments("ITR"),
-          getPendingPayments("CIBIL")
-        ]);
-        return {
-          data: [
-            ...bsa.data.pending_orders,
-            ...gst.data.pending_orders,
-            ...itr.data.pending_orders,
-            ...cibil.data.pending_orders
-          ]
-        };
+        const res = await getPendingPayments();
+        const order = res.data?.pending_order;
+        return { data: order ? [order] : [] };
       } catch (err) {
         console.error("Error fetching pending payments:", err);
         return { data: [] };
@@ -95,7 +85,7 @@ export default function CustomerPaymentsPage() {
   });
 
   const pendingPayments = paymentsRes?.data || [];
-
+  console.log("Pending Payments:", pendingPayments); // Debugging log
   const handleCheckWalletBalance = async (service: string) => {
     try {
       const toastId = toast.loading(`Checking wallet balance for ${service}...`);
@@ -214,14 +204,13 @@ export default function CustomerPaymentsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
           {modules.map((mod) => (
             <button
-            key={mod.id}
-            onClick={() => handleCheckWalletBalance(mod.id)}
-            className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 ${
-              walletBalances[mod.id] === 0
-                ? ""
-                : ""
-            } hover:shadow-lg transition-all group`}
-          >
+              key={mod.id}
+              onClick={() => handleCheckWalletBalance(mod.id)}
+              className={`flex flex-col items-center justify-center p-3 rounded-2xl border-2 ${walletBalances[mod.id] === 0
+                  ? ""
+                  : ""
+                } hover:shadow-lg transition-all group`}
+            >
               <div className="h-12 w-12 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-[#002366]/10 transition-colors">
                 <mod.icon className="h-6 w-6 text-slate-500 group-hover:text-[#002366]" />
               </div>
@@ -262,67 +251,67 @@ export default function CustomerPaymentsPage() {
                   : "Anchor";
 
               return (
-              <Card key={payment.id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
-                <div className="h-2 bg-[#002366]" />
-                <CardContent className="p-6 flex flex-col h-full">
-                  <div className="flex justify-between items-start mb-4">
-                    <div>
-                      <div className="text-xs font-bold text-[#002366] uppercase tracking-wider mb-1">
-                        {payment.service} REPORT
+                <Card key={payment.id} className="overflow-hidden border-0 shadow-lg shadow-black/5 hover:shadow-xl hover:shadow-[#002366]/5 transition-all group">
+                  <div className="h-2 bg-[#002366]" />
+                  <CardContent className="p-6 flex flex-col h-full">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <div className="text-xs font-bold text-[#002366] uppercase tracking-wider mb-1">
+                          {payment.service} REPORT
+                        </div>
+
                       </div>
-            
+                      <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#002366]/10 transition-colors">
+                        <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#002366]" />
+                      </div>
                     </div>
-                    <div className="h-10 w-10 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#002366]/10 transition-colors">
-                      <IndianRupee className="h-5 w-5 text-gray-700 group-hover:text-[#002366]" />
-                    </div>
-                  </div>
 
-                  <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-3 space-y-2 text-xs text-slate-600">
-                    <div className="flex items-center gap-2">
-                      <UserRound className="h-4 w-4 text-[#002366]" />
-                      <span>Requested by</span>
-                      
-                      <span className="font-bold text-[#002366]">{requestedBy}</span>
-                    </div>
-                    <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-semibold text-slate-500 shrink-0">User ID</span>
-                      <span className="font-mono text-[11px] truncate" title={payment.user_id || "Unavailable"}>
-                        {payment.notes.user_id || "Unavailable"}
-                      </span>
-                    </div>
-                   
-                  </div>
+                    <div className="rounded-xl border border-slate-100 bg-slate-50/80 p-3 space-y-2 text-xs text-slate-600">
+                      <div className="flex items-center gap-2">
+                        <UserRound className="h-4 w-4 text-[#002366]" />
+                        <span>Requested by</span>
 
-                  <div className="mt-auto pt-6">
-                    <div className="flex items-baseline gap-1 mb-4">
-                      <span className="text-3xl font-bold text-gray-900">₹{(payment.amount / 100).toLocaleString('en-IN')}</span>
+                        <span className="font-bold text-[#002366]">{requestedBy}</span>
+                      </div>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-semibold text-slate-500 shrink-0">User ID</span>
+                        <span className="font-mono text-[11px] truncate" title={payment.user_id || "Unavailable"}>
+                          {payment.notes.user_id || "Unavailable"}
+                        </span>
+                      </div>
+
                     </div>
-                    <Button
-                      onClick={() => {
-                        if (processingId === payment.id) {
-                          resetPaymentProcessing();
-                          return;
-                        }
-                        void handlePay(payment);
-                      }}
-                      disabled={processingId !== null && processingId !== payment.id}
-                      className="w-full h-11 bg-[#002366] hover:bg-[#3f32a3]/80 hover:tracking-[0.05em] text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
-                    >
-                      {processingId === payment.id ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                          Cancel Payment
-                        </>
-                      ) : (
-                        <>
-                          Pay Now
-                          <ArrowRight className="h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
+
+                    <div className="mt-auto pt-6">
+                      <div className="flex items-baseline gap-1 mb-4">
+                        <span className="text-3xl font-bold text-gray-900">₹{(payment.amount / 100).toLocaleString('en-IN')}</span>
+                      </div>
+                      <Button
+                        onClick={() => {
+                          if (processingId === payment.id) {
+                            resetPaymentProcessing();
+                            return;
+                          }
+                          void handlePay(payment);
+                        }}
+                        disabled={processingId !== null && processingId !== payment.id}
+                        className="w-full h-11 bg-[#002366] hover:bg-[#3f32a3]/80 hover:tracking-[0.05em] text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2"
+                      >
+                        {processingId === payment.id ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Cancel Payment
+                          </>
+                        ) : (
+                          <>
+                            Pay Now
+                            <ArrowRight className="h-4 w-4" />
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
               );
             })}
           </div>

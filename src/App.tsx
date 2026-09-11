@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "@/lib/queryClient";
@@ -11,7 +11,7 @@ import ViewReport from "./pages/cibil/ViewReport";
 
 
 const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const AnchorLoginPage = lazy(() => import("./pages/AnochorLogin/AnchorLoginPage"));
+const AnchorLoginPage = lazy(() => import("./pages/AnchorLogin/AnchorLoginPage"));
 const AdminLoginPage = lazy(() => import("./pages/adminlogin/AdminLoginPage"));
 const AdminProtectedRoute = lazy(() => import("./components/AdminProtectedRoute"));
 const AdminDashboardPage = lazy(() => import("@/pages/adminlogin/AdminUsersPage"));
@@ -20,7 +20,7 @@ const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
 const DashboardLayout = lazy(() => import("@/layouts/DashboardLayout"));
 const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
 const AnchorProtectedRoute = lazy(() => import("./components/AnchorProtectedRoute"));
-const AnchorCustomerPage = lazy(() => import("./pages/AnochorLogin/AnchorCustomerPage"));
+const AnchorCustomerPage = lazy(() => import("./pages/AnchorLogin/AnchorCustomerPage"));
 const SummeryOfDebitAndCredit = lazy(() => import("@/pages/bsa/SummaryOfDebitAndCredit"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const CashFlow = lazy(() => import("@/pages/bsa/cashFlow/CashFlow"));
@@ -35,8 +35,8 @@ const ITRProfitAndLossStatementPage = lazy(() => import("@/pages/itr/ProfitAndLo
 const ITRRatioAnalysisPage = lazy(() => import("@/pages/itr/RatioAnalysis"));
 const HelpCenterPage = lazy(() => import("@/pages/HelpCenter"));
 const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
-const ProfileManagement = lazy(()=>import("@/pages/ProfileManagement"))
-const CustomerPaymentsPage = lazy(() => import("@/pages/AnochorLogin/CustomerPaymentsPage"));
+const ProfileManagement = lazy(() => import("@/pages/ProfileManagement"))
+const CustomerPaymentsPage = lazy(() => import("@/pages/AnchorLogin/CustomerPaymentsPage"));
 const WalletProtectedComponent = lazy(() => import("@/components/WalletProtectedComponent"));
 
 

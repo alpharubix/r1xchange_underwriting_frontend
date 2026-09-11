@@ -29,7 +29,8 @@
   import PayerSelectionModal from '@/components/PayerSelectionModal';
   import { createPaymentOrder, getPendingPayments } from '@/api/payment';
   import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
-
+  import WalletModal from '@/pages/AnchorLogin/WalletModal';
+import { useNavigate } from 'react-router-dom';
 
   interface Customer {
     id: string;
@@ -137,6 +138,8 @@
     const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(null);
     const [viewingSaveMoneyReport, setViewingSaveMoneyReport] = useState<any | null>(null);
     const [viewingRectifyMoneyReport, setViewingRectifyMoneyReport] = useState<any | null>(null);
+    const [viewingAccessMoneyReport, setViewingAccessMoneyReport] = useState<any | null>(null);
+    const [walletModalOpen, setWalletModalOpen] = useState(false);
 
     const [paymentModalConfig, setPaymentModalConfig] = useState<{
       isOpen: boolean;
@@ -167,7 +170,7 @@
     });
 
     const [isCheckingWallet, setIsCheckingWallet] = useState(false);
-
+    const navigate = useNavigate();
     const handleCreateReport = async (moduleName: string, serviceId: string, amount: number, onSuccess: () => void) => {
       try {
         setIsCheckingWallet(true);
@@ -176,13 +179,8 @@
         if (res.data.is_balance_available) {
           onSuccess();
         } else {
-          setPayerSelectionConfig({
-            isOpen: true,
-            moduleName,
-            serviceId,
-            amount,
-            onSuccess
-          });
+          toast.error(`Insufficient wallet balance for ${moduleName}. Please select a payer to proceed.`);
+          setReportsSubTab("wallet");
         }
       } catch (error) {
         console.error(error);
@@ -202,7 +200,7 @@
     const handleCustomerPay = async () => {
       const config = payerSelectionConfig;
       try {
-        const pendingResponse = await getPendingPayments(config.serviceId, selectedCustomer.id);
+        const pendingResponse = await getPendingPayments(selectedCustomer.id);
         const pendingOrder = pendingResponse.data?.pending_order;
 
         if (pendingResponse.data?.is_pending_payment_found && pendingOrder) {
@@ -347,7 +345,7 @@
         </div>
 
         <div className="flex flex-wrap items-center gap-2.5">
-          {(["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money"] as const).map((tab) => {
+          {(["bsa", "gst", "itr", "cibil", "access_money", "save_money", "rectify_money","wallet"] as const).map((tab) => {
             const tabLabels: Record<string, string> = {
               bsa: "BSA",
               gst: "GST",
@@ -355,7 +353,8 @@
               cibil: "CIBIL",
               access_money: "Access Money",
               save_money: "Save Money",
-              rectify_money: "Rectify Money"
+              rectify_money: "Rectify Money",
+              wallet: "Wallet & Recharge"
             };
             const isActive = reportsSubTab === tab;
             return (
@@ -375,7 +374,7 @@
                   setViewingRectifyMoneyReport(null);
                   localStorage.removeItem("selected_itr_report_id");
                 }}
-                className={`inline-flex items-center gap-2 px-4 py-2 rounded-3xl text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
+                className={`-ml-1 inline-flex items-center gap-2 px-4 py-2 rounded-3xl text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive
                   ? "bg-[#002366] text-white shadow-sm shadow-[#002366]/25"
                   : "bg-[#f0f4f9] text-slate-600 hover:bg-[#e4ebf5] hover:text-slate-900"
                   }`}
@@ -1023,6 +1022,12 @@
                   selectedCustomer={selectedCustomer}
                 />
               )}
+              {reportsSubTab === "wallet" && (
+                <WalletModal
+                  selectedCustomer={selectedCustomer}
+                />
+              )
+              }
 
 
 

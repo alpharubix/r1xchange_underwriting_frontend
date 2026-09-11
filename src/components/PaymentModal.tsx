@@ -8,59 +8,18 @@ import {
   CheckCircle2,
   Minus,
   Plus,
+  Send,
+  Users,
+  CreditCard,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { logoBase64 } from '@/assets/logoBase64';
 import { useAuthContext } from '@/contexts/AuthContext';
+import { getPricingDetails } from '@/lib/paymentUtils';
 
-export const getPricingDetails = (
-  module: string,
-  currentAmount: number
-) => {
-  switch (module.toUpperCase()) {
-    case 'BSA':
-      return {
-        base: 479,
-        gst: 86,
-        total: 565,
-        period: '1 Year',
-      };
 
-    case 'GST':
-      return {
-        base: 475,
-        gst: 86,
-        total: 561,
-        period: '1 Year',
-      };
-
-    case 'ITR':
-      return {
-        base: 445,
-        gst: 80,
-        total: 525,
-        period: '2 Years',
-      };
-
-    case 'CIBIL':
-      return {
-        base: 545,
-        gst: 98,
-        total: 643,
-        period: 'Latest Report',
-      };
-
-    default:
-      return {
-        base: currentAmount,
-        gst: 0,
-        total: currentAmount,
-        period: 'N/A',
-      };
-  }
-};
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -72,6 +31,7 @@ interface PaymentModalProps {
   servicesBreakup?: ServiceBreakup[];
   onQuantityChange?: (service: string, change: number) => void;
   onSuccess: () => void;
+  requestFromAnchor?: boolean;
 }
 
 export default function PaymentModal({
@@ -84,9 +44,10 @@ export default function PaymentModal({
   servicesBreakup,
   onQuantityChange,
   onSuccess,
+  requestFromAnchor = false,
 }: PaymentModalProps) {
   const [isProcessing, setIsProcessing] = useState(false);
-
+  const [isSendingToCustomer, setIsSendingToCustomer] = useState(false);
   const { user } = useAuthContext() as any;
 
   useEffect(() => {
@@ -328,10 +289,55 @@ export default function PaymentModal({
     } catch (err: any) {
       toast.error(
         err?.response?.data?.message ||
-          'Failed to initiate payment.'
+        'Failed to initiate payment.'
       );
 
       setIsProcessing(false);
+    }
+  };
+
+  const handleSendToCustomer = async () => {
+    try {
+      setIsSendingToCustomer(true);
+
+      const resolvedUserId =
+        custId ||
+        localStorage.getItem('selected_cust_id') ||
+        user?._id ||
+        user?.id ||
+        user?.data?.user_id ||
+        user?.data?._id ||
+        localStorage.getItem('user_id');
+
+      const orderPayload = {
+        service: serviceId,
+        services_breakup: servicesBreakup
+          ? servicesBreakup.filter((item) => item.qty > 0)
+          : [{ service: serviceId, qty: 1 }],
+        amount: payableAmount,
+        currency: 'INR',
+      } as Parameters<typeof createPaymentOrder>[0];
+
+      if (custId && resolvedUserId) {
+        orderPayload.user_id = resolvedUserId;
+        orderPayload.userId = resolvedUserId;
+      }
+
+      await createPaymentOrder(orderPayload);
+
+      toast.success(
+        'Payment request sent! The customer can now pay from their dashboard.'
+      );
+
+      onClose();
+      onSuccess();
+    } catch (err: any) {
+      toast.error(
+        err?.response?.data?.message ||
+        'Failed to send payment request to customer.'
+      );
+    } finally {
+      setIsSendingToCustomer(false);
     }
   };
 
@@ -366,11 +372,10 @@ export default function PaymentModal({
                 scale: 0.95,
                 y: 10,
               }}
-              className={`relative z-10 flex min-h-[600px] max-h-[95vh] h-auto w-full ${
-                isCartPayment
+              className={`relative z-10 flex min-h-[600px] max-h-[95vh] h-auto w-full ${isCartPayment
                   ? 'max-w-2xl'
                   : 'max-w-md'
-              } flex-col overflow-hidden rounded-3xl bg-white shadow-2xl`}
+                } flex-col overflow-hidden rounded-3xl bg-white shadow-2xl`}
             >
               {/* Header */}
               <div className="relative shrink-0 bg-[#002366] p-6 pb-2 text-white">
@@ -594,30 +599,77 @@ export default function PaymentModal({
                   </div>
                 )}
 
-                {/* Payment Button */}
+                {/* Payment Button(s) */}
                 <div className="relative w-full bg-white pt-1">
-                  <Button
-                    onClick={handlePay}
-                    disabled={
-                      isProcessing ||
-                      (isCartPayment &&
-                        !hasSelectedServices)
-                    }
-                    className="h-12 w-full cursor-pointer rounded-xl bg-[#002366] text-base font-bold text-white shadow-sm shadow-[#002366]/20 hover:border-2 hover:border-[#002366] hover:bg-[#002366]/80"
-                  >
-                    {isProcessing ? (
-                      <>
-                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                        Processing...
-                      </>
-                    ) : (
-                      `Pay ₹${Math.floor(
-                        payableAmount
-                      )} Securely`
-                    )}
-                  </Button>
+                  {requestFromAnchor ? (
+                    <div className="flex gap-3">
+                      {/* Option 1 — I Will Pay (Razorpay) */}
+                      <Button
+                        onClick={handlePay}
+                        disabled={
+                          isProcessing ||
+                          isSendingToCustomer ||
+                          (isCartPayment && !hasSelectedServices)
+                        }
+                        className="flex-1 h-12 cursor-pointer rounded-xl bg-[#002366] text-sm font-bold text-white shadow-sm shadow-[#002366]/20 hover:bg-[#002366]/80 flex items-center justify-center gap-2 transition-all"
+                      >
+                        {isProcessing ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <CreditCard className="h-4 w-4" />
+                            I Will Pay
+                          </>
+                        )}
+                      </Button>
+
+                      {/* Option 2 — Send to Customer (pending order) */}
+                      <Button
+                        onClick={handleSendToCustomer}
+                        disabled={
+                          isSendingToCustomer ||
+                          isProcessing ||
+                          (isCartPayment && !hasSelectedServices)
+                        }
+                        className="flex-1 h-12 cursor-pointer rounded-xl border-2 border-[#002366] bg-white text-sm font-bold text-[#002366] shadow-sm hover:bg-[#002366]/5 flex items-center justify-center gap-2 transition-all"
+                      >
+                        {isSendingToCustomer ? (
+                          <>
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="h-4 w-4" />
+                            Send to Customer
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={handlePay}
+                      disabled={
+                        isProcessing ||
+                        (isCartPayment && !hasSelectedServices)
+                      }
+                      className="h-12 w-full cursor-pointer rounded-xl bg-[#002366] text-base font-bold text-white shadow-sm shadow-[#002366]/20 hover:border-2 hover:border-[#002366] hover:bg-[#002366]/80"
+                    >
+                      {isProcessing ? (
+                        <>
+                          <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                          Processing...
+                        </>
+                      ) : (
+                        `Pay ₹${Math.floor(payableAmount)}`
+                      )}
+                    </Button>
+                  )}
                 </div>
-              </div>
+               </div>
             </motion.div>
           </div>
         </div>
