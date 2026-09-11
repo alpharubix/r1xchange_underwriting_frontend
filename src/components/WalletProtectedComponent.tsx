@@ -50,7 +50,7 @@ export default function WalletProtectedComponent({
     navigate,
   ]);
 
- if (isLoading || isRedirecting) {
+ if (isRedirecting) {
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
       

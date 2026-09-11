@@ -109,6 +109,7 @@ export function AppSidebar() {
 
   const { data: user, isLoading: userLoading } = useMe();
 
+  
   const displayName = user?.customer_name || user?.email_id || "User";
   const displayEmail = user?.email_id || "";
   const displayCompany = user?.company_name || "";
