@@ -51,7 +51,7 @@ export default function DashboardPage() {
 
   // Quantity
   const updateQuantity = (service: string, change: number) => {
-    setCartTouched(true);
+    //setCartTouched(true);
 
     setQuantities((current) => ({
       ...current,
@@ -133,7 +133,7 @@ export default function DashboardPage() {
         return;
       }
 
-      setCartTouched(true);
+      //setCartTouched(true);
 
       toast.info(`Please add credits to analyze the ${serviceId} reports`);
     } catch (error: any) {
@@ -445,7 +445,7 @@ export default function DashboardPage() {
               CIBIL: 1,
             });
 
-            setCartTouched(false);
+            // setCartTouched(false);
           }}
         />
 
