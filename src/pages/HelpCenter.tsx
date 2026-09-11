@@ -80,7 +80,7 @@ export default function HelpCenter() {
         setTickets([]);
       }
     } catch (e) {
-      console.error("Failed to fetch tickets from backend", e);
+      // console.error("Failed to fetch tickets from backend", e);
       setTickets([]);
     }
   };

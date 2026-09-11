@@ -122,7 +122,7 @@ export default function DashboardPage() {
     onWalletAvailable: () => void
   ) => {
     try {
-      console.log('Cart touched ', cartTouched);
+      // console.log('Cart touched ', cartTouched);
 
       setIsCheckingWallet(true);
 
@@ -161,7 +161,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const service = location.state?.highlight as string | undefined;
 
-    console.log('Service is ', service);
+    // console.log('Service is ', service);
 
     if (!service) {
       return;

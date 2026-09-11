@@ -101,21 +101,21 @@ export default function AdminDashboardPage() {
     return "user";
   }, [tab]);
 
-  console.log("RENDER - tab param:", tab, "activeTab derived:", activeTab);
+  // console.log("RENDER - tab param:", tab, "activeTab derived:", activeTab);
 
   const handleTabChange = (targetTab: "user" | "admin" | "anchor" | "logs") => {
     const isCapital = window.location.pathname.startsWith("/Admins");
     const tabSegment = targetTab === "anchor" ? "anchors" : targetTab;
     const targetUrl = `${isCapital ? "/Admins" : "/admins"}/${tabSegment}`;
-    console.log("handleTabChange - targetTab:", targetTab, "navigating to:", targetUrl);
+    // console.log("handleTabChange - targetTab:", targetTab, "navigating to:", targetUrl);
     navigate(targetUrl);
   };
 
   useEffect(() => {
     const t = tab?.toLowerCase();
-    console.log("useEffect tab check - t:", t);
+    // console.log("useEffect tab check - t:", t);
     if (!t || (t !== "user" && t !== "admin" && t !== "anchor" && t !== "anchors" && t !== "logs")) {
-      console.log("Redirecting undefined/invalid tab to user");
+      // console.log("Redirecting undefined/invalid tab to user");
       handleTabChange("user");
     }
   }, [tab]);

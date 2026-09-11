@@ -603,7 +603,7 @@ export default function OverviewMonthlyWise() {
     const handleScroll = () => {
       setShowScrollHint(container.scrollTop < 80);
     };
-    console.log(container.scrollTop);
+    // console.log(container.scrollTop);
     container.addEventListener("scroll", handleScroll);
 
     return () => container.removeEventListener("scroll", handleScroll);

@@ -31,7 +31,7 @@ function ExistingReports() {
   }, []);
 
   const handleViewReport = (reference_id: string) => {
-    console.log(reference_id);
+    // console.log(reference_id);
     navigate(`/cibil/view-report/${reference_id}`);
   };
 

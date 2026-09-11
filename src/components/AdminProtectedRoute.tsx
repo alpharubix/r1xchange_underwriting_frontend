@@ -4,7 +4,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 export default function AdminProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
 
-  console.log("AdminProtectedRoute debug:", { isLoading, isAuthenticated, user, storedRole: localStorage.getItem("user_role") });
+  // console.log("AdminProtectedRoute debug:", { isLoading, isAuthenticated, user, storedRole: localStorage.getItem("user_role") });
 
   if (isLoading) {
     return (

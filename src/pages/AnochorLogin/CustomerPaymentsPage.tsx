@@ -247,7 +247,7 @@ export default function CustomerPaymentsPage() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pendingPayments.map((payment) => {
-              console.log("Rendering payment:", payment); // Debugging log
+              // // console.log("Rendering payment:", payment); // Debugging log
               const requestedByYou = Boolean(payment.user_id && String(payment.user_id) === String(userId));
               const requestedBy = payment.role?.trim()
                 ? payment.role.trim().toLowerCase() === "customer" && requestedByYou

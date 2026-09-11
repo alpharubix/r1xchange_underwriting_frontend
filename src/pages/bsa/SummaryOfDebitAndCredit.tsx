@@ -51,7 +51,7 @@ export default function SummaryOfDebitAndCredit() {
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
-      console.log(accountDetails);
+      // console.log(accountDetails);
       const from = new Date(dateRangeData.from_date);
       const to = new Date(dateRangeData.to_date);
 
@@ -133,7 +133,7 @@ export default function SummaryOfDebitAndCredit() {
       const acc_data = response.data.data.account_details;
 
       setAccountDetails(acc_data);
-      console.log("Setting:", accountDetails)
+      // console.log("Setting:", accountDetails)
       sessionStorage.setItem("account_details", JSON.stringify(acc_data));
 
       return response.data?.data as SummaryData;
