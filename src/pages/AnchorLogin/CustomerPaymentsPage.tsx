@@ -276,7 +276,7 @@ export default function CustomerPaymentsPage() {
                       <div className="flex items-center gap-2 min-w-0">
                         <span className="font-semibold text-slate-500 shrink-0">User ID</span>
                         <span className="font-mono text-[11px] truncate" title={payment.user_id || "Unavailable"}>
-                          {payment.notes.user_id || "Unavailable"}
+                          {payment.notes?.user_id || "Unavailable"}
                         </span>
                       </div>
 

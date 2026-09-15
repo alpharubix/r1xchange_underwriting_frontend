@@ -30,7 +30,6 @@
   import { createPaymentOrder, getPendingPayments } from '@/api/payment';
   import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
   import WalletModal from '@/pages/AnchorLogin/WalletModal';
-import { useNavigate } from 'react-router-dom';
 
   interface Customer {
     id: string;
@@ -124,7 +123,7 @@ import { useNavigate } from 'react-router-dom';
   };
 
   export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
-    const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money">("bsa");
+    const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money" | "wallet">("bsa");
     const [slideDirection, setSlideDirection] = useState(0);
     const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
     const [isItrModalOpen, setIsItrModalOpen] = useState(false);
@@ -138,8 +137,6 @@ import { useNavigate } from 'react-router-dom';
     const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(null);
     const [viewingSaveMoneyReport, setViewingSaveMoneyReport] = useState<any | null>(null);
     const [viewingRectifyMoneyReport, setViewingRectifyMoneyReport] = useState<any | null>(null);
-    const [viewingAccessMoneyReport, setViewingAccessMoneyReport] = useState<any | null>(null);
-    const [walletModalOpen, setWalletModalOpen] = useState(false);
 
     const [paymentModalConfig, setPaymentModalConfig] = useState<{
       isOpen: boolean;
@@ -170,7 +167,6 @@ import { useNavigate } from 'react-router-dom';
     });
 
     const [isCheckingWallet, setIsCheckingWallet] = useState(false);
-    const navigate = useNavigate();
     const handleCreateReport = async (moduleName: string, serviceId: string, amount: number, onSuccess: () => void) => {
       try {
         setIsCheckingWallet(true);

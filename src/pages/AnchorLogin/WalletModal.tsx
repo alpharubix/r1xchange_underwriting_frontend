@@ -50,7 +50,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const razorpayRef = useRef<any>(null);
   const [isRequestedPaymentOpen, setIsRequestedPaymentOpen] = useState(false);
-  const [requestedModule, setRequestedModule] = useState("");
+  const requestedModule = ""
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartServicesBreakup, setCartServicesBreakup] = useState([
     { service: "BSA", qty: 1 },
@@ -137,11 +137,6 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
       toast.error(`Failed to check ${service} wallet balance.`);
       console.error(err);
     }
-  };
-
-  const handleTopUp = (moduleId: string) => {
-    setRequestedModule(moduleId);
-    setIsRequestedPaymentOpen(true);
   };
 
   const handlePay = async (payment: PendingPayment) => {
