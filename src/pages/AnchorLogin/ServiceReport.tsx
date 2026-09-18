@@ -20,7 +20,7 @@ import AccessMoneyReportView from './money/AccessMoneyReportView';
 import { getWalletBalance } from '@/api/payment';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
-import PaymentModal from '@/components/PaymentModal';
+import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';
 import { createPaymentOrder, getPendingPayments } from '@/api/payment';
 import {

@@ -17,6 +17,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMe } from '@/hooks/useUser';
 import { useLogout } from '@/hooks/useAuth';
 import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+import { toast } from 'sonner';
 
 interface SidebarContextValue {
   collapsed: boolean;
@@ -39,46 +40,48 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 }
 
 const navItems = [
-  { icon: LayoutDashboard, label: 'Dashboard', path: '/home/dashboard' },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/home/dashboard',disabled: false },
   {
     icon: Building2,
     label: 'BSA Reports',
-    subItems: [{ label: 'Bank Accounts', path: '/bsa/bank-accounts' }],
+    subItems: [{ label: 'Bank Accounts', path: '/bsa/bank-accounts', disabled: false }],
   },
   {
     icon: FileText,
     label: 'GST',
     subItems: [
-      { label: 'GST Analysis', path: '/gst/analysis' },
-      { label: 'GST Analysis History', path: '/gst/history' },
-      { label: 'GST Reports', path: '/gst/reports' },
+      { label: 'GST Analysis', path: '/gst/analysis', disabled: false },
+      { label: 'GST Analysis History', path: '/gst/history', disabled: false },
+      { label: 'GST Reports', path: '/gst/reports', disabled: false },
     ],
   },
   {
     icon: PieChart,
     label: 'ITR',
     subItems: [
-      { label: 'Tax Calculation', path: '/itr/itr-tax-calculation' },
-      { label: 'Balance Sheet', path: '/itr/balance-sheet' },
+      { label: 'Tax Calculation', path: '/itr/itr-tax-calculation', disabled: false },
+      { label: 'Balance Sheet', path: '/itr/balance-sheet', disabled: false },
       {
         label: 'Profit and Loss Statement',
         path: '/itr/profit-and-loss-statement',
+        disabled: false,
       },
-      { label: 'Ratio Analysis', path: '/itr/ratio-analysis' },
+      { label: 'Ratio Analysis', path: '/itr/ratio-analysis', disabled: false },
     ],
   },
   {
     icon: ShieldCheck,
     label: 'CIBIL Reports',
     subItems: [
-      { label: 'Fetch New Report', path: '/cibil' },
-      { label: 'Existing Reports', path: '/cibil/reports' },
+      { label: 'Fetch New Report', path: '/cibil', disabled: false },
+      { label: 'Existing Reports', path: '/cibil/reports', disabled: false },
     ],
   },
   {
     icon: CreditCard,
     label: 'Payments',
     path: '/payments',
+    disabled: false,
   },
 ];
 
@@ -166,7 +169,7 @@ export function AppSidebar() {
           </p>
         )}
         {navItems.map((item) => {
-          const isDisabled = Boolean(item.Disabled || item.disabled);
+          const isDisabled = Boolean( item.disabled);
           const hasSubItems = !!item.subItems;
           const isExpanded = !isDisabled && expandedMenus[item.label];
           const isActive = item.path
