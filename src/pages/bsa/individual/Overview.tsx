@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
-import BankAccountDetails from './BankAccountDetails';
+import BankAccountDetails from '../BankAccountDetails';
 import { useLocation } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
@@ -162,409 +162,64 @@ type RowConfig = {
   isGreyBg?: boolean;
 };
 
+
 const ROWS: RowConfig[] = [
-  {
-    label: 'Average Credit Tranx',
-    overallKey: ['overview', 'average_credit_tranx'],
-    monthKey: 'AverageCreditTranx',
-    isCurrency: false,
-    isBold: true,
-  },
-  {
-    label: 'Total Credit (Nos.)',
-    overallKey: ['overview', 'total_credit_nos'],
-    monthKey: 'TotalCreditNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Average Debit Tranx',
-    overallKey: ['overview', 'average_debit_tranx'],
-    monthKey: 'AverageDebitTranx',
-    isCurrency: false,
-    isBold: true,
-  },
-  {
-    label: 'Total Debit (Nos.)',
-    overallKey: ['overview', 'total_debit_nos'],
-    monthKey: 'TotalDebitNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Receipts', isSeparator: true },
+  { label: 'Cash Deposit', overallKey: ['receipts', 'cash_deposit'], monthKey: 'CashDeposit' as any, isCurrency: true },
+  { label: 'Cheque Receipts', overallKey: ['receipts', 'cheque_receipts'], monthKey: 'ChequeReceipts' as any, isCurrency: true },
+  { label: 'Online Receipts', overallKey: ['receipts', 'online_receipts'], monthKey: 'OnlineReceipts' as any, isCurrency: true },
+  { label: 'Bank Instrument', overallKey: ['receipts', 'bank_instrument'], monthKey: 'BankInstrument' as any, isCurrency: true },
+  { label: 'Forex Remittance', overallKey: ['receipts', 'forex_remittance'], monthKey: 'ForexRemittance' as any, isCurrency: true },
+  { label: 'Refund/Reversal', overallKey: ['receipts', 'refund_reversal'], monthKey: 'RefundReversal' as any, isCurrency: true },
+  { label: 'Other Receipts', overallKey: ['receipts', 'other_receipts'], monthKey: 'OtherReceipts' as any, isCurrency: true },
 
-  {
-    label: 'Total Credits (A)',
-    overallKey: ['cash_inflow', 'total_credits_a'],
-    monthKey: 'TotalCredit',
-    isCurrency: true,
-  },
-  {
-    label: 'Outward Cheque Return (B)',
-    overallKey: ['cash_inflow', 'outward_cheque_return_b'],
-    monthKey: 'OutwardChequeReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Reversal of Inward Cheque Return (C)',
-    overallKey: ['cash_inflow', 'reversal_inward_cheque_return_c'],
-    monthKey: 'ReversalOfInwardChequeReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Reversal of Online Return (D)',
-    overallKey: ['cash_inflow', 'reversal_online_return_d'],
-    monthKey: 'ReversalOfOnlineReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Gross Credits (E = A-B-C-D)',
-    overallKey: ['cash_inflow', 'gross_credits_e'],
-    monthKey: 'GrossCredits',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  {
-    label: 'Contra (F)',
-    overallKey: ['cash_inflow', 'contra_f'],
-    monthKey: 'Contra',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Loan Received (G)',
-    overallKey: ['cash_inflow', 'loan_received_g'],
-    monthKey: 'LoanReceived',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Net Credits (H = E-F-G)',
-    overallKey: ['cash_inflow', 'net_credits_h'],
-    monthKey: 'NetCredits',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  {
-    label: 'Inhouse Credit (I)',
-    overallKey: ['cash_inflow', 'inhouse_credit_i'],
-    monthKey: 'InhouseCredit',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Net Cash Inflow (H-I)',
-    overallKey: ['cash_inflow', 'net_cash_inflow_j'],
-    monthKey: 'NetCashInflow',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Income Receipts', isSeparator: true },
+  { label: 'Salary Income', overallKey: ['income_receipts', 'salary_income'], monthKey: 'SalaryIncome' as any, isCurrency: true },
+  { label: 'Rent Income', overallKey: ['income_receipts', 'rent_income'], monthKey: 'RentIncome' as any, isCurrency: true },
+  { label: 'Interest Income', overallKey: ['income_receipts', 'interest_income'], monthKey: 'InterestIncome' as any, isCurrency: true },
 
-  {
-    label: 'Total Debits (A)',
-    overallKey: ['cash_outflow', 'total_debits_a'],
-    monthKey: 'TotalDebit',
-    isCurrency: true,
-  },
-  {
-    label: 'Inward Cheque Return (B)',
-    overallKey: ['cash_outflow', 'inward_cheque_return_b'],
-    monthKey: 'InwardChequeReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Reversal of Outward Cheque Return (C)',
-    overallKey: ['cash_outflow', 'reversal_outward_cheque_return_c'],
-    monthKey: 'ReversalOfOutwardChequeReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Online Return (D)',
-    overallKey: ['cash_outflow', 'online_return_d'],
-    monthKey: 'OnlineReturn',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Gross Debits (E = A-B-C-D)',
-    overallKey: ['cash_outflow', 'gross_debits_e'],
-    monthKey: 'GrossDebit',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  {
-    label: 'Contra (F)',
-    overallKey: ['cash_outflow', 'contra_f'],
-    monthKey: 'ContraDebit',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Net Debits (G=E-F)',
-    overallKey: ['cash_outflow', 'net_debits_g'],
-    monthKey: 'NetDebit',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  {
-    label: 'Inhouse Debit (H)',
-    overallKey: ['cash_outflow', 'inhouse_debit_h'],
-    monthKey: 'InhouseDebit',
-    isCurrency: true,
-    isRed: false,
-  },
-  {
-    label: 'Net Cash Outflow (G-H)',
-    overallKey: ['cash_outflow', 'net_cash_outflow'],
-    monthKey: 'NetCashOutFlow',
-    isCurrency: true,
-    isGreyBg: true,
-    isBold: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Financial Receipts', isSeparator: true },
+  { label: 'Loan Received', overallKey: ['financial_receipts', 'loan_received'], monthKey: 'LoanReceived' as any, isCurrency: true },
+  { label: 'Insurance', overallKey: ['financial_receipts', 'insurance'], monthKey: 'Insurance' as any, isCurrency: true },
+  { label: 'Investment Receipt', overallKey: ['financial_receipts', 'investment_receipt'], monthKey: 'InvestmentReceipt' as any, isCurrency: true },
 
-  {
-    label: 'Inward Cheque Return (Nos.)',
-    overallKey: ['returns', 'inward_cheque_return_nos'],
-    monthKey: 'InwardChequeReturnNos',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Inward Cheque Return/Total Cheques Received (%)',
-    overallKey: ['returns', 'inward_cheque_return_percent'],
-    monthKey: 'InwardChequeReturnToTotalChequeReceivedInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'Outward Cheque Return (Nos.)',
-    overallKey: ['returns', 'outward_cheque_return_nos'],
-    monthKey: 'OutwardChequeReturnNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Outward Cheque Return/Total Cheques Paid (%)',
-    overallKey: ['returns', 'outward_cheque_return_percent'],
-    monthKey: 'OutwardChequeReturnToTotalChequePaidInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'Inward Online Return (Nos.)',
-    overallKey: ['returns', 'inward_online_return_nos'],
-    monthKey: 'InwardOnlineReturnNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Inward Online Return/Total Online Credits (%)',
-    overallKey: ['returns', 'inward_online_return_percent'],
-    monthKey: 'InwardOnlineReturnTototalOnlineCreditInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'Outward Online Return (Nos.)',
-    overallKey: ['returns', 'outward_online_return_nos'],
-    monthKey: 'OutwardOnlineReturnNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Outward Online Return/Total Online Debits (%)',
-    overallKey: ['returns', 'outward_online_return_percent'],
-    monthKey: 'OutwardOnlineReturnToTotalOnlineDebitInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'ECS Return (Credit Nos.)',
-    overallKey: ['returns', 'ecs_return_nos'],
-    monthKey: 'EcsReturnNo',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'ECS Return/Total ECS Payments (%)',
-    overallKey: ['returns', 'ecs_return_percent'],
-    monthKey: 'EcsReturnToTotalEcsPaymentInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Total Receipts', overallKey: ['total_receipts'], monthKey: 'TotalReceipts' as any, isCurrency: true, isBold: true, isGreyBg: true },
 
-  {
-    label: 'Inhouse Credit (Nos.)',
-    overallKey: ['other_calculations', 'inhouse_credit_nos'],
-    monthKey: 'InhouseCreditNos',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Inhouse Credit/Total Credits (%)',
-    overallKey: ['other_calculations', 'inhouse_credit/total_percent'],
-    monthKey: 'InhouseCreditToTotalCreditInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'Inhouse Debit (Nos.)',
-    overallKey: ['other_calculations', 'inhouse_debit_nos'],
-    monthKey: 'InhouseDebitNos',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Inhouse Debit/Total Debits (%)',
-    overallKey: ['other_calculations', 'inhouse_debit/total_percent'],
-    monthKey: 'InhouseDebitToTotalDebitInPercent',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Expenses', isSeparator: true },
+  { label: 'External Payments', overallKey: ['expenses', 'external_payments'], monthKey: 'ExternalPayments' as any, isCurrency: true },
+  { label: 'Cash Withdrawals', overallKey: ['expenses', 'cash_withdrawals'], monthKey: 'CashWithdrawals' as any, isCurrency: true },
+  { label: 'Cheque Payments', overallKey: ['expenses', 'cheque_payments'], monthKey: 'ChequePayments' as any, isCurrency: true },
+  { label: 'Online Payments', overallKey: ['expenses', 'online_payments'], monthKey: 'OnlinePayments' as any, isCurrency: true },
+  { label: 'Bank Instrument', overallKey: ['expenses', 'bank_instrument'], monthKey: 'BankInstrument' as any, isCurrency: true },
+  { label: 'Forex Remittance', overallKey: ['expenses', 'forex_remittance'], monthKey: 'ForexRemittance' as any, isCurrency: true },
+  { label: 'Other Payments', overallKey: ['expenses', 'other_payments'], monthKey: 'OtherPayments' as any, isCurrency: true },
 
-  {
-    label: 'Average EOD',
-    overallKey: ['other_calculations', 'average_eod'],
-    monthKey: 'AverageEod',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'OD/CC Sanction Limit',
-    overallKey: ['other_calculations', 'od_cc_sanction_limit'],
-    monthKey: 'odccLimit',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'OD/CC Drawing Power Limit',
-    overallKey: ['other_calculations', 'od/cc_drawing_power_limit'],
-    monthKey: 'odccDrawingLimit',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'No. of days limit over-drawn',
-    overallKey: ['other_calculations', 'no_of_days_limit_overdrawn'],
-    monthKey: 'NoOfdaysLimitOverDrawn',
-    isCurrency: false,
-    isBold: true,
-  },
-  {
-    label: 'No. of times limit over-drawn',
-    overallKey: ['other_calculations', 'no_of_times_limit_overdrawn'],
-    monthKey: 'NoOfTimesLimitOverDrawn',
-    isCurrency: false,
-    isBold: true,
-  },
-  {
-    label: 'Overdrawn Amount in Rs. Mn. (for all days)',
-    overallKey: [
-      'other_calculations',
-      'overdrawn_amount_in_rs_mn_for_all_days',
-    ],
-    monthKey: 'OverDrawnAnountInRsMn',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'Overdrawn Average Amount in Rs. Mn.',
-    overallKey: ['other_calculations', 'overdrawn_average_amount_in_rs_mn'],
-    monthKey: 'OverDrawnAverageinRsMn',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'Overdrawn Average as a %age of OD/CC Limit',
-    overallKey: [
-      'other_calculations',
-      'overdrawn_average_as_percent_of_od/cc_limit',
-    ],
-    monthKey: 'OverDrawnAverageAsPercentOfOdCCLimit',
-    isCurrency: false,
-    isPercent: true,
-    isBold: true,
-  },
-  {
-    label: 'Peak overdrawing amount',
-    overallKey: ['other_calculations', 'peak_overdrawing_amount'],
-    monthKey: 'PeakOverDrawingAmount',
-    isCurrency: true,
-    isBold: true,
-  },
-  {
-    label: 'Peak overdrawing date',
-    overallKey: ['other_calculations', 'peak_overdrawing_date'],
-    monthKey: 'PeakOverDrawingDate',
-    isCurrency: false,
-    isBold: true,
-  },
-  { label: '', isSeparator: true },
+  { label: 'Maintenance Payments', isSeparator: true },
+  { label: 'Rent Payment', overallKey: ['maintenance_payments', 'rent_payment'], monthKey: 'RentPayment' as any, isCurrency: true },
+  { label: 'Utility Payment', overallKey: ['maintenance_payments', 'utility_payment'], monthKey: 'UtilityPayment' as any, isCurrency: true },
+  { label: 'Salary Payment', overallKey: ['maintenance_payments', 'salary_payment'], monthKey: 'SalaryPayment' as any, isCurrency: true },
+  { label: 'POS Expenses', overallKey: ['maintenance_payments', 'pos_expenses'], monthKey: 'POSExpenses' as any, isCurrency: true },
+  { label: 'Credit Card Payments', overallKey: ['maintenance_payments', 'credit_card_payments'], monthKey: 'CreditCardPayments' as any, isCurrency: true },
+  { label: 'Goods Purchase', overallKey: ['maintenance_payments', 'goods_purchase'], monthKey: 'GoodsPurchase' as any, isCurrency: true },
+  { label: 'Bank Charges', overallKey: ['maintenance_payments', 'bank_charges'], monthKey: 'BankCharges' as any, isCurrency: true },
 
-  {
-    label: 'Loan Repaid',
-    overallKey: ['other_calculations', 'loan_repaid'],
-    monthKey: 'LoanRepaid',
-    isCurrency: true,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'ECS Payment',
-    overallKey: ['other_calculations', 'ecs_payment'],
-    monthKey: 'EcsPayment',
-    isCurrency: true,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: "No. of Unique ECS/EMI's",
-    overallKey: ['other_calculations', 'no_of_unique_ecs/emis'],
-    monthKey: 'NoOfUniqueEcs',
-    isCurrency: false,
-    isRed: false,
-    isItalic: true,
-  },
-  {
-    label: 'Interest Paid',
-    overallKey: ['other_calculations', 'interest_paid'],
-    monthKey: 'InterestPaid',
-    isCurrency: true,
-    isBold: true,
-  },
+  { label: 'Financial Payments', isSeparator: true },
+  { label: 'Loan Repayment', overallKey: ['financial_payments', 'loan_repayment'], monthKey: 'LoanRepayment' as any, isCurrency: true },
+  { label: 'Insurance', overallKey: ['financial_payments', 'insurance'], monthKey: 'Insurance' as any, isCurrency: true },
+  { label: 'Interest', overallKey: ['financial_payments', 'interest'], monthKey: 'Interest' as any, isCurrency: true },
+  { label: 'Investment Expense', overallKey: ['financial_payments', 'investment_expense'], monthKey: 'InvestmentExpense' as any, isCurrency: true },
+  { label: 'Tax', overallKey: ['financial_payments', 'tax'], monthKey: 'Tax' as any, isCurrency: true },
+
+  { label: 'Total Expenses', overallKey: ['total_expenses'], monthKey: 'TotalExpenses' as any, isCurrency: true, isBold: true, isGreyBg: true },
+
+  { label: 'Summary', isSeparator: true },
+  { label: 'Monthly Savings', overallKey: ['monthly_savings'], monthKey: 'MonthlySavings' as any, isCurrency: true, isBold: true },
+  { label: 'Opening Balance', overallKey: ['opening_balance'], monthKey: 'OpeningBalance' as any, isCurrency: true, isBold: true },
+  { label: 'Closing Balance', overallKey: ['closing_balance'], monthKey: 'ClosingBalance' as any, isCurrency: true, isBold: true },
 ];
 
-export default function OverviewMonthlyWise() {
+
+export default function IndividualOverview() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
@@ -671,10 +326,10 @@ export default function OverviewMonthlyWise() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate, selectedAccountNumber],
+    queryKey: ['individual-overview', appliedFromDate, appliedToDate, selectedAccountNumber],
     queryFn: async () => {
       const response = await apiClient.post(
-        `/bsa/month-wise-overview`,
+        `/bsa/individual/overview`,
         {
           from_date: appliedFromDate,
           to_date: appliedToDate,
@@ -768,7 +423,7 @@ export default function OverviewMonthlyWise() {
   const dataMap = new Map<string, MonthlyBreakdown>();
   if (data?.monthly_breakdown) {
     data.monthly_breakdown.forEach((item) => {
-      dataMap.set(item.Month.toLowerCase(), item);
+      dataMap.set(item.parsedMonthDate ? new Date(item.parsedMonthDate).toLocaleString("en-US", { month: "short" }).toLowerCase() + " " + new Date(item.parsedMonthDate).getFullYear() : "", item);
     });
   }
 
@@ -777,7 +432,7 @@ export default function OverviewMonthlyWise() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-black mb-2">
-            Month-Wise Overview
+            Individual Overview
           </h1>
           <p className="text-gray-600">
             Detailed month-wise analysis of transactions

@@ -369,15 +369,15 @@ export default function CashFlow() {
                             Cash Flow Statement
                         </CardTitle>
                         <CardDescription>
-                            {dateRangeData?.from_date && dateRangeData?.to_date && (
+                            {appliedFromDate && appliedToDate && (
                                 <>
                                     From{' '}
                                     {format(
-                                        new Date(dateRangeData.from_date + 'T00:00:00'),
+                                        new Date(appliedFromDate + 'T00:00:00'),
                                         'PPP'
                                     )}{' '}
                                     To{' '}
-                                    {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                                    {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                                 </>
                             )}
                         </CardDescription>
@@ -420,7 +420,7 @@ export default function CashFlow() {
                             <table className="w-full text-sm text-left border-collapse min-w-[1000px]">
                                 <thead>
                                     <tr className="bg-[#002366] text-white text-xs">
-                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[200px] sticky left-0 bg-[#002366] z-20">
+                                        <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap w-[250px] min-w-[250px] max-w-[250px] sticky left-0 bg-[#002366] z-20">
                                             Particulars
                                         </th>
                                         <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap text-right">
@@ -447,7 +447,7 @@ export default function CashFlow() {
                                         >
                                             <td
                                                 className={cn(
-                                                    'px-4 py-2.5 border border-black/20 whitespace-nowrap sticky left-0 z-10 bg-white',
+                                                    'px-4 py-2.5 border border-black/20 whitespace-nowrap w-[250px] min-w-[250px] max-w-[250px] sticky left-0 z-10 bg-white',
                                                     row.labelClass
                                                 )}
                                             >

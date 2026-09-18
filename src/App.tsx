@@ -39,6 +39,9 @@ const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetc
 const ProfileManagement = lazy(() => import("@/pages/ProfileManagement"))
 const CustomerPaymentsPage = lazy(() => import("@/pages/AnchorLogin/CustomerPaymentsPage"));
 const WalletProtectedComponent = lazy(() => import("@/components/WalletProtectedComponent"));
+const IndividualOverview = lazy(() => import("@/pages/bsa/individual/Overview"));
+const IndividualEodAnalysis = lazy(() => import("@/pages/bsa/individual/EodAnalysis"));
+const IndividualLoanTransactions = lazy(() => import("@/pages/bsa/individual/LoanTransactions"));
 
 
 function App() {
@@ -95,6 +98,9 @@ function App() {
                       <Route path="/bsa/summary-of-debit-and-credit" element={<SummeryOfDebitAndCredit />} />
                       <Route path="/bsa/cash-flow" element={<CashFlow />} />
                       <Route path="/bsa/overview-monthly-wise" element={<OverviewMonthlyWise />} />
+                      <Route path="/bsa/individual/overview" element={<IndividualOverview />} />
+                      <Route path="/bsa/individual/eod-analysis" element={<IndividualEodAnalysis />} />
+                      <Route path="/bsa/individual/loan-transactions" element={<IndividualLoanTransactions />} />
                       <Route path="/gst/analysis" element={<WalletProtectedComponent service="GST"><GstAnalysisPage /></WalletProtectedComponent>} />
                       <Route path="/gst/history" element={<GstHistoryPage />} />
                       <Route path="/gst/reports" element={<GstReportPage />} />

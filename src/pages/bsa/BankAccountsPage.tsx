@@ -257,7 +257,9 @@ export default function BankAccountsPage() {
                       className="
                         group
                         relative
-                        aspect-square
+                        flex
+                        flex-col
+                        min-h-[420px]
                         overflow-hidden
                         rounded-xl
                         border
@@ -342,6 +344,12 @@ export default function BankAccountsPage() {
                                   {/* Overview */}
                                   <button
                                     type="button"
+                                    onClick={() => {
+                                      sessionStorage.setItem("selected_bsa_account_number", accountNumber);
+                                      navigate("/bsa/individual/overview", {
+                                        state: { accountNumber },
+                                      });
+                                    }}
                                     className="
                                       w-full
                                       rounded-lg
@@ -368,6 +376,12 @@ export default function BankAccountsPage() {
                                   {/* EOD Analysis */}
                                   <button
                                     type="button"
+                                    onClick={() => {
+                                      sessionStorage.setItem("selected_bsa_account_number", accountNumber);
+                                      navigate("/bsa/individual/eod-analysis", {
+                                        state: { accountNumber },
+                                      });
+                                    }}
                                     className="
                                       w-full
                                       rounded-lg
@@ -394,6 +408,12 @@ export default function BankAccountsPage() {
                                   {/* Loan Transactions */}
                                   <button
                                     type="button"
+                                    onClick={() => {
+                                      sessionStorage.setItem("selected_bsa_account_number", accountNumber);
+                                      navigate("/bsa/individual/loan-transactions", {
+                                        state: { accountNumber },
+                                      });
+                                    }}
                                     className="
                                       w-full
                                       rounded-lg
@@ -596,10 +616,8 @@ export default function BankAccountsPage() {
 
                           <div
                             className="
-                              absolute
-                              bottom-5
-                              left-5
-                              right-5
+                              mt-auto
+                              pt-5
                               space-y-3
                             "
                           >

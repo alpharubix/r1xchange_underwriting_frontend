@@ -465,14 +465,14 @@ export default function SummaryOfDebitAndCredit() {
           <div>
             <CardTitle className="text-xl text-black">Monthly Overview</CardTitle>
             <CardDescription>
-              {dateRangeData?.from_date && dateRangeData?.to_date && (
+              {appliedFromDate && appliedToDate && (
                 <>
                   From{' '}
                   {format(
-                    new Date(dateRangeData.from_date + 'T00:00:00'),
+                    new Date(appliedFromDate + 'T00:00:00'),
                     'PPP'
                   )}{' '}
-                  To {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
