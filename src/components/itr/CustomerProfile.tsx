@@ -12,36 +12,28 @@
           <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-white/80">
             Company Name
           </span>
-          <span className="font-semibold">
-            {profile.company_name || "N/A"}
-          </span>
+          <span className="font-semibold">{profile.company_name || 'N/A'}</span>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-center transition-all duration-300 hover:bg-[#002366] hover:text-white group">
           <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-white/80">
             GSTIN
           </span>
-          <span className="font-semibold">
-            {profile.gstin || "N/A"}
-          </span>
+          <span className="font-semibold">{profile.gstin || 'N/A'}</span>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-center transition-all duration-300 hover:bg-[#002366] hover:text-white group">
           <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-white/80">
             Phone Number
           </span>
-          <span className="font-semibold">
-            {profile.phone_number || "N/A"}
-          </span>
+          <span className="font-semibold">{profile.phone_number || 'N/A'}</span>
         </div>
 
         <div className="rounded-xl border border-slate-200 bg-slate-50/50 p-4 text-center transition-all duration-300 hover:bg-[#002366] hover:text-white group">
           <span className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-500 group-hover:text-white/80">
             PAN
           </span>
-          <span className="font-semibold">
-            {profile.pan || "N/A"}
-          </span>
+          <span className="font-semibold">{profile.pan || 'N/A'}</span>
         </div>
       </div>
     </div>

@@ -117,7 +117,8 @@ const GLOBAL_CODE_MESSAGES: Partial<Record<string, string>> = {
   EIB721: 'Incorrect bureau type configured for this request.',
   ENR901: 'Request limit exceeded. Please try again later.',
   ELL420: 'Login attempts limit exceeded. Please try again later.',
-  SYS_INT_ERR: 'CIBIL service is currently unavailable. Please try again later.',
+  SYS_INT_ERR:
+    'CIBIL service is currently unavailable. Please try again later.',
 };
 
 const GLOBAL_MESSAGE_PATTERNS = [

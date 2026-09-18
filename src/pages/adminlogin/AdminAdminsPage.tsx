@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   Plus,
   ChevronLeft,
@@ -7,13 +7,13 @@ import {
   ChevronsLeft,
   ChevronsRight,
   X,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
-import { useQuery } from "@tanstack/react-query";
-import { getAdminsList } from "@/api/user";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
+import { useQuery } from '@tanstack/react-query';
+import { getAdminsList } from '@/api/user';
 
 interface RecordItem {
   loginid: string;
@@ -28,29 +28,30 @@ export default function AdminAdminsPage() {
 
   // Fetch admin list
   const { data: fetchedAdmins, isLoading } = useQuery({
-    queryKey: ["admin", "admins-list"],
+    queryKey: ['admin', 'admins-list'],
     queryFn: getAdminsList,
   });
 
   useEffect(() => {
     if (fetchedAdmins) {
       const mapped = fetchedAdmins.map((admin: any) => ({
-        loginid: admin.login_id || admin.loginid || "",
-        adminstatus: admin.admin_status || admin.adminstatus || admin.status || "Active",
-        role: admin.role || "ADMIN",
-        createat: admin.created_at || admin.createat || "",
-        updatedat: admin.updated_at || admin.updatedat || "",
+        loginid: admin.login_id || admin.loginid || '',
+        adminstatus:
+          admin.admin_status || admin.adminstatus || admin.status || 'Active',
+        role: admin.role || 'ADMIN',
+        createat: admin.created_at || admin.createat || '',
+        updatedat: admin.updated_at || admin.updatedat || '',
       }));
       setAdminsList(mapped);
     }
   }, [fetchedAdmins]);
 
   // Filter input states
-  const [filterloginid, setFilterloginid] = useState("");
-  const [filteradminstatus, setFilteradminstatus] = useState("");
-  const [filterrole, setFilterrole] = useState("");
-  const [filtercreateat, setFiltercreateat] = useState("");
-  const [filterupdatedat, setFilterupdatedat] = useState("");
+  const [filterloginid, setFilterloginid] = useState('');
+  const [filteradminstatus, setFilteradminstatus] = useState('');
+  const [filterrole, setFilterrole] = useState('');
+  const [filtercreateat, setFiltercreateat] = useState('');
+  const [filterupdatedat, setFilterupdatedat] = useState('');
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -58,24 +59,42 @@ export default function AdminAdminsPage() {
 
   // Modal states for inspecting/creating
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(null);
+  const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(
+    null
+  );
 
   const [newFormData, setNewFormData] = useState({
-    loginid: "",
-    adminstatus: "Active",
-    role: "ADMIN",
+    loginid: '',
+    adminstatus: 'Active',
+    role: 'ADMIN',
   });
 
   // Apply filters logic (live filtering)
   const filteredList = useMemo(() => {
     return adminsList.filter((item) => {
-      const matchLoginId = filterloginid ? item.loginid.toLowerCase().includes(filterloginid.toLowerCase()) : true;
-      const matchStatus = filteradminstatus ? item.adminstatus.toLowerCase() === filteradminstatus.toLowerCase() : true;
-      const matchRole = filterrole ? item.role.toLowerCase() === filterrole.toLowerCase() : true;
-      const matchCreateAt = filtercreateat ? item.createat.toLowerCase().includes(filtercreateat.toLowerCase()) : true;
-      const matchUpdateAt = filterupdatedat ? item.updatedat.toLowerCase().includes(filterupdatedat.toLowerCase()) : true;
+      const matchLoginId = filterloginid
+        ? item.loginid.toLowerCase().includes(filterloginid.toLowerCase())
+        : true;
+      const matchStatus = filteradminstatus
+        ? item.adminstatus.toLowerCase() === filteradminstatus.toLowerCase()
+        : true;
+      const matchRole = filterrole
+        ? item.role.toLowerCase() === filterrole.toLowerCase()
+        : true;
+      const matchCreateAt = filtercreateat
+        ? item.createat.toLowerCase().includes(filtercreateat.toLowerCase())
+        : true;
+      const matchUpdateAt = filterupdatedat
+        ? item.updatedat.toLowerCase().includes(filterupdatedat.toLowerCase())
+        : true;
 
-      return matchLoginId && matchStatus && matchRole && matchCreateAt && matchUpdateAt;
+      return (
+        matchLoginId &&
+        matchStatus &&
+        matchRole &&
+        matchCreateAt &&
+        matchUpdateAt
+      );
     });
   }, [
     adminsList,
@@ -110,21 +129,25 @@ export default function AdminAdminsPage() {
     e.preventDefault();
 
     if (!newFormData.loginid || !newFormData.adminstatus || !newFormData.role) {
-      toast.error("Mandatory fields (Login ID, Status, Role) are missing.");
+      toast.error('Mandatory fields (Login ID, Status, Role) are missing.');
       return;
     }
 
     const formatDateTime = () => {
       const now = new Date();
-      return now.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      }) + " " + now.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      });
+      return (
+        now.toLocaleDateString('en-GB', {
+          day: '2-digit',
+          month: 'short',
+          year: 'numeric',
+        }) +
+        ' ' +
+        now.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true,
+        })
+      );
     };
 
     const newRecord: RecordItem = {
@@ -139,9 +162,9 @@ export default function AdminAdminsPage() {
     toast.success(`Admin created successfully.`);
     setIsCreateModalOpen(false);
     setNewFormData({
-      loginid: "",
-      adminstatus: "Active",
-      role: "ADMIN",
+      loginid: '',
+      adminstatus: 'Active',
+      role: 'ADMIN',
     });
   };
 
@@ -182,7 +205,12 @@ export default function AdminAdminsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
             {/* Login ID Filter */}
             <div className="space-y-1.5">
-              <Label htmlFor="flogin" className="text-xs font-bold text-slate-500 uppercase tracking-wider">LOGIN ID</Label>
+              <Label
+                htmlFor="flogin"
+                className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+              >
+                LOGIN ID
+              </Label>
               <Input
                 id="flogin"
                 placeholder="Enter Login ID"
@@ -194,7 +222,12 @@ export default function AdminAdminsPage() {
 
             {/* Admin Status Filter */}
             <div className="space-y-1.5">
-              <Label htmlFor="fstatus" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Admin Status</Label>
+              <Label
+                htmlFor="fstatus"
+                className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+              >
+                Admin Status
+              </Label>
               <select
                 id="fstatus"
                 value={filteradminstatus}
@@ -209,7 +242,12 @@ export default function AdminAdminsPage() {
 
             {/* Role Filter */}
             <div className="space-y-1.5">
-              <Label htmlFor="frole" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</Label>
+              <Label
+                htmlFor="frole"
+                className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+              >
+                Role
+              </Label>
               <select
                 id="frole"
                 value={filterrole}
@@ -224,7 +262,12 @@ export default function AdminAdminsPage() {
 
             {/* Created At Filter */}
             <div className="space-y-1.5">
-              <Label htmlFor="fcreate" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Created At</Label>
+              <Label
+                htmlFor="fcreate"
+                className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+              >
+                Created At
+              </Label>
               <Input
                 id="fcreate"
                 placeholder="Enter Created At"
@@ -236,7 +279,12 @@ export default function AdminAdminsPage() {
 
             {/* Updated At Filter */}
             <div className="space-y-1.5">
-              <Label htmlFor="fupdate" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Updated At</Label>
+              <Label
+                htmlFor="fupdate"
+                className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+              >
+                Updated At
+              </Label>
               <Input
                 id="fupdate"
                 placeholder="Enter Updated At"
@@ -263,7 +311,10 @@ export default function AdminAdminsPage() {
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                   {isLoading ? (
                     <tr>
-                      <td colSpan={5} className="py-16 text-center text-slate-400 font-bold">
+                      <td
+                        colSpan={5}
+                        className="py-16 text-center text-slate-400 font-bold"
+                      >
                         Loading admin records...
                       </td>
                     </tr>
@@ -274,16 +325,29 @@ export default function AdminAdminsPage() {
                         onClick={() => setInspectedRecord(item)}
                         className="transition-colors hover:bg-slate-50/40 cursor-pointer"
                       >
-                        <td className="py-4 px-6 text-slate-900 font-bold">{item.loginid}</td>
-                        <td className="py-4 px-6 text-slate-600 font-normal">{item.adminstatus}</td>
-                        <td className="py-4 px-6 text-slate-950 font-bold">{item.role}</td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.createat}</td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.updatedat}</td>
+                        <td className="py-4 px-6 text-slate-900 font-bold">
+                          {item.loginid}
+                        </td>
+                        <td className="py-4 px-6 text-slate-600 font-normal">
+                          {item.adminstatus}
+                        </td>
+                        <td className="py-4 px-6 text-slate-950 font-bold">
+                          {item.role}
+                        </td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">
+                          {item.createat}
+                        </td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">
+                          {item.updatedat}
+                        </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td colSpan={5} className="py-16 text-center text-slate-400 font-bold">
+                      <td
+                        colSpan={5}
+                        className="py-16 text-center text-slate-400 font-bold"
+                      >
                         No records match the applied filters.
                       </td>
                     </tr>
@@ -295,9 +359,18 @@ export default function AdminAdminsPage() {
             {/* Pagination Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4 gap-4">
               <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                Showing <span className="text-slate-800">{filteredList.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span> to{" "}
-                <span className="text-slate-800">{Math.min(currentPage * pageSize, filteredList.length)}</span> of{" "}
-                <span className="text-slate-800">{filteredList.length}</span> results
+                Showing{' '}
+                <span className="text-slate-800">
+                  {filteredList.length === 0
+                    ? 0
+                    : (currentPage - 1) * pageSize + 1}
+                </span>{' '}
+                to{' '}
+                <span className="text-slate-800">
+                  {Math.min(currentPage * pageSize, filteredList.length)}
+                </span>{' '}
+                of <span className="text-slate-800">{filteredList.length}</span>{' '}
+                results
               </div>
 
               <div className="flex items-center gap-6">
@@ -310,7 +383,9 @@ export default function AdminAdminsPage() {
                     <ChevronsLeft className="h-4 w-4" />
                   </button>
                   <button
-                    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
                     disabled={currentPage === 1}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
@@ -322,7 +397,9 @@ export default function AdminAdminsPage() {
                   </span>
 
                   <button
-                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
                     disabled={currentPage === totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
@@ -356,7 +433,9 @@ export default function AdminAdminsPage() {
               {/* Header */}
               <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                 <div>
-                  <h2 className="text-lg font-black text-slate-900">Record Details Inspector</h2>
+                  <h2 className="text-lg font-black text-slate-900">
+                    Record Details Inspector
+                  </h2>
                   <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider mt-0.5">
                     Viewing Record Login ID: {inspectedRecord.loginid}
                   </p>
@@ -373,28 +452,48 @@ export default function AdminAdminsPage() {
               <div className="flex-1 overflow-y-auto px-8 py-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Login ID</span>
-                    <span className="font-bold text-slate-800">{inspectedRecord.loginid}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Login ID
+                    </span>
+                    <span className="font-bold text-slate-800">
+                      {inspectedRecord.loginid}
+                    </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Role</span>
-                    <span className="font-bold text-slate-800">{inspectedRecord.role}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Role
+                    </span>
+                    <span className="font-bold text-slate-800">
+                      {inspectedRecord.role}
+                    </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Admin Status</span>
-                    <span className="font-semibold text-slate-800">{inspectedRecord.adminstatus}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Admin Status
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {inspectedRecord.adminstatus}
+                    </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Created At</span>
-                    <span className="font-semibold text-slate-800">{inspectedRecord.createat}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Created At
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {inspectedRecord.createat}
+                    </span>
                   </div>
 
                   <div>
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Updated At</span>
-                    <span className="font-semibold text-slate-800">{inspectedRecord.updatedat}</span>
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Updated At
+                    </span>
+                    <span className="font-semibold text-slate-800">
+                      {inspectedRecord.updatedat}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -424,11 +523,16 @@ export default function AdminAdminsPage() {
               transition={{ duration: 0.2 }}
               className="w-full max-w-2xl bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden max-h-[90vh] flex flex-col"
             >
-              <form onSubmit={handleCreateSubmit} className="flex flex-col h-full">
+              <form
+                onSubmit={handleCreateSubmit}
+                className="flex flex-col h-full"
+              >
                 {/* Header */}
                 <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                   <div>
-                    <h2 className="text-lg font-black text-slate-900">Create New Admin</h2>
+                    <h2 className="text-lg font-black text-slate-900">
+                      Create New Admin
+                    </h2>
                     <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider mt-0.5">
                       Fill in the details to insert a new admin record
                     </p>
@@ -447,23 +551,43 @@ export default function AdminAdminsPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Login ID */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="nlogin" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Login ID</Label>
+                      <Label
+                        htmlFor="nlogin"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Login ID
+                      </Label>
                       <Input
                         id="nlogin"
                         placeholder="e.g. ADM01"
                         value={newFormData.loginid}
-                        onChange={(e) => setNewFormData((prev) => ({ ...prev, loginid: e.target.value }))}
+                        onChange={(e) =>
+                          setNewFormData((prev) => ({
+                            ...prev,
+                            loginid: e.target.value,
+                          }))
+                        }
                         className="h-11 rounded-xl text-sm"
                       />
                     </div>
 
                     {/* Status */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="nstatus" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Admin Status</Label>
+                      <Label
+                        htmlFor="nstatus"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Admin Status
+                      </Label>
                       <select
                         id="nstatus"
                         value={newFormData.adminstatus}
-                        onChange={(e) => setNewFormData((prev) => ({ ...prev, adminstatus: e.target.value }))}
+                        onChange={(e) =>
+                          setNewFormData((prev) => ({
+                            ...prev,
+                            adminstatus: e.target.value,
+                          }))
+                        }
                         className="h-11 w-full px-3 bg-white border border-slate-200 rounded-xl text-sm outline-none font-semibold text-slate-700"
                       >
                         <option value="Active">Active</option>
@@ -473,11 +597,21 @@ export default function AdminAdminsPage() {
 
                     {/* Role */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="nrole" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Role</Label>
+                      <Label
+                        htmlFor="nrole"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Role
+                      </Label>
                       <select
                         id="nrole"
                         value={newFormData.role}
-                        onChange={(e) => setNewFormData((prev) => ({ ...prev, role: e.target.value }))}
+                        onChange={(e) =>
+                          setNewFormData((prev) => ({
+                            ...prev,
+                            role: e.target.value,
+                          }))
+                        }
                         className="h-11 w-full px-3 bg-white border border-slate-200 rounded-xl text-sm outline-none font-semibold text-slate-700"
                       >
                         <option value="ADMIN">ADMIN</option>

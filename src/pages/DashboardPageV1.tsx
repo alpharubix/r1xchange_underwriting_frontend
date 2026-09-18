@@ -156,18 +156,23 @@ export default function DashboardPage() {
       setModalStep('confirmation');
     },
     onError: (error: any) => {
-      const msg = extractErrorMessage(error) || 'Failed to upload bank statement';
+      const msg =
+        extractErrorMessage(error) || 'Failed to upload bank statement';
       toast.error(msg);
     },
   });
 
   const confirmMutation = useMutation({
     mutationFn: async (upload_ref_id: string) => {
-      const response = await apiClient.post('/bsa/upload_ref_id', {
-        upload_ref_id,
-      }, {
-        skipErrorToast: true,
-      });
+      const response = await apiClient.post(
+        '/bsa/upload_ref_id',
+        {
+          upload_ref_id,
+        },
+        {
+          skipErrorToast: true,
+        }
+      );
       return response.data;
     },
     onSuccess: (data: any) => {
@@ -385,11 +390,7 @@ export default function DashboardPage() {
         {dashboardItems.map((item, index) => (
           <Card
             key={index}
-            className={`transition-all duration-300 ${
-              item.disabled
-                ? 'opacity-60 cursor-not-allowed bg-gray-50'
-                : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'
-            }`}
+            className={`transition-all duration-300 ${item.disabled ? 'opacity-60 cursor-not-allowed bg-gray-50' : 'hover:shadow-xl hover:-translate-y-1 cursor-pointer border-[#002366]/20 hover:border-[#002366]/50 bg-white'}`}
             onClick={!item.disabled ? item.onClick : undefined}
           >
             <CardHeader className="flex flex-row items-center gap-4 pb-2">
@@ -850,7 +851,10 @@ export default function DashboardPage() {
         </div>
       )}
       {/* Kyc Modal */}
-      <KycModal isOpen={isKycModalOpen} onClose={() => setIsKycModalOpen(false)} />
+      <KycModal
+        isOpen={isKycModalOpen}
+        onClose={() => setIsKycModalOpen(false)}
+      />
     </div>
   );
 }

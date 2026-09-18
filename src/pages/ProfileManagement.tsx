@@ -1,9 +1,18 @@
-import { useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMe } from "@/hooks/useUser";
-import { updateProfile } from "@/api/user";
-import { Pencil, X, Check, User, Building2, Phone, FileText, ShieldCheck } from "lucide-react";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useState } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import { useMe } from '@/hooks/useUser';
+import { updateProfile } from '@/api/user';
+import {
+  Pencil,
+  X,
+  Check,
+  User,
+  Building2,
+  Phone,
+  FileText,
+  ShieldCheck,
+} from 'lucide-react';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 
 interface ProfileForm {
   customer_name: string;
@@ -14,14 +23,34 @@ interface ProfileForm {
 }
 
 function StatusBadge({ status }: { status: any }) {
-  const map: Record<string, { bg: string; dot: string; text: string; label: string }> = {
-    active: { bg: "bg-zinc-100 border border-zinc-300", dot: "bg-zinc-700", text: "text-zinc-800", label: "Active" },
-    inactive: { bg: "bg-zinc-200 border border-zinc-300", dot: "bg-zinc-500", text: "text-zinc-700", label: "Inactive" },
-    pending: { bg: "bg-zinc-50 border border-zinc-200", dot: "bg-zinc-400", text: "text-zinc-700", label: "Pending" },
+  const map: Record<
+    string,
+    { bg: string; dot: string; text: string; label: string }
+  > = {
+    active: {
+      bg: 'bg-zinc-100 border border-zinc-300',
+      dot: 'bg-zinc-700',
+      text: 'text-zinc-800',
+      label: 'Active',
+    },
+    inactive: {
+      bg: 'bg-zinc-200 border border-zinc-300',
+      dot: 'bg-zinc-500',
+      text: 'text-zinc-700',
+      label: 'Inactive',
+    },
+    pending: {
+      bg: 'bg-zinc-50 border border-zinc-200',
+      dot: 'bg-zinc-400',
+      text: 'text-zinc-700',
+      label: 'Pending',
+    },
   };
   const s = map[status] ?? map.active;
   return (
-    <span className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${s.bg} ${s.text}`}>
+    <span
+      className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold ${s.bg} ${s.text}`}
+    >
       <span className={`w-1.5 h-1.5 rounded-full ${s.dot} animate-pulse`} />
       {s.label}
     </span>
@@ -29,9 +58,13 @@ function StatusBadge({ status }: { status: any }) {
 }
 
 function InfoField({
-  icon: Icon, label, value,
+  icon: Icon,
+  label,
+  value,
 }: {
-  icon: React.ElementType; label: string; value: string;
+  icon: React.ElementType;
+  label: string;
+  value: string;
 }) {
   return (
     <div className="group flex items-start gap-4 p-4 rounded-2xl bg-white border border-zinc-200 hover:border-zinc-400 hover:shadow-md transition-all duration-200">
@@ -39,9 +72,15 @@ function InfoField({
         <Icon className="w-4 h-4 text-zinc-800" />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">{label}</p>
+        <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-0.5">
+          {label}
+        </p>
         <p className="text-sm font-medium text-zinc-900 truncate">
-          {value || <span className="text-zinc-400 italic font-normal">Not provided</span>}
+          {value || (
+            <span className="text-zinc-400 italic font-normal">
+              Not provided
+            </span>
+          )}
         </p>
       </div>
     </div>
@@ -49,11 +88,19 @@ function InfoField({
 }
 
 function EditField({
-  icon: Icon, label, value, onChange, type = "text", maxLength,
+  icon: Icon,
+  label,
+  value,
+  onChange,
+  type = 'text',
+  maxLength,
 }: {
-  icon: React.ElementType; label: string; value: string;
+  icon: React.ElementType;
+  label: string;
+  value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  type?: string; maxLength?: number;
+  type?: string;
+  maxLength?: number;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -64,7 +111,7 @@ function EditField({
       <input
         className="input-field border-zinc-300 focus:border-zinc-900 focus:ring-zinc-900"
         type={type}
-        inputMode={type === "tel" ? "numeric" : undefined}
+        inputMode={type === 'tel' ? 'numeric' : undefined}
         maxLength={maxLength}
         value={value}
         onChange={onChange}
@@ -81,46 +128,46 @@ export default function ProfileManagement() {
   const [toast, setToast] = useState(false);
 
   const defaultForm: ProfileForm = {
-    customer_name: "",
-    phone: "",
-    company_name: "",
-    gst_number: "",
-    email_id: "",
+    customer_name: '',
+    phone: '',
+    company_name: '',
+    gst_number: '',
+    email_id: '',
   };
 
   const [form, setForm] = useState<ProfileForm>(defaultForm);
   const [original, setOriginal] = useState<ProfileForm>(defaultForm);
 
-  const name = userData?.customer_name || "User";
+  const name = userData?.customer_name || 'User';
   const initials = name
     .trim()
     .split(/\s+/)
     .map((n: string) => n[0])
     .slice(0, 2)
-    .join("")
+    .join('')
     .toUpperCase();
 
   const status = userData?.status;
   const safeUser = userData ?? {};
 
-  const isGstValid = form.gst_number === "" || form.gst_number.length === 15;
+  const isGstValid = form.gst_number === '' || form.gst_number.length === 15;
 
   const hasChanges =
-    form.customer_name !== (safeUser.customer_name ?? "") ||
-    form.company_name !== (safeUser.company_name ?? "") ||
-    form.phone !== (safeUser.phone ?? "") ||
-    form.gst_number !== (safeUser.gst_number ?? "") ||
-    form.email_id !== (safeUser.email_id ?? "");
+    form.customer_name !== (safeUser.customer_name ?? '') ||
+    form.company_name !== (safeUser.company_name ?? '') ||
+    form.phone !== (safeUser.phone ?? '') ||
+    form.gst_number !== (safeUser.gst_number ?? '') ||
+    form.email_id !== (safeUser.email_id ?? '');
 
   function handleStartEdit() {
     if (!userData) return;
 
     const safeData = {
-      customer_name: userData.customer_name ?? "",
-      phone: userData.phone ?? "",
-      company_name: userData.company_name ?? "",
-      gst_number: userData.gst_number ?? "",
-      email_id: userData.email_id ?? "",
+      customer_name: userData.customer_name ?? '',
+      phone: userData.phone ?? '',
+      company_name: userData.company_name ?? '',
+      gst_number: userData.gst_number ?? '',
+      email_id: userData.email_id ?? '',
     };
 
     setForm(safeData);
@@ -134,8 +181,8 @@ export default function ProfileManagement() {
   }
 
   async function handleSave() {
-    if (form.phone !== "" && form.phone.length !== 10) {
-      alert("Please enter a valid 10-digit phone number.");
+    if (form.phone !== '' && form.phone.length !== 10) {
+      alert('Please enter a valid 10-digit phone number.');
       return;
     }
 
@@ -148,14 +195,14 @@ export default function ProfileManagement() {
         gst_number: form.gst_number,
       });
 
-      queryClient.setQueryData(["user", "me"], updatedUser);
+      queryClient.setQueryData(['user', 'me'], updatedUser);
 
       const safeData: ProfileForm = {
-        customer_name: updatedUser.customer_name ?? "",
-        company_name: updatedUser.company_name ?? "",
-        phone: updatedUser.phone ?? "",
-        email_id: updatedUser.email_id ?? "",
-        gst_number: updatedUser.gst_number ?? "",
+        customer_name: updatedUser.customer_name ?? '',
+        company_name: updatedUser.company_name ?? '',
+        phone: updatedUser.phone ?? '',
+        email_id: updatedUser.email_id ?? '',
+        gst_number: updatedUser.gst_number ?? '',
       };
 
       setOriginal(safeData);
@@ -166,7 +213,7 @@ export default function ProfileManagement() {
       setTimeout(() => setToast(false), 3000);
     } catch (error) {
       console.error(error);
-      alert("Profile update failed");
+      alert('Profile update failed');
     }
   }
 
@@ -178,16 +225,24 @@ export default function ProfileManagement() {
             <Check className="w-4 h-4 text-zinc-800" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-zinc-900">Profile updated</p>
-            <p className="text-xs text-zinc-500">Your changes have been saved.</p>
+            <p className="text-sm font-semibold text-zinc-900">
+              Profile updated
+            </p>
+            <p className="text-xs text-zinc-500">
+              Your changes have been saved.
+            </p>
           </div>
         </div>
       )}
 
       <div className="max-w-full mx-auto px-5 py-8 pb-16 space-y-6">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">Account Info</h1>
-          <p className="text-sm text-zinc-500 mt-1">Manage your personal and business details</p>
+          <h1 className="text-2xl font-bold text-zinc-900 tracking-tight">
+            Account Info
+          </h1>
+          <p className="text-sm text-zinc-500 mt-1">
+            Manage your personal and business details
+          </p>
         </div>
 
         <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-black to-zinc-800 p-8 text-white shadow-xl">
@@ -201,7 +256,9 @@ export default function ProfileManagement() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-1">Account Owner</p>
+              <p className="text-xs font-semibold uppercase tracking-widest text-white/50 mb-1">
+                Account Owner
+              </p>
               <h2 className="text-2xl font-bold text-white truncate">{name}</h2>
               <div className="mt-3">
                 <StatusBadge status={status} />
@@ -226,7 +283,7 @@ export default function ProfileManagement() {
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-zinc-900" />
               <h3 className="text-sm font-semibold text-zinc-900">
-                {editMode ? "Edit Information" : "Account Information"}
+                {editMode ? 'Edit Information' : 'Account Information'}
               </h3>
             </div>
             {editMode && (
@@ -243,13 +300,17 @@ export default function ProfileManagement() {
                   icon={User}
                   label="Customer Name"
                   value={form.customer_name}
-                  onChange={e => setForm(f => ({ ...f, customer_name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, customer_name: e.target.value }))
+                  }
                 />
                 <EditField
                   icon={Building2}
                   label="Company Name"
                   value={form.company_name}
-                  onChange={e => setForm(f => ({ ...f, company_name: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, company_name: e.target.value }))
+                  }
                 />
                 <EditField
                   icon={Phone}
@@ -257,9 +318,11 @@ export default function ProfileManagement() {
                   value={form.phone}
                   type="tel"
                   maxLength={10}
-                  onChange={e => {
-                    const val = e.target.value.replace(/[^0-9]/g, "").slice(0, 10);
-                    setForm(f => ({ ...f, phone: val }));
+                  onChange={(e) => {
+                    const val = e.target.value
+                      .replace(/[^0-9]/g, '')
+                      .slice(0, 10);
+                    setForm((f) => ({ ...f, phone: val }));
                   }}
                 />
                 <EditField
@@ -270,25 +333,47 @@ export default function ProfileManagement() {
                   onChange={(e) => {
                     const value = e.target.value
                       .toUpperCase()
-                      .replace(/[^A-Z0-9]/g, "")
+                      .replace(/[^A-Z0-9]/g, '')
                       .slice(0, 15);
-                    setForm(f => ({ ...f, gst_number: value }));
+                    setForm((f) => ({ ...f, gst_number: value }));
                   }}
                 />
                 <EditField
                   icon={FileText}
                   label="Email ID"
                   value={form.email_id}
-                  onChange={e => setForm(f => ({ ...f, email_id: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, email_id: e.target.value }))
+                  }
                 />
               </div>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <InfoField icon={User} label="Customer Name" value={userData?.customer_name ?? "N/A"} />
-                <InfoField icon={Building2} label="Company Name" value={userData?.company_name ?? "N/A"} />
-                <InfoField icon={Phone} label="Phone Number" value={userData?.phone ?? "N/A"} />
-                <InfoField icon={FileText} label="GST Number" value={userData?.gst_number ?? ""} />
-                <InfoField icon={FileText} label="Email ID" value={userData?.email_id ?? "N/A"} />
+                <InfoField
+                  icon={User}
+                  label="Customer Name"
+                  value={userData?.customer_name ?? 'N/A'}
+                />
+                <InfoField
+                  icon={Building2}
+                  label="Company Name"
+                  value={userData?.company_name ?? 'N/A'}
+                />
+                <InfoField
+                  icon={Phone}
+                  label="Phone Number"
+                  value={userData?.phone ?? 'N/A'}
+                />
+                <InfoField
+                  icon={FileText}
+                  label="GST Number"
+                  value={userData?.gst_number ?? ''}
+                />
+                <InfoField
+                  icon={FileText}
+                  label="Email ID"
+                  value={userData?.email_id ?? 'N/A'}
+                />
               </div>
             )}
 

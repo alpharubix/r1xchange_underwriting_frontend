@@ -93,7 +93,10 @@ export default function OTPVerification({
 
       <form onSubmit={handleVerify} className="space-y-4">
         <div>
-          <label htmlFor="otp" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="otp"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             One-Time Password
           </label>
           <input

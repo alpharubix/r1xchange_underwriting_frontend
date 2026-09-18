@@ -77,10 +77,16 @@ interface BsaUploadModalProps {
   custId?: string;
 }
 
-export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadModalProps) {
+export default function BsaUploadModal({
+  isOpen,
+  onClose,
+  custId,
+}: BsaUploadModalProps) {
   const [modalStep, setModalStep] = useState<ModalStep>('form');
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [uploadResult, setUploadResult] = useState<ParsedUploadResult | null>(null);
+  const [uploadResult, setUploadResult] = useState<ParsedUploadResult | null>(
+    null
+  );
 
   const [formData, setFormData] = useState({
     entityName: '',
@@ -115,7 +121,8 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
       setModalStep('confirmation');
     },
     onError: (error: any) => {
-      const msg = extractErrorMessage(error) || 'Failed to upload bank statement';
+      const msg =
+        extractErrorMessage(error) || 'Failed to upload bank statement';
       toast.error(msg);
     },
   });
@@ -123,12 +130,16 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
   const confirmMutation = useMutation({
     mutationFn: async (upload_ref_id: string) => {
       const config = custId ? { params: { cust_id: custId } } : {};
-      const response = await apiClient.post('/bsa/upload_ref_id', {
-        upload_ref_id,
-      }, {
-        skipErrorToast: true,
-        ...config,
-      });
+      const response = await apiClient.post(
+        '/bsa/upload_ref_id',
+        {
+          upload_ref_id,
+        },
+        {
+          skipErrorToast: true,
+          ...config,
+        }
+      );
       return response.data;
     },
     onSuccess: (data: any) => {
@@ -226,7 +237,11 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
               </CardTitle>
               <CardDescription>
                 Provide details and upload your bank statement for analysis
-                {custId && <span className="block mt-1 text-[#002366] font-semibold">Creating for Customer: {custId}</span>}
+                {custId && (
+                  <span className="block mt-1 text-[#002366] font-semibold">
+                    Creating for Customer: {custId}
+                  </span>
+                )}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -254,7 +269,9 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                             Sole Proprietorship
                           </SelectItem>
                           <SelectItem value="Trust">Trust</SelectItem>
-                          <SelectItem value="Partnership">Partnership</SelectItem>
+                          <SelectItem value="Partnership">
+                            Partnership
+                          </SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -278,8 +295,12 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                           <SelectLabel>Account Type</SelectLabel>
                           <SelectItem value="CURRENT">CURRENT</SelectItem>
                           <SelectItem value="SAVINGS">SAVINGS</SelectItem>
-                          <SelectItem value="OVER_DRAFT">Over Draft(OD)</SelectItem>
-                          <SelectItem value="CASH_CREDIT">Cash Credit(CC)</SelectItem>
+                          <SelectItem value="OVER_DRAFT">
+                            Over Draft(OD)
+                          </SelectItem>
+                          <SelectItem value="CASH_CREDIT">
+                            Cash Credit(CC)
+                          </SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -306,19 +327,26 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                   </Label>
                   <Select
                     value={formData.bankCode}
-                    onValueChange={(value) => setFormData({ ...formData, bankCode: value })}
+                    onValueChange={(value) =>
+                      setFormData({ ...formData, bankCode: value })
+                    }
                   >
                     <SelectTrigger className="w-full">
-                      <SelectValue placeholder={isLoadingBanks ? "Loading banks..." : "Select a bank"} />
+                      <SelectValue
+                        placeholder={
+                          isLoadingBanks ? 'Loading banks...' : 'Select a bank'
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent style={{ zIndex: 99999 }}>
                       <SelectGroup>
                         <SelectLabel>Available Banks</SelectLabel>
-                        {!isLoadingBanks && banks?.map((bank, idx) => (
-                          <SelectItem key={idx} value={bank.code}>
-                            {bank.bankName}
-                          </SelectItem>
-                        ))}
+                        {!isLoadingBanks &&
+                          banks?.map((bank, idx) => (
+                            <SelectItem key={idx} value={bank.code}>
+                              {bank.bankName}
+                            </SelectItem>
+                          ))}
                       </SelectGroup>
                     </SelectContent>
                   </Select>
@@ -452,7 +480,9 @@ export default function BsaUploadModal({ isOpen, onClose, custId }: BsaUploadMod
                 <Button
                   type="button"
                   className="flex-1 bg-[#002366] hover:bg-[#001744] text-white shadow-sm shadow-[#002366]/20 cursor-pointer"
-                  onClick={() => confirmMutation.mutate(uploadResult.upload_ref_id)}
+                  onClick={() =>
+                    confirmMutation.mutate(uploadResult.upload_ref_id)
+                  }
                   disabled={confirmMutation.isPending}
                 >
                   {confirmMutation.isPending ? (

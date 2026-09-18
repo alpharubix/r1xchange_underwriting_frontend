@@ -162,75 +162,265 @@ type RowConfig = {
   isGreyBg?: boolean;
 };
 
-
 const ROWS: RowConfig[] = [
   { label: 'Receipts', isSeparator: true },
-  { label: 'Cash Deposit', overallKey: ['receipts', 'cash_deposit'], monthKey: 'CashDeposit' as any, isCurrency: true },
-  { label: 'Cheque Receipts', overallKey: ['receipts', 'cheque_receipts'], monthKey: 'ChequeReceipts' as any, isCurrency: true },
-  { label: 'Online Receipts', overallKey: ['receipts', 'online_receipts'], monthKey: 'OnlineReceipts' as any, isCurrency: true },
-  { label: 'Bank Instrument', overallKey: ['receipts', 'bank_instrument'], monthKey: 'BankInstrument' as any, isCurrency: true },
-  { label: 'Forex Remittance', overallKey: ['receipts', 'forex_remittance'], monthKey: 'ForexRemittance' as any, isCurrency: true },
-  { label: 'Refund/Reversal', overallKey: ['receipts', 'refund_reversal'], monthKey: 'RefundReversal' as any, isCurrency: true },
-  { label: 'Other Receipts', overallKey: ['receipts', 'other_receipts'], monthKey: 'OtherReceipts' as any, isCurrency: true },
+  {
+    label: 'Cash Deposit',
+    overallKey: ['receipts', 'cash_deposit'],
+    monthKey: 'CashDeposit' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Cheque Receipts',
+    overallKey: ['receipts', 'cheque_receipts'],
+    monthKey: 'ChequeReceipts' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Online Receipts',
+    overallKey: ['receipts', 'online_receipts'],
+    monthKey: 'OnlineReceipts' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Bank Instrument',
+    overallKey: ['receipts', 'bank_instrument'],
+    monthKey: 'BankInstrument' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Forex Remittance',
+    overallKey: ['receipts', 'forex_remittance'],
+    monthKey: 'ForexRemittance' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Refund/Reversal',
+    overallKey: ['receipts', 'refund_reversal'],
+    monthKey: 'RefundReversal' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Other Receipts',
+    overallKey: ['receipts', 'other_receipts'],
+    monthKey: 'OtherReceipts' as any,
+    isCurrency: true,
+  },
 
   { label: 'Income Receipts', isSeparator: true },
-  { label: 'Salary Income', overallKey: ['income_receipts', 'salary_income'], monthKey: 'SalaryIncome' as any, isCurrency: true },
-  { label: 'Rent Income', overallKey: ['income_receipts', 'rent_income'], monthKey: 'RentIncome' as any, isCurrency: true },
-  { label: 'Interest Income', overallKey: ['income_receipts', 'interest_income'], monthKey: 'InterestIncome' as any, isCurrency: true },
+  {
+    label: 'Salary Income',
+    overallKey: ['income_receipts', 'salary_income'],
+    monthKey: 'SalaryIncome' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Rent Income',
+    overallKey: ['income_receipts', 'rent_income'],
+    monthKey: 'RentIncome' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Interest Income',
+    overallKey: ['income_receipts', 'interest_income'],
+    monthKey: 'InterestIncome' as any,
+    isCurrency: true,
+  },
 
   { label: 'Financial Receipts', isSeparator: true },
-  { label: 'Loan Received', overallKey: ['financial_receipts', 'loan_received'], monthKey: 'LoanReceived' as any, isCurrency: true },
-  { label: 'Insurance', overallKey: ['financial_receipts', 'insurance'], monthKey: 'Insurance' as any, isCurrency: true },
-  { label: 'Investment Receipt', overallKey: ['financial_receipts', 'investment_receipt'], monthKey: 'InvestmentReceipt' as any, isCurrency: true },
+  {
+    label: 'Loan Received',
+    overallKey: ['financial_receipts', 'loan_received'],
+    monthKey: 'LoanReceived' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Insurance',
+    overallKey: ['financial_receipts', 'insurance'],
+    monthKey: 'Insurance' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Investment Receipt',
+    overallKey: ['financial_receipts', 'investment_receipt'],
+    monthKey: 'InvestmentReceipt' as any,
+    isCurrency: true,
+  },
 
-  { label: 'Total Receipts', overallKey: ['total_receipts'], monthKey: 'TotalReceipts' as any, isCurrency: true, isBold: true, isGreyBg: true },
+  {
+    label: 'Total Receipts',
+    overallKey: ['total_receipts'],
+    monthKey: 'TotalReceipts' as any,
+    isCurrency: true,
+    isBold: true,
+    isGreyBg: true,
+  },
 
   { label: 'Expenses', isSeparator: true },
-  { label: 'External Payments', overallKey: ['expenses', 'external_payments'], monthKey: 'ExternalPayments' as any, isCurrency: true },
-  { label: 'Cash Withdrawals', overallKey: ['expenses', 'cash_withdrawals'], monthKey: 'CashWithdrawals' as any, isCurrency: true },
-  { label: 'Cheque Payments', overallKey: ['expenses', 'cheque_payments'], monthKey: 'ChequePayments' as any, isCurrency: true },
-  { label: 'Online Payments', overallKey: ['expenses', 'online_payments'], monthKey: 'OnlinePayments' as any, isCurrency: true },
-  { label: 'Bank Instrument', overallKey: ['expenses', 'bank_instrument'], monthKey: 'BankInstrument' as any, isCurrency: true },
-  { label: 'Forex Remittance', overallKey: ['expenses', 'forex_remittance'], monthKey: 'ForexRemittance' as any, isCurrency: true },
-  { label: 'Other Payments', overallKey: ['expenses', 'other_payments'], monthKey: 'OtherPayments' as any, isCurrency: true },
+  {
+    label: 'External Payments',
+    overallKey: ['expenses', 'external_payments'],
+    monthKey: 'ExternalPayments' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Cash Withdrawals',
+    overallKey: ['expenses', 'cash_withdrawals'],
+    monthKey: 'CashWithdrawals' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Cheque Payments',
+    overallKey: ['expenses', 'cheque_payments'],
+    monthKey: 'ChequePayments' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Online Payments',
+    overallKey: ['expenses', 'online_payments'],
+    monthKey: 'OnlinePayments' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Bank Instrument',
+    overallKey: ['expenses', 'bank_instrument'],
+    monthKey: 'BankInstrument' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Forex Remittance',
+    overallKey: ['expenses', 'forex_remittance'],
+    monthKey: 'ForexRemittance' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Other Payments',
+    overallKey: ['expenses', 'other_payments'],
+    monthKey: 'OtherPayments' as any,
+    isCurrency: true,
+  },
 
   { label: 'Maintenance Payments', isSeparator: true },
-  { label: 'Rent Payment', overallKey: ['maintenance_payments', 'rent_payment'], monthKey: 'RentPayment' as any, isCurrency: true },
-  { label: 'Utility Payment', overallKey: ['maintenance_payments', 'utility_payment'], monthKey: 'UtilityPayment' as any, isCurrency: true },
-  { label: 'Salary Payment', overallKey: ['maintenance_payments', 'salary_payment'], monthKey: 'SalaryPayment' as any, isCurrency: true },
-  { label: 'POS Expenses', overallKey: ['maintenance_payments', 'pos_expenses'], monthKey: 'POSExpenses' as any, isCurrency: true },
-  { label: 'Credit Card Payments', overallKey: ['maintenance_payments', 'credit_card_payments'], monthKey: 'CreditCardPayments' as any, isCurrency: true },
-  { label: 'Goods Purchase', overallKey: ['maintenance_payments', 'goods_purchase'], monthKey: 'GoodsPurchase' as any, isCurrency: true },
-  { label: 'Bank Charges', overallKey: ['maintenance_payments', 'bank_charges'], monthKey: 'BankCharges' as any, isCurrency: true },
+  {
+    label: 'Rent Payment',
+    overallKey: ['maintenance_payments', 'rent_payment'],
+    monthKey: 'RentPayment' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Utility Payment',
+    overallKey: ['maintenance_payments', 'utility_payment'],
+    monthKey: 'UtilityPayment' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Salary Payment',
+    overallKey: ['maintenance_payments', 'salary_payment'],
+    monthKey: 'SalaryPayment' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'POS Expenses',
+    overallKey: ['maintenance_payments', 'pos_expenses'],
+    monthKey: 'POSExpenses' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Credit Card Payments',
+    overallKey: ['maintenance_payments', 'credit_card_payments'],
+    monthKey: 'CreditCardPayments' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Goods Purchase',
+    overallKey: ['maintenance_payments', 'goods_purchase'],
+    monthKey: 'GoodsPurchase' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Bank Charges',
+    overallKey: ['maintenance_payments', 'bank_charges'],
+    monthKey: 'BankCharges' as any,
+    isCurrency: true,
+  },
 
   { label: 'Financial Payments', isSeparator: true },
-  { label: 'Loan Repayment', overallKey: ['financial_payments', 'loan_repayment'], monthKey: 'LoanRepayment' as any, isCurrency: true },
-  { label: 'Insurance', overallKey: ['financial_payments', 'insurance'], monthKey: 'Insurance' as any, isCurrency: true },
-  { label: 'Interest', overallKey: ['financial_payments', 'interest'], monthKey: 'Interest' as any, isCurrency: true },
-  { label: 'Investment Expense', overallKey: ['financial_payments', 'investment_expense'], monthKey: 'InvestmentExpense' as any, isCurrency: true },
-  { label: 'Tax', overallKey: ['financial_payments', 'tax'], monthKey: 'Tax' as any, isCurrency: true },
+  {
+    label: 'Loan Repayment',
+    overallKey: ['financial_payments', 'loan_repayment'],
+    monthKey: 'LoanRepayment' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Insurance',
+    overallKey: ['financial_payments', 'insurance'],
+    monthKey: 'Insurance' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Interest',
+    overallKey: ['financial_payments', 'interest'],
+    monthKey: 'Interest' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Investment Expense',
+    overallKey: ['financial_payments', 'investment_expense'],
+    monthKey: 'InvestmentExpense' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Tax',
+    overallKey: ['financial_payments', 'tax'],
+    monthKey: 'Tax' as any,
+    isCurrency: true,
+  },
 
-  { label: 'Total Expenses', overallKey: ['total_expenses'], monthKey: 'TotalExpenses' as any, isCurrency: true, isBold: true, isGreyBg: true },
+  {
+    label: 'Total Expenses',
+    overallKey: ['total_expenses'],
+    monthKey: 'TotalExpenses' as any,
+    isCurrency: true,
+    isBold: true,
+    isGreyBg: true,
+  },
 
   { label: 'Summary', isSeparator: true },
-  { label: 'Monthly Savings', overallKey: ['monthly_savings'], monthKey: 'MonthlySavings' as any, isCurrency: true, isBold: true },
-  { label: 'Opening Balance', overallKey: ['opening_balance'], monthKey: 'OpeningBalance' as any, isCurrency: true, isBold: true },
-  { label: 'Closing Balance', overallKey: ['closing_balance'], monthKey: 'ClosingBalance' as any, isCurrency: true, isBold: true },
+  {
+    label: 'Monthly Savings',
+    overallKey: ['monthly_savings'],
+    monthKey: 'MonthlySavings' as any,
+    isCurrency: true,
+    isBold: true,
+  },
+  {
+    label: 'Opening Balance',
+    overallKey: ['opening_balance'],
+    monthKey: 'OpeningBalance' as any,
+    isCurrency: true,
+    isBold: true,
+  },
+  {
+    label: 'Closing Balance',
+    overallKey: ['closing_balance'],
+    monthKey: 'ClosingBalance' as any,
+    isCurrency: true,
+    isBold: true,
+  },
 ];
-
 
 export default function IndividualOverview() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-  
+
   const location = useLocation();
 
   const selectedAccountNumber =
-  (location.state as { accountNumber?: string } | null)?.accountNumber ||
-  sessionStorage.getItem('selected_bsa_account_number') ||
-  '';
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
 
   const accountDetails = sessionStorage.getItem('account_details');
   console.log('accountDetails:', accountDetails);
@@ -270,11 +460,10 @@ export default function IndividualOverview() {
       setShowScrollHint(container.scrollTop < 80);
     };
     // console.log(container.scrollTop);
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener('scroll', handleScroll);
 
-    return () => container.removeEventListener("scroll", handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   const handleApply = () => {
     if (!fromDate || !toDate) {
@@ -326,14 +515,19 @@ export default function IndividualOverview() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['individual-overview', appliedFromDate, appliedToDate, selectedAccountNumber],
+    queryKey: [
+      'individual-overview',
+      appliedFromDate,
+      appliedToDate,
+      selectedAccountNumber,
+    ],
     queryFn: async () => {
       const response = await apiClient.post(
         `/bsa/individual/overview`,
         {
           from_date: appliedFromDate,
           to_date: appliedToDate,
-          account_number: selectedAccountNumber
+          account_number: selectedAccountNumber,
         },
         {
           errorMessage:
@@ -423,7 +617,16 @@ export default function IndividualOverview() {
   const dataMap = new Map<string, MonthlyBreakdown>();
   if (data?.monthly_breakdown) {
     data.monthly_breakdown.forEach((item) => {
-      dataMap.set(item.parsedMonthDate ? new Date(item.parsedMonthDate).toLocaleString("en-US", { month: "short" }).toLowerCase() + " " + new Date(item.parsedMonthDate).getFullYear() : "", item);
+      dataMap.set(
+        item.parsedMonthDate
+          ? new Date(item.parsedMonthDate)
+              .toLocaleString('en-US', { month: 'short' })
+              .toLowerCase() +
+              ' ' +
+              new Date(item.parsedMonthDate).getFullYear()
+          : '',
+        item
+      );
     });
   }
 
@@ -445,9 +648,13 @@ export default function IndividualOverview() {
       </div>
       {accountDetails && <BankAccountDetails />}
       {showScrollHint && (
-        <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+        <div
+          className="mt-4 flex justify-center animate-bounce transition-opacity duration-500"
+          ref={containerRef}
+        >
           <p className="text-sm text-gray-500">
-             Scroll up to view <span className="font-medium">Monthly Overview</span>
+            Scroll up to view{' '}
+            <span className="font-medium">Monthly Overview</span>
           </p>
         </div>
       )}
@@ -596,7 +803,6 @@ export default function IndividualOverview() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -627,13 +833,8 @@ export default function IndividualOverview() {
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(appliedFromDate + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To{' '}
-                  {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
@@ -716,9 +917,7 @@ export default function IndividualOverview() {
                     );
 
                     const cellClass = `px-4 py-2.5 border border-black/20 ${row.isRed ? 'text-red-700' : 'text-black'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
-                    const bgClass = row.isGreyBg
-                      ? 'bg-gray-100'
-                      : 'bg-white';
+                    const bgClass = row.isGreyBg ? 'bg-gray-100' : 'bg-white';
 
                     return (
                       <tr

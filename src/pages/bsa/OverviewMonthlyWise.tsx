@@ -569,13 +569,13 @@ export default function OverviewMonthlyWise() {
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-  
+
   const location = useLocation();
 
   const selectedAccountNumber =
-  (location.state as { accountNumber?: string } | null)?.accountNumber ||
-  sessionStorage.getItem('selected_bsa_account_number') ||
-  '';
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
 
   const accountDetails = sessionStorage.getItem('account_details');
   console.log('accountDetails:', accountDetails);
@@ -615,11 +615,10 @@ export default function OverviewMonthlyWise() {
       setShowScrollHint(container.scrollTop < 80);
     };
     // console.log(container.scrollTop);
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener('scroll', handleScroll);
 
-    return () => container.removeEventListener("scroll", handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   const handleApply = () => {
     if (!fromDate || !toDate) {
@@ -671,14 +670,19 @@ export default function OverviewMonthlyWise() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate, selectedAccountNumber],
+    queryKey: [
+      'month-wise-overview',
+      appliedFromDate,
+      appliedToDate,
+      selectedAccountNumber,
+    ],
     queryFn: async () => {
       const response = await apiClient.post(
         `/bsa/month-wise-overview`,
         {
           from_date: appliedFromDate,
           to_date: appliedToDate,
-          account_number: selectedAccountNumber
+          account_number: selectedAccountNumber,
         },
         {
           errorMessage:
@@ -790,9 +794,13 @@ export default function OverviewMonthlyWise() {
       </div>
       {accountDetails && <BankAccountDetails />}
       {showScrollHint && (
-        <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+        <div
+          className="mt-4 flex justify-center animate-bounce transition-opacity duration-500"
+          ref={containerRef}
+        >
           <p className="text-sm text-gray-500">
-             Scroll up to view <span className="font-medium">Monthly Overview</span>
+            Scroll up to view{' '}
+            <span className="font-medium">Monthly Overview</span>
           </p>
         </div>
       )}
@@ -941,7 +949,6 @@ export default function OverviewMonthlyWise() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -972,13 +979,8 @@ export default function OverviewMonthlyWise() {
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(appliedFromDate + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To{' '}
-                  {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
@@ -1061,9 +1063,7 @@ export default function OverviewMonthlyWise() {
                     );
 
                     const cellClass = `px-4 py-2.5 border border-black/20 ${row.isRed ? 'text-red-700' : 'text-black'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
-                    const bgClass = row.isGreyBg
-                      ? 'bg-gray-100'
-                      : 'bg-white';
+                    const bgClass = row.isGreyBg ? 'bg-gray-100' : 'bg-white';
 
                     return (
                       <tr

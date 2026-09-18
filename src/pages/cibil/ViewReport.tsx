@@ -1,6 +1,6 @@
-﻿import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import CibilReportTabs from "@/components/cibil/CibilReportTabs";
+﻿import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import CibilReportTabs from '@/components/cibil/CibilReportTabs';
 
 type ViewReportProps = {
   reference_id?: string;
@@ -14,12 +14,14 @@ export default function ViewReport({
   onBack,
   onStartNew,
 }: ViewReportProps = {}) {
-  const { reference_id: routeReferenceId } = useParams<{ reference_id: string }>();
+  const { reference_id: routeReferenceId } = useParams<{
+    reference_id: string;
+  }>();
   const navigate = useNavigate();
   const referenceId = propReferenceId || routeReferenceId;
 
   useEffect(() => {
-    document.title = "View CIBIL Report";
+    document.title = 'View CIBIL Report';
   }, []);
 
   const handleBack = () => {
@@ -28,7 +30,7 @@ export default function ViewReport({
       return;
     }
 
-    navigate("/cibil/reports");
+    navigate('/cibil/reports');
   };
 
   const handleStartNew = () => {
@@ -37,7 +39,7 @@ export default function ViewReport({
       return;
     }
 
-    navigate("/cibil");
+    navigate('/cibil');
   };
 
   if (!referenceId) {
@@ -62,7 +64,10 @@ export default function ViewReport({
               Report Sections
             </h1>
             <p className="mt-2 max-w-3xl break-all text-sm text-slate-600">
-              Reference ID: <span className="font-semibold text-[#002366]">{referenceId}</span>
+              Reference ID:{' '}
+              <span className="font-semibold text-[#002366]">
+                {referenceId}
+              </span>
             </p>
           </div>
 

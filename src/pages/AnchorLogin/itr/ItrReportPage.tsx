@@ -1,16 +1,19 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronLeft, FileText } from "lucide-react";
-import TaxCalculation from "./TaxCalculation";
-import BalanceSheet from "./BalanceSheet";
-import ProfitAndLossStatement from "./ProfitAndLossStatement";
-import RatioAnalysis from "./RatioAnalysis";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChevronLeft, FileText } from 'lucide-react';
+import TaxCalculation from './TaxCalculation';
+import BalanceSheet from './BalanceSheet';
+import ProfitAndLossStatement from './ProfitAndLossStatement';
+import RatioAnalysis from './RatioAnalysis';
 
 interface ItrReportPageProps {
   itrReportId?: string;
   onBack?: () => void;
 }
 
-export default function ItrReportPage({ itrReportId, onBack }: ItrReportPageProps) {
+export default function ItrReportPage({
+  itrReportId,
+  onBack,
+}: ItrReportPageProps) {
   if (!itrReportId) {
     return (
       <div className="bg-gray-50 py-12 px-4 flex items-center justify-center">
@@ -40,39 +43,65 @@ export default function ItrReportPage({ itrReportId, onBack }: ItrReportPageProp
           )}
           <div>
             <h1 className="text-2xl font-bold text-gray-950">ITR Report</h1>
-            <p className="text-xs text-gray-500 mt-0.5">Ref ID: {itrReportId}</p>
+            <p className="text-xs text-gray-500 mt-0.5">
+              Ref ID: {itrReportId}
+            </p>
           </div>
         </div>
 
         <Tabs defaultValue="tax-calc" className="w-full">
           <TabsList className="grid w-full grid-cols-4 mb-6 bg-slate-100/50 p-1 rounded-xl h-11 border border-slate-100">
-            <TabsTrigger value="tax-calc" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer">
+            <TabsTrigger
+              value="tax-calc"
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer"
+            >
               Tax Calculation
             </TabsTrigger>
-            <TabsTrigger value="balance-sheet" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer">
+            <TabsTrigger
+              value="balance-sheet"
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer"
+            >
               Balance Sheet
             </TabsTrigger>
-            <TabsTrigger value="profit-loss" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer">
+            <TabsTrigger
+              value="profit-loss"
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer"
+            >
               Profit & Loss
             </TabsTrigger>
-            <TabsTrigger value="ratio" className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer">
+            <TabsTrigger
+              value="ratio"
+              className="rounded-lg data-[state=active]:bg-white data-[state=active]:text-[#002366] data-[state=active]:shadow-sm text-xs font-bold cursor-pointer"
+            >
               Ratio Analysis
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="tax-calc" className="outline-none focus:outline-none">
+          <TabsContent
+            value="tax-calc"
+            className="outline-none focus:outline-none"
+          >
             <TaxCalculation />
           </TabsContent>
 
-          <TabsContent value="balance-sheet" className="outline-none focus:outline-none">
+          <TabsContent
+            value="balance-sheet"
+            className="outline-none focus:outline-none"
+          >
             <BalanceSheet />
           </TabsContent>
 
-          <TabsContent value="profit-loss" className="outline-none focus:outline-none">
+          <TabsContent
+            value="profit-loss"
+            className="outline-none focus:outline-none"
+          >
             <ProfitAndLossStatement />
           </TabsContent>
 
-          <TabsContent value="ratio" className="outline-none focus:outline-none">
+          <TabsContent
+            value="ratio"
+            className="outline-none focus:outline-none"
+          >
             <RatioAnalysis />
           </TabsContent>
         </Tabs>

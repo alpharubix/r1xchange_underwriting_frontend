@@ -1,5 +1,5 @@
-import himalayaLogo from "@/assets/himalaya_logo.png";
-import cavinkareLogo from "@/assets/cavinkare_logo.png";
+import himalayaLogo from '@/assets/himalaya_logo.png';
+import cavinkareLogo from '@/assets/cavinkare_logo.png';
 
 export interface BrandInfo {
   logo: string | null;
@@ -9,11 +9,10 @@ export interface BrandInfo {
 
 export function getAnchorBrand(user: any): BrandInfo {
   const code = String(
-    user?.anchor_code ||
-    user?.anchorCode ||
-    user?.anchor_id ||
-    ""
-  ).toLowerCase().trim();
+    user?.anchor_code || user?.anchorCode || user?.anchor_id || ''
+  )
+    .toLowerCase()
+    .trim();
 
   const combined = [
     user?.anchor_code,
@@ -32,7 +31,7 @@ export function getAnchorBrand(user: any): BrandInfo {
     user?.anchor_id,
   ]
     .filter(Boolean)
-    .join(" ")
+    .join(' ')
     .toLowerCase();
 
   const rawName =
@@ -41,10 +40,10 @@ export function getAnchorBrand(user: any): BrandInfo {
     user?.company_name ||
     user?.customer_name ||
     user?.login_id ||
-    "User";
+    'User';
 
   const getInitials = (name?: string): string => {
-    if (!name) return "U";
+    if (!name) return 'U';
     const clean = name.trim();
     const parts = clean.split(/[\s_\-]+/).filter(Boolean);
     if (parts.length >= 2) {
@@ -63,31 +62,31 @@ export function getAnchorBrand(user: any): BrandInfo {
 
   // Check for CavinKare (cavin, cavinkare, cavin kare, or code ck, ck01, etc.)
   if (
-    combined.includes("cavin") ||
-    combined.includes("kare") ||
-    code === "ck" ||
-    code.startsWith("ck") ||
-    code.includes("cavin")
+    combined.includes('cavin') ||
+    combined.includes('kare') ||
+    code === 'ck' ||
+    code.startsWith('ck') ||
+    code.includes('cavin')
   ) {
     return {
       logo: cavinkareLogo,
       name: rawName,
-      initial: "CK",
+      initial: 'CK',
     };
   }
 
   // Check for Himalaya (himalaya, hwc, hw, hml, or code hwc, hwc01, etc.)
   if (
-    combined.includes("himalaya") ||
-    combined.includes("hwc") ||
-    code === "hwc" ||
-    code.startsWith("hw") ||
-    code.includes("himalaya")
+    combined.includes('himalaya') ||
+    combined.includes('hwc') ||
+    code === 'hwc' ||
+    code.startsWith('hw') ||
+    code.includes('himalaya')
   ) {
     return {
       logo: himalayaLogo,
       name: rawName,
-      initial: "H",
+      initial: 'H',
     };
   }
 

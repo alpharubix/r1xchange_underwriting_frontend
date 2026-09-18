@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCcw } from 'lucide-react';
 import BankAccountDetails from '../BankAccountDetails';
@@ -47,11 +42,10 @@ export default function IndividualLoanTransactions() {
       const response = await apiClient.post(
         `/bsa/individual/loan-transactions`,
         {
-          account_number: selectedAccountNumber
+          account_number: selectedAccountNumber,
         },
         {
-          errorMessage:
-            'Failed to load loan transactions. Please try again.',
+          errorMessage: 'Failed to load loan transactions. Please try again.',
         }
       );
       // Backend returns data inside response.data.data (array of docs, taking first one)
@@ -65,7 +59,8 @@ export default function IndividualLoanTransactions() {
   });
 
   const formatCurrency = (value: number | string | undefined | null) => {
-    if (value === undefined || value === null || value === '' || value === '-') return '-';
+    if (value === undefined || value === null || value === '' || value === '-')
+      return '-';
     const numValue = typeof value === 'string' ? parseFloat(value) : value;
     if (isNaN(numValue)) return value;
     return new Intl.NumberFormat('en-IN', {
@@ -87,7 +82,7 @@ export default function IndividualLoanTransactions() {
           </p>
         </div>
       </div>
-      
+
       {accountDetails && <BankAccountDetails />}
 
       {!selectedAccountNumber && (
@@ -111,7 +106,9 @@ export default function IndividualLoanTransactions() {
         <Card className="shadow-lg border-black/10 bg-white mb-8">
           <CardHeader className="flex flex-row items-center justify-between bg-gray-50/50 border-b pb-4">
             <div>
-              <CardTitle className="text-xl text-black">Summary of Loan Transactions</CardTitle>
+              <CardTitle className="text-xl text-black">
+                Summary of Loan Transactions
+              </CardTitle>
             </div>
             <Button
               variant="outline"
@@ -119,7 +116,9 @@ export default function IndividualLoanTransactions() {
               disabled={isLoading}
               className="gap-2 border-black text-black hover:bg-gray-100"
             >
-              <RefreshCcw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
+              <RefreshCcw
+                className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`}
+              />
               Refresh
             </Button>
           </CardHeader>
@@ -131,24 +130,43 @@ export default function IndividualLoanTransactions() {
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">
-                <p>Error loading data: {(error as any)?.message || 'Unknown error'}</p>
+                <p>
+                  Error loading data:{' '}
+                  {(error as any)?.message || 'Unknown error'}
+                </p>
               </div>
-            ) : data?.summary_of_loan_trans && data.summary_of_loan_trans.length > 0 ? (
+            ) : data?.summary_of_loan_trans &&
+              data.summary_of_loan_trans.length > 0 ? (
               <div className="overflow-x-auto pb-4">
                 <table className="w-full text-sm text-left border-collapse border border-gray-300">
                   <thead className="text-xs text-white bg-[#002366]">
                     <tr>
-                      <th className="px-4 py-3 font-semibold border border-gray-400">Month</th>
-                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">Debit</th>
-                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">Credit</th>
+                      <th className="px-4 py-3 font-semibold border border-gray-400">
+                        Month
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">
+                        Debit
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">
+                        Credit
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white">
                     {data.summary_of_loan_trans.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-gray-100 transition-colors">
-                        <td className="px-4 py-2 border border-gray-300">{row.month}</td>
-                        <td className="px-4 py-2 text-right border border-gray-300">{formatCurrency(row.Debit)}</td>
-                        <td className="px-4 py-2 text-right border border-gray-300">{formatCurrency(row.Credit)}</td>
+                      <tr
+                        key={idx}
+                        className="hover:bg-gray-100 transition-colors"
+                      >
+                        <td className="px-4 py-2 border border-gray-300">
+                          {row.month}
+                        </td>
+                        <td className="px-4 py-2 text-right border border-gray-300">
+                          {formatCurrency(row.Debit)}
+                        </td>
+                        <td className="px-4 py-2 text-right border border-gray-300">
+                          {formatCurrency(row.Credit)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -167,7 +185,9 @@ export default function IndividualLoanTransactions() {
         <Card className="shadow-lg border-black/10 bg-white">
           <CardHeader className="flex flex-row items-center justify-between bg-gray-50/50 border-b pb-4">
             <div>
-              <CardTitle className="text-xl text-black">Details of Loan Transactions</CardTitle>
+              <CardTitle className="text-xl text-black">
+                Details of Loan Transactions
+              </CardTitle>
             </div>
           </CardHeader>
           <CardContent className="p-0">
@@ -178,26 +198,49 @@ export default function IndividualLoanTransactions() {
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">
-                <p>Error loading data: {(error as any)?.message || 'Unknown error'}</p>
+                <p>
+                  Error loading data:{' '}
+                  {(error as any)?.message || 'Unknown error'}
+                </p>
               </div>
-            ) : data?.details_of_loan_transaction && data.details_of_loan_transaction.length > 0 ? (
+            ) : data?.details_of_loan_transaction &&
+              data.details_of_loan_transaction.length > 0 ? (
               <div className="overflow-x-auto pb-4">
                 <table className="w-full text-sm text-left border-collapse border border-gray-300">
                   <thead className="text-xs text-white bg-[#002366]">
                     <tr>
-                      <th className="px-4 py-3 font-semibold border border-gray-400">Date</th>
-                      <th className="px-4 py-3 font-semibold border border-gray-400">Particulars</th>
-                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">Debit</th>
-                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">Credit</th>
+                      <th className="px-4 py-3 font-semibold border border-gray-400">
+                        Date
+                      </th>
+                      <th className="px-4 py-3 font-semibold border border-gray-400">
+                        Particulars
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">
+                        Debit
+                      </th>
+                      <th className="px-4 py-3 font-semibold text-right border border-gray-400">
+                        Credit
+                      </th>
                     </tr>
                   </thead>
                   <tbody className="bg-white">
                     {data.details_of_loan_transaction.map((row, idx) => (
-                      <tr key={idx} className="hover:bg-gray-100 transition-colors">
-                        <td className="px-4 py-2 border border-gray-300">{row.date}</td>
-                        <td className="px-4 py-2 border border-gray-300">{row.particulars}</td>
-                        <td className="px-4 py-2 text-right border border-gray-300">{formatCurrency(row.Debit)}</td>
-                        <td className="px-4 py-2 text-right border border-gray-300">{formatCurrency(row.Credit)}</td>
+                      <tr
+                        key={idx}
+                        className="hover:bg-gray-100 transition-colors"
+                      >
+                        <td className="px-4 py-2 border border-gray-300">
+                          {row.date}
+                        </td>
+                        <td className="px-4 py-2 border border-gray-300">
+                          {row.particulars}
+                        </td>
+                        <td className="px-4 py-2 text-right border border-gray-300">
+                          {formatCurrency(row.Debit)}
+                        </td>
+                        <td className="px-4 py-2 text-right border border-gray-300">
+                          {formatCurrency(row.Credit)}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
@@ -214,4 +257,3 @@ export default function IndividualLoanTransactions() {
     </div>
   );
 }
-

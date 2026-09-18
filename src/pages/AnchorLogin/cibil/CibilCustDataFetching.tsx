@@ -1,11 +1,10 @@
 ﻿import CibilWorkflow from './index';
 
 export default function CibilCustDataFetching() {
-
   const handleReports = () => {
     // Navigate to the reports page
     window.location.href = '/cibil/reports';
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -16,7 +15,10 @@ export default function CibilCustDataFetching() {
             <p className="text-gray-500 mt-1">
               Authenticate customer consent and process CIBIL report data
             </p>
-            <button className="mt-4 px-4 py-2 bg-[#002366] text-white rounded-xl hover:bg-[#001744] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366] shadow-sm shadow-[#002366]/20 cursor-pointer" onClick={handleReports}>
+            <button
+              className="mt-4 px-4 py-2 bg-[#002366] text-white rounded-xl hover:bg-[#001744] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366] shadow-sm shadow-[#002366]/20 cursor-pointer"
+              onClick={handleReports}
+            >
               View Previous Reports
             </button>
           </div>

@@ -162,41 +162,113 @@ type RowConfig = {
   isGreyBg?: boolean;
 };
 
-
 const ROWS: RowConfig[] = [
-  { label: 'Opening Balance', overallKey: ['opening_balance'], monthKey: 'openingBalance' as any, isCurrency: true, isBold: true },
-  { label: 'Max EOD', overallKey: ['max_eod'], monthKey: 'MaxEod' as any, isCurrency: true },
-  { label: 'Max EOD Date', overallKey: ['max_eod_date'], monthKey: 'maxEodDate' as any },
-  { label: 'Min EOD', overallKey: ['min_eod'], monthKey: 'minEod' as any, isCurrency: true },
-  { label: 'Min EOD Date', overallKey: ['min_eod_date'], monthKey: 'minEodDate' as any },
-  { label: 'Average EOD', overallKey: ['average_eod'], monthKey: 'averageEod' as any, isCurrency: true, isBold: true },
-  { label: 'Max EOD by Income', overallKey: ['max_eod_by_income'], monthKey: 'maxEodByIncome' as any, isCurrency: true },
-  { label: 'Min EOD by Income', overallKey: ['min_eod_by_income'], monthKey: 'minEodByIncome' as any, isCurrency: true },
-  { label: 'Closing Balance', overallKey: ['closing_balance'], monthKey: 'closingbalance' as any, isCurrency: true, isBold: true },
-  
-  { label: 'EOD Buckets', isSeparator: true },
-  { label: '1 EOD', overallKey: ['eod_buckets', 'one_eod'], monthKey: 'oneEod' as any },
-  { label: '5 EOD', overallKey: ['eod_buckets', 'five_eod'], monthKey: 'fiveEod' as any },
-  { label: '10 EOD', overallKey: ['eod_buckets', 'ten_eod'], monthKey: 'tenEod' as any },
-  { label: '15 EOD', overallKey: ['eod_buckets', 'fifteen_eod'], monthKey: 'fifteenEod' as any },
-  { label: '20 EOD', overallKey: ['eod_buckets', 'twenty_eod'], monthKey: 'twentyEod' as any },
-  { label: '25 EOD', overallKey: ['eod_buckets', 'twentyfive_eod'], monthKey: 'twentyfiveEod' as any },
-  { label: 'Last Day', overallKey: ['eod_buckets', 'last_day'], monthKey: 'lastDay' as any },
-];
+  {
+    label: 'Opening Balance',
+    overallKey: ['opening_balance'],
+    monthKey: 'openingBalance' as any,
+    isCurrency: true,
+    isBold: true,
+  },
+  {
+    label: 'Max EOD',
+    overallKey: ['max_eod'],
+    monthKey: 'MaxEod' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Max EOD Date',
+    overallKey: ['max_eod_date'],
+    monthKey: 'maxEodDate' as any,
+  },
+  {
+    label: 'Min EOD',
+    overallKey: ['min_eod'],
+    monthKey: 'minEod' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Min EOD Date',
+    overallKey: ['min_eod_date'],
+    monthKey: 'minEodDate' as any,
+  },
+  {
+    label: 'Average EOD',
+    overallKey: ['average_eod'],
+    monthKey: 'averageEod' as any,
+    isCurrency: true,
+    isBold: true,
+  },
+  {
+    label: 'Max EOD by Income',
+    overallKey: ['max_eod_by_income'],
+    monthKey: 'maxEodByIncome' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Min EOD by Income',
+    overallKey: ['min_eod_by_income'],
+    monthKey: 'minEodByIncome' as any,
+    isCurrency: true,
+  },
+  {
+    label: 'Closing Balance',
+    overallKey: ['closing_balance'],
+    monthKey: 'closingbalance' as any,
+    isCurrency: true,
+    isBold: true,
+  },
 
+  { label: 'EOD Buckets', isSeparator: true },
+  {
+    label: '1 EOD',
+    overallKey: ['eod_buckets', 'one_eod'],
+    monthKey: 'oneEod' as any,
+  },
+  {
+    label: '5 EOD',
+    overallKey: ['eod_buckets', 'five_eod'],
+    monthKey: 'fiveEod' as any,
+  },
+  {
+    label: '10 EOD',
+    overallKey: ['eod_buckets', 'ten_eod'],
+    monthKey: 'tenEod' as any,
+  },
+  {
+    label: '15 EOD',
+    overallKey: ['eod_buckets', 'fifteen_eod'],
+    monthKey: 'fifteenEod' as any,
+  },
+  {
+    label: '20 EOD',
+    overallKey: ['eod_buckets', 'twenty_eod'],
+    monthKey: 'twentyEod' as any,
+  },
+  {
+    label: '25 EOD',
+    overallKey: ['eod_buckets', 'twentyfive_eod'],
+    monthKey: 'twentyfiveEod' as any,
+  },
+  {
+    label: 'Last Day',
+    overallKey: ['eod_buckets', 'last_day'],
+    monthKey: 'lastDay' as any,
+  },
+];
 
 export default function IndividualEodAnalysis() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-  
+
   const location = useLocation();
 
   const selectedAccountNumber =
-  (location.state as { accountNumber?: string } | null)?.accountNumber ||
-  sessionStorage.getItem('selected_bsa_account_number') ||
-  '';
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
 
   const accountDetails = sessionStorage.getItem('account_details');
   console.log('accountDetails:', accountDetails);
@@ -236,11 +308,10 @@ export default function IndividualEodAnalysis() {
       setShowScrollHint(container.scrollTop < 80);
     };
     // console.log(container.scrollTop);
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener('scroll', handleScroll);
 
-    return () => container.removeEventListener("scroll", handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   const handleApply = () => {
     if (!fromDate || !toDate) {
@@ -292,14 +363,19 @@ export default function IndividualEodAnalysis() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['individual-eod-analysis', appliedFromDate, appliedToDate, selectedAccountNumber],
+    queryKey: [
+      'individual-eod-analysis',
+      appliedFromDate,
+      appliedToDate,
+      selectedAccountNumber,
+    ],
     queryFn: async () => {
       const response = await apiClient.post(
         `/bsa/individual/eod-analysis`,
         {
           from_date: appliedFromDate,
           to_date: appliedToDate,
-          account_number: selectedAccountNumber
+          account_number: selectedAccountNumber,
         },
         {
           errorMessage:
@@ -389,7 +465,16 @@ export default function IndividualEodAnalysis() {
   const dataMap = new Map<string, MonthlyBreakdown>();
   if (data?.monthly_breakdown) {
     data.monthly_breakdown.forEach((item) => {
-      dataMap.set(item.parsedMonthDate ? new Date(item.parsedMonthDate).toLocaleString("en-US", { month: "short" }).toLowerCase() + " " + new Date(item.parsedMonthDate).getFullYear() : "", item);
+      dataMap.set(
+        item.parsedMonthDate
+          ? new Date(item.parsedMonthDate)
+              .toLocaleString('en-US', { month: 'short' })
+              .toLowerCase() +
+              ' ' +
+              new Date(item.parsedMonthDate).getFullYear()
+          : '',
+        item
+      );
     });
   }
 
@@ -397,9 +482,7 @@ export default function IndividualEodAnalysis() {
     <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)] bg-white">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-black mb-2">
-            EOD Analysis
-          </h1>
+          <h1 className="text-3xl font-bold text-black mb-2">EOD Analysis</h1>
           <p className="text-gray-600">
             Detailed month-wise analysis of transactions
           </p>
@@ -411,9 +494,13 @@ export default function IndividualEodAnalysis() {
       </div>
       {accountDetails && <BankAccountDetails />}
       {showScrollHint && (
-        <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+        <div
+          className="mt-4 flex justify-center animate-bounce transition-opacity duration-500"
+          ref={containerRef}
+        >
           <p className="text-sm text-gray-500">
-             Scroll up to view <span className="font-medium">Monthly Overview</span>
+            Scroll up to view{' '}
+            <span className="font-medium">Monthly Overview</span>
           </p>
         </div>
       )}
@@ -562,7 +649,6 @@ export default function IndividualEodAnalysis() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -593,13 +679,8 @@ export default function IndividualEodAnalysis() {
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(appliedFromDate + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To{' '}
-                  {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
@@ -682,9 +763,7 @@ export default function IndividualEodAnalysis() {
                     );
 
                     const cellClass = `px-4 py-2.5 border border-black/20 ${row.isRed ? 'text-red-700' : 'text-black'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
-                    const bgClass = row.isGreyBg
-                      ? 'bg-gray-100'
-                      : 'bg-white';
+                    const bgClass = row.isGreyBg ? 'bg-gray-100' : 'bg-white';
 
                     return (
                       <tr

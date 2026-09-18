@@ -151,8 +151,8 @@ export default function SummaryOfDebitAndCredit() {
 
       setAccountDetails(acc_data);
       // console.log("Setting:", accountDetails)
-      sessionStorage.setItem("account_details", JSON.stringify(acc_data));
-      
+      sessionStorage.setItem('account_details', JSON.stringify(acc_data));
+
       return response.data?.data as SummaryData;
     },
     enabled: !!selectedAccountNumber && !!appliedFromDate && !!appliedToDate,
@@ -317,9 +317,11 @@ export default function SummaryOfDebitAndCredit() {
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#002366] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#002366] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-gray-100 text-black',
-                        nav_button: 'border border-black text-black hover:bg-gray-100',
+                        nav_button:
+                          'border border-black text-black hover:bg-gray-100',
                         chevron: 'text-black',
                       }}
                       startMonth={
@@ -438,7 +440,6 @@ export default function SummaryOfDebitAndCredit() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -463,15 +464,13 @@ export default function SummaryOfDebitAndCredit() {
       <Card className="shadow-lg border-black/10 bg-white">
         <CardHeader className="flex flex-row items-center justify-between bg-gray-50/50 border-b pb-4">
           <div>
-            <CardTitle className="text-xl text-black">Monthly Overview</CardTitle>
+            <CardTitle className="text-xl text-black">
+              Monthly Overview
+            </CardTitle>
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(appliedFromDate + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
                   To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
@@ -595,7 +594,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cash Deposit',
                     data?.total?.inflows_no_breakdown?.cash_deposit ??
-                    data?.total?.inflows_no_breakdown?.cash_deposit_no,
+                      data?.total?.inflows_no_breakdown?.cash_deposit_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit ??
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit_no,
@@ -604,7 +603,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cheque Receipt',
                     data?.total?.inflows_no_breakdown?.cheque_receipt ??
-                    data?.total?.inflows_no_breakdown?.cheque_receipt_no,
+                      data?.total?.inflows_no_breakdown?.cheque_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt_no,
@@ -613,7 +612,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Online Receipt',
                     data?.total?.inflows_no_breakdown?.online_receipt ??
-                    data?.total?.inflows_no_breakdown?.online_receipt_no,
+                      data?.total?.inflows_no_breakdown?.online_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt_no,
@@ -622,7 +621,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Other Receipt',
                     data?.total?.inflows_no_breakdown?.other_receipt ??
-                    data?.total?.inflows_no_breakdown?.other_receipt_no,
+                      data?.total?.inflows_no_breakdown?.other_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt_no,
@@ -631,7 +630,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Inhouse Receipt',
                     data?.total?.inflows_no_breakdown?.inhouse_receipt ??
-                    data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
+                      data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt_no,
@@ -712,7 +711,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cash Withdrawal',
                     data?.total?.outflows_no_breakdown?.cash_withdrawal ??
-                    data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
+                      data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal ??
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal_no,
@@ -721,7 +720,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cheque Payment',
                     data?.total?.outflows_no_breakdown?.cheque_payment ??
-                    data?.total?.outflows_no_breakdown?.cheque_payment_no,
+                      data?.total?.outflows_no_breakdown?.cheque_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment_no,
@@ -730,7 +729,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Online Payment',
                     data?.total?.outflows_no_breakdown?.online_payment ??
-                    data?.total?.outflows_no_breakdown?.online_payment_no,
+                      data?.total?.outflows_no_breakdown?.online_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.online_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.online_payment_no,
@@ -739,7 +738,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Other Payment',
                     data?.total?.outflows_no_breakdown?.other_payment ??
-                    data?.total?.outflows_no_breakdown?.other_payment_no,
+                      data?.total?.outflows_no_breakdown?.other_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.other_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.other_payment_no,
@@ -748,7 +747,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Inhouse Payment',
                     data?.total?.outflows_no_breakdown?.inhouse_payment ??
-                    data?.total?.outflows_no_breakdown?.inhouse_payment_no,
+                      data?.total?.outflows_no_breakdown?.inhouse_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment_no,

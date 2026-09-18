@@ -1,5 +1,5 @@
-﻿import React, { createContext, useContext, useState } from "react";
-import { cn } from "@/lib/utils";
+﻿import React, { createContext, useContext, useState } from 'react';
+import { cn } from '@/lib/utils';
 import {
   LogOut,
   ChevronLeft,
@@ -12,11 +12,11 @@ import {
   PieChart,
   ShieldCheck,
   CreditCard,
-} from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useMe } from "@/hooks/useUser";
-import { useLogout } from "@/hooks/useAuth";
-import r1xchangeLogoWhiteWebView from "../assets/r1xchangeLogoWhiteWebView.svg";
+} from 'lucide-react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useMe } from '@/hooks/useUser';
+import { useLogout } from '@/hooks/useAuth';
+import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
 
 interface SidebarContextValue {
   collapsed: boolean;
@@ -24,7 +24,7 @@ interface SidebarContextValue {
 }
 const SidebarContext = createContext<SidebarContextValue>({
   collapsed: false,
-  setCollapsed: () => { },
+  setCollapsed: () => {},
 });
 
 export const useSidebar = () => useContext(SidebarContext);
@@ -39,55 +39,56 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
 }
 
 const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", path: "/home/dashboard" },
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/home/dashboard' },
   {
     icon: Building2,
-    label: "BSA Reports",
-    subItems: [
-      { label: "Bank Accounts", path: "/bsa/bank-accounts" },
-    ]
+    label: 'BSA Reports',
+    subItems: [{ label: 'Bank Accounts', path: '/bsa/bank-accounts' }],
   },
   {
     icon: FileText,
-    label: "GST",
+    label: 'GST',
     subItems: [
-      { label: "GST Analysis", path: "/gst/analysis" },
-      { label: "GST Analysis History", path: "/gst/history" },
-      { label: "GST Reports", path: "/gst/reports" }
-    ]
+      { label: 'GST Analysis', path: '/gst/analysis' },
+      { label: 'GST Analysis History', path: '/gst/history' },
+      { label: 'GST Reports', path: '/gst/reports' },
+    ],
   },
   {
     icon: PieChart,
-    label: "ITR",
+    label: 'ITR',
     subItems: [
-      { label: "Tax Calculation", path: "/itr/itr-tax-calculation" },
-      { label: "Balance Sheet", path: "/itr/balance-sheet" },
-      { label: "Profit and Loss Statement", path: "/itr/profit-and-loss-statement" },
-      { label: "Ratio Analysis", path: "/itr/ratio-analysis" },
-    ]
+      { label: 'Tax Calculation', path: '/itr/itr-tax-calculation' },
+      { label: 'Balance Sheet', path: '/itr/balance-sheet' },
+      {
+        label: 'Profit and Loss Statement',
+        path: '/itr/profit-and-loss-statement',
+      },
+      { label: 'Ratio Analysis', path: '/itr/ratio-analysis' },
+    ],
   },
   {
     icon: ShieldCheck,
-    label: "CIBIL Reports",
+    label: 'CIBIL Reports',
     subItems: [
-      { label: "Fetch New Report", path: "/cibil" },
-      { label: "Existing Reports", path: "/cibil/reports" }
-    ]
+      { label: 'Fetch New Report', path: '/cibil' },
+      { label: 'Existing Reports', path: '/cibil/reports' },
+    ],
   },
   {
     icon: CreditCard,
-    label: "Payments",
-    path: "/payments"
-  }
+    label: 'Payments',
+    path: '/payments',
+  },
 ];
 
 function getInitials(name?: string): string {
-  if (!name) return "?";
+  if (!name) return '?';
   return name
-    .split(" ")
+    .split(' ')
     .map((n) => n[0])
     .slice(0, 2)
-    .join("")
+    .join('')
     .toUpperCase();
 }
 
@@ -96,7 +97,9 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const location = useLocation();
   const logoutMutation = useLogout();
-  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>({});
+  const [expandedMenus, setExpandedMenus] = useState<Record<string, boolean>>(
+    {}
+  );
 
   const toggleMenu = (label: string) => {
     setExpandedMenus((prev) => ({
@@ -107,12 +110,11 @@ export function AppSidebar() {
 
   const { data: user, isLoading: userLoading } = useMe();
 
-  
-  const displayName = user?.customer_name || user?.email_id || "User";
-  const displayEmail = user?.email_id || "";
-  const displayCompany = user?.company_name || "";
+  const displayName = user?.customer_name || user?.email_id || 'User';
+  const displayEmail = user?.email_id || '';
+  const displayCompany = user?.company_name || '';
   const initials = getInitials(displayName);
-  sessionStorage.setItem("company_name", displayCompany)
+  sessionStorage.setItem('company_name', displayCompany);
 
   const handleLogout = () => {
     logoutMutation.mutate();
@@ -121,8 +123,8 @@ export function AppSidebar() {
   return (
     <aside
       className={cn(
-        "relative flex flex-col h-screen bg-[#002366] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0",
-        collapsed ? "w-[68px]" : "w-64"
+        'relative flex flex-col h-screen bg-[#002366] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0',
+        collapsed ? 'w-[68px]' : 'w-64'
       )}
     >
       <button
@@ -139,17 +141,17 @@ export function AppSidebar() {
 
       <div
         className={cn(
-          "flex items-center gap-3 px-4 py-5 border-b border-white/10",
-          collapsed ? "justify-center" : ""
+          'flex items-center gap-3 px-4 py-5 border-b border-white/10',
+          collapsed ? 'justify-center' : ''
         )}
       >
         <div className="h-20 w-96 flex items-center justify-center">
-  <img
-    src={r1xchangeLogoWhiteWebView}
-    alt="R1Xchange Logo"
-    className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
-  />
-</div>
+          <img
+            src={r1xchangeLogoWhiteWebView}
+            alt="R1Xchange Logo"
+            className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
+          />
+        </div>
         {/* {!collapsed && (
           <div className="animate-fade-in overflow-hidden">
             <p className="text-base font-bold text-white tracking-wide">R1Xchange</p>
@@ -168,7 +170,7 @@ export function AppSidebar() {
           const isExpanded = expandedMenus[item.label];
           const isActive = item.path
             ? location.pathname === item.path
-            : item.subItems?.some(sub => location.pathname === sub.path);
+            : item.subItems?.some((sub) => location.pathname === sub.path);
 
           return (
             <div key={item.label}>
@@ -177,7 +179,10 @@ export function AppSidebar() {
                   if (hasSubItems) {
                     if (collapsed) {
                       setCollapsed(false);
-                      setExpandedMenus((prev) => ({ ...prev, [item.label]: true }));
+                      setExpandedMenus((prev) => ({
+                        ...prev,
+                        [item.label]: true,
+                      }));
                     } else {
                       toggleMenu(item.label);
                     }
@@ -186,14 +191,17 @@ export function AppSidebar() {
                   }
                 }}
                 className={cn(
-                  "sidebar-item w-full",
-                  isActive && !hasSubItems && "active",
-                  collapsed && "justify-center px-0"
+                  'sidebar-item w-full',
+                  isActive && !hasSubItems && 'active',
+                  collapsed && 'justify-center px-0'
                 )}
                 title={collapsed ? item.label : undefined}
               >
                 <item.icon
-                  className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-white/70")}
+                  className={cn(
+                    'h-5 w-5 shrink-0',
+                    isActive ? 'text-white' : 'text-white/70'
+                  )}
                 />
                 {!collapsed && <span className="truncate">{item.label}</span>}
                 {!collapsed && hasSubItems && (
@@ -216,14 +224,14 @@ export function AppSidebar() {
                     const isSubActive = location.pathname === sub.path;
                     return (
                       <button
-                      key={sub.path}
-                      type="button"
-                      onClick={() => navigate(sub.path)}
-                      className={cn(
-                        "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
-                        isSubActive && "text-white font-medium bg-white/20"
-                      )}
-                        >
+                        key={sub.path}
+                        type="button"
+                        onClick={() => navigate(sub.path)}
+                        className={cn(
+                          'sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors',
+                          isSubActive && 'text-white font-medium bg-white/20'
+                        )}
+                      >
                         <span className="truncate">{sub.label}</span>
                         {isSubActive && (
                           <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
@@ -243,10 +251,10 @@ export function AppSidebar() {
           onClick={handleLogout}
           disabled={logoutMutation.isPending}
           className={cn(
-  "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
-  collapsed && "justify-center px-0"
-)}
-          title={collapsed ? "Logout" : undefined}
+            'sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors',
+            collapsed && 'justify-center px-0'
+          )}
+          title={collapsed ? 'Logout' : undefined}
           id="logout-btn"
         >
           {logoutMutation.isPending ? (
@@ -270,10 +278,17 @@ export function AppSidebar() {
                 {initials}
               </div>
             )}
-            <div className="overflow-hidden hover:cursor-pointer" onClick={() => navigate("/profile")}>
-              <p className="text-sm font-semibold text-white truncate">{displayName}</p>
+            <div
+              className="overflow-hidden hover:cursor-pointer"
+              onClick={() => navigate('/profile')}
+            >
+              <p className="text-sm font-semibold text-white truncate">
+                {displayName}
+              </p>
               {displayCompany ? (
-                <p className="text-xs text-white/50 truncate">{displayCompany}</p>
+                <p className="text-xs text-white/50 truncate">
+                  {displayCompany}
+                </p>
               ) : (
                 <p className="text-xs text-white/50 truncate">{displayEmail}</p>
               )}

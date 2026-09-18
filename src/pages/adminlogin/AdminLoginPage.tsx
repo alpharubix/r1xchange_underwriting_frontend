@@ -1,21 +1,21 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { z } from "zod";
-import { useAdminLogin } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import characterLaptop from "@/assets/character_laptop.jpg";
-import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { z } from 'zod';
+import { useAdminLogin } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import characterLaptop from '@/assets/character_laptop.jpg';
+import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
 
 const adminLoginSchema = z.object({
-  id: z.string().min(1, "ID is required"),
-  password: z.string().min(1, "Password is required"),
+  id: z.string().min(1, 'ID is required'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 type AdminLoginFormValues = z.infer<typeof adminLoginSchema>;
@@ -30,10 +30,8 @@ export default function AdminLoginPage() {
     formState: { errors },
   } = useForm<AdminLoginFormValues>({
     resolver: zodResolver(adminLoginSchema),
-    mode: "onTouched",
+    mode: 'onTouched',
   });
-
-
 
   const onSubmit = (values: AdminLoginFormValues) => {
     loginMutation.mutate({
@@ -46,13 +44,17 @@ export default function AdminLoginPage() {
     <div className="flex min-h-screen w-full bg-[#f4f5f9] text-[#1a1a1a]">
       {/* Left Branding Panel (Mockup Redesign) */}
       <div className="relative hidden w-1/2 bg-gradient-to-br from-[#7754f8] to-[#5130d2] p-8 text-white md:flex overflow-hidden">
-
         {/* Transparent glassmorphic inner card matching the screenshot layout */}
         <div className="relative w-full h-full flex flex-col justify-between p-10 overflow-hidden rounded-[36px] border border-white/20 bg-white/10 backdrop-blur-md shadow-2xl">
-
           {/* Blueprint/Grid skyline watermark in the card background */}
           <div className="absolute inset-0 pointer-events-none opacity-10 select-none">
-            <svg className="w-full h-full text-white" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="0.3">
+            <svg
+              className="w-full h-full text-white"
+              viewBox="0 0 100 100"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="0.3"
+            >
               {/* Grid lines */}
               <line x1="10" y1="0" x2="10" y2="100" />
               <line x1="25" y1="0" x2="25" y2="100" />
@@ -74,7 +76,11 @@ export default function AdminLoginPage() {
               <path d="M 72,75 L 72,40 L 88,40 L 88,75" />
 
               {/* Outline Clouds */}
-              <path d="M 60,25 C 62,20 70,20 72,25 C 74,20 82,20 84,25 L 85,28 L 58,28 Z" fill="currentColor" opacity="0.3" />
+              <path
+                d="M 60,25 C 62,20 70,20 72,25 C 74,20 82,20 84,25 L 85,28 L 58,28 Z"
+                fill="currentColor"
+                opacity="0.3"
+              />
             </svg>
           </div>
 
@@ -115,11 +121,8 @@ export default function AdminLoginPage() {
             </div>
 
             {/* Slider Indicator Dots */}
-
           </div>
-
         </div>
-
       </div>
 
       {/* Right Login Panel */}
@@ -133,7 +136,11 @@ export default function AdminLoginPage() {
           {/* Card Form */}
           <Card className="border-0 bg-white shadow-xl shadow-black/5 rounded-2xl overflow-hidden">
             <CardContent className="p-8">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6" autoComplete="off">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-6"
+                autoComplete="off"
+              >
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight text-gray-900">
                     Login
@@ -144,9 +151,7 @@ export default function AdminLoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="id">
-                    ID
-                  </Label>
+                  <Label htmlFor="id">ID</Label>
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <Input
@@ -155,7 +160,7 @@ export default function AdminLoginPage() {
                       placeholder="ID"
                       className="h-12 pl-11 pr-4 border-gray-200 focus:border-[#7754f8] focus:ring-[#7754f8] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="off"
-                      {...register("id")}
+                      {...register('id')}
                     />
                   </div>
                   {errors.id && (
@@ -166,18 +171,16 @@ export default function AdminLoginPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="password">
-                    Password
-                  </Label>
+                  <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
                       className="h-12 pl-11 pr-11 border-gray-200 focus:border-[#7754f8] focus:ring-[#7754f8] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="new-password"
-                      {...register("password")}
+                      {...register('password')}
                     />
                     <button
                       type="button"
@@ -225,7 +228,9 @@ export default function AdminLoginPage() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                toast.info("Please contact system administrator to retrieve your credentials.");
+                toast.info(
+                  'Please contact system administrator to retrieve your credentials.'
+                );
               }}
               className="text-sm font-semibold text-gray-500 hover:text-[#7754f8] transition-colors"
             >

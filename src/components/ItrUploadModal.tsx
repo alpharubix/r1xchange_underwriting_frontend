@@ -15,12 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  PieChart,
-  X,
-  CheckCircle2,
-  Loader2,
-} from 'lucide-react';
+import { PieChart, X, CheckCircle2, Loader2 } from 'lucide-react';
 
 type ITRState =
   | 'INITIALIZING'
@@ -57,7 +52,11 @@ interface ItrUploadModalProps {
   custId?: string;
 }
 
-export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadModalProps) {
+export default function ItrUploadModal({
+  isOpen,
+  onClose,
+  custId,
+}: ItrUploadModalProps) {
   const [itrState, setItrState] = useState<ITRState>('INITIALIZING');
   const [itrEmail, setItrEmail] = useState('');
   const [itrReferenceId, setItrReferenceId] = useState<string | null>(null);
@@ -106,15 +105,20 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
     queryKey: ['itr-polling', itrReferenceId, custId],
     queryFn: async () => {
       const config = custId ? { params: { cust_id: custId } } : {};
-      const res = await apiClient.post('/itr/check-link-status', {
-        itr_reference_id: itrReferenceId,
-      }, config);
+      const res = await apiClient.post(
+        '/itr/check-link-status',
+        {
+          itr_reference_id: itrReferenceId,
+        },
+        config
+      );
       return res.data;
     },
     enabled:
       isOpen &&
       !!itrReferenceId &&
-      (itrState === 'AWAITING_CREDENTIAL_SUBMISSION' || itrState === 'PROCESSING'),
+      (itrState === 'AWAITING_CREDENTIAL_SUBMISSION' ||
+        itrState === 'PROCESSING'),
     refetchInterval: 15000,
   });
 
@@ -137,9 +141,13 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
   const generateItrLinkMutation = useMutation({
     mutationFn: async (email: string) => {
       const config = custId ? { params: { cust_id: custId } } : {};
-      const res = await apiClient.post('/itr/generate-link', {
-        email_id: email,
-      }, config);
+      const res = await apiClient.post(
+        '/itr/generate-link',
+        {
+          email_id: email,
+        },
+        config
+      );
       return res.data;
     },
     onSuccess: (data) => {
@@ -149,10 +157,14 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
         setItrReferenceId(refId);
         setItrState('AWAITING_CREDENTIAL_SUBMISSION');
       }
-      toast.success('Verification email sent successfully. Please check your inbox.');
+      toast.success(
+        'Verification email sent successfully. Please check your inbox.'
+      );
     },
     onError: (error: any) => {
-      toast.error(error.response?.data?.detail?.message || 'Failed to generate link');
+      toast.error(
+        error.response?.data?.detail?.message || 'Failed to generate link'
+      );
     },
   });
 
@@ -185,7 +197,11 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
           </CardTitle>
           <CardDescription>
             Fetch and analyze your ITR data securely
-            {custId && <span className="block mt-1 text-[#002366] font-semibold">Creating for Customer: {custId}</span>}
+            {custId && (
+              <span className="block mt-1 text-[#002366] font-semibold">
+                Creating for Customer: {custId}
+              </span>
+            )}
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -264,11 +280,13 @@ export default function ItrUploadModal({ isOpen, onClose, custId }: ItrUploadMod
                   if (!custId) {
                     navigate('/itr/itr-tax-calculation');
                   } else {
-                    toast.info("Report created successfully. Please refresh the list.");
+                    toast.info(
+                      'Report created successfully. Please refresh the list.'
+                    );
                   }
                 }}
               >
-                {custId ? "Close" : "View ITR Analysis"}
+                {custId ? 'Close' : 'View ITR Analysis'}
               </Button>
             </div>
           )}

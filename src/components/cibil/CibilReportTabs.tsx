@@ -9,18 +9,15 @@ import {
   getCibilPaymentHistory,
 } from '@/api/cibil';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  EmptyReportState,
-  ErrorState,
-  LoadingState,
-} from './ReportPrimitives';
+import { EmptyReportState, ErrorState, LoadingState } from './ReportPrimitives';
 
 import OverviewTab from './OverviewTab';
 import AccountSummaryTab from './AccountSummaryTab';
 import PaymentHistoryTab from './PaymentHistoryTab';
 import AnalysisTab from './AnalysisTab';
 
-type TabValue = 'overview' | 'account-summary' | 'Payments-history' | 'analysis';
+type TabValue =
+  'overview' | 'account-summary' | 'Payments-history' | 'analysis';
 
 type QueryState<T> = {
   data?: T;
@@ -37,20 +34,35 @@ const reportTabs: Array<{ value: TabValue; label: string }> = [
 ];
 
 const tabIndices: Record<TabValue, number> = {
-  'overview': 0,
+  overview: 0,
   'account-summary': 1,
   'Payments-history': 2,
-  'analysis': 3,
+  analysis: 3,
 };
 
-function QueryBoundary<T>({ query, children }: { query: QueryState<T>; children: (data: T) => React.ReactElement }) {
+function QueryBoundary<T>({
+  query,
+  children,
+}: {
+  query: QueryState<T>;
+  children: (data: T) => React.ReactElement;
+}) {
   if (query.isLoading) return <LoadingState />;
-  if (query.isError) return <ErrorState message={query.error?.message || 'Unable to load this report section.'} />;
+  if (query.isError)
+    return (
+      <ErrorState
+        message={query.error?.message || 'Unable to load this report section.'}
+      />
+    );
   if (!query.data) return <EmptyReportState />;
   return children(query.data);
 }
 
-export default function CibilReportTabs({ referenceId }: { referenceId: string }) {
+export default function CibilReportTabs({
+  referenceId,
+}: {
+  referenceId: string;
+}) {
   const [activeTab, setActiveTab] = useState<TabValue>('overview');
   const [prevTab, setPrevTab] = useState<TabValue>('overview');
   const enabled = Boolean(referenceId);
@@ -108,7 +120,11 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
   const initialX = direction === 1 ? 150 : -150;
 
   return (
-    <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-5 overflow-hidden">
+    <Tabs
+      value={activeTab}
+      onValueChange={handleTabChange}
+      className="space-y-5 overflow-hidden"
+    >
       <div className="overflow-x-auto">
         <TabsList className="h-auto min-w-max justify-start rounded-md bg-slate-100 p-1">
           {reportTabs.map((tab) => (
@@ -126,8 +142,19 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
         </TabsList>
       </div>
 
-      <TabsContent value="overview" forceMount className="data-[state=inactive]:hidden">
-        <QueryBoundary query={{ data: overviewQuery.data?.data, isLoading: overviewQuery.isLoading, isError: overviewQuery.isError, error: overviewQuery.error }}>
+      <TabsContent
+        value="overview"
+        forceMount
+        className="data-[state=inactive]:hidden"
+      >
+        <QueryBoundary
+          query={{
+            data: overviewQuery.data?.data,
+            isLoading: overviewQuery.isLoading,
+            isError: overviewQuery.isError,
+            error: overviewQuery.error,
+          }}
+        >
           {(data) => (
             <motion.div
               key={`overview-${activeTab === 'overview' ? 'active' : 'inactive'}`}
@@ -141,8 +168,19 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
         </QueryBoundary>
       </TabsContent>
 
-      <TabsContent value="account-summary" forceMount className="data-[state=inactive]:hidden">
-        <QueryBoundary query={{ data: accountSummaryQuery.data?.data, isLoading: accountSummaryQuery.isLoading, isError: accountSummaryQuery.isError, error: accountSummaryQuery.error }}>
+      <TabsContent
+        value="account-summary"
+        forceMount
+        className="data-[state=inactive]:hidden"
+      >
+        <QueryBoundary
+          query={{
+            data: accountSummaryQuery.data?.data,
+            isLoading: accountSummaryQuery.isLoading,
+            isError: accountSummaryQuery.isError,
+            error: accountSummaryQuery.error,
+          }}
+        >
           {(data) => (
             <motion.div
               key={`summary-${activeTab === 'account-summary' ? 'active' : 'inactive'}`}
@@ -156,8 +194,19 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
         </QueryBoundary>
       </TabsContent>
 
-      <TabsContent value="Payments-history" forceMount className="data-[state=inactive]:hidden">
-        <QueryBoundary query={{ data: paymentHistoryQuery.data?.data, isLoading: paymentHistoryQuery.isLoading, isError: paymentHistoryQuery.isError, error: paymentHistoryQuery.error }}>
+      <TabsContent
+        value="Payments-history"
+        forceMount
+        className="data-[state=inactive]:hidden"
+      >
+        <QueryBoundary
+          query={{
+            data: paymentHistoryQuery.data?.data,
+            isLoading: paymentHistoryQuery.isLoading,
+            isError: paymentHistoryQuery.isError,
+            error: paymentHistoryQuery.error,
+          }}
+        >
           {(data) => (
             <motion.div
               key={`history-${activeTab === 'Payments-history' ? 'active' : 'inactive'}`}
@@ -171,8 +220,19 @@ export default function CibilReportTabs({ referenceId }: { referenceId: string }
         </QueryBoundary>
       </TabsContent>
 
-      <TabsContent value="analysis" forceMount className="data-[state=inactive]:hidden">
-        <QueryBoundary query={{ data: analysisQuery.data?.data, isLoading: analysisQuery.isLoading, isError: analysisQuery.isError, error: analysisQuery.error }}>
+      <TabsContent
+        value="analysis"
+        forceMount
+        className="data-[state=inactive]:hidden"
+      >
+        <QueryBoundary
+          query={{
+            data: analysisQuery.data?.data,
+            isLoading: analysisQuery.isLoading,
+            isError: analysisQuery.isError,
+            error: analysisQuery.error,
+          }}
+        >
           {(data) => (
             <motion.div
               key={`analysis-${activeTab === 'analysis' ? 'active' : 'inactive'}`}

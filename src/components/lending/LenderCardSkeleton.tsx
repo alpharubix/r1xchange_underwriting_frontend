@@ -15,7 +15,7 @@ export function LenderCardSkeleton() {
           <div className="h-6 w-16 bg-slate-200 rounded-full animate-pulse" />
         </div>
       </CardHeader>
-      
+
       <CardContent>
         <div className="space-y-4">
           <div>
@@ -30,7 +30,7 @@ export function LenderCardSkeleton() {
             <div className="flex-1 h-16 bg-slate-100 rounded-lg animate-pulse" />
             <div className="flex-1 h-16 bg-slate-100 rounded-lg animate-pulse" />
           </div>
-          
+
           <div className="h-10 w-full bg-slate-50 rounded animate-pulse mt-2" />
         </div>
       </CardContent>

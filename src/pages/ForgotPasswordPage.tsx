@@ -1,7 +1,7 @@
-﻿import { useState } from "react";
-import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+﻿import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   Mail,
   KeyRound,
@@ -12,17 +12,17 @@ import {
   ArrowLeft,
   Check,
   ShieldCheck,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card';
 import {
   forgotPasswordSchema,
   validateOtpSchema,
@@ -30,51 +30,50 @@ import {
   type ForgotPasswordFormValues,
   type ValidateOtpFormValues,
   type ResetPasswordFormValues,
-} from "@/lib/zod-schemas";
+} from '@/lib/zod-schemas';
 import {
   useForgotPassword,
   useValidateOtp,
   useResetPassword,
   getApiError,
-} from "@/hooks/useAuth";
-import r1xchangeLogoBlackWebView from "../assets/r1xchangeLogoBlackWebView.svg";
-import r1xchangeLogoWhiteWebView from "../assets/r1xchangeLogoWhiteWebView.svg";
+} from '@/hooks/useAuth';
+import r1xchangeLogoBlackWebView from '../assets/r1xchangeLogoBlackWebView.svg';
+import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
 const passwordRules = [
-  { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
-  { label: "Contains uppercase letter", test: (p: string) => /[A-Z]/.test(p) },
-  { label: "Contains a number", test: (p: string) => /\d/.test(p) },
+  { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
+  { label: 'Contains uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
+  { label: 'Contains a number', test: (p: string) => /\d/.test(p) },
   {
-    label: "Contains a special character",
+    label: 'Contains a special character',
     test: (p: string) => /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(p),
   },
 ];
 
-type Step = "email" | "otp" | "reset";
+type Step = 'email' | 'otp' | 'reset';
 
-const STEP_META: Record<Step, { title: string; description: string; step: number }> = {
+const STEP_META: Record<
+  Step,
+  { title: string; description: string; step: number }
+> = {
   email: {
     step: 1,
-    title: "Forgot Password",
+    title: 'Forgot Password',
     description: "Enter your registered email and we'll send you an OTP.",
   },
   otp: {
     step: 2,
-    title: "Verify OTP",
-    description: "Enter the 4-digit OTP sent to your email address.",
+    title: 'Verify OTP',
+    description: 'Enter the 4-digit OTP sent to your email address.',
   },
   reset: {
     step: 3,
-    title: "Reset Password",
-    description: "Create a new strong password for your account.",
+    title: 'Reset Password',
+    description: 'Create a new strong password for your account.',
   },
 };
 
 // ─── Step 1: Email ────────────────────────────────────────────────────────────
-function EmailStep({
-  onSuccess,
-}: {
-  onSuccess: (email: string) => void;
-}) {
+function EmailStep({ onSuccess }: { onSuccess: (email: string) => void }) {
   const mutation = useForgotPassword();
   const {
     register,
@@ -91,7 +90,11 @@ function EmailStep({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id="forgot-email-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-5"
+      id="forgot-email-form"
+    >
       {mutation.isError && (
         <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 animate-fade-in">
           {getApiError(mutation.error)}
@@ -106,9 +109,9 @@ function EmailStep({
             id="forgot-email"
             type="email"
             placeholder="you@example.com"
-            className={`pl-10 ${errors.email_id ? "border-red-400 focus-visible:ring-red-300" : ""}`}
+            className={`pl-10 ${errors.email_id ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
             autoComplete="email"
-            {...register("email_id")}
+            {...register('email_id')}
           />
         </div>
         {errors.email_id && (
@@ -138,8 +141,11 @@ function EmailStep({
       </Button>
 
       <p className="text-center text-sm text-gray-600">
-        Remembered it?{" "}
-        <Link to="/login" className="font-semibold text-[#002366] hover:underline">
+        Remembered it?{' '}
+        <Link
+          to="/login"
+          className="font-semibold text-[#002366] hover:underline"
+        >
           Back to Sign In
         </Link>
       </p>
@@ -173,10 +179,7 @@ function OtpStep({
         onSuccess: (data) => {
           // Extract reset_token from API response
           const token =
-            data?.reset_token ||
-            data?.data?.reset_token ||
-            data?.token ||
-            "";
+            data?.reset_token || data?.data?.reset_token || data?.token || '';
           onSuccess(token);
         },
       }
@@ -184,7 +187,11 @@ function OtpStep({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id="forgot-otp-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-5"
+      id="forgot-otp-form"
+    >
       {mutation.isError && (
         <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 animate-fade-in">
           {getApiError(mutation.error)}
@@ -207,8 +214,8 @@ function OtpStep({
             inputMode="numeric"
             placeholder="• • • •"
             maxLength={4}
-            className={`pl-10 tracking-[0.5em] text-center text-lg font-bold ${errors.otp ? "border-red-400 focus-visible:ring-red-300" : ""}`}
-            {...register("otp")}
+            className={`pl-10 tracking-[0.5em] text-center text-lg font-bold ${errors.otp ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
+            {...register('otp')}
           />
         </div>
         {errors.otp && (
@@ -266,7 +273,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
     resolver: zodResolver(resetPasswordSchema),
   });
 
-  const passwordValue = watch("new_password", "");
+  const passwordValue = watch('new_password', '');
   const passwordStrength = passwordRules.filter((r) =>
     r.test(passwordValue)
   ).length;
@@ -279,7 +286,11 @@ function ResetStep({ resetToken }: { resetToken: string }) {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" id="forgot-reset-form">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-5"
+      id="forgot-reset-form"
+    >
       {mutation.isError && (
         <div className="rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-600 animate-fade-in">
           {getApiError(mutation.error)}
@@ -293,11 +304,11 @@ function ResetStep({ resetToken }: { resetToken: string }) {
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
           <Input
             id="reset-password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
-            className={`pl-10 pr-10 ${errors.new_password ? "border-red-400 focus-visible:ring-red-300" : ""}`}
+            className={`pl-10 pr-10 ${errors.new_password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
             autoComplete="new-password"
-            {...register("new_password")}
+            {...register('new_password')}
           />
           <button
             type="button"
@@ -325,31 +336,24 @@ function ResetStep({ resetToken }: { resetToken: string }) {
               {[1, 2, 3, 4].map((i) => (
                 <div
                   key={i}
-                  className={`flex-1 rounded-full transition-all duration-300 ${
-                    passwordStrength >= i
-                      ? passwordStrength <= 1
-                        ? "bg-red-400"
-                        : passwordStrength === 2
-                          ? "bg-orange-400"
-                          : passwordStrength === 3
-                            ? "bg-yellow-400"
-                            : "bg-green-500"
-                      : "bg-gray-200"
-                  }`}
+                  className={`flex-1 rounded-full transition-all duration-300 ${passwordStrength >= i ? (passwordStrength <= 1 ? 'bg-red-400' : passwordStrength === 2 ? 'bg-orange-400' : passwordStrength === 3 ? 'bg-yellow-400' : 'bg-green-500') : 'bg-gray-200'}`}
                 />
               ))}
             </div>
             <div className="space-y-1">
               {passwordRules.map((rule) => (
-                <div key={rule.label} className="flex items-center gap-2 text-xs">
+                <div
+                  key={rule.label}
+                  className="flex items-center gap-2 text-xs"
+                >
                   <Check
-                    className={`h-3 w-3 ${
-                      rule.test(passwordValue) ? "text-green-500" : "text-gray-300"
-                    }`}
+                    className={`h-3 w-3 ${rule.test(passwordValue) ? 'text-green-500' : 'text-gray-300'}`}
                   />
                   <span
                     className={
-                      rule.test(passwordValue) ? "text-green-600" : "text-gray-400"
+                      rule.test(passwordValue)
+                        ? 'text-green-600'
+                        : 'text-gray-400'
                     }
                   >
                     {rule.label}
@@ -368,11 +372,11 @@ function ResetStep({ resetToken }: { resetToken: string }) {
           <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#002366]/40" />
           <Input
             id="reset-confirm"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
-            className={`pl-10 ${errors.confirm_password ? "border-red-400 focus-visible:ring-red-300" : ""}`}
+            className={`pl-10 ${errors.confirm_password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
             autoComplete="new-password"
-            {...register("confirm_password")}
+            {...register('confirm_password')}
           />
         </div>
         {errors.confirm_password && (
@@ -406,9 +410,9 @@ function ResetStep({ resetToken }: { resetToken: string }) {
 
 // ─── Page Wrapper ─────────────────────────────────────────────────────────────
 export default function ForgotPasswordPage() {
-  const [step, setStep] = useState<Step>("email");
-  const [email, setEmail] = useState("");
-  const [resetToken, setResetToken] = useState("");
+  const [step, setStep] = useState<Step>('email');
+  const [email, setEmail] = useState('');
+  const [resetToken, setResetToken] = useState('');
 
   const meta = STEP_META[step];
 
@@ -426,7 +430,11 @@ export default function ForgotPasswordPage() {
         <div className="relative z-10 text-center max-w-md -top-12">
           <div className="float-animation mb-8 inline-flex">
             <div className="flex h-80 w-80 items-center justify-center rounded-3xl">
-              <img src={r1xchangeLogoWhiteWebView} alt="r1xchange logo" className="hover:scale-110 transition-transform duration-500" />
+              <img
+                src={r1xchangeLogoWhiteWebView}
+                alt="r1xchange logo"
+                className="hover:scale-110 transition-transform duration-500"
+              />
             </div>
           </div>
           <h1 className="text-4xl font-bold text-white mb-4 leading-tight ">
@@ -440,16 +448,10 @@ export default function ForgotPasswordPage() {
 
           {/* Step indicators */}
           <div className="mt-10 flex items-center justify-center gap-3 ">
-            {(["email", "otp", "reset"] as Step[]).map((s, idx) => (
+            {(['email', 'otp', 'reset'] as Step[]).map((s, idx) => (
               <div key={s} className="flex items-center gap-3">
                 <div
-                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${
-                    step === s
-                      ? "bg-white text-[#002366]"
-                      : STEP_META[s].step < meta.step
-                        ? "bg-white/30 text-white"
-                        : "bg-white/10 text-white/40"
-                  }`}
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300 ${step === s ? 'bg-white text-[#002366]' : STEP_META[s].step < meta.step ? 'bg-white/30 text-white' : 'bg-white/10 text-white/40'}`}
                 >
                   {STEP_META[s].step < meta.step ? (
                     <Check className="h-4 w-4" />
@@ -459,9 +461,7 @@ export default function ForgotPasswordPage() {
                 </div>
                 {idx < 2 && (
                   <div
-                    className={`w-8 h-0.5 rounded transition-all duration-300 ${
-                      STEP_META[s].step < meta.step ? "bg-white/50" : "bg-white/20"
-                    }`}
+                    className={`w-8 h-0.5 rounded transition-all duration-300 ${STEP_META[s].step < meta.step ? 'bg-white/50' : 'bg-white/20'}`}
                   />
                 )}
               </div>
@@ -481,22 +481,20 @@ export default function ForgotPasswordPage() {
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
             <div className="flex h-44 w-44 items-center justify-center rounded-xl">
-              <img src={r1xchangeLogoBlackWebView} alt="R1Xchange logo" className="hover:scale-110 transition-transform duration-500" />
+              <img
+                src={r1xchangeLogoBlackWebView}
+                alt="R1Xchange logo"
+                className="hover:scale-110 transition-transform duration-500"
+              />
             </div>
           </div>
 
           {/* Mobile step indicator */}
           <div className="lg:hidden flex items-center justify-center gap-2 mb-6 ">
-            {(["email", "otp", "reset"] as Step[]).map((s, idx) => (
+            {(['email', 'otp', 'reset'] as Step[]).map((s, idx) => (
               <div key={s} className="flex items-center gap-2">
                 <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${
-                    step === s
-                      ? "bg-[#002366] text-white"
-                      : STEP_META[s].step < meta.step
-                        ? "bg-green-500 text-white"
-                        : "bg-gray-200 text-grey-400"
-                  }`}
+                  className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all duration-300 ${step === s ? 'bg-[#002366] text-white' : STEP_META[s].step < meta.step ? 'bg-green-500 text-white' : 'bg-gray-200 text-grey-400'}`}
                 >
                   {STEP_META[s].step < meta.step ? (
                     <Check className="h-3 w-3" />
@@ -506,9 +504,7 @@ export default function ForgotPasswordPage() {
                 </div>
                 {idx < 2 && (
                   <div
-                    className={`w-6 h-0.5 rounded ${
-                      STEP_META[s].step < meta.step ? "bg-green-500" : "bg-grey-200"
-                    }`}
+                    className={`w-6 h-0.5 rounded ${STEP_META[s].step < meta.step ? 'bg-green-500' : 'bg-grey-200'}`}
                   />
                 )}
               </div>
@@ -533,25 +529,25 @@ export default function ForgotPasswordPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              {step === "email" && (
+              {step === 'email' && (
                 <EmailStep
                   onSuccess={(e) => {
                     setEmail(e);
-                    setStep("otp");
+                    setStep('otp');
                   }}
                 />
               )}
-              {step === "otp" && (
+              {step === 'otp' && (
                 <OtpStep
                   email={email}
                   onSuccess={(token) => {
                     setResetToken(token);
-                    setStep("reset");
+                    setStep('reset');
                   }}
-                  onBack={() => setStep("email")}
+                  onBack={() => setStep('email')}
                 />
               )}
-              {step === "reset" && <ResetStep resetToken={resetToken} />}
+              {step === 'reset' && <ResetStep resetToken={resetToken} />}
             </CardContent>
           </Card>
         </div>

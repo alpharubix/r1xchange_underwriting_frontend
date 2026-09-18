@@ -17,8 +17,7 @@ export interface DefinitionItem {
 }
 
 const isScalar = (value: unknown) =>
-  value === null ||
-  ['string', 'number', 'boolean'].includes(typeof value);
+  value === null || ['string', 'number', 'boolean'].includes(typeof value);
 
 export const isRecord = (value: unknown): value is ReportRecord =>
   Boolean(value) && typeof value === 'object' && !Array.isArray(value);
@@ -42,10 +41,15 @@ export const formatLabel = (label: string) => {
 export const formatValue = (value: unknown): string => {
   if (value === null || value === undefined || value === '') return 'N/A';
   if (typeof value === 'boolean') return value ? 'Yes' : 'No';
-  if (typeof value === 'number') return Number.isFinite(value) ? value.toLocaleString('en-IN') : String(value);
+  if (typeof value === 'number')
+    return Number.isFinite(value)
+      ? value.toLocaleString('en-IN')
+      : String(value);
   if (typeof value === 'string') return value;
-  if (Array.isArray(value)) return `${value.length} item${value.length === 1 ? '' : 's'}`;
-  if (isRecord(value)) return `${Object.keys(value).length} field${Object.keys(value).length === 1 ? '' : 's'}`;
+  if (Array.isArray(value))
+    return `${value.length} item${value.length === 1 ? '' : 's'}`;
+  if (isRecord(value))
+    return `${Object.keys(value).length} field${Object.keys(value).length === 1 ? '' : 's'}`;
   return String(value);
 };
 
@@ -118,17 +122,30 @@ export function SectionCard({
   className?: string;
 }) {
   return (
-    <section className={cn('overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm', className)}>
+    <section
+      className={cn(
+        'overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm',
+        className
+      )}
+    >
       <div className="border-b border-blue-900/30 bg-[#002366] px-4 py-3 text-white">
-        <h3 className="text-sm font-semibold uppercase tracking-wide">{title}</h3>
-        {description ? <p className="mt-1 text-xs text-white/85">{description}</p> : null}
+        <h3 className="text-sm font-semibold uppercase tracking-wide">
+          {title}
+        </h3>
+        {description ? (
+          <p className="mt-1 text-xs text-white/85">{description}</p>
+        ) : null}
       </div>
       <div className="p-4">{children}</div>
     </section>
   );
 }
 
-export function EmptyReportState({ message = 'No data returned for this section.' }: { message?: string }) {
+export function EmptyReportState({
+  message = 'No data returned for this section.',
+}: {
+  message?: string;
+}) {
   return (
     <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center text-sm text-slate-500">
       {message}
@@ -136,7 +153,11 @@ export function EmptyReportState({ message = 'No data returned for this section.
   );
 }
 
-export function LoadingState({ label = 'Loading report section...' }: { label?: string }) {
+export function LoadingState({
+  label = 'Loading report section...',
+}: {
+  label?: string;
+}) {
   return (
     <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white">
       <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#002366] animate-spin" />
@@ -154,15 +175,23 @@ export function ErrorState({ message }: { message: string }) {
 }
 
 export function MetricGrid({ items }: { items: MetricItem[] }) {
-  const visibleItems = items.filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
+  const visibleItems = items.filter(
+    (item) =>
+      item.value !== undefined && item.value !== null && item.value !== ''
+  );
 
   if (!visibleItems.length) return <EmptyReportState />;
 
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
       {visibleItems.map((item) => (
-        <div key={item.label} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</p>
+        <div
+          key={item.label}
+          className="rounded-xl border border-slate-200 bg-slate-50 p-4"
+        >
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {item.label}
+          </p>
           <p
             className={cn(
               'mt-2 break-words text-base font-semibold text-slate-900',
@@ -178,17 +207,31 @@ export function MetricGrid({ items }: { items: MetricItem[] }) {
   );
 }
 
-export function KeyValueGrid({ data }: { data: Array<{ label: string; value: unknown }> }) {
-  const visibleData = data.filter((item) => item.value !== undefined && item.value !== null && item.value !== '');
+export function KeyValueGrid({
+  data,
+}: {
+  data: Array<{ label: string; value: unknown }>;
+}) {
+  const visibleData = data.filter(
+    (item) =>
+      item.value !== undefined && item.value !== null && item.value !== ''
+  );
 
   if (!visibleData.length) return <EmptyReportState />;
 
   return (
     <dl className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {visibleData.map((item) => (
-        <div key={item.label} className="rounded-xl border border-slate-200 bg-white p-3">
-          <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">{item.label}</dt>
-          <dd className="mt-1 break-words text-sm font-semibold text-slate-900">{formatValue(item.value)}</dd>
+        <div
+          key={item.label}
+          className="rounded-xl border border-slate-200 bg-white p-3"
+        >
+          <dt className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+            {item.label}
+          </dt>
+          <dd className="mt-1 break-words text-sm font-semibold text-slate-900">
+            {formatValue(item.value)}
+          </dd>
         </div>
       ))}
     </dl>
@@ -208,7 +251,11 @@ export function DataTable({ rows }: { rows: ReportRecord[] }) {
         <thead className="bg-slate-100 text-xs uppercase tracking-wide text-slate-600">
           <tr>
             {columns.map((column) => (
-              <th key={column} scope="col" className="whitespace-nowrap border-b border-slate-200 px-3 py-2 font-semibold">
+              <th
+                key={column}
+                scope="col"
+                className="whitespace-nowrap border-b border-slate-200 px-3 py-2 font-semibold"
+              >
                 {formatLabel(column)}
               </th>
             ))}
@@ -218,7 +265,10 @@ export function DataTable({ rows }: { rows: ReportRecord[] }) {
           {rows.map((row, index) => (
             <tr key={index} className="hover:bg-slate-50">
               {columns.map((column) => (
-                <td key={column} className="max-w-xs break-words px-3 py-2 text-slate-700 whitespace-normal">
+                <td
+                  key={column}
+                  className="max-w-xs break-words px-3 py-2 text-slate-700 whitespace-normal"
+                >
                   {formatValue(row[column])}
                 </td>
               ))}
@@ -242,9 +292,19 @@ export function DefinitionTable({ items }: { items: DefinitionItem[] }) {
   );
 }
 
-export function DataBlock({ title, value, depth = 0 }: { title: string; value: unknown; depth?: number }) {
+export function DataBlock({
+  title,
+  value,
+  depth = 0,
+}: {
+  title: string;
+  value: unknown;
+  depth?: number;
+}) {
   if (value === null || value === undefined || value === '') {
-    return <EmptyReportState message={`${title} was not returned by the backend.`} />;
+    return (
+      <EmptyReportState message={`${title} was not returned by the backend.`} />
+    );
   }
 
   if (Array.isArray(value)) {
@@ -259,7 +319,12 @@ export function DataBlock({ title, value, depth = 0 }: { title: string; value: u
     return (
       <div className="space-y-3">
         {value.map((item, index) => (
-          <DataBlock key={index} title={`${title} ${index + 1}`} value={item} depth={depth + 1} />
+          <DataBlock
+            key={index}
+            title={`${title} ${index + 1}`}
+            value={item}
+            depth={depth + 1}
+          />
         ))}
       </div>
     );
@@ -272,16 +337,29 @@ export function DataBlock({ title, value, depth = 0 }: { title: string; value: u
   const scalarEntries = getScalarEntries(value);
   const complexEntries = getComplexEntries(value);
 
-  if (!scalarEntries.length && !complexEntries.length) return <EmptyReportState />;
+  if (!scalarEntries.length && !complexEntries.length)
+    return <EmptyReportState />;
 
   return (
     <div className="space-y-4">
       {scalarEntries.length ? (
-        <KeyValueGrid data={scalarEntries.map(([label, item]) => ({ label: formatLabel(label), value: item }))} />
+        <KeyValueGrid
+          data={scalarEntries.map(([label, item]) => ({
+            label: formatLabel(label),
+            value: item,
+          }))}
+        />
       ) : null}
       {complexEntries.map(([key, item]) => (
-        <div key={key} className={cn(depth < 2 && 'rounded-md border border-slate-200 bg-slate-50 p-3')}>
-          <h4 className="mb-3 text-sm font-semibold text-slate-800">{formatLabel(key)}</h4>
+        <div
+          key={key}
+          className={cn(
+            depth < 2 && 'rounded-md border border-slate-200 bg-slate-50 p-3'
+          )}
+        >
+          <h4 className="mb-3 text-sm font-semibold text-slate-800">
+            {formatLabel(key)}
+          </h4>
           <DataBlock title={formatLabel(key)} value={item} depth={depth + 1} />
         </div>
       ))}

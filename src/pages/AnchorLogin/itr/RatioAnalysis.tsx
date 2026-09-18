@@ -10,9 +10,13 @@ interface RatioAnalysisProps {
   reportId?: string;
 }
 
-export default function RatioAnalysis({ custId, reportId }: RatioAnalysisProps = {}) {
-  const finalCustId = custId || localStorage.getItem("selected_cust_id");
-  const finalReportId = reportId || localStorage.getItem("selected_itr_report_id");
+export default function RatioAnalysis({
+  custId,
+  reportId,
+}: RatioAnalysisProps = {}) {
+  const finalCustId = custId || localStorage.getItem('selected_cust_id');
+  const finalReportId =
+    reportId || localStorage.getItem('selected_itr_report_id');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['itrRatioAnalysis', finalCustId, finalReportId],
@@ -30,7 +34,9 @@ export default function RatioAnalysis({ custId, reportId }: RatioAnalysisProps =
   if (isError || !data || !data.data) {
     return (
       <div className="mx-auto mt-8 flex max-w-5xl flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-100 px-10 py-12 shadow-xl animate-pulse">
-        <p className="text-lg font-large text-red-800">No Data to load Ratio Analysis.</p>
+        <p className="text-lg font-large text-red-800">
+          No Data to load Ratio Analysis.
+        </p>
       </div>
     );
   }
@@ -39,19 +45,19 @@ export default function RatioAnalysis({ custId, reportId }: RatioAnalysisProps =
 
   // The order of sections based on the typical presentation or JSON structure
   const sections = [
-    "Liquidity Analysis",
-    "Asset Management",
-    "Leverage Ratios",
-    "Coverage Ratios",
-    "Profitability Ratios",
-    "Growth in Cashflow Margin"
+    'Liquidity Analysis',
+    'Asset Management',
+    'Leverage Ratios',
+    'Coverage Ratios',
+    'Profitability Ratios',
+    'Growth in Cashflow Margin',
   ];
 
   return (
     <div className="p-6 space-y-6">
       <CustomerProfile profile={customer_profile} />
 
-      {sections.map(section => {
+      {sections.map((section) => {
         if (ratio_analysis[section]) {
           return (
             <React.Fragment key={section}>

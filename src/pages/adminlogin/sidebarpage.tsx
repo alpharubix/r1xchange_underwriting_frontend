@@ -1,7 +1,7 @@
-import { useState, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { useLogout } from "@/hooks/useAuth";
+import { useState, useMemo } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { useLogout } from '@/hooks/useAuth';
 import {
   Users,
   Shield,
@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Activity,
-} from "lucide-react";
+} from 'lucide-react';
 
 export default function AdminSidebar() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -21,16 +21,24 @@ export default function AdminSidebar() {
 
   const activeTab = useMemo(() => {
     const t = tab?.toLowerCase();
-    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors" || t === "logs") {
-      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor" | "logs");
+    if (
+      t === 'user' ||
+      t === 'admin' ||
+      t === 'anchor' ||
+      t === 'anchors' ||
+      t === 'logs'
+    ) {
+      return t === 'anchors'
+        ? 'anchor'
+        : (t as 'user' | 'admin' | 'anchor' | 'logs');
     }
-    return "user";
+    return 'user';
   }, [tab]);
 
-  const handleTabChange = (targetTab: "user" | "admin" | "anchor" | "logs") => {
-    const isCapital = window.location.pathname.startsWith("/Admins");
-    const tabSegment = targetTab === "anchor" ? "anchors" : targetTab;
-    const targetUrl = `${isCapital ? "/Admins" : "/admins"}/${tabSegment}`;
+  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs') => {
+    const isCapital = window.location.pathname.startsWith('/Admins');
+    const tabSegment = targetTab === 'anchor' ? 'anchors' : targetTab;
+    const targetUrl = `${isCapital ? '/Admins' : '/admins'}/${tabSegment}`;
     navigate(targetUrl);
   };
 
@@ -40,9 +48,7 @@ export default function AdminSidebar() {
 
   return (
     <aside
-      className={`relative flex flex-col h-full bg-[#000080] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0 ${
-        sidebarCollapsed ? "w-20" : "w-64"
-      }`}
+      className={`relative flex flex-col h-full bg-[#000080] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}
     >
       {/* Toggle Button */}
       <button
@@ -59,7 +65,9 @@ export default function AdminSidebar() {
 
       {/* Sidebar Header */}
       <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5">
-        <div className={`flex items-center gap-3 overflow-hidden ${sidebarCollapsed ? "justify-center w-full" : ""}`}>
+        <div
+          className={`flex items-center gap-3 overflow-hidden ${sidebarCollapsed ? 'justify-center w-full' : ''}`}
+        >
           <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center font-black text-lg text-[#000080] shadow-md shrink-0 transform hover:scale-[1.02] transition-transform">
             R1
           </div>
@@ -79,97 +87,65 @@ export default function AdminSidebar() {
       {/* Navigation items */}
       <nav className="flex-1 px-4 py-6 space-y-1.5">
         <button
-          onClick={() => handleTabChange("user")}
-          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${
-            activeTab === "user"
-              ? "bg-white shadow-lg shadow-blue-950/20"
-              : "text-blue-100 hover:bg-white/10 hover:text-white border border-transparent"
-          }`}
-          style={{ color: activeTab === "user" ? "#000080" : "" }}
+          onClick={() => handleTabChange('user')}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'user' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'user' ? '#000080' : '' }}
         >
           <div
-            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${
-              activeTab === "user" ? "h-2/5" : "h-0 bg-transparent"
-            }`}
-            style={{ backgroundColor: activeTab === "user" ? "#000080" : "" }}
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'user' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'user' ? '#000080' : '' }}
           />
           <Users
-            className={`h-5 w-5 shrink-0 transition-colors ${
-              activeTab === "user" ? "" : "text-blue-200 group-hover:text-white"
-            }`}
-            style={{ color: activeTab === "user" ? "#000080" : "" }}
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'user' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'user' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Users</span>}
         </button>
 
         <button
-          onClick={() => handleTabChange("admin")}
-          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${
-            activeTab === "admin"
-              ? "bg-white shadow-lg shadow-blue-950/20"
-              : "text-blue-100 hover:bg-white/10 hover:text-white border border-transparent"
-          }`}
-          style={{ color: activeTab === "admin" ? "#000080" : "" }}
+          onClick={() => handleTabChange('admin')}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'admin' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'admin' ? '#000080' : '' }}
         >
           <div
-            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${
-              activeTab === "admin" ? "h-2/5" : "h-0 bg-transparent"
-            }`}
-            style={{ backgroundColor: activeTab === "admin" ? "#000080" : "" }}
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'admin' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'admin' ? '#000080' : '' }}
           />
           <Shield
-            className={`h-5 w-5 shrink-0 transition-colors ${
-              activeTab === "admin" ? "" : "text-blue-200 group-hover:text-white"
-            }`}
-            style={{ color: activeTab === "admin" ? "#000080" : "" }}
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'admin' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'admin' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Admins</span>}
         </button>
 
         <button
-          onClick={() => handleTabChange("anchor")}
-          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${
-            activeTab === "anchor"
-              ? "bg-white shadow-lg shadow-blue-950/20"
-              : "text-blue-100 hover:bg-white/10 hover:text-white border border-transparent"
-          }`}
-          style={{ color: activeTab === "anchor" ? "#000080" : "" }}
+          onClick={() => handleTabChange('anchor')}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'anchor' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'anchor' ? '#000080' : '' }}
         >
           <div
-            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${
-              activeTab === "anchor" ? "h-2/5" : "h-0 bg-transparent"
-            }`}
-            style={{ backgroundColor: activeTab === "anchor" ? "#000080" : "" }}
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'anchor' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'anchor' ? '#000080' : '' }}
           />
           <Anchor
-            className={`h-5 w-5 shrink-0 transition-colors ${
-              activeTab === "anchor" ? "" : "text-blue-200 group-hover:text-white"
-            }`}
-            style={{ color: activeTab === "anchor" ? "#000080" : "" }}
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'anchor' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'anchor' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Anchors</span>}
         </button>
 
         <button
-          onClick={() => handleTabChange("logs" as any)}
-          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${
-            activeTab === "logs"
-              ? "bg-white shadow-lg shadow-blue-950/20"
-              : "text-blue-100 hover:bg-white/10 hover:text-white border border-transparent"
-          }`}
-          style={{ color: activeTab === "logs" ? "#000080" : "" }}
+          onClick={() => handleTabChange('logs' as any)}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'logs' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'logs' ? '#000080' : '' }}
         >
           <div
-            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${
-              activeTab === "logs" ? "h-2/5" : "h-0 bg-transparent"
-            }`}
-            style={{ backgroundColor: activeTab === "logs" ? "#000080" : "" }}
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'logs' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'logs' ? '#000080' : '' }}
           />
           <Activity
-            className={`h-5 w-5 shrink-0 transition-colors ${
-              activeTab === "logs" ? "" : "text-blue-200 group-hover:text-white"
-            }`}
-            style={{ color: activeTab === "logs" ? "#000080" : "" }}
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'logs' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'logs' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">System Logs</span>}
         </button>
@@ -180,7 +156,9 @@ export default function AdminSidebar() {
           <div className="flex items-center gap-3 bg-white/10 border border-white/10 p-3 rounded-2xl shadow-inner overflow-hidden">
             <div className="relative shrink-0">
               <div className="h-9 w-9 rounded-xl bg-white flex items-center justify-center font-bold text-[#000080] text-xs shadow-sm">
-                {String(user?.role || "").charAt(0).toUpperCase()}
+                {String(user?.role || '')
+                  .charAt(0)
+                  .toUpperCase()}
               </div>
               <div className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 border-2 border-[#000080] flex items-center justify-center">
                 <span className="absolute h-2 w-2 rounded-full bg-emerald-400 animate-ping opacity-75" />
@@ -188,7 +166,7 @@ export default function AdminSidebar() {
             </div>
             <div className="overflow-hidden text-left">
               <p className="text-sm font-bold text-white truncate uppercase">
-                {String(user?.role || "ADMIN").replace("_", " ")}
+                {String(user?.role || 'ADMIN').replace('_', ' ')}
               </p>
             </div>
           </div>

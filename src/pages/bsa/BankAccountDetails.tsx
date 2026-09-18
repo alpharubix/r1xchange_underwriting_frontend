@@ -1,18 +1,17 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import Tile from "@/components/ui/Tile";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import Tile from '@/components/ui/Tile';
 
 function BankAccountDetails() {
-  const stored = sessionStorage.getItem("account_details");
+  const stored = sessionStorage.getItem('account_details');
 
   let accountDetails = null;
 
-  
-  if (stored && stored !== "undefined" && stored !== "null") {
+  if (stored && stored !== 'undefined' && stored !== 'null') {
     try {
       accountDetails = JSON.parse(stored);
-      console.log("Account details ",accountDetails)
+      console.log('Account details ', accountDetails);
     } catch (error) {
-      console.error("Invalid account_details:", stored, error);
+      console.error('Invalid account_details:', stored, error);
     }
   }
   if (!accountDetails) return null;
@@ -20,16 +19,12 @@ function BankAccountDetails() {
   const entries = Object.entries(accountDetails);
 
   const normalTiles = entries.filter(
-    ([key]) => key !== "Opening Balance" && key !== "Closing Balance"
+    ([key]) => key !== 'Opening Balance' && key !== 'Closing Balance'
   );
 
-  const openingBalance = entries.find(
-    ([key]) => key === "Opening Balance"
-  );
+  const openingBalance = entries.find(([key]) => key === 'Opening Balance');
 
-  const closingBalance = entries.find(
-    ([key]) => key === "Closing Balance"
-  );
+  const closingBalance = entries.find(([key]) => key === 'Closing Balance');
 
   return (
     <Card className="mx-auto shadow-sm border border-gray-300">
@@ -43,11 +38,7 @@ function BankAccountDetails() {
         {/* First 8 tiles */}
         <div className="grid grid-cols-4 gap-4">
           {normalTiles.map(([key, value]) => (
-            <Tile
-              key={key}
-              title={key}
-              value={String(value)}
-            />
+            <Tile key={key} title={key} value={String(value)} />
           ))}
         </div>
 
@@ -56,7 +47,7 @@ function BankAccountDetails() {
           {openingBalance && (
             <Tile
               className="col-span-2"
-              title={openingBalance[0]} 
+              title={openingBalance[0]}
               value={String(openingBalance[1])}
             />
           )}

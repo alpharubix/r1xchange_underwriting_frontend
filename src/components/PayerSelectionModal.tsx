@@ -1,5 +1,5 @@
-﻿import { motion, AnimatePresence } from "framer-motion";
-import { X, User, Building2, CreditCard } from "lucide-react";
+﻿import { motion, AnimatePresence } from 'framer-motion';
+import { X, User, Building2, CreditCard } from 'lucide-react';
 
 interface PayerSelectionModalProps {
   isOpen: boolean;
@@ -45,7 +45,9 @@ export default function PayerSelectionModal({
                 <CreditCard className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-white tracking-tight">Who is paying?</h2>
+                <h2 className="text-2xl font-bold text-white tracking-tight">
+                  Who is paying?
+                </h2>
                 <p className="text-blue-100 font-medium text-sm mt-1">
                   Select how the {moduleName} report should be billed.
                 </p>
@@ -61,7 +63,9 @@ export default function PayerSelectionModal({
                   <Building2 className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-800 text-lg">I will pay</h3>
+                  <h3 className="font-bold text-slate-800 text-lg">
+                    I will pay
+                  </h3>
                   <p className="text-sm text-slate-500 mt-0.5">
                     Pay immediately.
                   </p>
@@ -76,9 +80,12 @@ export default function PayerSelectionModal({
                   <User className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-slate-800 text-lg">Customer will pay</h3>
+                  <h3 className="font-bold text-slate-800 text-lg">
+                    Customer will pay
+                  </h3>
                   <p className="text-sm text-slate-500 mt-0.5">
-                    Generate a pending payment for the customer to fulfill in their dashboard.
+                    Generate a pending payment for the customer to fulfill in
+                    their dashboard.
                   </p>
                 </div>
               </button>

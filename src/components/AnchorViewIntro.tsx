@@ -1,8 +1,8 @@
-﻿import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
-import { useAuthContext } from "@/contexts/AuthContext";
-import { getAnchorBrand } from "@/lib/brandLogo";
+﻿import { useEffect, useState } from 'react';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import { useAuthContext } from '@/contexts/AuthContext';
+import { getAnchorBrand } from '@/lib/brandLogo';
 
 interface AnchorViewIntroProps {
   onComplete: () => void;
@@ -40,12 +40,20 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: "easeInOut" }}
+          transition={{ duration: 0.6, ease: 'easeInOut' }}
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-gradient-to-br from-[#2f1ecc] via-[#1c0f99] to-[#0e0758] overflow-hidden pointer-events-none"
         >
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.8, y: 10 }}
-            animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, scale: 1, y: 0 }}
+            initial={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, scale: 0.8, y: 10 }
+            }
+            animate={
+              shouldReduceMotion
+                ? { opacity: 1 }
+                : { opacity: 1, scale: 1, y: 0 }
+            }
             transition={{
               duration: 1.2,
               delay: 0.2, // Subtle delay before logo appears
@@ -72,7 +80,7 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
                   <motion.div
                     initial={{ scale: 0.5, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
-                    transition={{ delay: 0.8, duration: 0.8, ease: "easeOut" }}
+                    transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
                     className="text-white/40 font-light text-5xl md:text-6xl select-none font-serif italic"
                   >
                     X
@@ -105,12 +113,12 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
             {/* Extremely subtle light sweep */}
             {!shouldReduceMotion && (
               <motion.div
-                initial={{ left: "-150%" }}
-                animate={{ left: "150%" }}
+                initial={{ left: '-150%' }}
+                animate={{ left: '150%' }}
                 transition={{
                   duration: 1.5,
                   delay: 0.4,
-                  ease: "easeInOut",
+                  ease: 'easeInOut',
                 }}
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent w-[200%] h-full mix-blend-overlay -skew-x-12"
               />

@@ -1,9 +1,7 @@
-
-
 const Tile = ({
   title,
   value,
-  className = "",
+  className = '',
 }: {
   title: string;
   value: string | number;
@@ -12,14 +10,10 @@ const Tile = ({
   <div
     className={`rounded-xl border border-gray-200 bg-white p-2 shadow-sm ${className}`}
   >
-    <p className="text-xs uppercase tracking-wide text-gray-500">
-      {title}
-    </p>
+    <p className="text-xs uppercase tracking-wide text-gray-500">{title}</p>
 
-    <p className='mt-3 text-xs font-semibold  break-words'>
-      {value}
-    </p>
+    <p className="mt-3 text-xs font-semibold  break-words">{value}</p>
   </div>
 );
 
-export default Tile
+export default Tile;

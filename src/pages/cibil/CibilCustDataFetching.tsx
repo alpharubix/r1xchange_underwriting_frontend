@@ -9,7 +9,7 @@ export default function CibilCustDataFetching() {
     // Navigate to the reports page
     const queryStr = custId ? `?cust_id=${custId}` : '';
     window.location.href = `/cibil/reports${queryStr}`;
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
@@ -20,8 +20,15 @@ export default function CibilCustDataFetching() {
             <p className="text-gray-500 mt-1">
               Authenticate customer consent and process CIBIL report data
             </p>
-            {custId && <p className="text-[#7754f8] mt-1 font-medium text-sm">Target Customer ID: {custId}</p>}
-            <button className="mt-4 px-4 py-2 bg-[#002366] text-white rounded hover:bg-[#002366]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366]" onClick={handleReports}>
+            {custId && (
+              <p className="text-[#7754f8] mt-1 font-medium text-sm">
+                Target Customer ID: {custId}
+              </p>
+            )}
+            <button
+              className="mt-4 px-4 py-2 bg-[#002366] text-white rounded hover:bg-[#002366]/80 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#002366]"
+              onClick={handleReports}
+            >
               View Previous Reports
             </button>
           </div>

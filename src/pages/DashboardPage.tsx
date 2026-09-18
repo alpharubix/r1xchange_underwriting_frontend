@@ -44,7 +44,9 @@ export default function DashboardPage() {
     CIBIL: 1,
   });
 
-  const [highlightedService, setHighlightedService] = useState<string | undefined>(undefined);
+  const [highlightedService, setHighlightedService] = useState<
+    string | undefined
+  >(undefined);
   const [showHomeIntro, setShowHomeIntro] = useState(false);
 
   const navigate = useNavigate();
@@ -283,20 +285,20 @@ export default function DashboardPage() {
             Help Center
           </Button>
         </div>
-    <div className="mb-6 flex items-center gap-3  ">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#002366]/5 border border-[#002366]/10">
-        <BriefcaseBusiness className="h-5 w-5 text-[#002366]" />
-      </div>
+        <div className="mb-6 flex items-center gap-3  ">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#002366]/5 border border-[#002366]/10">
+            <BriefcaseBusiness className="h-5 w-5 text-[#002366]" />
+          </div>
 
-      <div className="min-w-0">
-        <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
-          Welcome back
-        </p>
-        <h2 className="truncate text-lg font-bold text-[#002366] animate-pulse">
-          {companyName}
-        </h2>
-      </div>
-    </div>
+          <div className="min-w-0">
+            <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+              Welcome back
+            </p>
+            <h2 className="truncate text-lg font-bold text-[#002366] animate-pulse">
+              {companyName}
+            </h2>
+          </div>
+        </div>
         {/* Service Cards */}
         <div className="w-full">
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
@@ -305,31 +307,20 @@ export default function DashboardPage() {
                 Boolean(highlightedService) &&
                 highlightedService === item.moduleId;
 
-              const shouldBlur =
-                Boolean(highlightedService) && !isHighlighted;
+              const shouldBlur = Boolean(highlightedService) && !isHighlighted;
 
               return (
                 <Card
                   key={index}
                   onClick={!item.disabled ? item.onClick : undefined}
                   aria-busy={isCheckingWallet}
-                  className={`h-[160px] min-h-0 overflow-hidden rounded-2xl border bg-white transition-all duration-500 ${
-                    item.disabled
-                      ? 'cursor-not-allowed border-gray-200 bg-gray-50 opacity-60'
-                      : isHighlighted
-                        ? 'relative z-20 cursor-pointer scale-[1.02] border-2 border-[#002366] bg-white shadow-[0_0_35px_rgba(0,35,102,0.65)]'
-                        : shouldBlur
-                          ? 'pointer-events-none cursor-default blur-sm opacity-35'
-                          : 'cursor-pointer border-[#002366]/20 hover:-translate-y-1 hover:border-[#002366]/50 hover:shadow-lg'
-                  }`}
+                  className={`h-[160px] min-h-0 overflow-hidden rounded-2xl border bg-white transition-all duration-500 ${item.disabled ? 'cursor-not-allowed border-gray-200 bg-gray-50 opacity-60' : isHighlighted ? 'relative z-20 cursor-pointer scale-[1.02] border-2 border-[#002366] bg-white shadow-[0_0_35px_rgba(0,35,102,0.65)]' : shouldBlur ? 'pointer-events-none cursor-default blur-sm opacity-35' : 'cursor-pointer border-[#002366]/20 hover:-translate-y-1 hover:border-[#002366]/50 hover:shadow-lg'}`}
                 >
                   <div className="flex h-full min-h-0 flex-col">
                     {/* Card Top */}
                     <div className="flex items-start gap-4 p-5">
                       <div
-                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${
-                          item.disabled ? 'bg-gray-200' : 'bg-blue-50'
-                        }`}
+                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${item.disabled ? 'bg-gray-200' : 'bg-blue-50'}`}
                       >
                         {item.icon}
                       </div>
@@ -347,7 +338,6 @@ export default function DashboardPage() {
 
                     {/* Card Bottom */}
                     <div className="mt-auto px-5 pb-2 ">
-      
                       {!item.disabled && (
                         <div className="flex items-center justify-between gap-3 text-xs font-small text-[#002366] rounded-lg ">
                           <span className="whitespace-nowrap text-s">
@@ -462,9 +452,7 @@ export default function DashboardPage() {
 
           <div className="h-5 w-px bg-gray-300" />
 
-          <span className="text-gray-500">
-            Engineered in Bengaluru 🖤
-          </span>
+          <span className="text-gray-500">Engineered in Bengaluru 🖤</span>
 
           <span className="text-black">///</span>
 

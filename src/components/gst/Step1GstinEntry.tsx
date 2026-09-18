@@ -1,7 +1,7 @@
-﻿import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getGstin, updateGstin } from "@/api/gst";
-import { toast } from "sonner";
+﻿import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { getGstin, updateGstin } from '@/api/gst';
+import { toast } from 'sonner';
 
 interface Step1Props {
   onNext: (gstin: string) => void;
@@ -9,11 +9,11 @@ interface Step1Props {
 }
 
 export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
-  const [gstinInput, setGstinInput] = useState("");
+  const [gstinInput, setGstinInput] = useState('');
   const queryClient = useQueryClient();
 
   const { data: gstinData, isLoading: isLoadingGstin } = useQuery({
-    queryKey: ["gstin", custId],
+    queryKey: ['gstin', custId],
     queryFn: () => getGstin(custId),
   });
 
@@ -22,11 +22,14 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
       const rawGst = gstinData.gst_number;
       const gstinVal = Array.isArray(rawGst)
         ? rawGst[0]
-        : typeof rawGst === "string"
-          ? rawGst.split(",")[0]
-          : "";
+        : typeof rawGst === 'string'
+          ? rawGst.split(',')[0]
+          : '';
 
-      const cleanGstin = typeof gstinVal === 'string' ? gstinVal.trim() : String(gstinVal || "").trim();
+      const cleanGstin =
+        typeof gstinVal === 'string'
+          ? gstinVal.trim()
+          : String(gstinVal || '').trim();
       if (cleanGstin) {
         setGstinInput(cleanGstin);
         onNext(cleanGstin);
@@ -35,10 +38,13 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   }, [gstinData, onNext]);
 
   const updateMutation = useMutation({
-    mutationFn: (data: Parameters<typeof updateGstin>[0]) => updateGstin(data, custId),
+    mutationFn: (data: Parameters<typeof updateGstin>[0]) =>
+      updateGstin(data, custId),
     onSuccess: (res) => {
-      queryClient.invalidateQueries({ queryKey: ["gstin"] });
-      const resolved = (res.data?.gstin || (res as any).gstin || res.data || "").toUpperCase().trim();
+      queryClient.invalidateQueries({ queryKey: ['gstin'] });
+      const resolved = (res.data?.gstin || (res as any).gstin || res.data || '')
+        .toUpperCase()
+        .trim();
       onNext(resolved);
     },
   });
@@ -46,15 +52,16 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const gstin = gstinInput.toUpperCase().trim();
-    const gstRegex = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+    const gstRegex =
+      /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
 
     if (gstin.length !== 15) {
-      toast.error("GSTIN must be exactly 15 characters long");
+      toast.error('GSTIN must be exactly 15 characters long');
       return;
     }
 
     if (!gstRegex.test(gstin)) {
-      toast.error("Invalid GSTIN format");
+      toast.error('Invalid GSTIN format');
       return;
     }
 
@@ -71,14 +78,20 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-xl shadow-sm border border-slate-100">
-      <h2 className="text-2xl font-semibold mb-4 text-slate-900">Enter GSTIN</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-slate-900">
+        Enter GSTIN
+      </h2>
       <p className="text-gray-500 mb-6 text-sm">
-        Please provide your Goods and Services Tax Identification Number (GSTIN) to proceed.
+        Please provide your Goods and Services Tax Identification Number (GSTIN)
+        to proceed.
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="gstin" className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            htmlFor="gstin"
+            className="block text-sm font-medium text-gray-700 mb-1"
+          >
             GSTIN Number
           </label>
           <input
@@ -88,7 +101,10 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
             placeholder="e.g. 27AAAPL1234C1Z5"
             value={gstinInput}
             onChange={(e) => {
-              const clean = e.target.value.replace(/[^A-Z0-9]/gi, "").toUpperCase().slice(0, 15);
+              const clean = e.target.value
+                .replace(/[^A-Z0-9]/gi, '')
+                .toUpperCase()
+                .slice(0, 15);
               setGstinInput(clean);
             }}
             required
@@ -104,7 +120,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
           {updateMutation.isPending ? (
             <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
           ) : null}
-          {updateMutation.isPending ? "Saving..." : "Continue"}
+          {updateMutation.isPending ? 'Saving...' : 'Continue'}
         </button>
       </form>
     </div>

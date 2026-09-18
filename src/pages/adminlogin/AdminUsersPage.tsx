@@ -1,5 +1,5 @@
-import { useState, useMemo, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useMemo, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   ChevronLeft,
   ChevronRight,
@@ -8,18 +8,17 @@ import {
   X,
   Check,
   AlertTriangle,
-} from "lucide-react";
-import { useParams, useNavigate, } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { getUsersList } from "@/api/user";
-import AdminSidebar from "./sidebarpage";
-import AdminAdminsPage from "./AdminAdminsPage";
-import AdminAnchorsPage from "./AdminAnchorsPage";
-import AdminLogsPage from "./AdminLogsPage";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
+} from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { getUsersList } from '@/api/user';
+import AdminSidebar from './sidebarpage';
+import AdminAdminsPage from './AdminAdminsPage';
+import AdminAnchorsPage from './AdminAnchorsPage';
+import AdminLogsPage from './AdminLogsPage';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 interface RecordItem {
   accountid: string;
@@ -30,8 +29,8 @@ interface RecordItem {
   phoneverified: boolean;
   companyname: string;
   gstnumber: string;
-  status: "Active" | "Inactive";
-  role: "USER" | "ADMIN" | "ANCHOR";
+  status: 'Active' | 'Inactive';
+  role: 'USER' | 'ADMIN' | 'ANCHOR';
   createat: string;
   updatedat: string;
   lastloginat: string;
@@ -43,26 +42,32 @@ const findAccountId = (user: any, index: number): string => {
   const keys = Object.keys(user);
   for (const key of keys) {
     const lowerKey = key.toLowerCase();
-    if (lowerKey.includes("account") && lowerKey.includes("id")) {
+    if (lowerKey.includes('account') && lowerKey.includes('id')) {
       const val = user[key];
-      if (val !== null && val !== undefined && val !== "") return String(val);
+      if (val !== null && val !== undefined && val !== '') return String(val);
     }
   }
   for (const key of keys) {
     const lowerKey = key.toLowerCase();
-    if (lowerKey.includes("user") && lowerKey.includes("id")) {
+    if (lowerKey.includes('user') && lowerKey.includes('id')) {
       const val = user[key];
-      if (val !== null && val !== undefined && val !== "") return String(val);
+      if (val !== null && val !== undefined && val !== '') return String(val);
     }
   }
-  if (user.id !== undefined && user.id !== null && user.id !== "") return String(user.id);
-  if (user._id !== undefined && user._id !== null && user._id !== "") return String(user._id);
+  if (user.id !== undefined && user.id !== null && user.id !== '')
+    return String(user.id);
+  if (user._id !== undefined && user._id !== null && user._id !== '')
+    return String(user._id);
 
   for (const key of keys) {
     const lowerKey = key.toLowerCase();
-    if (lowerKey.includes("id") && !lowerKey.includes("email") && !lowerKey.includes("anchor")) {
+    if (
+      lowerKey.includes('id') &&
+      !lowerKey.includes('email') &&
+      !lowerKey.includes('anchor')
+    ) {
       const val = user[key];
-      if (val !== null && val !== undefined && val !== "") return String(val);
+      if (val !== null && val !== undefined && val !== '') return String(val);
     }
   }
   return `ACC-${100 + index}`;
@@ -72,21 +77,30 @@ const findLastLoginValue = (user: any): string => {
   const keys = Object.keys(user);
   for (const key of keys) {
     const lowerKey = key.toLowerCase();
-    if ((lowerKey.includes("login") || lowerKey.includes("active")) &&
-        (lowerKey.includes("at") || lowerKey.includes("time") || lowerKey.includes("date") || lowerKey.includes("dt") || lowerKey.includes("day"))) {
+    if (
+      (lowerKey.includes('login') || lowerKey.includes('active')) &&
+      (lowerKey.includes('at') ||
+        lowerKey.includes('time') ||
+        lowerKey.includes('date') ||
+        lowerKey.includes('dt') ||
+        lowerKey.includes('day'))
+    ) {
       const val = user[key];
-      if (val !== null && val !== undefined && val !== "") return String(val);
+      if (val !== null && val !== undefined && val !== '') return String(val);
     }
   }
   for (const key of keys) {
     const lowerKey = key.toLowerCase();
-    if ((lowerKey.includes("login") || lowerKey.includes("active")) &&
-        !lowerKey.includes("ip") && !lowerKey.includes("status")) {
+    if (
+      (lowerKey.includes('login') || lowerKey.includes('active')) &&
+      !lowerKey.includes('ip') &&
+      !lowerKey.includes('status')
+    ) {
       const val = user[key];
-      if (val !== null && val !== undefined && val !== "") return String(val);
+      if (val !== null && val !== undefined && val !== '') return String(val);
     }
   }
-  return "-";
+  return '-';
 };
 
 export default function AdminDashboardPage() {
@@ -95,18 +109,26 @@ export default function AdminDashboardPage() {
 
   const activeTab = useMemo(() => {
     const t = tab?.toLowerCase();
-    if (t === "user" || t === "admin" || t === "anchor" || t === "anchors" || t === "logs") {
-      return t === "anchors" ? "anchor" : (t as "user" | "admin" | "anchor" | "logs");
+    if (
+      t === 'user' ||
+      t === 'admin' ||
+      t === 'anchor' ||
+      t === 'anchors' ||
+      t === 'logs'
+    ) {
+      return t === 'anchors'
+        ? 'anchor'
+        : (t as 'user' | 'admin' | 'anchor' | 'logs');
     }
-    return "user";
+    return 'user';
   }, [tab]);
 
   // console.log("RENDER - tab param:", tab, "activeTab derived:", activeTab);
 
-  const handleTabChange = (targetTab: "user" | "admin" | "anchor" | "logs") => {
-    const isCapital = window.location.pathname.startsWith("/Admins");
-    const tabSegment = targetTab === "anchor" ? "anchors" : targetTab;
-    const targetUrl = `${isCapital ? "/Admins" : "/admins"}/${tabSegment}`;
+  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs') => {
+    const isCapital = window.location.pathname.startsWith('/Admins');
+    const tabSegment = targetTab === 'anchor' ? 'anchors' : targetTab;
+    const targetUrl = `${isCapital ? '/Admins' : '/admins'}/${tabSegment}`;
     // console.log("handleTabChange - targetTab:", targetTab, "navigating to:", targetUrl);
     navigate(targetUrl);
   };
@@ -114,16 +136,23 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     const t = tab?.toLowerCase();
     // console.log("useEffect tab check - t:", t);
-    if (!t || (t !== "user" && t !== "admin" && t !== "anchor" && t !== "anchors" && t !== "logs")) {
+    if (
+      !t ||
+      (t !== 'user' &&
+        t !== 'admin' &&
+        t !== 'anchor' &&
+        t !== 'anchors' &&
+        t !== 'logs')
+    ) {
       // console.log("Redirecting undefined/invalid tab to user");
-      handleTabChange("user");
+      handleTabChange('user');
     }
   }, [tab]);
 
   const { data: fetchedUsers, isLoading } = useQuery({
-    queryKey: ["admin", "users-list"],
+    queryKey: ['admin', 'users-list'],
     queryFn: getUsersList,
-    enabled: activeTab === "user",
+    enabled: activeTab === 'user',
   });
 
   const [usersList, setUsersList] = useState<RecordItem[]>([]);
@@ -132,43 +161,82 @@ export default function AdminDashboardPage() {
     if (fetchedUsers) {
       const mapped = fetchedUsers.map((user: any, index: number) => ({
         accountid: findAccountId(user, index),
-        emailid: user.emailid || user.email_id || user.emailId || user.email || "",
-        customername: user.customername || user.customer_name || user.customerName || user.name || "",
-        emailverified: !!(user.emailverified ?? user.email_verified ?? user.emailVerified ?? false),
-        phone: user.phone || user.phone_no || user.phoneNo || user.phoneNumber || "",
-        phoneverified: !!(user.phoneverified ?? user.phone_verified ?? user.phoneVerified ?? false),
-        companyname: user.companyname || user.company_name || user.companyName || "",
-        gstnumber: user.gstnumber || user.gst_number || user.gstNumber || user.gst || "",
-        status: user.status === "Active" || user.status === "Inactive" ? user.status : (user.status ? "Active" : "Inactive"),
-        role: user.role || "USER",
-        createat: user.createat || user.created_at || user.createAt || user.createdAt || "",
-        updatedat: user.updatedat || user.updated_at || user.updatedAt || user.updatedAt || "",
+        emailid:
+          user.emailid || user.email_id || user.emailId || user.email || '',
+        customername:
+          user.customername ||
+          user.customer_name ||
+          user.customerName ||
+          user.name ||
+          '',
+        emailverified: !!(
+          user.emailverified ??
+          user.email_verified ??
+          user.emailVerified ??
+          false
+        ),
+        phone:
+          user.phone || user.phone_no || user.phoneNo || user.phoneNumber || '',
+        phoneverified: !!(
+          user.phoneverified ??
+          user.phone_verified ??
+          user.phoneVerified ??
+          false
+        ),
+        companyname:
+          user.companyname || user.company_name || user.companyName || '',
+        gstnumber:
+          user.gstnumber || user.gst_number || user.gstNumber || user.gst || '',
+        status:
+          user.status === 'Active' || user.status === 'Inactive'
+            ? user.status
+            : user.status
+              ? 'Active'
+              : 'Inactive',
+        role: user.role || 'USER',
+        createat:
+          user.createat ||
+          user.created_at ||
+          user.createAt ||
+          user.createdAt ||
+          '',
+        updatedat:
+          user.updatedat ||
+          user.updated_at ||
+          user.updatedAt ||
+          user.updatedAt ||
+          '',
         lastloginat: findLastLoginValue(user),
         secondarygstlist: Array.isArray(user.secondary_gst_list)
-          ? user.secondary_gst_list.join(", ")
-          : (user.secondarygstlist || user.secondary_gst_list || user.secondaryGstList || ""),
-        anchor_id: user.anchor_id || user.anchorId || "",
+          ? user.secondary_gst_list.join(', ')
+          : user.secondarygstlist ||
+            user.secondary_gst_list ||
+            user.secondaryGstList ||
+            '',
+        anchor_id: user.anchor_id || user.anchorId || '',
       }));
       setUsersList(mapped);
     }
   }, [fetchedUsers]);
 
   // Filter input states
-  const [filterAccId, setFilterAccId] = useState("");
-  const [filterEmailId, setFilterEmailId] = useState("");
-  const [filterCustomerName, setFilterCustomerName] = useState("");
-  const [filterPhone, setFilterPhone] = useState("");
-  const [filterCompanyName, setFilterCompanyName] = useState("");
-  const [filterGstNumber, setFilterGstNumber] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
-  const [filterAnchorId, setFilterAnchorId] = useState("");
+  const [filterAccId, setFilterAccId] = useState('');
+  const [filterEmailId, setFilterEmailId] = useState('');
+  const [filterCustomerName, setFilterCustomerName] = useState('');
+  const [filterPhone, setFilterPhone] = useState('');
+  const [filterCompanyName, setFilterCompanyName] = useState('');
+  const [filterGstNumber, setFilterGstNumber] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterAnchorId, setFilterAnchorId] = useState('');
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 5;
 
   // Modal states for inspecting
-  const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(null);
+  const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(
+    null
+  );
 
   // Selected tab list
   const currentList = usersList;
@@ -176,16 +244,46 @@ export default function AdminDashboardPage() {
   // Apply filters logic (live filtering)
   const filteredList = useMemo(() => {
     return currentList.filter((item) => {
-      const matchAccId = filterAccId ? item.accountid.toLowerCase().includes(filterAccId.toLowerCase()) : true;
-      const matchEmail = filterEmailId ? item.emailid.toLowerCase().includes(filterEmailId.toLowerCase()) : true;
-      const matchCustomerName = filterCustomerName ? item.customername.toLowerCase().includes(filterCustomerName.toLowerCase()) : true;
-      const matchPhone = filterPhone ? item.phone.toLowerCase().includes(filterPhone.toLowerCase()) : true;
-      const matchCompanyName = filterCompanyName ? item.companyname.toLowerCase().includes(filterCompanyName.toLowerCase()) : true;
-      const matchGstNumber = filterGstNumber ? item.gstnumber.toLowerCase().includes(filterGstNumber.toLowerCase()) : true;
-      const matchStatus = filterStatus !== "all" ? item.status.toLowerCase() === filterStatus.toLowerCase() : true;
-      const matchAnchor = filterAnchorId ? item.anchor_id.toLowerCase().includes(filterAnchorId.toLowerCase()) : true;
+      const matchAccId = filterAccId
+        ? item.accountid.toLowerCase().includes(filterAccId.toLowerCase())
+        : true;
+      const matchEmail = filterEmailId
+        ? item.emailid.toLowerCase().includes(filterEmailId.toLowerCase())
+        : true;
+      const matchCustomerName = filterCustomerName
+        ? item.customername
+            .toLowerCase()
+            .includes(filterCustomerName.toLowerCase())
+        : true;
+      const matchPhone = filterPhone
+        ? item.phone.toLowerCase().includes(filterPhone.toLowerCase())
+        : true;
+      const matchCompanyName = filterCompanyName
+        ? item.companyname
+            .toLowerCase()
+            .includes(filterCompanyName.toLowerCase())
+        : true;
+      const matchGstNumber = filterGstNumber
+        ? item.gstnumber.toLowerCase().includes(filterGstNumber.toLowerCase())
+        : true;
+      const matchStatus =
+        filterStatus !== 'all'
+          ? item.status.toLowerCase() === filterStatus.toLowerCase()
+          : true;
+      const matchAnchor = filterAnchorId
+        ? item.anchor_id.toLowerCase().includes(filterAnchorId.toLowerCase())
+        : true;
 
-      return matchAccId && matchEmail && matchCustomerName && matchPhone && matchCompanyName && matchGstNumber && matchStatus && matchAnchor;
+      return (
+        matchAccId &&
+        matchEmail &&
+        matchCustomerName &&
+        matchPhone &&
+        matchCompanyName &&
+        matchGstNumber &&
+        matchStatus &&
+        matchAnchor
+      );
     });
   }, [
     currentList,
@@ -222,19 +320,17 @@ export default function AdminDashboardPage() {
 
   const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
 
-
-
-  console.log("activeTab", activeTab)
+  console.log('activeTab', activeTab);
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
       <AdminSidebar />
 
-      {activeTab === "admin" ? (
+      {activeTab === 'admin' ? (
         <AdminAdminsPage />
-      ) : activeTab === "anchor" ? (
+      ) : activeTab === 'anchor' ? (
         <AdminAnchorsPage />
-      ) : activeTab === "logs" ? (
+      ) : activeTab === 'logs' ? (
         <AdminLogsPage />
       ) : (
         <>
@@ -250,26 +346,33 @@ export default function AdminDashboardPage() {
                   Manage and view all users records.
                 </p>
               </div>
-
             </header>
 
             {/* Body Container */}
-            {activeTab === "user" && (
+            {activeTab === 'user' && (
               <div className="flex-1 overflow-y-auto px-8 py-8 space-y-6">
                 {/* ─── INVOICE MASTER COMPONENT CARD ─── */}
                 <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <h2 className="text-lg font-black text-slate-900 tracking-tight">
-                      {activeTab === "user" ? "User List Portal" : activeTab === "admin" ? "Admin List Portal" : "Anchor List Portal"}
+                      {activeTab === 'user'
+                        ? 'User List Portal'
+                        : activeTab === 'admin'
+                          ? 'Admin List Portal'
+                          : 'Anchor List Portal'}
                     </h2>
                   </div>
 
                   {/* ─── FILTERS ─── */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-
                     {/* Account ID Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="facc" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Account ID</Label>
+                      <Label
+                        htmlFor="facc"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Account ID
+                      </Label>
                       <Input
                         id="facc"
                         placeholder="Enter Account ID"
@@ -281,7 +384,12 @@ export default function AdminDashboardPage() {
 
                     {/* Email ID Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="femail" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Email ID</Label>
+                      <Label
+                        htmlFor="femail"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Email ID
+                      </Label>
                       <Input
                         id="femail"
                         placeholder="Enter Email"
@@ -293,7 +401,12 @@ export default function AdminDashboardPage() {
 
                     {/* Customer Name Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fname" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Customer Name</Label>
+                      <Label
+                        htmlFor="fname"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Customer Name
+                      </Label>
                       <Input
                         id="fname"
                         placeholder="Enter Name"
@@ -305,7 +418,12 @@ export default function AdminDashboardPage() {
 
                     {/* Phone Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fphone" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Phone</Label>
+                      <Label
+                        htmlFor="fphone"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Phone
+                      </Label>
                       <Input
                         id="fphone"
                         placeholder="Enter Phone"
@@ -317,7 +435,12 @@ export default function AdminDashboardPage() {
 
                     {/* Company Name Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fcompany" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Company Name</Label>
+                      <Label
+                        htmlFor="fcompany"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Company Name
+                      </Label>
                       <Input
                         id="fcompany"
                         placeholder="Enter Company"
@@ -329,7 +452,12 @@ export default function AdminDashboardPage() {
 
                     {/* GST Number Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fgst" className="text-xs font-bold text-slate-500 uppercase tracking-wider">GST Number</Label>
+                      <Label
+                        htmlFor="fgst"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        GST Number
+                      </Label>
                       <Input
                         id="fgst"
                         placeholder="Enter GST"
@@ -341,7 +469,12 @@ export default function AdminDashboardPage() {
 
                     {/* Status Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fstatus" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Status</Label>
+                      <Label
+                        htmlFor="fstatus"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Status
+                      </Label>
                       <select
                         id="fstatus"
                         value={filterStatus}
@@ -356,7 +489,12 @@ export default function AdminDashboardPage() {
 
                     {/* Anchor ID Filter */}
                     <div className="space-y-1.5">
-                      <Label htmlFor="fanchor" className="text-xs font-bold text-slate-500 uppercase tracking-wider">Anchor ID</Label>
+                      <Label
+                        htmlFor="fanchor"
+                        className="text-xs font-bold text-slate-500 uppercase tracking-wider"
+                      >
+                        Anchor ID
+                      </Label>
                       <Input
                         id="fanchor"
                         placeholder="Enter Anchor ID"
@@ -373,27 +511,54 @@ export default function AdminDashboardPage() {
                       <table className="w-full border-collapse text-left text-xs whitespace-nowrap">
                         <thead>
                           <tr className="bg-slate-50 border-b border-slate-200 text-slate-800 font-bold uppercase tracking-wider select-none">
-                            <th className="py-4 px-6 min-w-[120px]">Account ID</th>
-                            <th className="py-4 px-6 min-w-[200px]">Email ID</th>
-                            <th className="py-4 px-6 min-w-[180px]">Customer Name</th>
-                            <th className="py-4 px-6 min-w-[120px]">Email Verified</th>
+                            <th className="py-4 px-6 min-w-[120px]">
+                              Account ID
+                            </th>
+                            <th className="py-4 px-6 min-w-[200px]">
+                              Email ID
+                            </th>
+                            <th className="py-4 px-6 min-w-[180px]">
+                              Customer Name
+                            </th>
+                            <th className="py-4 px-6 min-w-[120px]">
+                              Email Verified
+                            </th>
                             <th className="py-4 px-6 min-w-[150px]">Phone</th>
-                            <th className="py-4 px-6 min-w-[130px]">Phone Verified</th>
-                            <th className="py-4 px-6 min-w-[180px]">Company Name</th>
-                            <th className="py-4 px-6 min-w-[150px]">GST Number</th>
+                            <th className="py-4 px-6 min-w-[130px]">
+                              Phone Verified
+                            </th>
+                            <th className="py-4 px-6 min-w-[180px]">
+                              Company Name
+                            </th>
+                            <th className="py-4 px-6 min-w-[150px]">
+                              GST Number
+                            </th>
                             <th className="py-4 px-6 min-w-[100px]">Status</th>
                             <th className="py-4 px-6 min-w-[90px]">Role</th>
-                            <th className="py-4 px-6 min-w-[180px]">Created At</th>
-                            <th className="py-4 px-6 min-w-[180px]">Updated At</th>
-                            <th className="py-4 px-6 min-w-[180px]">Last Login At</th>
-                            <th className="py-4 px-6 min-w-[240px]">Secondary GST List</th>
-                            <th className="py-4 px-6 min-w-[120px]">Anchor ID</th>
+                            <th className="py-4 px-6 min-w-[180px]">
+                              Created At
+                            </th>
+                            <th className="py-4 px-6 min-w-[180px]">
+                              Updated At
+                            </th>
+                            <th className="py-4 px-6 min-w-[180px]">
+                              Last Login At
+                            </th>
+                            <th className="py-4 px-6 min-w-[240px]">
+                              Secondary GST List
+                            </th>
+                            <th className="py-4 px-6 min-w-[120px]">
+                              Anchor ID
+                            </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                           {isLoading ? (
                             <tr>
-                              <td colSpan={17} className="py-16 text-center text-slate-400 font-bold">
+                              <td
+                                colSpan={17}
+                                className="py-16 text-center text-slate-400 font-bold"
+                              >
                                 <div className="flex justify-center items-center gap-3">
                                   <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-blue-600 animate-spin" />
                                   <span>Loading users list...</span>
@@ -408,10 +573,15 @@ export default function AdminDashboardPage() {
                                   onClick={() => setInspectedRecord(item)}
                                   className="transition-colors hover:bg-slate-50/40 cursor-pointer"
                                 >
-
-                                  <td className="py-4 px-6 text-slate-900 font-bold">{item.accountid}</td>
-                                  <td className="py-4 px-6 text-slate-600 font-normal">{item.emailid}</td>
-                                  <td className="py-4 px-6 text-slate-950 font-bold">{item.customername}</td>
+                                  <td className="py-4 px-6 text-slate-900 font-bold">
+                                    {item.accountid}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-600 font-normal">
+                                    {item.emailid}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-950 font-bold">
+                                    {item.customername}
+                                  </td>
                                   <td className="py-4 px-6">
                                     {item.emailverified ? (
                                       <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 font-bold px-2 py-0.5 rounded-md text-[10px]">
@@ -419,11 +589,14 @@ export default function AdminDashboardPage() {
                                       </span>
                                     ) : (
                                       <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-md text-[10px]">
-                                        <AlertTriangle className="h-3 w-3" /> UNVERIFIED
+                                        <AlertTriangle className="h-3 w-3" />{' '}
+                                        UNVERIFIED
                                       </span>
                                     )}
                                   </td>
-                                  <td className="py-4 px-6 text-slate-600">{item.phone}</td>
+                                  <td className="py-4 px-6 text-slate-600">
+                                    {item.phone}
+                                  </td>
                                   <td className="py-4 px-6">
                                     {item.phoneverified ? (
                                       <span className="inline-flex items-center gap-1 bg-green-50 text-green-700 font-bold px-2 py-0.5 rounded-md text-[10px]">
@@ -431,14 +604,19 @@ export default function AdminDashboardPage() {
                                       </span>
                                     ) : (
                                       <span className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 font-bold px-2 py-0.5 rounded-md text-[10px]">
-                                        <AlertTriangle className="h-3 w-3" /> UNVERIFIED
+                                        <AlertTriangle className="h-3 w-3" />{' '}
+                                        UNVERIFIED
                                       </span>
                                     )}
                                   </td>
-                                  <td className="py-4 px-6 text-slate-700">{item.companyname}</td>
-                                  <td className="py-4 px-6 text-slate-700 font-mono">{item.gstnumber}</td>
+                                  <td className="py-4 px-6 text-slate-700">
+                                    {item.companyname}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-700 font-mono">
+                                    {item.gstnumber}
+                                  </td>
                                   <td className="py-4 px-6">
-                                    {item.status === "Active" ? (
+                                    {item.status === 'Active' ? (
                                       <span className="inline-flex bg-green-100 text-green-700 font-bold px-2.5 py-0.5 rounded-full text-[10px] leading-5">
                                         Active
                                       </span>
@@ -451,17 +629,30 @@ export default function AdminDashboardPage() {
                                   <td className="py-4 px-6 text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">
                                     {item.role}
                                   </td>
-                                  <td className="py-4 px-6 text-slate-500 font-semibold">{item.createat}</td>
-                                  <td className="py-4 px-6 text-slate-500 font-semibold">{item.updatedat}</td>
-                                  <td className="py-4 px-6 text-slate-500 font-semibold">{item.lastloginat}</td>
-                                  <td className="py-4 px-6 text-slate-500 max-w-[200px] truncate">{item.secondarygstlist || "N/A"}</td>
-                                  <td className="py-4 px-6 text-slate-900 font-bold">{item.anchor_id || "N/A"}</td>
+                                  <td className="py-4 px-6 text-slate-500 font-semibold">
+                                    {item.createat}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-500 font-semibold">
+                                    {item.updatedat}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-500 font-semibold">
+                                    {item.lastloginat}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-500 max-w-[200px] truncate">
+                                    {item.secondarygstlist || 'N/A'}
+                                  </td>
+                                  <td className="py-4 px-6 text-slate-900 font-bold">
+                                    {item.anchor_id || 'N/A'}
+                                  </td>
                                 </tr>
                               );
                             })
                           ) : (
                             <tr>
-                              <td colSpan={17} className="py-16 text-center text-slate-400 font-bold">
+                              <td
+                                colSpan={17}
+                                className="py-16 text-center text-slate-400 font-bold"
+                              >
                                 No records match the applied filters.
                               </td>
                             </tr>
@@ -473,16 +664,30 @@ export default function AdminDashboardPage() {
                     {/* ─── PAGINATION ─── */}
                     <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4 gap-4">
                       <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                        Showing <span className="text-slate-800">{filteredList.length === 0 ? 0 : (currentPage - 1) * pageSize + 1}</span> to{" "}
-                        <span className="text-slate-800">{Math.min(currentPage * pageSize, filteredList.length)}</span> of{" "}
-                        <span className="text-slate-800">{filteredList.length}</span> results
+                        Showing{' '}
+                        <span className="text-slate-800">
+                          {filteredList.length === 0
+                            ? 0
+                            : (currentPage - 1) * pageSize + 1}
+                        </span>{' '}
+                        to{' '}
+                        <span className="text-slate-800">
+                          {Math.min(
+                            currentPage * pageSize,
+                            filteredList.length
+                          )}
+                        </span>{' '}
+                        of{' '}
+                        <span className="text-slate-800">
+                          {filteredList.length}
+                        </span>{' '}
+                        results
                       </div>
 
                       <div className="flex items-center gap-6">
                         {/* Page size dropdown */}
                         <div className="flex items-center gap-2">
-                          <select
-                          >
+                          <select>
                             <option value={10}>10</option>
                           </select>
                         </div>
@@ -496,7 +701,9 @@ export default function AdminDashboardPage() {
                             <ChevronsLeft className="h-4 w-4" />
                           </button>
                           <button
-                            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                            onClick={() =>
+                              setCurrentPage((prev) => Math.max(prev - 1, 1))
+                            }
                             disabled={currentPage === 1}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                           >
@@ -508,7 +715,11 @@ export default function AdminDashboardPage() {
                           </span>
 
                           <button
-                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                            onClick={() =>
+                              setCurrentPage((prev) =>
+                                Math.min(prev + 1, totalPages)
+                              )
+                            }
                             disabled={currentPage === totalPages}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                           >
@@ -544,7 +755,9 @@ export default function AdminDashboardPage() {
                   {/* Header */}
                   <div className="flex items-center justify-between px-8 py-6 border-b border-slate-100 bg-slate-50/50">
                     <div>
-                      <h2 className="text-lg font-black text-slate-900">Record Details Inspector</h2>
+                      <h2 className="text-lg font-black text-slate-900">
+                        Record Details Inspector
+                      </h2>
                       <p className="text-[10px] text-slate-500 font-extrabold uppercase tracking-wider mt-0.5">
                         Viewing Record ID:
                       </p>
@@ -562,82 +775,139 @@ export default function AdminDashboardPage() {
                     {/* Profile Header */}
                     <div className="flex items-center gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
                       <div>
-                        <h3 className="text-lg font-bold text-slate-900">{inspectedRecord.customername}</h3>
-                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">{inspectedRecord.role}</p>
+                        <h3 className="text-lg font-bold text-slate-900">
+                          {inspectedRecord.customername}
+                        </h3>
+                        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                          {inspectedRecord.role}
+                        </p>
                       </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
-
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Account ID</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.accountid}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Account ID
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.accountid}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Email ID</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.emailid}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Email ID
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.emailid}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Email Verified</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.emailverified ? "YES" : "NO"}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Email Verified
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.emailverified ? 'YES' : 'NO'}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Phone</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.phone}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Phone
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.phone}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Phone Verified</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.phoneverified ? "YES" : "NO"}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Phone Verified
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.phoneverified ? 'YES' : 'NO'}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Company Name</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.companyname}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Company Name
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.companyname}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">GST Number</span>
-                        <span className="font-mono font-bold text-slate-800">{inspectedRecord.gstnumber}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          GST Number
+                        </span>
+                        <span className="font-mono font-bold text-slate-800">
+                          {inspectedRecord.gstnumber}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Status</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.status}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Status
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.status}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Role</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.role}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Role
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.role}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Created At</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.createat}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Created At
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.createat}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Updated At</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.updatedat}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Updated At
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.updatedat}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Last Login At</span>
-                        <span className="font-semibold text-slate-800">{inspectedRecord.lastloginat}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Last Login At
+                        </span>
+                        <span className="font-semibold text-slate-800">
+                          {inspectedRecord.lastloginat}
+                        </span>
                       </div>
 
                       <div>
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Anchor ID</span>
-                        <span className="font-bold text-slate-800">{inspectedRecord.anchor_id || "N/A"}</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Anchor ID
+                        </span>
+                        <span className="font-bold text-slate-800">
+                          {inspectedRecord.anchor_id || 'N/A'}
+                        </span>
                       </div>
 
                       <div className="md:col-span-2">
-                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">Secondary GST List</span>
+                        <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                          Secondary GST List
+                        </span>
                         <span className="font-semibold text-slate-800 block bg-slate-50 p-2.5 rounded-xl border border-slate-100 max-h-24 overflow-y-auto">
-                          {inspectedRecord.secondarygstlist || "N/A"}
+                          {inspectedRecord.secondarygstlist || 'N/A'}
                         </span>
                       </div>
                     </div>
@@ -656,8 +926,6 @@ export default function AdminDashboardPage() {
               </div>
             )}
           </AnimatePresence>
-
-
         </>
       )}
     </div>

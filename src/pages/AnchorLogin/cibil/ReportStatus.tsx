@@ -1,10 +1,7 @@
 ﻿import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
-import {
-  getCibilWebhookStatus,
-  listCibilReports,
-} from '@/api/cibil';
+import { getCibilWebhookStatus, listCibilReports } from '@/api/cibil';
 import type {
   CibilReportListItem,
   CibilReportStatus,
@@ -121,8 +118,18 @@ export default function ReportStatus({
       {isError ? (
         <div className="animate-in fade-in duration-300">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
-            <svg className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="h-8 w-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -152,8 +159,18 @@ export default function ReportStatus({
       ) : hasFailed ? (
         <div className="animate-in fade-in duration-300">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
-            <svg className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="h-8 w-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -173,8 +190,18 @@ export default function ReportStatus({
       ) : hasReceived ? (
         <div className="animate-in zoom-in duration-500">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-            <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            <svg
+              className="h-8 w-8 text-green-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -194,8 +221,18 @@ export default function ReportStatus({
       ) : hasTimedOut ? (
         <div className="animate-in fade-in duration-300">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 mb-6">
-            <svg className="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="h-8 w-8 text-yellow-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-slate-900 mb-2">
@@ -242,7 +279,8 @@ export default function ReportStatus({
             {data?.message || 'Next status check runs every few seconds.'}
           </p>
           <div className="rounded-xl bg-gray-50 p-3 text-xs text-gray-500 mb-5">
-            Flow ID: <span className="font-semibold text-gray-700">{otpFlowId}</span>
+            Flow ID:{' '}
+            <span className="font-semibold text-gray-700">{otpFlowId}</span>
           </div>
           <button
             type="button"

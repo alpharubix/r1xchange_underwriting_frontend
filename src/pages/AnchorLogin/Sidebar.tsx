@@ -7,18 +7,16 @@ import {
 } from 'lucide-react';
 import { getAnchorBrand } from '@/lib/brandLogo';
 
-
 interface SidebarProps {
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
-  activeTab: "anchor" | "customer" | string;
-  setActiveTab: (tab: "anchor" | "customer") => void;
+  activeTab: 'anchor' | 'customer' | string;
+  setActiveTab: (tab: 'anchor' | 'customer') => void;
   isSuperAnchor: boolean;
   userRole: string;
   user: any;
   handleLogout: () => void;
 }
-
 
 export default function Sidebar({
   sidebarCollapsed,
@@ -28,17 +26,15 @@ export default function Sidebar({
   isSuperAnchor,
   userRole,
   user,
-  handleLogout
+  handleLogout,
 }: SidebarProps) {
   const brand = getAnchorBrand(user);
   const displayName = brand.name;
   const initialLetter = brand.initial;
 
-
   return (
     <aside
-      className={`relative flex flex-col h-full bg-[#f4f6fa] p-5 text-gray-800 transition-all duration-300 ease-in-out shrink-0 z-20 gap-4 ${sidebarCollapsed ? "w-20 p-3" : "w-72"
-        }`}
+      className={`relative flex flex-col h-full bg-[#f4f6fa] p-5 text-gray-800 transition-all duration-300 ease-in-out shrink-0 z-20 gap-4 ${sidebarCollapsed ? 'w-20 p-3' : 'w-72'}`}
     >
       {/* Toggle Button */}
       <button
@@ -55,7 +51,9 @@ export default function Sidebar({
 
       {/* Brand Header Card */}
       <div className="bg-white rounded-3xl p-5 shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80">
-        <div className={`flex flex-col ${sidebarCollapsed ? "items-center" : ""}`}>
+        <div
+          className={`flex flex-col ${sidebarCollapsed ? 'items-center' : ''}`}
+        >
           <div className="flex items-center gap-3">
             <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center font-black text-xl shadow-md shadow-[#002366]/25 shrink-0">
               C
@@ -75,7 +73,7 @@ export default function Sidebar({
             <div className="mt-3.5 flex justify-center w-full">
               <span className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#eff6ff] text-[#002366] w-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#002366]" />
-                {isSuperAnchor ? "Anchor View" : "User View"}
+                {isSuperAnchor ? 'Anchor View' : 'User View'}
               </span>
             </div>
           )}
@@ -86,11 +84,8 @@ export default function Sidebar({
       <nav className="flex-1 space-y-3 overflow-y-auto">
         {isSuperAnchor && (
           <button
-            onClick={() => setActiveTab("anchor")}
-            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "anchor"
-              ? "bg-[#002366] text-white shadow-md shadow-[#002366]/25"
-              : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
-              } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+            onClick={() => setActiveTab('anchor')}
+            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === 'anchor' ? 'bg-[#002366] text-white shadow-md shadow-[#002366]/25' : 'bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80'} ${sidebarCollapsed ? 'justify-center px-0' : ''}`}
             title="Anchors"
           >
             <AnchorIcon className="h-5 w-5 shrink-0" />
@@ -100,27 +95,19 @@ export default function Sidebar({
 
         {!isSuperAnchor && (
           <button
-            onClick={() => setActiveTab("customer")}
-            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === "customer"
-              ? "bg-[#002366] text-white shadow-md shadow-[#002366]/25"
-              : "bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80"
-              } ${sidebarCollapsed ? "justify-center px-0" : ""}`}
+            onClick={() => setActiveTab('customer')}
+            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === 'customer' ? 'bg-[#002366] text-white shadow-md shadow-[#002366]/25' : 'bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80'} ${sidebarCollapsed ? 'justify-center px-0' : ''}`}
             title="Customer"
           >
             <Users className="h-5 w-5 shrink-0" />
             {!sidebarCollapsed && <span>Customer</span>}
           </button>
         )}
-
       </nav>
 
       {/* Sidebar Footer - Profile Card */}
       <div
-        className={`bg-white rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80 mt-auto flex flex-col transition-all duration-300 ${
-          sidebarCollapsed
-            ? "py-5 px-2 items-center justify-center"
-            : "p-4 items-stretch"
-        }`}
+        className={`bg-white rounded-3xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-gray-100/80 mt-auto flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'py-5 px-2 items-center justify-center' : 'p-4 items-stretch'}`}
       >
         {!sidebarCollapsed && (
           <div className="flex items-center gap-3">
@@ -143,19 +130,15 @@ export default function Sidebar({
               </div>
 
               <div className="text-xs text-gray-400 font-medium truncate mt-0.5 capitalize">
-                {userRole?.toLowerCase() == "super_anchor" ? "Anchor" : "User"}
+                {userRole?.toLowerCase() == 'super_anchor' ? 'Anchor' : 'User'}
               </div>
             </div>
           </div>
         )}
         <button
           onClick={handleLogout}
-          title={sidebarCollapsed ? "Log out" : undefined}
-          className={`flex items-center justify-center transition-colors cursor-pointer bg-[#f8fafc] hover:bg-gray-100 text-gray-600 hover:text-gray-900 ${
-            sidebarCollapsed
-              ? "h-10 w-10 rounded-xl"
-              : "mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-semibold gap-2"
-          }`}
+          title={sidebarCollapsed ? 'Log out' : undefined}
+          className={`flex items-center justify-center transition-colors cursor-pointer bg-[#f8fafc] hover:bg-gray-100 text-gray-600 hover:text-gray-900 ${sidebarCollapsed ? 'h-10 w-10 rounded-xl' : 'mt-3.5 w-full py-2.5 px-3 rounded-xl text-xs font-semibold gap-2'}`}
         >
           <LogOut className="h-4 w-4 shrink-0 text-gray-500" />
           {!sidebarCollapsed && <span>Log out</span>}

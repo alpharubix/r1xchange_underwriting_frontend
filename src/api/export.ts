@@ -1,4 +1,4 @@
-import apiClient from "@/lib/axios";
+import apiClient from '@/lib/axios';
 
 export interface ExportBsaParams {
   from_date: string;
@@ -9,18 +9,20 @@ export interface ExportBsaParams {
 /**
  * Download the consolidated BSA Excel report from /v1/export/bsa
  */
-export const downloadBsaReport = async (params: ExportBsaParams): Promise<void> => {
+export const downloadBsaReport = async (
+  params: ExportBsaParams
+): Promise<void> => {
   try {
-    const response = await apiClient.get("/export/bsa", {
+    const response = await apiClient.get('/export/bsa', {
       params,
-      responseType: "blob",
+      responseType: 'blob',
       skipErrorToast: true,
     });
 
     let filename = `BSA_Report_${params.from_date}_to_${params.to_date}.xlsx`;
     const disposition =
-      response.headers?.["content-disposition"] ||
-      response.headers?.["Content-Disposition"];
+      response.headers?.['content-disposition'] ||
+      response.headers?.['Content-Disposition'];
 
     if (disposition) {
       const match = disposition.match(/filename=["']?([^"';]+)["']?/);
@@ -30,11 +32,11 @@ export const downloadBsaReport = async (params: ExportBsaParams): Promise<void> 
     }
 
     const blob = new Blob([response.data], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
 
     const downloadUrl = window.URL.createObjectURL(blob);
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = downloadUrl;
     link.download = filename;
     document.body.appendChild(link);
@@ -51,12 +53,12 @@ export const downloadBsaReport = async (params: ExportBsaParams): Promise<void> 
           json.detail?.message ||
           json.detail ||
           json.message ||
-          "Failed to download BSA export";
+          'Failed to download BSA export';
         throw new Error(
-          typeof serverMsg === "string" ? serverMsg : JSON.stringify(serverMsg)
+          typeof serverMsg === 'string' ? serverMsg : JSON.stringify(serverMsg)
         );
       } catch (parseErr: any) {
-        if (parseErr.message && !parseErr.message.includes("JSON")) {
+        if (parseErr.message && !parseErr.message.includes('JSON')) {
           throw parseErr;
         }
       }
@@ -65,7 +67,7 @@ export const downloadBsaReport = async (params: ExportBsaParams): Promise<void> 
       error.response?.data?.detail?.message ||
       error.response?.data?.message ||
       error.message ||
-      "Failed to download BSA report";
+      'Failed to download BSA report';
     throw new Error(msg);
   }
 };
