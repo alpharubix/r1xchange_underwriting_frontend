@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -26,7 +26,6 @@ interface LoanTransactionData {
 }
 
 export default function IndividualLoanTransactions() {
-  const [accountDetails, setAccountDetails] = useState<any>(null);
   const location = useLocation();
   const navigate = useNavigate();
 

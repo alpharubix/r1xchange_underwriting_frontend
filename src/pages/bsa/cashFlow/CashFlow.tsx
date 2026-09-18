@@ -38,8 +38,6 @@ export default function CashFlow() {
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
-
-  const [accountDetails, setAccountDetails] = useState<any>(null);
   const { data: dateRangeData } = useDateRange({
     accountNumber: selectedAccountNumber,
   });
@@ -139,7 +137,6 @@ export default function CashFlow() {
         response.data?.data?.[0]?.account_details ||
         response.data?.account_details;
       if (acc_data) {
-        setAccountDetails(acc_data);
         sessionStorage.setItem('account_details', JSON.stringify(acc_data));
       }
 

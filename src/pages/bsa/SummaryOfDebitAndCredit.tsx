@@ -50,7 +50,6 @@ export default function SummaryOfDebitAndCredit() {
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
   // ADDING ACCOUNT_DETAILS
-  const [accountDetails, setAccountDetails] = useState<any>(null);
 
   const { data: dateRangeData } = useDateRange({
     accountNumber: selectedAccountNumber,
@@ -148,8 +147,6 @@ export default function SummaryOfDebitAndCredit() {
         }
       );
       const acc_data = response.data.data.account_details;
-
-      setAccountDetails(acc_data);
       // console.log("Setting:", accountDetails)
       sessionStorage.setItem('account_details', JSON.stringify(acc_data));
 
