@@ -26,6 +26,7 @@ interface LoanTransactionData {
 }
 
 export default function IndividualLoanTransactions() {
+  const [accountDetails, setAccountDetails] = useState<any>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,8 +34,6 @@ export default function IndividualLoanTransactions() {
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
-
-  const accountDetails = sessionStorage.getItem('account_details');
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['individual-loan-transactions', selectedAccountNumber],
@@ -83,7 +82,7 @@ export default function IndividualLoanTransactions() {
         </div>
       </div>
 
-      {accountDetails && <BankAccountDetails />}
+      <BankAccountDetails />
 
       {!selectedAccountNumber && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">

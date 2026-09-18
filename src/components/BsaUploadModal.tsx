@@ -94,6 +94,7 @@ export default function BsaUploadModal({
     accountNumber: '',
     accountType: '',
     bankCode: '',
+    filePassword: '',
   });
 
   const { data: banks, isLoading: isLoadingBanks } = useQuery({
@@ -162,6 +163,7 @@ export default function BsaUploadModal({
       accountNumber: '',
       accountType: '',
       bankCode: '',
+      filePassword: '',
     });
     onClose();
   };
@@ -184,6 +186,7 @@ export default function BsaUploadModal({
       accountNumber: formData.accountNumber,
       accountType: formData.accountType,
       bankCode: formData.bankCode,
+      filePassword: formData.filePassword || undefined,
     });
     formPayload.append('data', jsonString);
     selectedFiles.forEach((file) => {
@@ -350,6 +353,20 @@ export default function BsaUploadModal({
                       </SelectGroup>
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="filePassword">
+                    File Password <span className="text-gray-400 font-normal text-xs">(Optional)</span>
+                  </Label>
+                  <Input
+                    id="filePassword"
+                    name="filePassword"
+                    type="password"
+                    placeholder="Enter password if statement is protected"
+                    value={formData.filePassword}
+                    onChange={handleInputChange}
+                  />
                 </div>
 
                 <div className="space-y-2">

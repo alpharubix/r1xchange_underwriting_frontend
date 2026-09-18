@@ -270,8 +270,7 @@ export default function IndividualEodAnalysis() {
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
 
-  const accountDetails = sessionStorage.getItem('account_details');
-  console.log('accountDetails:', accountDetails);
+  const [accountDetails, setAccountDetails] = useState<any>(null);
   const { data: dateRangeData } = useDateRange({
     accountNumber: selectedAccountNumber,
   });
@@ -382,6 +381,16 @@ export default function IndividualEodAnalysis() {
             'Failed to load overview monthlywise. Please try again.',
         }
       );
+
+      const acc_data =
+        response.data?.data?.account_details ||
+        response.data?.data?.[0]?.account_details ||
+        response.data?.account_details;
+      if (acc_data) {
+        setAccountDetails(acc_data);
+        sessionStorage.setItem('account_details', JSON.stringify(acc_data));
+      }
+
       return response.data?.data as OverviewData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -492,7 +501,7 @@ export default function IndividualEodAnalysis() {
           toDate={appliedToDate || toDate}
         /> */}
       </div>
-      {accountDetails && <BankAccountDetails />}
+      <BankAccountDetails />
       {showScrollHint && (
         <div
           className="mt-4 flex justify-center animate-bounce transition-opacity duration-500"

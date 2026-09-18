@@ -1,30 +1,36 @@
+import { useQuery } from '@tanstack/react-query';
+import apiClient from '@/lib/axios';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Tile from '@/components/ui/Tile';
 
 function BankAccountDetails() {
-  const stored = sessionStorage.getItem('account_details');
+  const selectedAccountNumber = sessionStorage.getItem(
+    'selected_bsa_account_number'
+  );
 
-  let accountDetails = null;
+  const { data: accountDetails, isLoading } = useQuery({
+    queryKey: ['accountDetails', selectedAccountNumber],
+    queryFn: async () => {
+      if (!selectedAccountNumber) return null;
+      const res = await apiClient.post('/bsa/account-details', {
+        account_number: selectedAccountNumber,
+      });
+      return res.data?.data?.account_details;
+    },
+    enabled: !!selectedAccountNumber,
+  });
 
-  if (stored && stored !== 'undefined' && stored !== 'null') {
-    try {
-      accountDetails = JSON.parse(stored);
-      console.log('Account details ', accountDetails);
-    } catch (error) {
-      console.error('Invalid account_details:', stored, error);
-    }
-  }
+  if (isLoading) return null; // Or a skeleton/spinner
   if (!accountDetails) return null;
 
   const entries = Object.entries(accountDetails);
 
-  const normalTiles = entries.filter(
-    ([key]) => key !== 'Opening Balance' && key !== 'Closing Balance'
-  );
+  const isOpening = (key: string) => key.toLowerCase().includes('open') && key.toLowerCase().includes('bal');
+  const isClosing = (key: string) => key.toLowerCase().includes('clos') && key.toLowerCase().includes('bal');
 
-  const openingBalance = entries.find(([key]) => key === 'Opening Balance');
-
-  const closingBalance = entries.find(([key]) => key === 'Closing Balance');
+  const normalTiles = entries.filter(([key]) => !isOpening(key) && !isClosing(key));
+  const openingBalance = entries.find(([key]) => isOpening(key));
+  const closingBalance = entries.find(([key]) => isClosing(key));
 
   return (
     <Card className="mx-auto shadow-sm border border-gray-300">

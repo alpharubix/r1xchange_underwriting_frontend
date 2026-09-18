@@ -268,7 +268,7 @@ export default function SummaryOfDebitAndCredit() {
         /> */}
       </div>
 
-      {accountDetails && <BankAccountDetails />}
+      <BankAccountDetails />
 
       {!selectedAccountNumber && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">

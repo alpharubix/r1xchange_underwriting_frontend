@@ -39,8 +39,7 @@ export default function CashFlow() {
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
 
-  const accountDetails = sessionStorage.getItem('account_details');
-
+  const [accountDetails, setAccountDetails] = useState<any>(null);
   const { data: dateRangeData } = useDateRange({
     accountNumber: selectedAccountNumber,
   });
@@ -134,6 +133,16 @@ export default function CashFlow() {
           errorMessage: 'Failed to load cashflow. Please try again.',
         }
       );
+
+      const acc_data =
+        response.data?.data?.account_details ||
+        response.data?.data?.[0]?.account_details ||
+        response.data?.account_details;
+      if (acc_data) {
+        setAccountDetails(acc_data);
+        sessionStorage.setItem('account_details', JSON.stringify(acc_data));
+      }
+
       return response.data?.data as CashFlowData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -194,7 +203,7 @@ export default function CashFlow() {
                 /> */}
       </div>
 
-      {accountDetails && <BankAccountDetails />}
+      <BankAccountDetails />
       {/* Date Filter Card */}
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-[#002366]/10 bg-white">
