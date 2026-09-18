@@ -23,7 +23,9 @@ import { Calendar } from '@/components/ui/calendar';
 import type { CashFlowData } from './cashFlowType';
 import rows from './cashflowtablerow';
 import BankAccountDetails from '../BankAccountDetails';
+import { useLocation } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
+
 
 export default function CashFlow() {
     const [fromDate, setFromDate] = useState('');
@@ -31,8 +33,17 @@ export default function CashFlow() {
     const [appliedFromDate, setAppliedFromDate] = useState('');
     const [appliedToDate, setAppliedToDate] = useState('');
 
+    const location = useLocation();
+
+    const selectedAccountNumber = (location.state as { accountNumber?: string } | null)?.accountNumber || sessionStorage.getItem("selected_bsa_account_number") || "";
+
     const accountDetails = sessionStorage.getItem("account_details");
-    const { data: dateRangeData } = useDateRange();
+
+    const { data: dateRangeData } = useDateRange(
+        {
+            accountNumber:selectedAccountNumber,
+        }
+    );
 
     useEffect(() => {
         if (dateRangeData && !appliedFromDate && !appliedToDate) {
@@ -79,6 +90,8 @@ export default function CashFlow() {
             return;
         }
 
+
+        
         setAppliedFromDate(fromDate);
         setAppliedToDate(toDate);
     };
@@ -105,10 +118,15 @@ export default function CashFlow() {
     };
 
     const { data, isLoading, isError, error, refetch } = useQuery({
-        queryKey: ['cashflow', appliedFromDate, appliedToDate],
+        queryKey: ['cashflow', appliedFromDate, appliedToDate, selectedAccountNumber],
         queryFn: async () => {
-            const response = await apiClient.get(
-                `/bsa/cashflow?from_month=${appliedFromDate}&to_month=${appliedToDate}`,
+            const response = await apiClient.post(
+                `/bsa/cashflow`,
+                {
+                    from_date:appliedFromDate,
+                    to_date:appliedToDate,
+                    account_number:selectedAccountNumber,
+                },
                 {
                     errorMessage: 'Failed to load cashflow. Please try again.',
                 }
@@ -157,6 +175,8 @@ export default function CashFlow() {
         if (isNaN(num)) return '';
         return num < 0 ? 'text-red-600' : '';
     };
+
+    
 
     return (
         <div className="p-8 animate-fade-in relative min-h-[calc(100vh-4rem)]">

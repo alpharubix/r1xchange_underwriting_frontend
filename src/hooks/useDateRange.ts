@@ -6,19 +6,25 @@ export interface DateRange {
   to_date: string;
 }
 
-export function useDateRange(options?: { enabled?: boolean; custId?: string }) {
+export function useDateRange(options?: {
+  enabled?: boolean;
+  custId?: string;
+  accountNumber?: string;
+}) {
   return useQuery<DateRange>({
-    queryKey: ['report-date-range', options?.custId],
+    queryKey: ['report-date-range', options?.custId, options?.accountNumber],
     queryFn: async () => {
       let url = '/bsa/report-date-range';
       if (options?.custId) {
         url += `?cust_id=${encodeURIComponent(options.custId)}`;
       }
-      const response = await apiClient.get(url);
+      const response = await apiClient.post(url, {
+        account_number: options?.accountNumber,
+      });
       return response.data?.data as DateRange;
     },
     staleTime: 1000 * 60 * 5,
     retry: false,
-    enabled: options?.enabled ?? true,
+    enabled: (options?.enabled ?? true) && !!options?.accountNumber,
   });
 }

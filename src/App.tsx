@@ -22,6 +22,7 @@ const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
 const AnchorProtectedRoute = lazy(() => import("./components/AnchorProtectedRoute"));
 const AnchorCustomerPage = lazy(() => import("./pages/AnchorLogin/AnchorCustomerPage"));
 const SummeryOfDebitAndCredit = lazy(() => import("@/pages/bsa/SummaryOfDebitAndCredit"));
+const BankAccountsPage = lazy(() => import("@/pages/bsa/BankAccountsPage"));
 const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
 const CashFlow = lazy(() => import("@/pages/bsa/cashFlow/CashFlow"));
 const OverviewMonthlyWise = lazy(() => import("@/pages/bsa/OverviewMonthlyWise"));
@@ -90,6 +91,7 @@ function App() {
                   <Route element={<ProtectedRoute />}>
                     <Route element={<DashboardLayout />}>
                       <Route path="/home/dashboard" element={<DashboardPage />} />
+                      <Route path="/bsa/bank-accounts" element={<BankAccountsPage />} />
                       <Route path="/bsa/summary-of-debit-and-credit" element={<SummeryOfDebitAndCredit />} />
                       <Route path="/bsa/cash-flow" element={<CashFlow />} />
                       <Route path="/bsa/overview-monthly-wise" element={<OverviewMonthlyWise />} />

@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import BankAccountDetails from './BankAccountDetails';
+import { useLocation, useNavigate } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
-// import { useNavigate } from "react-router-dom";
 
 interface MonthlyBreakdown {
   month: string;
@@ -39,7 +39,12 @@ interface SummaryData {
 }
 
 export default function SummaryOfDebitAndCredit() {
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const selectedAccountNumber =
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
@@ -47,7 +52,9 @@ export default function SummaryOfDebitAndCredit() {
   // ADDING ACCOUNT_DETAILS
   const [accountDetails, setAccountDetails] = useState<any>(null);
 
-  const { data: dateRangeData } = useDateRange();
+  const { data: dateRangeData } = useDateRange({
+    accountNumber: selectedAccountNumber,
+  });
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
@@ -121,10 +128,20 @@ export default function SummaryOfDebitAndCredit() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['summary-of-debit-and-credit', appliedFromDate, appliedToDate],
+    queryKey: [
+      'summary-of-debit-and-credit',
+      selectedAccountNumber,
+      appliedFromDate,
+      appliedToDate,
+    ],
     queryFn: async () => {
-      const response = await apiClient.get(
-        `/bsa/summary-of-debit-and-credit_monthwise?from_date=${appliedFromDate}&to_date=${appliedToDate}`,
+      const response = await apiClient.post(
+        '/bsa/summary-of-debit-and-credit_monthwise',
+        {
+          from_date: appliedFromDate,
+          to_date: appliedToDate,
+          account_number: selectedAccountNumber,
+        },
         {
           errorMessage:
             'Failed to load summary of debit and credit. Please try again.',
@@ -135,10 +152,10 @@ export default function SummaryOfDebitAndCredit() {
       setAccountDetails(acc_data);
       // console.log("Setting:", accountDetails)
       sessionStorage.setItem("account_details", JSON.stringify(acc_data));
-
+      
       return response.data?.data as SummaryData;
     },
-    enabled: !!appliedFromDate && !!appliedToDate,
+    enabled: !!selectedAccountNumber && !!appliedFromDate && !!appliedToDate,
   });
 
   const generateMonthsRange = (startStr: string, endStr: string) => {
@@ -239,6 +256,11 @@ export default function SummaryOfDebitAndCredit() {
           <p className="text-gray-600">
             Monthwise breakdown of inflows and outflows
           </p>
+          {selectedAccountNumber && (
+            <p className="mt-1 text-sm text-gray-500">
+              Account Number: {selectedAccountNumber}
+            </p>
+          )}
         </div>
         {/* <BsaDownloadButton
           fromDate={appliedFromDate || fromDate}
@@ -246,9 +268,24 @@ export default function SummaryOfDebitAndCredit() {
         /> */}
       </div>
 
-      {
-        accountDetails && <BankAccountDetails />
-      }
+      {accountDetails && <BankAccountDetails />}
+
+      {!selectedAccountNumber && (
+        <Card className="mb-8 shadow-sm border-black/10 bg-white">
+          <CardContent className="p-8 text-center">
+            <p className="text-sm text-gray-600">
+              Please select a bank account before opening this report.
+            </p>
+            <Button
+              type="button"
+              onClick={() => navigate('/bsa/bank-accounts')}
+              className="mt-4 bg-[#002366] hover:bg-[#001744] text-white"
+            >
+              Back to Bank Accounts
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">
@@ -727,9 +764,13 @@ export default function SummaryOfDebitAndCredit() {
                 </tbody>
               </table>
             </div>
-          ) : dateRangeData ? (
+          ) : selectedAccountNumber && dateRangeData ? (
             <div className="p-8 text-center text-gray-500">
               Select date range and apply filter
+            </div>
+          ) : !selectedAccountNumber ? (
+            <div className="p-8 text-center text-gray-500">
+              Select an account from Bank Accounts to view this report.
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">

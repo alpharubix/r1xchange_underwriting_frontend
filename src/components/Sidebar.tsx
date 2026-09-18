@@ -44,9 +44,7 @@ const navItems = [
     icon: Building2,
     label: "BSA Reports",
     subItems: [
-      { label: "Summary of Debit and Credit", path: "/bsa/summary-of-debit-and-credit" },
-      { label: "Cash Flow", path: "/bsa/cash-flow" },
-      { label: "Overview Monthly Wise", path: "/bsa/overview-monthly-wise" }
+      { label: "Bank Accounts", path: "/bsa/bank-accounts" },
     ]
   },
   {

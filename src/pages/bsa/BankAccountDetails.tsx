@@ -3,8 +3,18 @@ import Tile from "@/components/ui/Tile";
 
 function BankAccountDetails() {
   const stored = sessionStorage.getItem("account_details");
-  const accountDetails = stored ? JSON.parse(stored) : null;
 
+  let accountDetails = null;
+
+  
+  if (stored && stored !== "undefined" && stored !== "null") {
+    try {
+      accountDetails = JSON.parse(stored);
+      console.log("Account details ",accountDetails)
+    } catch (error) {
+      console.error("Invalid account_details:", stored, error);
+    }
+  }
   if (!accountDetails) return null;
 
   const entries = Object.entries(accountDetails);

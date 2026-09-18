@@ -16,7 +16,7 @@ declare module "axios" {
 }
 
 const apiClient = axios.create({
-  baseURL: ENV.VITE_BACKEND_BASE_URL,
+  baseURL: ENV.VITE_BACKEND_BASE_URL || "/v1",
   headers: {
     "Content-Type": "application/json",
   },

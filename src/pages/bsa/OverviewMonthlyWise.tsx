@@ -21,6 +21,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import BankAccountDetails from './BankAccountDetails';
+import { useLocation } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 interface MonthlyBreakdown {
@@ -568,8 +569,19 @@ export default function OverviewMonthlyWise() {
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-  const accountDetails = sessionStorage.getItem("account_details")
-  const { data: dateRangeData } = useDateRange();
+  
+  const location = useLocation();
+
+  const selectedAccountNumber =
+  (location.state as { accountNumber?: string } | null)?.accountNumber ||
+  sessionStorage.getItem('selected_bsa_account_number') ||
+  '';
+
+  const accountDetails = sessionStorage.getItem('account_details');
+  console.log('accountDetails:', accountDetails);
+  const { data: dateRangeData } = useDateRange({
+    accountNumber: selectedAccountNumber,
+  });
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
@@ -581,7 +593,6 @@ export default function OverviewMonthlyWise() {
       defaultTo.setDate(defaultTo.getDate() - 1);
 
       const finalTo = to < defaultTo ? to : defaultTo;
-
       const startStr = from.toISOString().split('T')[0];
       const endStr = finalTo.toISOString().split('T')[0];
 
@@ -660,10 +671,15 @@ export default function OverviewMonthlyWise() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate],
+    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate, selectedAccountNumber],
     queryFn: async () => {
-      const response = await apiClient.get(
-        `/bsa/month-wise-overview?from_date=${appliedFromDate}&to_date=${appliedToDate}`,
+      const response = await apiClient.post(
+        `/bsa/month-wise-overview`,
+        {
+          from_date: appliedFromDate,
+          to_date: appliedToDate,
+          account_number: selectedAccountNumber
+        },
         {
           errorMessage:
             'Failed to load overview monthlywise. Please try again.',
