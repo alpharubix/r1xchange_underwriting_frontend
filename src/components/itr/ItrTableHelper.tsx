@@ -1,22 +1,20 @@
 ﻿export const renderYearlyTable = (title: string, dataArray: any[]) => {
   if (!dataArray || dataArray.length === 0) return null;
 
-  const years = Array.from(
-    new Set(dataArray.map((d: any) => d.Year))
-  )
+  const years = Array.from(new Set(dataArray.map((d: any) => d.Year)))
     .filter(Boolean)
     .sort() as string[];
 
   const allKeys = Array.from(
     new Set(dataArray.flatMap((d: any) => Object.keys(d)))
-  ).filter((k) => k !== "Year");
+  ).filter((k) => k !== 'Year');
 
   const isHighlighted = (key: string) =>
-    key.toLowerCase().includes("total") ||
-    key.toLowerCase().includes("net ") ||
-    key.toLowerCase().includes("gross ") ||
-    key.toLowerCase().includes("profit") ||
-    key.toLowerCase().includes("ebitda");
+    key.toLowerCase().includes('total') ||
+    key.toLowerCase().includes('net ') ||
+    key.toLowerCase().includes('gross ') ||
+    key.toLowerCase().includes('profit') ||
+    key.toLowerCase().includes('ebitda');
 
   return (
     <div className="mb-6 overflow-x-auto rounded-2xl border border-slate-100 bg-white shadow-sm animate-in fade-in duration-500">
@@ -49,28 +47,24 @@
               className="transition-colors duration-300 hover:bg-slate-50/80"
             >
               <td
-                className={`border border-slate-200 px-4 py-3 ${
-                  isHighlighted(key)
-                    ? "font-semibold text-slate-900"
-                    : "text-slate-700"
-                }`}
+                className={`border border-slate-200 px-4 py-3 ${isHighlighted(key) ? 'font-semibold text-slate-900' : 'text-slate-700'}`}
               >
                 {key}
               </td>
 
               {years.map((y) => {
                 const yearData = dataArray.find((d: any) => d.Year === y);
-                let val = yearData ? yearData[key] : "";
+                let val = yearData ? yearData[key] : '';
 
                 const rawVal = val;
                 const isNegative =
-                  typeof rawVal === "number"
+                  typeof rawVal === 'number'
                     ? rawVal < 0
-                    : typeof rawVal === "string" &&
-                      rawVal.trim().startsWith("-");
+                    : typeof rawVal === 'string' &&
+                      rawVal.trim().startsWith('-');
 
-                if (val !== "" && val !== null && !isNaN(Number(val))) {
-                  val = Number(val).toLocaleString("en-IN", {
+                if (val !== '' && val !== null && !isNaN(Number(val))) {
+                  val = Number(val).toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   });
@@ -79,13 +73,9 @@
                 return (
                   <td
                     key={y}
-                    className={`border border-slate-200 px-4 py-3 text-right ${
-                      isNegative
-                        ? "font-semibold text-red-600"
-                        : "font-medium text-slate-800"
-                    }`}
+                    className={`border border-slate-200 px-4 py-3 text-right ${isNegative ? 'font-semibold text-red-600' : 'font-medium text-slate-800'}`}
                   >
-                    {val || "-"}
+                    {val || '-'}
                   </td>
                 );
               })}
@@ -131,17 +121,13 @@ export const renderDataTable = (title: string, dataArray: any[]) => {
                 const rawVal = val;
 
                 const isNegative =
-                  typeof rawVal === "number"
+                  typeof rawVal === 'number'
                     ? rawVal < 0
-                    : typeof rawVal === "string" &&
-                      rawVal.trim().startsWith("-");
+                    : typeof rawVal === 'string' &&
+                      rawVal.trim().startsWith('-');
 
-                if (
-                  val !== "" &&
-                  val !== null &&
-                  typeof val === "number"
-                ) {
-                  val = Number(val).toLocaleString("en-IN", {
+                if (val !== '' && val !== null && typeof val === 'number') {
+                  val = Number(val).toLocaleString('en-IN', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                   });
@@ -150,11 +136,9 @@ export const renderDataTable = (title: string, dataArray: any[]) => {
                 return (
                   <td
                     key={key}
-                    className={`px-4 py-2 border border-gray-200 text-gray-700 ${
-                      isNegative ? "text-red-600 font-medium" : ""
-                    }`}
+                    className={`px-4 py-2 border border-gray-200 text-gray-700 ${isNegative ? 'text-red-600 font-medium' : ''}`}
                   >
-                    {val || "-"}
+                    {val || '-'}
                   </td>
                 );
               })}

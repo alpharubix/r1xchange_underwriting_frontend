@@ -1,9 +1,13 @@
-import { useQuery } from "@tanstack/react-query";
-import { getGstMonthlySummary } from "@/api/gst";
+import { useQuery } from '@tanstack/react-query';
+import { getGstMonthlySummary } from '@/api/gst';
 
-export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: string }) {
+export default function MonthlySummaryTab({
+  gstReferenceId,
+}: {
+  gstReferenceId: string;
+}) {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["gstMonthlySummary", gstReferenceId],
+    queryKey: ['gstMonthlySummary', gstReferenceId],
     queryFn: () => getGstMonthlySummary({ gst_reference_id: gstReferenceId }),
     enabled: !!gstReferenceId,
   });
@@ -25,11 +29,19 @@ export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: 
   }
 
   const summaryArray = data.data.monthly_sales_and_purchase_summary || [];
-  const accountDetails = summaryArray.find((item: any) => item["Account Details"])?.["Account Details"];
-  const salesPurchaseData = summaryArray.find((item: any) => item["Monthly Sales&Purchase"])?.["Monthly Sales&Purchase"];
+  const accountDetails = summaryArray.find(
+    (item: any) => item['Account Details']
+  )?.['Account Details'];
+  const salesPurchaseData = summaryArray.find(
+    (item: any) => item['Monthly Sales&Purchase']
+  )?.['Monthly Sales&Purchase'];
 
-  const purchasesSummary = salesPurchaseData?.find((item: any) => item["Monthly Purchases Summary"])?.["Monthly Purchases Summary"];
-  const salesSummary = salesPurchaseData?.find((item: any) => item["Monthly Sale Summary"])?.["Monthly Sale Summary"];
+  const purchasesSummary = salesPurchaseData?.find(
+    (item: any) => item['Monthly Purchases Summary']
+  )?.['Monthly Purchases Summary'];
+  const salesSummary = salesPurchaseData?.find(
+    (item: any) => item['Monthly Sale Summary']
+  )?.['Monthly Sale Summary'];
 
   const SectionTitle = ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md text-center">
@@ -50,41 +62,87 @@ export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: 
           <table className="w-full text-sm text-left whitespace-nowrap">
             <thead className="bg-[#002366]/60 text-white">
               <tr>
-                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">Month</th>
-                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">Taxable Value</th>
-                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">Tax</th>
+                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">
+                  Month
+                </th>
+                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">
+                  Taxable Value
+                </th>
+                <th className="px-4 py-2 border border-[#002366] font-semibold text-center w-1/3">
+                  Tax
+                </th>
               </tr>
             </thead>
             <tbody>
-              {tableData.length > 0 ? tableData.map((row: any, idx: number) => {
-                const taxableVal = Number(row["Taxable Value"] || 0);
-                const taxVal = Number(row["Tax"] || 0);
-                return (
-                  <tr key={idx} className="hover:bg-gray-50">
-                    <td className="px-4 py-2 border border-gray-200 text-center font-medium">{row.Month}</td>
-                    <td className={`px-4 py-2 border border-gray-200 text-right ${taxableVal < 0 ? 'text-red-600' : ''}`}>₹ {taxableVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                    <td className={`px-4 py-2 border border-gray-200 text-right ${taxVal < 0 ? 'text-red-600' : ''}`}>₹ {taxVal.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                );
-              }) : (
+              {tableData.length > 0 ? (
+                tableData.map((row: any, idx: number) => {
+                  const taxableVal = Number(row['Taxable Value'] || 0);
+                  const taxVal = Number(row['Tax'] || 0);
+                  return (
+                    <tr key={idx} className="hover:bg-gray-50">
+                      <td className="px-4 py-2 border border-gray-200 text-center font-medium">
+                        {row.Month}
+                      </td>
+                      <td
+                        className={`px-4 py-2 border border-gray-200 text-right ${taxableVal < 0 ? 'text-red-600' : ''}`}
+                      >
+                        ₹{' '}
+                        {taxableVal.toLocaleString('en-IN', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td
+                        className={`px-4 py-2 border border-gray-200 text-right ${taxVal < 0 ? 'text-red-600' : ''}`}
+                      >
+                        ₹{' '}
+                        {taxVal.toLocaleString('en-IN', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </td>
+                    </tr>
+                  );
+                })
+              ) : (
                 <tr>
-                  <td colSpan={3} className="px-4 py-4 text-center text-gray-500">No data available</td>
+                  <td
+                    colSpan={3}
+                    className="px-4 py-4 text-center text-gray-500"
+                  >
+                    No data available
+                  </td>
                 </tr>
               )}
             </tbody>
-            {totalData && (() => {
-              const totalTaxable = Number(totalData["Taxable Value"] || 0);
-              const totalTax = Number(totalData["Tax"] || 0);
-              return (
-                <tfoot className="bg-[#002366] text-white font-bold">
-                  <tr>
-                    <td className="px-4 py-2 border border-[#002366] text-center">Total</td>
-                    <td className={`px-4 py-2 border border-[#002366] text-right ${totalTaxable < 0 ? 'text-red-900 bg-white/20' : ''}`}>₹ {totalTaxable.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                    <td className={`px-4 py-2 border border-[#002366]/30 text-right ${totalTax < 0 ? 'text-red-900 bg-white/20' : ''}`}>₹ {totalTax.toLocaleString('en-IN', { minimumFractionDigits: 2 })}</td>
-                  </tr>
-                </tfoot>
-              );
-            })()}
+            {totalData &&
+              (() => {
+                const totalTaxable = Number(totalData['Taxable Value'] || 0);
+                const totalTax = Number(totalData['Tax'] || 0);
+                return (
+                  <tfoot className="bg-[#002366] text-white font-bold">
+                    <tr>
+                      <td className="px-4 py-2 border border-[#002366] text-center">
+                        Total
+                      </td>
+                      <td
+                        className={`px-4 py-2 border border-[#002366] text-right ${totalTaxable < 0 ? 'text-red-900 bg-white/20' : ''}`}
+                      >
+                        ₹{' '}
+                        {totalTaxable.toLocaleString('en-IN', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </td>
+                      <td
+                        className={`px-4 py-2 border border-[#002366]/30 text-right ${totalTax < 0 ? 'text-red-900 bg-white/20' : ''}`}
+                      >
+                        ₹{' '}
+                        {totalTax.toLocaleString('en-IN', {
+                          minimumFractionDigits: 2,
+                        })}
+                      </td>
+                    </tr>
+                  </tfoot>
+                );
+              })()}
           </table>
         </div>
       </div>
@@ -101,28 +159,52 @@ export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: 
           </h3>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-center">
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Company Name</span>
-              <span className="text-gray-700">{accountDetails["GSTR Analysis Report  - "] || "N/A"}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Company Name
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['GSTR Analysis Report  - '] || 'N/A'}
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">GSTIN</span>
-              <span className="text-gray-700">{accountDetails["GSTIN"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                GSTIN
+              </span>
+              <span className="text-gray-700">{accountDetails['GSTIN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">PAN</span>
-              <span className="text-gray-700">{accountDetails["PAN"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                PAN
+              </span>
+              <span className="text-gray-700">{accountDetails['PAN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">State</span>
-              <span className="text-gray-700">{accountDetails["State of Operations(based on max. gross sales)"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                State
+              </span>
+              <span className="text-gray-700">
+                {
+                  accountDetails[
+                    'State of Operations(based on max. gross sales)'
+                  ]
+                }
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Period From</span>
-              <span className="text-gray-700">{accountDetails["periodFrom"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Period From
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['periodFrom']}
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Period To</span>
-              <span className="text-gray-700">{accountDetails["periodTo"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Period To
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['periodTo']}
+              </span>
             </div>
           </div>
         </div>
@@ -130,8 +212,8 @@ export default function MonthlySummaryTab({ gstReferenceId }: { gstReferenceId: 
 
       {/* Tables */}
       <div className="grid grid-cols-1 gap-6">
-        {renderSummaryTable("Monthly Sales Summary", salesSummary)}
-        {renderSummaryTable("Monthly Purchases Summary", purchasesSummary)}
+        {renderSummaryTable('Monthly Sales Summary', salesSummary)}
+        {renderSummaryTable('Monthly Purchases Summary', purchasesSummary)}
       </div>
     </div>
   );

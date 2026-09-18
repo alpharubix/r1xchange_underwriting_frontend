@@ -1,7 +1,7 @@
-﻿import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { listCibilReports } from "@/api/cibil";
-import type { CibilReportListItem } from "@/api/cibil";
+﻿import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { listCibilReports } from '@/api/cibil';
+import type { CibilReportListItem } from '@/api/cibil';
 
 function ExistingReports() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ function ExistingReports() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    document.title = "Existing CIBIL Reports";
+    document.title = 'Existing CIBIL Reports';
 
     const fetchReports = async () => {
       try {
@@ -21,7 +21,7 @@ function ExistingReports() {
         setReports(response.data);
       } catch (err) {
         console.log(err);
-        setError("Error while fetching CIBIL reports");
+        setError('Error while fetching CIBIL reports');
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,9 @@ function ExistingReports() {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-lg px-6 py-5 flex items-center gap-3 border border-slate-200">
           <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
-          <p className="text-sm font-medium text-slate-700">Loading reports...</p>
+          <p className="text-sm font-medium text-slate-700">
+            Loading reports...
+          </p>
         </div>
       </div>
     );
@@ -55,7 +57,9 @@ function ExistingReports() {
               !
             </div>
             <div>
-              <h2 className="text-lg font-semibold text-slate-900">Something went wrong</h2>
+              <h2 className="text-lg font-semibold text-slate-900">
+                Something went wrong
+              </h2>
               <p className="text-sm text-slate-600 mt-1">{error}</p>
             </div>
           </div>
@@ -72,7 +76,8 @@ function ExistingReports() {
             Existing CIBIL Reports
           </h1>
           <p className="mt-3 text-slate-600 max-w-2xl">
-            Below is a list of your available CIBIL reports. Open any report to view the detailed credit summary.
+            Below is a list of your available CIBIL reports. Open any report to
+            view the detailed credit summary.
           </p>
         </div>
 
@@ -82,7 +87,9 @@ function ExistingReports() {
               <div className="mx-auto h-14 w-14 rounded-full bg-slate-100 flex items-center justify-center text-slate-400 text-2xl">
                 ○
               </div>
-              <h2 className="mt-4 text-lg font-semibold text-slate-900">No reports found</h2>
+              <h2 className="mt-4 text-lg font-semibold text-slate-900">
+                No reports found
+              </h2>
               <p className="mt-2 text-sm text-slate-600">
                 There are no CIBIL reports available right now.
               </p>

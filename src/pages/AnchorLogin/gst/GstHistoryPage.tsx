@@ -135,12 +135,7 @@ export default function GstHistoryPage() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.gst_reference_id_status === 'COMPLETED'
-                          ? 'bg-green-100 text-green-800'
-                          : item.gst_reference_id_status === 'FAILED'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-yellow-100 text-yellow-800'
-                          }`}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${item.gst_reference_id_status === 'COMPLETED' ? 'bg-green-100 text-green-800' : item.gst_reference_id_status === 'FAILED' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}`}
                       >
                         {item.gst_reference_id_status}
                       </span>

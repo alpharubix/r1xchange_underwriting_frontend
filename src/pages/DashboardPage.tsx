@@ -44,7 +44,9 @@ export default function DashboardPage() {
     CIBIL: 1,
   });
 
-  const [highlightedService, setHighlightedService] = useState<string | undefined>(undefined);
+  const [highlightedService, setHighlightedService] = useState<
+    string | undefined
+  >(undefined);
   const [showHomeIntro, setShowHomeIntro] = useState(false);
 
   const navigate = useNavigate();
@@ -214,7 +216,7 @@ export default function DashboardPage() {
       onClick: () => {
         void handleModuleClick('BSA', () => setIsModalOpen(true));
       },
-      disabled: true,
+      disabled: false,
     },
     {
       title: 'GSTR Analysis',
@@ -305,8 +307,7 @@ export default function DashboardPage() {
                 Boolean(highlightedService) &&
                 highlightedService === item.moduleId;
 
-              const shouldBlur =
-                Boolean(highlightedService) && !isHighlighted;
+              const shouldBlur = Boolean(highlightedService) && !isHighlighted;
 
               return (
                 <Card
@@ -346,7 +347,6 @@ export default function DashboardPage() {
 
                     {/* Card Bottom */}
                     <div className="mt-auto px-5 pb-2 ">
-
                       {!item.disabled && (
                         <div className="flex items-center justify-between gap-3 text-xs font-small text-[#002366] rounded-lg ">
                           <span className="whitespace-nowrap text-s">
@@ -461,9 +461,7 @@ export default function DashboardPage() {
 
           <div className="h-5 w-px bg-gray-300" />
 
-          <span className="text-gray-500">
-            Engineered in Bengaluru 🖤
-          </span>
+          <span className="text-gray-500">Engineered in Bengaluru 🖤</span>
 
           <span className="text-black">///</span>
 

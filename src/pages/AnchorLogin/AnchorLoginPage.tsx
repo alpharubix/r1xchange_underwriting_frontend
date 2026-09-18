@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { motion } from "framer-motion";
-import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { z } from "zod";
-import { useAnchorLogin, getApiError } from "@/hooks/useAuth";
-import { toast } from "sonner";
-import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { motion } from 'framer-motion';
+import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { z } from 'zod';
+import { useAnchorLogin, getApiError } from '@/hooks/useAuth';
+import { toast } from 'sonner';
+import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
 
 const loginSchema = z.object({
-  id: z.string().min(1, "ID is required"),
-  password: z.string().min(1, "Password is required"),
+  id: z.string().min(1, 'ID is required'),
+  password: z.string().min(1, 'Password is required'),
 });
 
 type LoginFormValues = z.infer<typeof loginSchema>;
@@ -29,21 +29,24 @@ export default function AnchorLoginPage() {
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
-    mode: "onTouched",
+    mode: 'onTouched',
   });
 
   const onSubmit = (values: LoginFormValues) => {
-    loginMutation.mutate({
-      login_id: values.id,
-      password: values.password,
-    }, {
-      onError: (err) => {
-        if (err.message.toLocaleLowerCase() == "Unauthorized Access") {
-          toast.error("Invalid ID or password. Please try again.");
-        }
-        toast.error(getApiError(err));
+    loginMutation.mutate(
+      {
+        login_id: values.id,
+        password: values.password,
       },
-    });
+      {
+        onError: (err) => {
+          if (err.message.toLocaleLowerCase() == 'Unauthorized Access') {
+            toast.error('Invalid ID or password. Please try again.');
+          }
+          toast.error(getApiError(err));
+        },
+      }
+    );
   };
 
   return (
@@ -61,7 +64,7 @@ export default function AnchorLoginPage() {
             transition={{
               duration: 8,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
             className="absolute -right-24 top-[15%] w-[600px] h-[600px] rounded-full bg-[#0047cc]/25 blur-[120px]"
           />
@@ -75,7 +78,7 @@ export default function AnchorLoginPage() {
             transition={{
               duration: 6,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
             className="absolute -right-24 top-[20%] w-[480px] h-[480px] rounded-full bg-gradient-to-br from-[#0047cc] to-[#001333] opacity-90 border-t border-l border-white/20 shadow-[inset_15px_15px_40px_rgba(255,255,255,0.22),_0_0_80px_rgba(0,35,102,0.25)]"
           />
@@ -85,12 +88,12 @@ export default function AnchorLoginPage() {
             initial={{ rotate: -38 }}
             animate={{
               y: [0, 15, 0],
-              rotate: [-38, -39, -38]
+              rotate: [-38, -39, -38],
             }}
             transition={{
               duration: 10,
               repeat: Infinity,
-              ease: "easeInOut"
+              ease: 'easeInOut',
             }}
             className="absolute right-[-15%] bottom-[-15%] w-[100%] h-[90%] rounded-[100px] bg-gradient-to-tr from-white/[0.05] to-transparent backdrop-blur-[14px] border-t border-l border-white/[0.08] shadow-[25px_-25px_60px_rgba(0,0,0,0.2)] origin-bottom-right"
           />
@@ -107,17 +110,33 @@ export default function AnchorLoginPage() {
                 <mask id="gridMask">
                   <rect width="100%" height="100%" fill="url(#dotMask)" />
                 </mask>
-                <pattern id="dots" x="0" y="0" width="16" height="16" patternUnits="userSpaceOnUse">
+                <pattern
+                  id="dots"
+                  x="0"
+                  y="0"
+                  width="16"
+                  height="16"
+                  patternUnits="userSpaceOnUse"
+                >
                   <circle cx="3" cy="3" r="1.5" fill="white" />
                 </pattern>
               </defs>
-              <rect width="100%" height="100%" fill="url(#dots)" mask="url(#gridMask)" />
+              <rect
+                width="100%"
+                height="100%"
+                fill="url(#dots)"
+                mask="url(#gridMask)"
+              />
             </svg>
           </div>
         </div>
 
         <div className="relative z-10 flex items-center gap-4">
-          <img src={r1xchangeLogoWhiteWebView} alt="R1Xchange Logo" className="h-32 w-auto object-contain select-none" />
+          <img
+            src={r1xchangeLogoWhiteWebView}
+            alt="R1Xchange Logo"
+            className="h-32 w-auto object-contain select-none"
+          />
         </div>
 
         {/* Center Text Branding */}
@@ -152,7 +171,11 @@ export default function AnchorLoginPage() {
           {/* Card Form */}
           <Card className="border-0 bg-white shadow-xl shadow-black/5 rounded-2xl overflow-hidden">
             <CardContent className="p-6 md:p-7">
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-5" autoComplete="off">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="space-y-5"
+                autoComplete="off"
+              >
                 <div>
                   <h2 className="text-2xl font-bold tracking-tight text-gray-900">
                     Login
@@ -163,9 +186,7 @@ export default function AnchorLoginPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="id">
-                    ID
-                  </Label>
+                  <Label htmlFor="id">ID</Label>
                   <div className="relative">
                     <User className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <Input
@@ -174,7 +195,7 @@ export default function AnchorLoginPage() {
                       placeholder="ID"
                       className="h-11 pl-11 pr-4 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="off"
-                      {...register("id")}
+                      {...register('id')}
                     />
                   </div>
                   {errors.id && (
@@ -185,18 +206,16 @@ export default function AnchorLoginPage() {
                 </div>
 
                 <div className="space-y-1.5">
-                  <Label htmlFor="password">
-                    Password
-                  </Label>
+                  <Label htmlFor="password">Password</Label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
                       className="h-11 pl-11 pr-11 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
                       autoComplete="new-password"
-                      {...register("password")}
+                      {...register('password')}
                     />
                     <button
                       type="button"
@@ -244,7 +263,9 @@ export default function AnchorLoginPage() {
               href="#"
               onClick={(e) => {
                 e.preventDefault();
-                toast.info("Please contact system administrator to retrieve your credentials.");
+                toast.info(
+                  'Please contact system administrator to retrieve your credentials.'
+                );
               }}
               className="text-sm font-semibold text-gray-500 hover:text-[#002366] transition-colors"
             >

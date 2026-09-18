@@ -1,44 +1,74 @@
-import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { QueryClientProvider } from "@tanstack/react-query";
-import { queryClient } from "@/lib/queryClient";
-import { AuthProvider } from "@/contexts/AuthContext";
-import { Toaster } from "sonner";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
-import PublicRoute from "@/components/PublicRoute";
-import ExistingReports from "./pages/cibil/ExistingReports";
-import ViewReport from "./pages/cibil/ViewReport";
+import { lazy, Suspense } from 'react';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from '@/lib/queryClient';
+import { AuthProvider } from '@/contexts/AuthContext';
+import { Toaster } from 'sonner';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import PublicRoute from '@/components/PublicRoute';
+import ExistingReports from './pages/cibil/ExistingReports';
+import ViewReport from './pages/cibil/ViewReport';
 
-
-const LoginPage = lazy(() => import("@/pages/LoginPage"));
-const AnchorLoginPage = lazy(() => import("./pages/AnchorLogin/AnchorLoginPage"));
-const AdminLoginPage = lazy(() => import("./pages/adminlogin/AdminLoginPage"));
-const AdminProtectedRoute = lazy(() => import("./components/AdminProtectedRoute"));
-const AdminDashboardPage = lazy(() => import("@/pages/adminlogin/AdminUsersPage"));
-const SignupPage = lazy(() => import("@/pages/SignupPage"));
-const ForgotPasswordPage = lazy(() => import("@/pages/ForgotPasswordPage"));
-const DashboardLayout = lazy(() => import("@/layouts/DashboardLayout"));
-const ProtectedRoute = lazy(() => import("@/components/ProtectedRoute"));
-const AnchorProtectedRoute = lazy(() => import("./components/AnchorProtectedRoute"));
-const AnchorCustomerPage = lazy(() => import("./pages/AnchorLogin/AnchorCustomerPage"));
-const SummeryOfDebitAndCredit = lazy(() => import("@/pages/bsa/SummaryOfDebitAndCredit"));
-const DashboardPage = lazy(() => import("@/pages/DashboardPage"));
-const CashFlow = lazy(() => import("@/pages/bsa/cashFlow/CashFlow"));
-const OverviewMonthlyWise = lazy(() => import("@/pages/bsa/OverviewMonthlyWise"));
-const NotF = lazy(() => import("@/pages/404"));
-const GstAnalysisPage = lazy(() => import("@/pages/gst/GstAnalysisPage"));
-const GstHistoryPage = lazy(() => import("@/pages/gst/GstHistoryPage"));
-const GstReportPage = lazy(() => import("@/components/gstReportPage"));
-const ITRTaxCalculationPage = lazy(() => import("@/pages/itr/TaxCalculation"));
-const ITRBalanceSheetPage = lazy(() => import("@/pages/itr/BalanceSheet"));
-const ITRProfitAndLossStatementPage = lazy(() => import("@/pages/itr/ProfitAndLossStatement"));
-const ITRRatioAnalysisPage = lazy(() => import("@/pages/itr/RatioAnalysis"));
-const HelpCenterPage = lazy(() => import("@/pages/HelpCenter"));
-const CibilCustDataFetching = lazy(() => import("@/pages/cibil/CibilCustDataFetching"));
-const ProfileManagement = lazy(() => import("@/pages/ProfileManagement"))
-const CustomerPaymentsPage = lazy(() => import("@/pages/AnchorLogin/CustomerPaymentsPage"));
-const WalletProtectedComponent = lazy(() => import("@/components/WalletProtectedComponent"));
-
+const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const AnchorLoginPage = lazy(
+  () => import('./pages/AnchorLogin/AnchorLoginPage')
+);
+const AdminLoginPage = lazy(() => import('./pages/adminlogin/AdminLoginPage'));
+const AdminProtectedRoute = lazy(
+  () => import('./components/AdminProtectedRoute')
+);
+const AdminDashboardPage = lazy(
+  () => import('@/pages/adminlogin/AdminUsersPage')
+);
+const SignupPage = lazy(() => import('@/pages/SignupPage'));
+const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
+const DashboardLayout = lazy(() => import('@/layouts/DashboardLayout'));
+const ProtectedRoute = lazy(() => import('@/components/ProtectedRoute'));
+const AnchorProtectedRoute = lazy(
+  () => import('./components/AnchorProtectedRoute')
+);
+const AnchorCustomerPage = lazy(
+  () => import('./pages/AnchorLogin/AnchorCustomerPage')
+);
+const SummeryOfDebitAndCredit = lazy(
+  () => import('@/pages/bsa/SummaryOfDebitAndCredit')
+);
+const BankAccountsPage = lazy(() => import('@/pages/bsa/BankAccountsPage'));
+const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
+const CashFlow = lazy(() => import('@/pages/bsa/cashFlow/CashFlow'));
+const OverviewMonthlyWise = lazy(
+  () => import('@/pages/bsa/OverviewMonthlyWise')
+);
+const NotF = lazy(() => import('@/pages/404'));
+const GstAnalysisPage = lazy(() => import('@/pages/gst/GstAnalysisPage'));
+const GstHistoryPage = lazy(() => import('@/pages/gst/GstHistoryPage'));
+const GstReportPage = lazy(() => import('@/components/gstReportPage'));
+const ITRTaxCalculationPage = lazy(() => import('@/pages/itr/TaxCalculation'));
+const ITRBalanceSheetPage = lazy(() => import('@/pages/itr/BalanceSheet'));
+const ITRProfitAndLossStatementPage = lazy(
+  () => import('@/pages/itr/ProfitAndLossStatement')
+);
+const ITRRatioAnalysisPage = lazy(() => import('@/pages/itr/RatioAnalysis'));
+const HelpCenterPage = lazy(() => import('@/pages/HelpCenter'));
+const CibilCustDataFetching = lazy(
+  () => import('@/pages/cibil/CibilCustDataFetching')
+);
+const ProfileManagement = lazy(() => import('@/pages/ProfileManagement'));
+const CustomerPaymentsPage = lazy(
+  () => import('@/pages/AnchorLogin/CustomerPaymentsPage')
+);
+const WalletProtectedComponent = lazy(
+  () => import('@/components/WalletProtectedComponent')
+);
+const IndividualOverview = lazy(
+  () => import('@/pages/bsa/individual/Overview')
+);
+const IndividualEodAnalysis = lazy(
+  () => import('@/pages/bsa/individual/EodAnalysis')
+);
+const IndividualLoanTransactions = lazy(
+  () => import('@/pages/bsa/individual/LoanTransactions')
+);
 
 function App() {
   return (
@@ -59,7 +89,10 @@ function App() {
                   <Route element={<PublicRoute />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
-                    <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+                    <Route
+                      path="/forgot-password"
+                      element={<ForgotPasswordPage />}
+                    />
                   </Route>
 
                   {/* Anchor Login Page */}
@@ -72,39 +105,129 @@ function App() {
 
                   {/* Admin Dashboard */}
                   <Route element={<AdminProtectedRoute />}>
-                    <Route path="/admins" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/Admins" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/admins/dashboard" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/admins/dashboard/:tab" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/Admins/dashboard" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/Admins/dashboard/:tab" element={<Navigate to="/admins/user" replace />} />
-                    <Route path="/admins/:tab" element={<AdminDashboardPage />} />
-                    <Route path="/Admins/:tab" element={<AdminDashboardPage />} />
+                    <Route
+                      path="/admins"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/Admins"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/admins/dashboard"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/admins/dashboard/:tab"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/Admins/dashboard"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/Admins/dashboard/:tab"
+                      element={<Navigate to="/admins/user" replace />}
+                    />
+                    <Route
+                      path="/admins/:tab"
+                      element={<AdminDashboardPage />}
+                    />
+                    <Route
+                      path="/Admins/:tab"
+                      element={<AdminDashboardPage />}
+                    />
                   </Route>
 
                   {/* Protected routes */}
                   <Route element={<AnchorProtectedRoute />}>
-                    <Route path="/anchors/dashboard" element={<AnchorCustomerPage />} />
-                    <Route path="/Anchors/dashboard" element={<AnchorCustomerPage />} />
+                    <Route
+                      path="/anchors/dashboard"
+                      element={<AnchorCustomerPage />}
+                    />
+                    <Route
+                      path="/Anchors/dashboard"
+                      element={<AnchorCustomerPage />}
+                    />
                   </Route>
                   <Route element={<ProtectedRoute />}>
                     <Route element={<DashboardLayout />}>
-                      <Route path="/home/dashboard" element={<DashboardPage />} />
-                      <Route path="/bsa/summary-of-debit-and-credit" element={<SummeryOfDebitAndCredit />} />
+                      <Route
+                        path="/home/dashboard"
+                        element={<DashboardPage />}
+                      />
+                      <Route
+                        path="/bsa/bank-accounts"
+                        element={<BankAccountsPage />}
+                      />
+                      <Route
+                        path="/bsa/summary-of-debit-and-credit"
+                        element={<SummeryOfDebitAndCredit />}
+                      />
                       <Route path="/bsa/cash-flow" element={<CashFlow />} />
-                      <Route path="/bsa/overview-monthly-wise" element={<OverviewMonthlyWise />} />
-                      <Route path="/gst/analysis" element={<WalletProtectedComponent service="GST"><GstAnalysisPage /></WalletProtectedComponent>} />
+                      <Route
+                        path="/bsa/overview-monthly-wise"
+                        element={<OverviewMonthlyWise />}
+                      />
+                      <Route
+                        path="/bsa/individual/overview"
+                        element={<IndividualOverview />}
+                      />
+                      <Route
+                        path="/bsa/individual/eod-analysis"
+                        element={<IndividualEodAnalysis />}
+                      />
+                      <Route
+                        path="/bsa/individual/loan-transactions"
+                        element={<IndividualLoanTransactions />}
+                      />
+                      <Route
+                        path="/gst/analysis"
+                        element={
+                          <WalletProtectedComponent service="GST">
+                            <GstAnalysisPage />
+                          </WalletProtectedComponent>
+                        }
+                      />
                       <Route path="/gst/history" element={<GstHistoryPage />} />
                       <Route path="/gst/reports" element={<GstReportPage />} />
-                      <Route path="/itr/itr-tax-calculation" element={<ITRTaxCalculationPage />} />
-                      <Route path="/itr/balance-sheet" element={<ITRBalanceSheetPage />} />
-                      <Route path="/itr/profit-and-loss-statement" element={<ITRProfitAndLossStatementPage />} />
-                      <Route path="/itr/ratio-analysis" element={<ITRRatioAnalysisPage />} />
+                      <Route
+                        path="/itr/itr-tax-calculation"
+                        element={<ITRTaxCalculationPage />}
+                      />
+                      <Route
+                        path="/itr/balance-sheet"
+                        element={<ITRBalanceSheetPage />}
+                      />
+                      <Route
+                        path="/itr/profit-and-loss-statement"
+                        element={<ITRProfitAndLossStatementPage />}
+                      />
+                      <Route
+                        path="/itr/ratio-analysis"
+                        element={<ITRRatioAnalysisPage />}
+                      />
                       <Route path="/profile" element={<ProfileManagement />} />
-                      <Route path="/cibil" element={<WalletProtectedComponent service="CIBIL"><CibilCustDataFetching /></WalletProtectedComponent>} />
-                      <Route path="/cibil/reports" element={<ExistingReports />} />
-                      <Route path="/cibil/view-report/:reference_id" element={<ViewReport />} />
-                      <Route path="/payments" element={<CustomerPaymentsPage />} />
+                      <Route
+                        path="/cibil"
+                        element={
+                          <WalletProtectedComponent service="CIBIL">
+                            <CibilCustDataFetching />
+                          </WalletProtectedComponent>
+                        }
+                      />
+                      <Route
+                        path="/cibil/reports"
+                        element={<ExistingReports />}
+                      />
+                      <Route
+                        path="/cibil/view-report/:reference_id"
+                        element={<ViewReport />}
+                      />
+                      <Route
+                        path="/payments"
+                        element={<CustomerPaymentsPage />}
+                      />
                       <Route path="/help-center" element={<HelpCenterPage />} />
                     </Route>
                   </Route>

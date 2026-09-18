@@ -21,6 +21,7 @@ import {
 import { Calendar } from '@/components/ui/calendar';
 import { toast } from 'sonner';
 import BankAccountDetails from './BankAccountDetails';
+import { useLocation } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 interface MonthlyBreakdown {
@@ -568,8 +569,16 @@ export default function OverviewMonthlyWise() {
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
-  const accountDetails = sessionStorage.getItem("account_details")
-  const { data: dateRangeData } = useDateRange();
+
+  const location = useLocation();
+
+  const selectedAccountNumber =
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
+  const { data: dateRangeData } = useDateRange({
+    accountNumber: selectedAccountNumber,
+  });
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
@@ -581,7 +590,6 @@ export default function OverviewMonthlyWise() {
       defaultTo.setDate(defaultTo.getDate() - 1);
 
       const finalTo = to < defaultTo ? to : defaultTo;
-
       const startStr = from.toISOString().split('T')[0];
       const endStr = finalTo.toISOString().split('T')[0];
 
@@ -604,11 +612,10 @@ export default function OverviewMonthlyWise() {
       setShowScrollHint(container.scrollTop < 80);
     };
     // console.log(container.scrollTop);
-    container.addEventListener("scroll", handleScroll);
+    container.addEventListener('scroll', handleScroll);
 
-    return () => container.removeEventListener("scroll", handleScroll);
+    return () => container.removeEventListener('scroll', handleScroll);
   }, []);
-
 
   const handleApply = () => {
     if (!fromDate || !toDate) {
@@ -660,15 +667,34 @@ export default function OverviewMonthlyWise() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate],
+    queryKey: [
+      'month-wise-overview',
+      appliedFromDate,
+      appliedToDate,
+      selectedAccountNumber,
+    ],
     queryFn: async () => {
-      const response = await apiClient.get(
-        `/bsa/month-wise-overview?from_date=${appliedFromDate}&to_date=${appliedToDate}`,
+      const response = await apiClient.post(
+        `/bsa/month-wise-overview`,
+        {
+          from_date: appliedFromDate,
+          to_date: appliedToDate,
+          account_number: selectedAccountNumber,
+        },
         {
           errorMessage:
             'Failed to load overview monthlywise. Please try again.',
         }
       );
+
+      const acc_data =
+        response.data?.data?.account_details ||
+        response.data?.data?.[0]?.account_details ||
+        response.data?.account_details;
+      if (acc_data) {
+        sessionStorage.setItem('account_details', JSON.stringify(acc_data));
+      }
+
       return response.data?.data as OverviewData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -772,11 +798,15 @@ export default function OverviewMonthlyWise() {
           toDate={appliedToDate || toDate}
         /> */}
       </div>
-      {accountDetails && <BankAccountDetails />}
+      <BankAccountDetails />
       {showScrollHint && (
-        <div className="mt-4 flex justify-center animate-bounce transition-opacity duration-500" ref={containerRef}>
+        <div
+          className="mt-4 flex justify-center animate-bounce transition-opacity duration-500"
+          ref={containerRef}
+        >
           <p className="text-sm text-gray-500">
-             Scroll up to view <span className="font-medium">Monthly Overview</span>
+            Scroll up to view{' '}
+            <span className="font-medium">Monthly Overview</span>
           </p>
         </div>
       )}
@@ -925,7 +955,6 @@ export default function OverviewMonthlyWise() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -954,15 +983,10 @@ export default function OverviewMonthlyWise() {
               Overview Details
             </CardTitle>
             <CardDescription>
-              {dateRangeData?.from_date && dateRangeData?.to_date && (
+              {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(dateRangeData.from_date + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To{' '}
-                  {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
@@ -1005,7 +1029,7 @@ export default function OverviewMonthlyWise() {
               <table className="w-full text-sm text-left border-collapse min-w-[1200px]">
                 <thead>
                   <tr className="bg-[#002366] text-white text-xs">
-                    <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap min-w-[300px] sticky left-0 bg-[#002366] z-20">
+                    <th className="px-4 py-3 border border-black/20 font-medium whitespace-nowrap w-[300px] min-w-[300px] max-w-[300px] sticky left-0 bg-[#002366] z-20">
                       Particulars
                     </th>
                     <th className="px-4 py-3 border border-black/20 font-bold whitespace-nowrap text-right">
@@ -1045,9 +1069,7 @@ export default function OverviewMonthlyWise() {
                     );
 
                     const cellClass = `px-4 py-2.5 border border-black/20 ${row.isRed ? 'text-red-700' : 'text-black'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
-                    const bgClass = row.isGreyBg
-                      ? 'bg-gray-100'
-                      : 'bg-white';
+                    const bgClass = row.isGreyBg ? 'bg-gray-100' : 'bg-white';
 
                     return (
                       <tr
@@ -1055,7 +1077,7 @@ export default function OverviewMonthlyWise() {
                         className={`hover:bg-gray-50 transition-colors ${bgClass}`}
                       >
                         <td
-                          className={`px-4 py-2.5 border border-black/20 sticky left-0 z-10 ${row.isBold ? 'font-bold' : 'font-medium'} ${row.isGreyBg ? 'bg-gray-100' : 'bg-white'}`}
+                          className={`px-4 py-2.5 border border-black/20 w-[300px] min-w-[300px] max-w-[300px] sticky left-0 z-10 ${row.isBold ? 'font-bold' : 'font-medium'} ${row.isGreyBg ? 'bg-gray-100' : 'bg-white'}`}
                         >
                           {labelContent}
                         </td>

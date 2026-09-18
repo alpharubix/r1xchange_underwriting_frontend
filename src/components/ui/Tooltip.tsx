@@ -1,5 +1,5 @@
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import type { ReactNode } from 'react';
+import { cn } from '@/lib/utils';
 
 interface TooltipProps {
   content: ReactNode;
@@ -13,10 +13,10 @@ export function Tooltip({ content, children, className }: TooltipProps) {
       {children}
       <div
         className={cn(
-          "absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-3 py-1.5",
-          "bg-[#1D1E2C] text-white text-xs font-semibold rounded-lg shadow-lg",
-          "opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200",
-          "pointer-events-none z-50",
+          'absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max px-3 py-1.5',
+          'bg-[#1D1E2C] text-white text-xs font-semibold rounded-lg shadow-lg',
+          'opacity-0 invisible group-hover/tooltip:opacity-100 group-hover/tooltip:visible transition-all duration-200',
+          'pointer-events-none z-50',
           className
         )}
       >

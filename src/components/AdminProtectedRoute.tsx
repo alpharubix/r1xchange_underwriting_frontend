@@ -1,5 +1,5 @@
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "@/contexts/AuthContext";
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function AdminProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
@@ -16,15 +16,15 @@ export default function AdminProtectedRoute() {
     );
   }
 
-  const storedRole = localStorage.getItem("user_role")?.toLowerCase();
+  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
   const userRole = (user as any)?.role?.toLowerCase();
-  const isAdmin = 
-    userRole === "admin" || 
-    userRole === "super_admin" || 
-    userRole === "superadmin" || 
-    storedRole === "admin" || 
-    storedRole === "super_admin" || 
-    storedRole === "superadmin";
+  const isAdmin =
+    userRole === 'admin' ||
+    userRole === 'super_admin' ||
+    userRole === 'superadmin' ||
+    storedRole === 'admin' ||
+    storedRole === 'super_admin' ||
+    storedRole === 'superadmin';
 
   if (!isAuthenticated || !isAdmin) {
     return <Navigate to="/admins/login" replace />;

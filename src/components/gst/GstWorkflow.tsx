@@ -1,19 +1,25 @@
-﻿import { useState, useEffect } from "react";
-import Step1GstinEntry from "./Step1GstinEntry";
-import Step2BusinessInfo from "./Step2BusinessInfo";
-import Step3OtpValidation from "./Step3OtpValidation";
-import Step4Processing from "./Step4Processing";
+﻿import { useState, useEffect } from 'react';
+import Step1GstinEntry from './Step1GstinEntry';
+import Step2BusinessInfo from './Step2BusinessInfo';
+import Step3OtpValidation from './Step3OtpValidation';
+import Step4Processing from './Step4Processing';
 
-export default function GstWorkflow({ custId, onComplete }: { custId?: string, onComplete?: () => void }) {
+export default function GstWorkflow({
+  custId,
+  onComplete,
+}: {
+  custId?: string;
+  onComplete?: () => void;
+}) {
   const [currentStep, setCurrentStep] = useState<number>(1);
-  const [gstin, setGstin] = useState<string>("");
-  const [gstReferenceId, setGstReferenceId] = useState<string>("");
-  const [fromMonth, setFromMonth] = useState<string>("");
-  const [toMonth, setToMonth] = useState<string>("");
+  const [gstin, setGstin] = useState<string>('');
+  const [gstReferenceId, setGstReferenceId] = useState<string>('');
+  const [fromMonth, setFromMonth] = useState<string>('');
+  const [toMonth, setToMonth] = useState<string>('');
 
   useEffect(() => {
     // Check if there's an ongoing processing session in localStorage
-    const savedRefId = localStorage.getItem("gst_reference_id");
+    const savedRefId = localStorage.getItem('gst_reference_id');
     if (savedRefId) {
       setGstReferenceId(savedRefId);
       setCurrentStep(4);
@@ -27,7 +33,7 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
 
   const handleStep2Success = (gstRefId: string) => {
     setGstReferenceId(gstRefId);
-    localStorage.setItem("gst_reference_id", gstRefId);
+    localStorage.setItem('gst_reference_id', gstRefId);
     setCurrentStep(4);
   };
 
@@ -39,13 +45,13 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
 
   const handleStep3Next = (gstRefId: string) => {
     setGstReferenceId(gstRefId);
-    localStorage.setItem("gst_reference_id", gstRefId);
+    localStorage.setItem('gst_reference_id', gstRefId);
     setCurrentStep(4);
   };
 
   const handleRetry = () => {
-    localStorage.removeItem("gst_reference_id");
-    setGstReferenceId("");
+    localStorage.removeItem('gst_reference_id');
+    setGstReferenceId('');
     setCurrentStep(1);
   };
 
@@ -55,7 +61,6 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
 
   return (
     <div className="w-full max-w-4xl mx-auto py-8 px-4">
-
       {/* Workflow Progress Bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
@@ -63,35 +68,40 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
             <div key={step} className="flex flex-col items-center flex-1">
               <div className="flex items-center w-full">
                 <div
-                  className={`w-full h-1 ${step === 1 ? "bg-transparent" : currentStep >= step ? "bg-[#002366]" : "bg-gray-200"
-                    }`}
+                  className={`w-full h-1 ${step === 1 ? 'bg-transparent' : currentStep >= step ? 'bg-[#002366]' : 'bg-gray-200'}`}
                 />
                 <div
-                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step
-                    ? "border-[#002366] bg-[#002366] text-white shadow-md shadow-[#002366]/30"
-                    : currentStep > step
-                      ? "border-[#002366] bg-[#002366] text-white"
-                      : "border-gray-300 bg-white text-gray-500"
-                    } font-semibold text-sm transition-colors duration-300`}
+                  className={`flex-shrink-0 w-8 h-8 flex items-center justify-center rounded-full border-2 ${currentStep === step ? 'border-[#002366] bg-[#002366] text-white shadow-md shadow-[#002366]/30' : currentStep > step ? 'border-[#002366] bg-[#002366] text-white' : 'border-gray-300 bg-white text-gray-500'} font-semibold text-sm transition-colors duration-300`}
                 >
                   {currentStep > step ? (
-                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
                     </svg>
                   ) : (
                     step
                   )}
                 </div>
                 <div
-                  className={`w-full h-1 ${step === 4 ? "bg-transparent" : currentStep > step ? "bg-[#002366]" : "bg-gray-200"
-                    }`}
+                  className={`w-full h-1 ${step === 4 ? 'bg-transparent' : currentStep > step ? 'bg-[#002366]' : 'bg-gray-200'}`}
                 />
               </div>
-              <span className={`text-xs mt-2 font-medium ${currentStep >= step ? "text-[#002366] font-semibold" : "text-gray-400"}`}>
-                {step === 1 && "GSTIN"}
-                {step === 2 && "Business & Date"}
-                {step === 3 && "Authentication"}
-                {step === 4 && "Analysis"}
+              <span
+                className={`text-xs mt-2 font-medium ${currentStep >= step ? 'text-[#002366] font-semibold' : 'text-gray-400'}`}
+              >
+                {step === 1 && 'GSTIN'}
+                {step === 2 && 'Business & Date'}
+                {step === 3 && 'Authentication'}
+                {step === 4 && 'Analysis'}
               </span>
             </div>
           ))}
@@ -134,7 +144,6 @@ export default function GstWorkflow({ custId, onComplete }: { custId?: string, o
           />
         )}
       </div>
-
     </div>
   );
 }

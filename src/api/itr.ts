@@ -14,7 +14,9 @@ export const getItrBalanceSheet = async (custId?: string | null) => {
 
 export const getItrProfitAndLoss = async (custId?: string | null) => {
   const queryStr = custId ? `?cust_id=${encodeURIComponent(custId)}` : '';
-  const response = await apiClient.get(`/itr/profit-and-loss-statement${queryStr}`);
+  const response = await apiClient.get(
+    `/itr/profit-and-loss-statement${queryStr}`
+  );
   return response.data;
 };
 

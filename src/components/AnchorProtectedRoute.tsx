@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
-import { useAuthContext } from "@/contexts/AuthContext";
-import AnchorViewIntro from "./AnchorViewIntro";
+import { useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useAuthContext } from '@/contexts/AuthContext';
+import AnchorViewIntro from './AnchorViewIntro';
 
 export default function AnchorProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
   const [showIntro, setShowIntro] = useState(() => {
-    return sessionStorage.getItem("show_anchor_intro") === "true";
+    return sessionStorage.getItem('show_anchor_intro') === 'true';
   });
 
   if (isLoading) {
@@ -19,24 +19,24 @@ export default function AnchorProtectedRoute() {
     );
   }
 
-  const storedRole = localStorage.getItem("user_role")?.toLowerCase();
+  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
   const userRole = (user as any)?.role?.toLowerCase();
   const isAnchor =
-    userRole === "anchor" ||
-    userRole === "super_anchor" ||
-    userRole === "superanchor" ||
-    userRole === "super-anchor" ||
-    storedRole === "anchor" ||
-    storedRole === "super_anchor" ||
-    storedRole === "superanchor" ||
-    storedRole === "super-anchor";
+    userRole === 'anchor' ||
+    userRole === 'super_anchor' ||
+    userRole === 'superanchor' ||
+    userRole === 'super-anchor' ||
+    storedRole === 'anchor' ||
+    storedRole === 'super_anchor' ||
+    storedRole === 'superanchor' ||
+    storedRole === 'super-anchor';
 
   if (!isAuthenticated || !isAnchor) {
     return <Navigate to="/anchors/login" replace />;
   }
 
   const handleIntroComplete = () => {
-    sessionStorage.removeItem("show_anchor_intro");
+    sessionStorage.removeItem('show_anchor_intro');
     setShowIntro(false);
   };
 

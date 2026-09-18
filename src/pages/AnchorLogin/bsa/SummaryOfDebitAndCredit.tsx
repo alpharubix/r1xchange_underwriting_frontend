@@ -80,7 +80,12 @@ const parseDateSafely = (dateStr: string) => {
   return date;
 };
 
-export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: propFromDate, toDate: propToDate }: SummeryOfDebitAndCreditProps = {}) {
+export default function SummeryOfDebitAndCredit({
+  custId,
+  reportId,
+  fromDate: propFromDate,
+  toDate: propToDate,
+}: SummeryOfDebitAndCreditProps = {}) {
   // const navigate = useNavigate();
   const cleanPropFromDate = propFromDate ? propFromDate.split('T')[0] : '';
   const cleanPropToDate = propToDate ? propToDate.split('T')[0] : '';
@@ -174,7 +179,13 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['summary-of-debit-and-credit', appliedFromDate, appliedToDate, custId, reportId],
+    queryKey: [
+      'summary-of-debit-and-credit',
+      appliedFromDate,
+      appliedToDate,
+      custId,
+      reportId,
+    ],
     queryFn: async () => {
       const cleanFromDate = appliedFromDate.split('T')[0];
       const cleanToDate = appliedToDate.split('T')[0];
@@ -183,13 +194,10 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
         url += `cust_id=${encodeURIComponent(custId)}&`;
       }
       url += `from_date=${cleanFromDate}&to_date=${cleanToDate}`;
-      const response = await apiClient.get(
-        url,
-        {
-          errorMessage:
-            'Failed to load summary of debit and credit. Please try again.',
-        }
-      );
+      const response = await apiClient.get(url, {
+        errorMessage:
+          'Failed to load summary of debit and credit. Please try again.',
+      });
       return response.data?.data as SummaryData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -326,9 +334,11 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-blue-50 text-[#002366] font-bold',
-                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        nav_button:
+                          'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
                       startMonth={
@@ -397,9 +407,11 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-blue-50 text-[#002366] font-bold',
-                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        nav_button:
+                          'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
                       startMonth={
@@ -477,11 +489,14 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
       <Card className="shadow-lg border-slate-100 bg-white rounded-2xl">
         <CardHeader className="flex flex-row items-center justify-between bg-slate-50/70 border-b pb-4">
           <div>
-            <CardTitle className="text-xl text-slate-900 font-bold">Monthly Overview</CardTitle>
+            <CardTitle className="text-xl text-slate-900 font-bold">
+              Monthly Overview
+            </CardTitle>
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From {formatDateSafely(appliedFromDate)} To {formatDateSafely(appliedToDate)}
+                  From {formatDateSafely(appliedFromDate)} To{' '}
+                  {formatDateSafely(appliedToDate)}
                 </>
               )}
             </CardDescription>
@@ -604,7 +619,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Cash Deposit',
                     data?.total?.inflows_no_breakdown?.cash_deposit ??
-                    data?.total?.inflows_no_breakdown?.cash_deposit_no,
+                      data?.total?.inflows_no_breakdown?.cash_deposit_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit ??
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit_no,
@@ -613,7 +628,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Cheque Receipt',
                     data?.total?.inflows_no_breakdown?.cheque_receipt ??
-                    data?.total?.inflows_no_breakdown?.cheque_receipt_no,
+                      data?.total?.inflows_no_breakdown?.cheque_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt_no,
@@ -622,7 +637,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Online Receipt',
                     data?.total?.inflows_no_breakdown?.online_receipt ??
-                    data?.total?.inflows_no_breakdown?.online_receipt_no,
+                      data?.total?.inflows_no_breakdown?.online_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt_no,
@@ -631,7 +646,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Other Receipt',
                     data?.total?.inflows_no_breakdown?.other_receipt ??
-                    data?.total?.inflows_no_breakdown?.other_receipt_no,
+                      data?.total?.inflows_no_breakdown?.other_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt_no,
@@ -640,7 +655,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Inhouse Receipt',
                     data?.total?.inflows_no_breakdown?.inhouse_receipt ??
-                    data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
+                      data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt_no,
@@ -721,7 +736,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Cash Withdrawal',
                     data?.total?.outflows_no_breakdown?.cash_withdrawal ??
-                    data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
+                      data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal ??
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal_no,
@@ -730,7 +745,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Cheque Payment',
                     data?.total?.outflows_no_breakdown?.cheque_payment ??
-                    data?.total?.outflows_no_breakdown?.cheque_payment_no,
+                      data?.total?.outflows_no_breakdown?.cheque_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment_no,
@@ -739,7 +754,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Online Payment',
                     data?.total?.outflows_no_breakdown?.online_payment ??
-                    data?.total?.outflows_no_breakdown?.online_payment_no,
+                      data?.total?.outflows_no_breakdown?.online_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.online_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.online_payment_no,
@@ -748,7 +763,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Other Payment',
                     data?.total?.outflows_no_breakdown?.other_payment ??
-                    data?.total?.outflows_no_breakdown?.other_payment_no,
+                      data?.total?.outflows_no_breakdown?.other_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.other_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.other_payment_no,
@@ -757,7 +772,7 @@ export default function SummeryOfDebitAndCredit({ custId, reportId, fromDate: pr
                   {renderRow(
                     'Inhouse Payment',
                     data?.total?.outflows_no_breakdown?.inhouse_payment ??
-                    data?.total?.outflows_no_breakdown?.inhouse_payment_no,
+                      data?.total?.outflows_no_breakdown?.inhouse_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment_no,

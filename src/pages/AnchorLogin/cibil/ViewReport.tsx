@@ -1,7 +1,7 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import CibilReportTabs from "@/components/cibil/CibilReportTabs";
-import { ChevronLeft } from "lucide-react";
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import CibilReportTabs from '@/components/cibil/CibilReportTabs';
+import { ChevronLeft } from 'lucide-react';
 
 type ViewReportProps = {
   reference_id?: string;
@@ -14,12 +14,14 @@ export default function ViewReport({
   onBack,
   onStartNew,
 }: ViewReportProps = {}) {
-  const { reference_id: routeReferenceId } = useParams<{ reference_id: string }>();
+  const { reference_id: routeReferenceId } = useParams<{
+    reference_id: string;
+  }>();
   const navigate = useNavigate();
   const referenceId = propReferenceId || routeReferenceId;
 
   useEffect(() => {
-    document.title = "View CIBIL Report";
+    document.title = 'View CIBIL Report';
   }, []);
 
   const handleBack = () => {
@@ -28,7 +30,7 @@ export default function ViewReport({
       return;
     }
 
-    navigate("/cibil/reports");
+    navigate('/cibil/reports');
   };
 
   const handleStartNew = () => {
@@ -37,7 +39,7 @@ export default function ViewReport({
       return;
     }
 
-    navigate("/cibil");
+    navigate('/cibil');
   };
 
   if (!referenceId) {
@@ -67,7 +69,9 @@ export default function ViewReport({
             )}
             <div>
               <h1 className="text-2xl font-bold text-gray-950">CIBIL Report</h1>
-              <p className="text-xs text-gray-500 mt-0.5">Ref ID: {referenceId}</p>
+              <p className="text-xs text-gray-500 mt-0.5">
+                Ref ID: {referenceId}
+              </p>
             </div>
           </div>
 

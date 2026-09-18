@@ -1,7 +1,7 @@
-﻿import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getGstRefStatus } from "@/api/gst";
-import { useNavigate } from "react-router-dom";
+﻿import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getGstRefStatus } from '@/api/gst';
+import { useNavigate } from 'react-router-dom';
 
 interface Step4Props {
   gstReferenceId: string;
@@ -10,13 +10,17 @@ interface Step4Props {
   onComplete?: () => void;
 }
 
-export default function Step4Processing({ gstReferenceId, onRetry, onComplete }: Step4Props) {
+export default function Step4Processing({
+  gstReferenceId,
+  onRetry,
+  onComplete,
+}: Step4Props) {
   const navigate = useNavigate();
   const [pollCount, setPollCount] = useState(0);
   const MAX_POLLS = 40;
 
   const { data, isError, error } = useQuery({
-    queryKey: ["gstStatus", gstReferenceId],
+    queryKey: ['gstStatus', gstReferenceId],
     queryFn: async () => {
       setPollCount((prev) => prev + 1);
       return getGstRefStatus({ gst_ref_id: [gstReferenceId] });
@@ -25,10 +29,12 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
     refetchInterval: (query) => {
       if (pollCount >= MAX_POLLS) return false;
       const rawData = query.state.data;
-      const statusList = rawData?.data?.gst_reference_id_status || (rawData as any)?.gst_reference_id_status;
+      const statusList =
+        rawData?.data?.gst_reference_id_status ||
+        (rawData as any)?.gst_reference_id_status;
       const currentStatus = statusList?.[0]?.gst_reference_id_status;
 
-      if (currentStatus === "COMPLETED" || currentStatus === "FAILED") {
+      if (currentStatus === 'COMPLETED' || currentStatus === 'FAILED') {
         return false; // stop polling
       }
       return 15000;
@@ -36,50 +42,79 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
     refetchIntervalInBackground: true,
   });
 
-  const statusList = data?.data?.gst_reference_id_status || (data as any)?.gst_reference_id_status;
+  const statusList =
+    data?.data?.gst_reference_id_status ||
+    (data as any)?.gst_reference_id_status;
   const currentStatus = statusList?.[0]?.gst_reference_id_status;
 
   useEffect(() => {
-    if (currentStatus === "COMPLETED") {
-      localStorage.removeItem("gst_reference_id");
+    if (currentStatus === 'COMPLETED') {
+      localStorage.removeItem('gst_reference_id');
     }
   }, [currentStatus]);
 
   const hasTimedOut = pollCount >= MAX_POLLS;
-  const hasFailed = currentStatus === "FAILED" || isError;
+  const hasFailed = currentStatus === 'FAILED' || isError;
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-lg shadow-sm border border-gray-100 text-center">
-
-      {currentStatus === "COMPLETED" ? (
+      {currentStatus === 'COMPLETED' ? (
         <div className="animate-in zoom-in duration-500">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 mb-6">
-            <svg className="h-8 w-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            <svg
+              className="h-8 w-8 text-green-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 13l4 4L19 7"
+              />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Analysis Complete!</h2>
-          <p className="text-gray-500 mb-6 font-medium">Your GST data has been successfully processed.</p>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Analysis Complete!
+          </h2>
+          <p className="text-gray-500 mb-6 font-medium">
+            Your GST data has been successfully processed.
+          </p>
           <button
             onClick={() => {
               if (onComplete) onComplete();
-              else navigate("/gst/history");
+              else navigate('/gst/history');
             }}
             className="bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-6 rounded-xl transition-colors shadow-md shadow-[#002366]/20 cursor-pointer"
           >
-            {onComplete ? "Close" : "View History"}
+            {onComplete ? 'Close' : 'View History'}
           </button>
         </div>
       ) : hasFailed ? (
         <div className="animate-in fade-in duration-300">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 mb-6">
-            <svg className="h-8 w-8 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+            <svg
+              className="h-8 w-8 text-red-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M6 18L18 6M6 6l12 12"
+              />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Processing Failed</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Processing Failed
+          </h2>
           <p className="text-gray-500 mb-6">
-            {isError ? (error as any)?.message : "We encountered an error while analyzing your GST data."}
+            {isError
+              ? (error as any)?.message
+              : 'We encountered an error while analyzing your GST data.'}
           </p>
           <button
             onClick={onRetry}
@@ -91,23 +126,36 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
       ) : hasTimedOut ? (
         <div className="animate-in fade-in duration-300">
           <div className="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-yellow-100 mb-6">
-            <svg className="h-8 w-8 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="h-8 w-8 text-yellow-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Taking longer than expected</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Taking longer than expected
+          </h2>
           <p className="text-gray-500 mb-6">
-            The analysis is taking longer than usual. You can safely close this page and check your history later.
+            The analysis is taking longer than usual. You can safely close this
+            page and check your history later.
           </p>
           <button
             onClick={() => {
-              localStorage.removeItem("gst_reference_id");
+              localStorage.removeItem('gst_reference_id');
               if (onComplete) onComplete();
-              else navigate("/gst/history");
+              else navigate('/gst/history');
             }}
             className="bg-gray-100 text-gray-800 px-6 py-2 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer"
           >
-            {onComplete ? "Close" : "Go to History"}
+            {onComplete ? 'Close' : 'Go to History'}
           </button>
         </div>
       ) : (
@@ -119,10 +167,12 @@ export default function Step4Processing({ gstReferenceId, onRetry, onComplete }:
               {Math.min(90, Math.round((pollCount / 10) * 100))}%
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Analyzing Data</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+            Analyzing Data
+          </h2>
           <p className="text-gray-500 mb-2">
-            Please wait while we process your GST records.
-            This may take a few minutes.
+            Please wait while we process your GST records. This may take a few
+            minutes.
           </p>
           <p className="text-xs text-gray-400 mt-4">
             Reference ID: {gstReferenceId}

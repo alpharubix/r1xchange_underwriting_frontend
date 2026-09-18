@@ -1,10 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
-import { getGstTopSuppliersCustomers } from "@/api/gst";
+import { useQuery } from '@tanstack/react-query';
+import { getGstTopSuppliersCustomers } from '@/api/gst';
 
-export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstReferenceId: string }) {
+export default function TopSuppliersCustomersTab({
+  gstReferenceId,
+}: {
+  gstReferenceId: string;
+}) {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ["gstTopSuppliersCustomers", gstReferenceId],
-    queryFn: () => getGstTopSuppliersCustomers({ gst_reference_id: gstReferenceId }),
+    queryKey: ['gstTopSuppliersCustomers', gstReferenceId],
+    queryFn: () =>
+      getGstTopSuppliersCustomers({ gst_reference_id: gstReferenceId }),
     enabled: !!gstReferenceId,
   });
 
@@ -24,11 +29,21 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
     );
   }
 
-  const accountDetails = data.data.find((item: any) => item["Account Details"])?.["Account Details"];
-  const majorData = data.data.find((item: any) => item["Major Suppliers & Customers "])?.["Major Suppliers & Customers "];
+  const accountDetails = data.data.find(
+    (item: any) => item['Account Details']
+  )?.['Account Details'];
+  const majorData = data.data.find(
+    (item: any) => item['Major Suppliers & Customers ']
+  )?.['Major Suppliers & Customers '];
 
-  const suppliers = majorData?.find((item: any) => item["10 Major Suppliers"])?.["10 Major Suppliers"] || [];
-  const customers = majorData?.find((item: any) => item["10 Major Customers"])?.["10 Major Customers"] || [];
+  const suppliers =
+    majorData?.find((item: any) => item['10 Major Suppliers'])?.[
+      '10 Major Suppliers'
+    ] || [];
+  const customers =
+    majorData?.find((item: any) => item['10 Major Customers'])?.[
+      '10 Major Customers'
+    ] || [];
 
   const SectionTitle = ({ children }: { children: React.ReactNode }) => (
     <h3 className="text-lg font-semibold text-white bg-[#002366] px-4 py-2 rounded-t-md text-center">
@@ -58,7 +73,10 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
             <thead className="bg-[#002366]/60 text-white">
               <tr>
                 {headers.map((header) => (
-                  <th key={header} className="px-4 py-2 border border-[#002366]/30 font-semibold text-center">
+                  <th
+                    key={header}
+                    className="px-4 py-2 border border-[#002366]/30 font-semibold text-center"
+                  >
                     {header}
                   </th>
                 ))}
@@ -68,12 +86,22 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
               {tableData.map((row, idx) => (
                 <tr key={idx} className="hover:bg-gray-50">
                   {headers.map((header) => {
-                    const isNumber = !isNaN(Number(row[header])) && row[header] !== '';
+                    const isNumber =
+                      !isNaN(Number(row[header])) && row[header] !== '';
                     const rawVal = row[header];
-                    const isNegative = typeof rawVal === 'number' ? rawVal < 0 : (typeof rawVal === 'string' && rawVal.trim().startsWith('-'));
+                    const isNegative =
+                      typeof rawVal === 'number'
+                        ? rawVal < 0
+                        : typeof rawVal === 'string' &&
+                          rawVal.trim().startsWith('-');
                     return (
-                      <td key={header} className={`px-4 py-2 border border-gray-200 ${isNumber && header !== 'S.No' && header !== 'Sl. no.' ? 'text-right' : 'text-center'} ${isNegative ? 'text-red-600' : ''}`}>
-                        {header.toLowerCase().includes('amount') ? `₹ ${Number(row[header]).toLocaleString('en-IN')}` : row[header]}
+                      <td
+                        key={header}
+                        className={`px-4 py-2 border border-gray-200 ${isNumber && header !== 'S.No' && header !== 'Sl. no.' ? 'text-right' : 'text-center'} ${isNegative ? 'text-red-600' : ''}`}
+                      >
+                        {header.toLowerCase().includes('amount')
+                          ? `₹ ${Number(row[header]).toLocaleString('en-IN')}`
+                          : row[header]}
                       </td>
                     );
                   })}
@@ -96,28 +124,52 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
           </h3>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-center">
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Company Name</span>
-              <span className="text-gray-700">{accountDetails["GSTR Analysis Report  - "] || "N/A"}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Company Name
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['GSTR Analysis Report  - '] || 'N/A'}
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">GSTIN</span>
-              <span className="text-gray-700">{accountDetails["GSTIN"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                GSTIN
+              </span>
+              <span className="text-gray-700">{accountDetails['GSTIN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">PAN</span>
-              <span className="text-gray-700">{accountDetails["PAN"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                PAN
+              </span>
+              <span className="text-gray-700">{accountDetails['PAN']}</span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">State</span>
-              <span className="text-gray-700">{accountDetails["State of Operations(based on max. gross sales)"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                State
+              </span>
+              <span className="text-gray-700">
+                {
+                  accountDetails[
+                    'State of Operations(based on max. gross sales)'
+                  ]
+                }
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Period From</span>
-              <span className="text-gray-700">{accountDetails["periodFrom"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Period From
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['periodFrom']}
+              </span>
             </div>
             <div className="border border-gray-200 rounded-md p-2">
-              <span className="font-semibold text-[#002366] block mb-1">Period To</span>
-              <span className="text-gray-700">{accountDetails["periodTo"]}</span>
+              <span className="font-semibold text-[#002366] block mb-1">
+                Period To
+              </span>
+              <span className="text-gray-700">
+                {accountDetails['periodTo']}
+              </span>
             </div>
           </div>
         </div>
@@ -125,8 +177,8 @@ export default function TopSuppliersCustomersTab({ gstReferenceId }: { gstRefere
 
       {/* Tables */}
       <div className="grid grid-cols-1 gap-6">
-        {renderTable("10 Major Suppliers", suppliers)}
-        {renderTable("10 Major Customers", customers)}
+        {renderTable('10 Major Suppliers', suppliers)}
+        {renderTable('10 Major Customers', customers)}
       </div>
     </div>
   );

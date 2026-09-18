@@ -605,7 +605,12 @@ const parseDateSafely = (dateStr: string) => {
   return date;
 };
 
-export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFromDate, toDate: propToDate }: OverviewMonthlyWiseProps = {}) {
+export default function OverviewMonthlyWise({
+  custId,
+  reportId,
+  fromDate: propFromDate,
+  toDate: propToDate,
+}: OverviewMonthlyWiseProps = {}) {
   const cleanPropFromDate = propFromDate ? propFromDate.split('T')[0] : '';
   const cleanPropToDate = propToDate ? propToDate.split('T')[0] : '';
 
@@ -698,7 +703,13 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['month-wise-overview', appliedFromDate, appliedToDate, custId, reportId],
+    queryKey: [
+      'month-wise-overview',
+      appliedFromDate,
+      appliedToDate,
+      custId,
+      reportId,
+    ],
     queryFn: async () => {
       const cleanFromDate = appliedFromDate.split('T')[0];
       const cleanToDate = appliedToDate.split('T')[0];
@@ -707,13 +718,9 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
         url += `cust_id=${encodeURIComponent(custId)}&`;
       }
       url += `from_date=${cleanFromDate}&to_date=${cleanToDate}`;
-      const response = await apiClient.get(
-        url,
-        {
-          errorMessage:
-            'Failed to load overview monthlywise. Please try again.',
-        }
-      );
+      const response = await apiClient.get(url, {
+        errorMessage: 'Failed to load overview monthlywise. Please try again.',
+      });
       return response.data?.data as OverviewData;
     },
     enabled: !!appliedFromDate && !!appliedToDate,
@@ -844,9 +851,11 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-blue-50 text-[#002366] font-bold',
-                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        nav_button:
+                          'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
                       startMonth={
@@ -915,9 +924,11 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#001744] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-blue-50 text-[#002366] font-bold',
-                        nav_button: 'border border-slate-200 text-slate-700 hover:bg-slate-100',
+                        nav_button:
+                          'border border-slate-200 text-slate-700 hover:bg-slate-100',
                         chevron: 'text-slate-700',
                       }}
                       startMonth={
@@ -1001,7 +1012,8 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
             <CardDescription>
               {appliedFromDate && appliedToDate && (
                 <>
-                  From {formatDateSafely(appliedFromDate)} To {formatDateSafely(appliedToDate)}
+                  From {formatDateSafely(appliedFromDate)} To{' '}
+                  {formatDateSafely(appliedToDate)}
                 </>
               )}
             </CardDescription>
@@ -1084,9 +1096,7 @@ export default function OverviewMonthlyWise({ custId, reportId, fromDate: propFr
                     );
 
                     const cellClass = `px-4 py-2.5 border border-slate-200 ${row.isRed ? 'text-red-700' : 'text-slate-900'} ${row.isItalic ? 'italic' : ''} ${row.isBold ? 'font-bold' : ''}`;
-                    const bgClass = row.isGreyBg
-                      ? 'bg-slate-50'
-                      : 'bg-white';
+                    const bgClass = row.isGreyBg ? 'bg-slate-50' : 'bg-white';
 
                     return (
                       <tr

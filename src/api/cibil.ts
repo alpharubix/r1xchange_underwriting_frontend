@@ -68,7 +68,8 @@ export interface CibilWebhookStatusData {
   webhook_status: CibilWebhookStatus;
 }
 
-export type CibilWebhookStatusResponse = CibilApiResponse<CibilWebhookStatusData>;
+export type CibilWebhookStatusResponse =
+  CibilApiResponse<CibilWebhookStatusData>;
 
 export interface CibilRetailOverview {
   BureauAnalysis?: unknown;
@@ -104,7 +105,8 @@ export interface CibilAccountSummaryData {
   cibil_report?: CibilAccountSummaryReport;
 }
 
-export type CibilAccountSummaryResponse = CibilApiResponse<CibilAccountSummaryData>;
+export type CibilAccountSummaryResponse =
+  CibilApiResponse<CibilAccountSummaryData>;
 
 export interface CibilPaymentHistoryRetail {
   activeAccountRepaymentTrack?: unknown;
@@ -122,7 +124,8 @@ export interface CibilPaymentHistoryData {
   cibil_report?: CibilPaymentHistoryReport;
 }
 
-export type CibilPaymentHistoryResponse = CibilApiResponse<CibilPaymentHistoryData>;
+export type CibilPaymentHistoryResponse =
+  CibilApiResponse<CibilPaymentHistoryData>;
 
 export interface CibilAnalysisRetail {
   ScoremeAnalysis?: unknown;
@@ -211,7 +214,10 @@ export async function resendCibilOtp(
   return normalizeResponse(response.data, 'Unable to resend OTP.');
 }
 
-export async function listCibilReports(options?: RequestOptions, custId?: string) {
+export async function listCibilReports(
+  options?: RequestOptions,
+  custId?: string
+) {
   const params = custId ? { cust_id: custId } : undefined;
   const response = await apiClient.get<ListCibilReportsResponse>(
     '/cibil/list-reports',

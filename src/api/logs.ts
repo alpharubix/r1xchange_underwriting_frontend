@@ -1,4 +1,4 @@
-import apiClient from "@/lib/axios";
+import apiClient from '@/lib/axios';
 
 export interface LogRequest {
   method: string;
@@ -50,7 +50,7 @@ export interface LogPerformance {
 export interface LogItem {
   _id: string;
   timestamp: string;
-  status: "SUCCESS" | "FAILED" | string;
+  status: 'SUCCESS' | 'FAILED' | string;
   request?: LogRequest;
   response?: LogResponse;
   user?: LogUser;
@@ -68,7 +68,7 @@ export interface LogsResponse {
   total_pages: number;
   logs: LogItem[];
   total_records?: number;
-  "page-info"?: {
+  'page-info'?: {
     page: number;
     limit: number;
     total_records: number;
@@ -92,13 +92,17 @@ export const getLogsList = async (
   pageOrFilters: number | LogFilters = 1
 ): Promise<LogsResponse> => {
   const params: Record<string, any> =
-    typeof pageOrFilters === "number"
+    typeof pageOrFilters === 'number'
       ? { page: pageOrFilters }
       : { ...pageOrFilters };
 
   // Remove empty / undefined / null filters
   Object.keys(params).forEach((key) => {
-    if (params[key] === undefined || params[key] === null || params[key] === "") {
+    if (
+      params[key] === undefined ||
+      params[key] === null ||
+      params[key] === ''
+    ) {
       delete params[key];
     }
   });
@@ -106,5 +110,3 @@ export const getLogsList = async (
   const response = await apiClient.get(`/logs/view`, { params });
   return response.data?.data ?? response.data;
 };
-
-

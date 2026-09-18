@@ -16,10 +16,10 @@ import {
   ShieldCheck,
   Building2,
   UserRound,
-} from "lucide-react";
-import { toast } from "sonner";
-import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
-import { useAuthContext } from "@/contexts/AuthContext";
+} from 'lucide-react';
+import { toast } from 'sonner';
+import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import { useAuthContext } from '@/contexts/AuthContext';
 
 interface Customer {
   id: string;
@@ -39,10 +39,10 @@ interface WalletModalProps {
 }
 
 const modules = [
-  { id: "BSA", label: "BSA", icon: Building2 },
-  { id: "GST", label: "GST", icon: FileText },
-  { id: "ITR", label: "ITR", icon: PieChart },
-  { id: "CIBIL", label: "CIBIL", icon: ShieldCheck },
+  { id: 'BSA', label: 'BSA', icon: Building2 },
+  { id: 'GST', label: 'GST', icon: FileText },
+  { id: 'ITR', label: 'ITR', icon: PieChart },
+  { id: 'CIBIL', label: 'CIBIL', icon: ShieldCheck },
 ];
 
 export default function WalletModal({ selectedCustomer }: WalletModalProps) {
@@ -50,15 +50,14 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
   const [processingId, setProcessingId] = useState<string | null>(null);
   const razorpayRef = useRef<any>(null);
   const [isRequestedPaymentOpen, setIsRequestedPaymentOpen] = useState(false);
-  const requestedModule = ""
+  const requestedModule = '';
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [cartServicesBreakup, setCartServicesBreakup] = useState([
-    { service: "BSA", qty: 1 },
-    { service: "GST", qty: 1 },
-    { service: "ITR", qty: 1 },
-    { service: "CIBIL", qty: 1 },
+    { service: 'BSA', qty: 1 },
+    { service: 'GST', qty: 1 },
+    { service: 'ITR', qty: 1 },
+    { service: 'CIBIL', qty: 1 },
   ]);
-
 
   const handleCartQtyChange = (service: string, change: number) => {
     setCartServicesBreakup((prev) =>
@@ -86,7 +85,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
     isLoading: isWalletLoading,
     refetch: refetchWalletBalances,
   } = useQuery({
-    queryKey: ["wallet-balances-customer", customerId],
+    queryKey: ['wallet-balances-customer', customerId],
     queryFn: async () => {
       const balances = await Promise.all(
         modules.map(async (module) => {
@@ -104,14 +103,14 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["pending-payments-customer", customerId],
+    queryKey: ['pending-payments-customer', customerId],
     queryFn: async () => {
       try {
         const res = await getPendingPayments(customerId);
         const order = res.data?.pending_order;
         return { data: order ? [order] : [] };
       } catch (err) {
-        console.error("Error fetching pending payments:", err);
+        console.error('Error fetching pending payments:', err);
         return { data: [] };
       }
     },
@@ -122,15 +121,21 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
 
   const handleCheckWalletBalance = async (service: string) => {
     try {
-      const toastId = toast.loading(`Checking wallet balance for ${service}...`);
+      const toastId = toast.loading(
+        `Checking wallet balance for ${service}...`
+      );
       const res = await getWalletBalance(service, customerId);
       toast.dismiss(toastId);
       await refetchWalletBalances();
 
       if (res.data?.is_balance_available) {
-        toast.success(`${service} Balance Available: Rs.${res.data.available_balance}`);
+        toast.success(
+          `${service} Balance Available: Rs.${res.data.available_balance}`
+        );
       } else {
-        toast.error(`Insufficient ${service} Balance: Rs.${res.data?.available_balance || 0}`);
+        toast.error(
+          `Insufficient ${service} Balance: Rs.${res.data?.available_balance || 0}`
+        );
       }
     } catch (err: any) {
       toast.dismiss();
@@ -148,7 +153,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
         import.meta.env.VITE_RAZORPAY_KEY_ID;
       if (!razorpayKey) {
         toast.error(
-          "Razorpay live key is not configured. Please contact system administration."
+          'Razorpay live key is not configured. Please contact system administration.'
         );
         resetPaymentProcessing();
         return;
@@ -157,8 +162,8 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
       const options = {
         key: razorpayKey,
         amount: payment.amount,
-        currency: payment.currency || "INR",
-        name: "R1Xchange Underwriting",
+        currency: payment.currency || 'INR',
+        name: 'R1Xchange Underwriting',
         description: `Payment for ${payment.service} report`,
         image: window.location.origin + r1xchangeLogoWhiteWebView,
         order_id: payment.id,
@@ -168,46 +173,50 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
               razorpay_order_id: response.razorpay_order_id,
               razorpay_payment_id: response.razorpay_payment_id,
               razorpay_signature: response.razorpay_signature,
-              user_id: ((user as any)?._id || (user as any)?.id) as string | undefined,
-              userId: ((user as any)?._id || (user as any)?.id) as string | undefined,
+              user_id: ((user as any)?._id || (user as any)?.id) as
+                string | undefined,
+              userId: ((user as any)?._id || (user as any)?.id) as
+                string | undefined,
             });
-            toast.success("Payment successful!");
+            toast.success('Payment successful!');
             resetPaymentProcessing();
             refetch();
             refetchWalletBalances();
           } catch (err: any) {
-            console.error("Payment verification failed", err);
-            toast.error(err.response?.data?.detail || "Payment verification failed");
+            console.error('Payment verification failed', err);
+            toast.error(
+              err.response?.data?.detail || 'Payment verification failed'
+            );
           } finally {
             resetPaymentProcessing();
           }
         },
         prefill: {
-          name: user?.name || "Customer",
-          email: user?.email_id || "customer@example.com",
-          contact: user?.mobile_number || "9999999999",
+          name: user?.name || 'Customer',
+          email: user?.email_id || 'customer@example.com',
+          contact: user?.mobile_number || '9999999999',
         },
         modal: {
           ondismiss: function () {
             resetPaymentProcessing(false);
-            toast.info("Payment cancelled.");
+            toast.info('Payment cancelled.');
           },
         },
-        theme: { color: "#002366" },
+        theme: { color: '#002366' },
       };
 
       const razorpay = new (window as any).Razorpay(options);
       razorpayRef.current = razorpay;
-      razorpay.on("payment.failed", function (response: any) {
-        console.error("Payment failed", response.error);
+      razorpay.on('payment.failed', function (response: any) {
+        console.error('Payment failed', response.error);
         toast.error(`Payment failed: ${response.error.description}`);
         resetPaymentProcessing(false);
       });
 
       razorpay.open();
     } catch (err: any) {
-      console.error("Payment initiation failed", err);
-      toast.error(err.response?.data?.detail || "Failed to initiate payment");
+      console.error('Payment initiation failed', err);
+      toast.error(err.response?.data?.detail || 'Failed to initiate payment');
       resetPaymentProcessing();
     }
   };
@@ -216,7 +225,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
     selectedCustomer.customer_name ||
     selectedCustomer.name ||
     selectedCustomer.company_name ||
-    "Customer";
+    'Customer';
 
   if (isLoading) {
     return (
@@ -235,25 +244,27 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
           Wallet Dashboard
         </h2>
         <p className="mt-1 text-sm text-gray-500">
-          Wallet balances and pending payments for{" "}
-          <span className="font-semibold text-[#002366]">{customerDisplayName}</span>
+          Wallet balances and pending payments for{' '}
+          <span className="font-semibold text-[#002366]">
+            {customerDisplayName}
+          </span>
         </p>
       </div>
-        <button
-          onClick={() => {
-            setCartServicesBreakup([
-              { service: "BSA", qty: 1 },
-              { service: "GST", qty: 1 },
-              { service: "ITR", qty: 1 },
-              { service: "CIBIL", qty: 1 },
-            ]);
-            setIsCartOpen(true);
-          }}
-          className="px-4 py-2 rounded-lg bg-[#002366] hover:bg-[#002366]/80 text-white shadow-md transition-all flex items-center justify-center gap-2 text-sm"
-        >
-          <CreditCard className="h-4 w-4" />
-          Pay for {customerDisplayName}
-        </button>
+      <button
+        onClick={() => {
+          setCartServicesBreakup([
+            { service: 'BSA', qty: 1 },
+            { service: 'GST', qty: 1 },
+            { service: 'ITR', qty: 1 },
+            { service: 'CIBIL', qty: 1 },
+          ]);
+          setIsCartOpen(true);
+        }}
+        className="px-4 py-2 rounded-lg bg-[#002366] hover:bg-[#002366]/80 text-white shadow-md transition-all flex items-center justify-center gap-2 text-sm"
+      >
+        <CreditCard className="h-4 w-4" />
+        Pay for {customerDisplayName}
+      </button>
       {/* Wallet Balances */}
       <div>
         <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-3">
@@ -269,7 +280,9 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                 <div className="h-11 w-11 rounded-full bg-slate-50 flex items-center justify-center mb-3 group-hover:bg-[#002366]/10 transition-colors">
                   <mod.icon className="h-5 w-5 text-slate-500 group-hover:text-[#002366]" />
                 </div>
-                <span className="font-semibold text-slate-700 text-sm">{mod.label}</span>
+                <span className="font-semibold text-slate-700 text-sm">
+                  {mod.label}
+                </span>
                 <span className="mt-1.5 text-lg font-bold text-[#002366]">
                   {isWalletLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
@@ -301,7 +314,9 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
               <div className="h-14 w-14 bg-blue-50 text-[#002366] rounded-full flex items-center justify-center mb-3">
                 <CreditCard className="h-7 w-7" />
               </div>
-              <h4 className="text-base font-bold text-gray-900">No Pending Payments</h4>
+              <h4 className="text-base font-bold text-gray-900">
+                No Pending Payments
+              </h4>
               <p className="text-gray-500 max-w-sm mt-1 text-sm">
                 All caught up! No pending payments for this customer.
               </p>
@@ -311,16 +326,18 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {pendingPayments.map((payment) => {
               const requestedByYou = Boolean(
-                payment.user_id && String(payment.user_id) === String(customerId)
+                payment.user_id &&
+                String(payment.user_id) === String(customerId)
               );
               const requestedBy = payment.role?.trim()
-                ? payment.role.trim().toLowerCase() === "customer" && requestedByYou
-                  ? "Customer"
+                ? payment.role.trim().toLowerCase() === 'customer' &&
+                  requestedByYou
+                  ? 'Customer'
                   : payment.role.trim().charAt(0).toUpperCase() +
                     payment.role.trim().slice(1).toLowerCase()
                 : requestedByYou
-                ? "Customer"
-                : "Anchor";
+                  ? 'Customer'
+                  : 'Anchor';
 
               const serviceBreakup = payment.notes?.services_breakup || [];
 
@@ -347,22 +364,28 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                       <div className="flex items-center gap-2">
                         <UserRound className="h-3.5 w-3.5 text-[#002366]" />
                         <span>Requested by</span>
-                        <span className="font-bold text-[#002366]">{requestedBy}</span>
+                        <span className="font-bold text-[#002366]">
+                          {requestedBy}
+                        </span>
                       </div>
                       <div className="flex items-center gap-2 min-w-0">
-                        <span className="font-semibold text-slate-500 shrink-0">User ID</span>
+                        <span className="font-semibold text-slate-500 shrink-0">
+                          User ID
+                        </span>
                         <span
                           className="font-mono text-[11px] truncate"
-                          title={payment.user_id || "Unavailable"}
+                          title={payment.user_id || 'Unavailable'}
                         >
-                          {payment.notes?.user_id || payment.user_id || "Unavailable"}
+                          {payment.notes?.user_id ||
+                            payment.user_id ||
+                            'Unavailable'}
                         </span>
                       </div>
                     </div>
 
                     <div className="flex items-baseline gap-1 mb-3">
                       <span className="text-2xl font-bold text-gray-900">
-                        Rs.{(payment.amount / 100).toLocaleString("en-IN")}
+                        Rs.{(payment.amount / 100).toLocaleString('en-IN')}
                       </span>
                     </div>
                     <Button
@@ -373,7 +396,9 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                         }
                         void handlePay(payment);
                       }}
-                      disabled={processingId !== null && processingId !== payment.id}
+                      disabled={
+                        processingId !== null && processingId !== payment.id
+                      }
                       className="w-full h-10 bg-[#002366] hover:bg-[#002366]/80 text-white rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm"
                     >
                       {processingId === payment.id ? (

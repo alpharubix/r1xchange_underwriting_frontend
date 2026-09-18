@@ -21,8 +21,8 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import BankAccountDetails from './BankAccountDetails';
+import { useLocation, useNavigate } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
-// import { useNavigate } from "react-router-dom";
 
 interface MonthlyBreakdown {
   month: string;
@@ -39,15 +39,21 @@ interface SummaryData {
 }
 
 export default function SummaryOfDebitAndCredit() {
-  // const navigate = useNavigate();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const selectedAccountNumber =
+    (location.state as { accountNumber?: string } | null)?.accountNumber ||
+    sessionStorage.getItem('selected_bsa_account_number') ||
+    '';
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
   // ADDING ACCOUNT_DETAILS
-  const [accountDetails, setAccountDetails] = useState<any>(null);
 
-  const { data: dateRangeData } = useDateRange();
+  const { data: dateRangeData } = useDateRange({
+    accountNumber: selectedAccountNumber,
+  });
 
   useEffect(() => {
     if (dateRangeData && !appliedFromDate && !appliedToDate) {
@@ -121,24 +127,32 @@ export default function SummaryOfDebitAndCredit() {
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['summary-of-debit-and-credit', appliedFromDate, appliedToDate],
+    queryKey: [
+      'summary-of-debit-and-credit',
+      selectedAccountNumber,
+      appliedFromDate,
+      appliedToDate,
+    ],
     queryFn: async () => {
-      const response = await apiClient.get(
-        `/bsa/summary-of-debit-and-credit_monthwise?from_date=${appliedFromDate}&to_date=${appliedToDate}`,
+      const response = await apiClient.post(
+        '/bsa/summary-of-debit-and-credit_monthwise',
+        {
+          from_date: appliedFromDate,
+          to_date: appliedToDate,
+          account_number: selectedAccountNumber,
+        },
         {
           errorMessage:
             'Failed to load summary of debit and credit. Please try again.',
         }
       );
       const acc_data = response.data.data.account_details;
-
-      setAccountDetails(acc_data);
       // console.log("Setting:", accountDetails)
-      sessionStorage.setItem("account_details", JSON.stringify(acc_data));
+      sessionStorage.setItem('account_details', JSON.stringify(acc_data));
 
       return response.data?.data as SummaryData;
     },
-    enabled: !!appliedFromDate && !!appliedToDate,
+    enabled: !!selectedAccountNumber && !!appliedFromDate && !!appliedToDate,
   });
 
   const generateMonthsRange = (startStr: string, endStr: string) => {
@@ -239,6 +253,11 @@ export default function SummaryOfDebitAndCredit() {
           <p className="text-gray-600">
             Monthwise breakdown of inflows and outflows
           </p>
+          {selectedAccountNumber && (
+            <p className="mt-1 text-sm text-gray-500">
+              Account Number: {selectedAccountNumber}
+            </p>
+          )}
         </div>
         {/* <BsaDownloadButton
           fromDate={appliedFromDate || fromDate}
@@ -246,9 +265,24 @@ export default function SummaryOfDebitAndCredit() {
         /> */}
       </div>
 
-      {
-        accountDetails && <BankAccountDetails />
-      }
+      <BankAccountDetails />
+
+      {!selectedAccountNumber && (
+        <Card className="mb-8 shadow-sm border-black/10 bg-white">
+          <CardContent className="p-8 text-center">
+            <p className="text-sm text-gray-600">
+              Please select a bank account before opening this report.
+            </p>
+            <Button
+              type="button"
+              onClick={() => navigate('/bsa/bank-accounts')}
+              className="mt-4 bg-[#002366] hover:bg-[#001744] text-white"
+            >
+              Back to Bank Accounts
+            </Button>
+          </CardContent>
+        </Card>
+      )}
 
       {dateRangeData && (
         <Card className="mb-8 shadow-sm border-black/10 bg-white">
@@ -280,9 +314,11 @@ export default function SummaryOfDebitAndCredit() {
                       mode="single"
                       captionLayout="dropdown"
                       classNames={{
-                        day_selected: 'bg-[#002366] text-white hover:bg-[#002366] hover:text-white focus:bg-[#002366] focus:text-white',
+                        day_selected:
+                          'bg-[#002366] text-white hover:bg-[#002366] hover:text-white focus:bg-[#002366] focus:text-white',
                         day_today: 'bg-gray-100 text-black',
-                        nav_button: 'border border-black text-black hover:bg-gray-100',
+                        nav_button:
+                          'border border-black text-black hover:bg-gray-100',
                         chevron: 'text-black',
                       }}
                       startMonth={
@@ -401,7 +437,6 @@ export default function SummaryOfDebitAndCredit() {
                 >
                   <X className="w-4 h-4" /> Clear
                 </Button>
-
               </div>
             </div>
             <div className="mt-2 text-xs text-gray-500">
@@ -426,16 +461,14 @@ export default function SummaryOfDebitAndCredit() {
       <Card className="shadow-lg border-black/10 bg-white">
         <CardHeader className="flex flex-row items-center justify-between bg-gray-50/50 border-b pb-4">
           <div>
-            <CardTitle className="text-xl text-black">Monthly Overview</CardTitle>
+            <CardTitle className="text-xl text-black">
+              Monthly Overview
+            </CardTitle>
             <CardDescription>
-              {dateRangeData?.from_date && dateRangeData?.to_date && (
+              {appliedFromDate && appliedToDate && (
                 <>
-                  From{' '}
-                  {format(
-                    new Date(dateRangeData.from_date + 'T00:00:00'),
-                    'PPP'
-                  )}{' '}
-                  To {format(new Date(dateRangeData.to_date + 'T00:00:00'), 'PPP')}
+                  From {format(new Date(appliedFromDate + 'T00:00:00'), 'PPP')}{' '}
+                  To {format(new Date(appliedToDate + 'T00:00:00'), 'PPP')}
                 </>
               )}
             </CardDescription>
@@ -558,7 +591,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cash Deposit',
                     data?.total?.inflows_no_breakdown?.cash_deposit ??
-                    data?.total?.inflows_no_breakdown?.cash_deposit_no,
+                      data?.total?.inflows_no_breakdown?.cash_deposit_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit ??
                       m?.inflows_no?.inflows_no_breakdown?.cash_deposit_no,
@@ -567,7 +600,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cheque Receipt',
                     data?.total?.inflows_no_breakdown?.cheque_receipt ??
-                    data?.total?.inflows_no_breakdown?.cheque_receipt_no,
+                      data?.total?.inflows_no_breakdown?.cheque_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.cheque_receipt_no,
@@ -576,7 +609,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Online Receipt',
                     data?.total?.inflows_no_breakdown?.online_receipt ??
-                    data?.total?.inflows_no_breakdown?.online_receipt_no,
+                      data?.total?.inflows_no_breakdown?.online_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.online_receipt_no,
@@ -585,7 +618,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Other Receipt',
                     data?.total?.inflows_no_breakdown?.other_receipt ??
-                    data?.total?.inflows_no_breakdown?.other_receipt_no,
+                      data?.total?.inflows_no_breakdown?.other_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.other_receipt_no,
@@ -594,7 +627,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Inhouse Receipt',
                     data?.total?.inflows_no_breakdown?.inhouse_receipt ??
-                    data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
+                      data?.total?.inflows_no_breakdown?.inhouse_receipt_no,
                     (m) =>
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt ??
                       m?.inflows_no?.inflows_no_breakdown?.inhouse_receipt_no,
@@ -675,7 +708,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cash Withdrawal',
                     data?.total?.outflows_no_breakdown?.cash_withdrawal ??
-                    data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
+                      data?.total?.outflows_no_breakdown?.cash_withdrawal_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal ??
                       m?.outflows_no?.outflows_no_breakdown?.cash_withdrawal_no,
@@ -684,7 +717,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Cheque Payment',
                     data?.total?.outflows_no_breakdown?.cheque_payment ??
-                    data?.total?.outflows_no_breakdown?.cheque_payment_no,
+                      data?.total?.outflows_no_breakdown?.cheque_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.cheque_payment_no,
@@ -693,7 +726,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Online Payment',
                     data?.total?.outflows_no_breakdown?.online_payment ??
-                    data?.total?.outflows_no_breakdown?.online_payment_no,
+                      data?.total?.outflows_no_breakdown?.online_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.online_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.online_payment_no,
@@ -702,7 +735,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Other Payment',
                     data?.total?.outflows_no_breakdown?.other_payment ??
-                    data?.total?.outflows_no_breakdown?.other_payment_no,
+                      data?.total?.outflows_no_breakdown?.other_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.other_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.other_payment_no,
@@ -711,7 +744,7 @@ export default function SummaryOfDebitAndCredit() {
                   {renderRow(
                     'Inhouse Payment',
                     data?.total?.outflows_no_breakdown?.inhouse_payment ??
-                    data?.total?.outflows_no_breakdown?.inhouse_payment_no,
+                      data?.total?.outflows_no_breakdown?.inhouse_payment_no,
                     (m) =>
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment ??
                       m?.outflows_no?.outflows_no_breakdown?.inhouse_payment_no,
@@ -727,9 +760,13 @@ export default function SummaryOfDebitAndCredit() {
                 </tbody>
               </table>
             </div>
-          ) : dateRangeData ? (
+          ) : selectedAccountNumber && dateRangeData ? (
             <div className="p-8 text-center text-gray-500">
               Select date range and apply filter
+            </div>
+          ) : !selectedAccountNumber ? (
+            <div className="p-8 text-center text-gray-500">
+              Select an account from Bank Accounts to view this report.
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">

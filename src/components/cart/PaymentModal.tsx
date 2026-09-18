@@ -18,8 +18,6 @@ import { logoBase64 } from '@/assets/logoBase64';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { getPricingDetails } from '@/lib/paymentUtils';
 
-
-
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -134,26 +132,18 @@ export default function PaymentModal({
 
   const isCartPayment = servicesBreakup !== undefined;
 
-  const hasSelectedServices = cartLines.some(
-    (item) => item.qty > 0
-  );
+  const hasSelectedServices = cartLines.some((item) => item.qty > 0);
 
   const cartSubtotal = cartLines.reduce(
     (sum, item) => sum + item.lineAmount,
     0
   );
 
-  const cartIgst = Number(
-    (cartSubtotal * 0.18).toFixed(2)
-  );
+  const cartIgst = Number((cartSubtotal * 0.18).toFixed(2));
 
-  const cartGrandTotal = Number(
-    (cartSubtotal + cartIgst).toFixed(2)
-  );
+  const cartGrandTotal = Number((cartSubtotal + cartIgst).toFixed(2));
 
-  const payableAmount = isCartPayment
-    ? cartGrandTotal
-    : amount;
+  const payableAmount = isCartPayment ? cartGrandTotal : amount;
 
   const periodFeature =
     pricing.period !== 'N/A'
@@ -211,8 +201,7 @@ export default function PaymentModal({
         orderPayload.userId = resolvedUserId;
       }
 
-      const orderRes =
-        await createPaymentOrder(orderPayload);
+      const orderRes = await createPaymentOrder(orderPayload);
 
       const orderData = orderRes.data;
 
@@ -234,14 +223,11 @@ export default function PaymentModal({
         handler: async function (response: any) {
           try {
             const validationPayload = {
-              razorpay_payment_id:
-                response.razorpay_payment_id,
+              razorpay_payment_id: response.razorpay_payment_id,
 
-              razorpay_order_id:
-                response.razorpay_order_id,
+              razorpay_order_id: response.razorpay_order_id,
 
-              razorpay_signature:
-                response.razorpay_signature,
+              razorpay_signature: response.razorpay_signature,
             } as Parameters<typeof validatePayment>[0];
 
             if (custId && resolvedUserId) {
@@ -251,9 +237,7 @@ export default function PaymentModal({
 
             await validatePayment(validationPayload);
 
-            toast.success(
-              `${moduleName} successfully unlocked!`
-            );
+            toast.success(`${moduleName} successfully unlocked!`);
 
             setIsProcessing(false);
 
@@ -261,9 +245,7 @@ export default function PaymentModal({
 
             onSuccess();
           } catch (err) {
-            toast.error(
-              'Payment validation failed. Please contact support.'
-            );
+            toast.error('Payment validation failed. Please contact support.');
           } finally {
             setIsProcessing(false);
           }
@@ -287,8 +269,7 @@ export default function PaymentModal({
       rzp.open();
     } catch (err: any) {
       toast.error(
-        err?.response?.data?.message ||
-        'Failed to initiate payment.'
+        err?.response?.data?.message || 'Failed to initiate payment.'
       );
 
       setIsProcessing(false);
@@ -333,7 +314,7 @@ export default function PaymentModal({
     } catch (err: any) {
       toast.error(
         err?.response?.data?.message ||
-        'Failed to send payment request to customer.'
+          'Failed to send payment request to customer.'
       );
     } finally {
       setIsSendingToCustomer(false);
@@ -380,9 +361,7 @@ export default function PaymentModal({
               <div className="relative shrink-0 bg-[#002366] p-6 pb-2 text-white">
                 <div
                   className="absolute right-4 top-4 cursor-pointer opacity-70 transition-opacity hover:opacity-100"
-                  onClick={() =>
-                    !isProcessing && onClose()
-                  }
+                  onClick={() => !isProcessing && onClose()}
                 >
                   <X className="h-5 w-5 hover:text-red-500" />
                 </div>
@@ -416,35 +395,25 @@ export default function PaymentModal({
 
                         <span>Description</span>
 
-                        <span className="-ml-5">
-                          Qty
-                        </span>
+                        <span className="-ml-5">Qty</span>
 
                         <span>Rate</span>
 
-                        <span className="text-right">
-                          Amount
-                        </span>
+                        <span className="text-right">Amount</span>
                       </div>
 
                       {/* Cart Lines */}
                       {cartLines
-                        .filter(
-                          (line) => line.qty > 0
-                        )
+                        .filter((line) => line.qty > 0)
                         .map((line, index) => (
                           <div
                             key={line.service}
                             className="grid grid-cols-[28px_minmax(0,1fr)_76px_62px_80px] gap-2 border-t border-slate-100 px-3 py-3 text-xs text-slate-700"
                           >
-                            <span>
-                              {index + 1}
-                            </span>
+                            <span>{index + 1}</span>
 
                             <span className="flex min-w-0 flex-col font-medium">
-                              <span>
-                                {line.label}
-                              </span>
+                              <span>{line.label}</span>
 
                               <span className="text-[10px] font-normal leading-tight text-slate-500">
                                 {line.periodLabel}
@@ -457,10 +426,7 @@ export default function PaymentModal({
                                   type="button"
                                   aria-label={`Decrease ${line.service} quantity`}
                                   onClick={() =>
-                                    onQuantityChange(
-                                      line.service,
-                                      -1
-                                    )
+                                    onQuantityChange(line.service, -1)
                                   }
                                   className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-200 text-[#002366] hover:bg-slate-50"
                                 >
@@ -477,10 +443,7 @@ export default function PaymentModal({
                                   type="button"
                                   aria-label={`Increase ${line.service} quantity`}
                                   onClick={() =>
-                                    onQuantityChange(
-                                      line.service,
-                                      1
-                                    )
+                                    onQuantityChange(line.service, 1)
                                   }
                                   className="flex h-6 w-6 shrink-0 items-center justify-center rounded border border-slate-200 text-[#002366] hover:bg-slate-50"
                                 >
@@ -489,9 +452,7 @@ export default function PaymentModal({
                               )}
                             </span>
 
-                            <span>
-                              ₹{line.base}
-                            </span>
+                            <span>₹{line.base}</span>
 
                             <span className="text-right font-semibold">
                               ₹{line.lineAmount}
@@ -506,20 +467,15 @@ export default function PaymentModal({
                       </h3>
 
                       <ul className="space-y-2.5">
-                        {features.map(
-                          (feature, idx) => (
-                            <li
-                              key={idx}
-                              className="flex items-start gap-2.5"
-                            >
-                              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#002366]" />
+                        {features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start gap-2.5">
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#002366]" />
 
-                              <span className="text-sm font-medium leading-tight text-slate-600">
-                                {feature}
-                              </span>
-                            </li>
-                          )
-                        )}
+                            <span className="text-sm font-medium leading-tight text-slate-600">
+                              {feature}
+                            </span>
+                          </li>
+                        ))}
                       </ul>
                     </>
                   )}
@@ -620,8 +576,7 @@ export default function PaymentModal({
                           </>
                         ) : (
                           <>
-                            <CreditCard className="h-4 w-4" />
-                            I Will Pay
+                            <CreditCard className="h-4 w-4" />I Will Pay
                           </>
                         )}
                       </Button>
@@ -653,8 +608,7 @@ export default function PaymentModal({
                     <Button
                       onClick={handlePay}
                       disabled={
-                        isProcessing ||
-                        (isCartPayment && !hasSelectedServices)
+                        isProcessing || (isCartPayment && !hasSelectedServices)
                       }
                       className="h-12 w-full cursor-pointer rounded-xl bg-[#002366] text-base font-bold text-white shadow-sm shadow-[#002366]/20 hover:border-2 hover:border-[#002366] hover:bg-[#002366]/80"
                     >

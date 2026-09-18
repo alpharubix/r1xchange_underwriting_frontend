@@ -1,8 +1,8 @@
-import axios from "axios";
-import { toast } from "sonner";
-import { ENV } from "@/conf";
+import axios from 'axios';
+import { toast } from 'sonner';
+import { ENV } from '@/conf';
 
-declare module "axios" {
+declare module 'axios' {
   interface AxiosRequestConfig {
     successMessage?: string;
     errorMessage?: string;
@@ -16,22 +16,21 @@ declare module "axios" {
 }
 
 const apiClient = axios.create({
-  baseURL: ENV.VITE_BACKEND_BASE_URL,
+  baseURL: ENV.VITE_BACKEND_BASE_URL || '/v1',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   withCredentials: true,
 });
 
-console.log("Base URL:", ENV.VITE_BACKEND_BASE_URL);
-
+console.log('Base URL:', ENV.VITE_BACKEND_BASE_URL);
 
 // Helper to extract a user-friendly error message from backend responses
 export const extractErrorMessage = (error: any): string | null => {
   let data = error.response?.data;
   if (!data) return null;
 
-  if (typeof data === "string") {
+  if (typeof data === 'string') {
     try {
       data = JSON.parse(data);
     } catch {
@@ -40,10 +39,10 @@ export const extractErrorMessage = (error: any): string | null => {
   }
 
   const fromObject = (obj: any): string | null => {
-    if (!obj || typeof obj !== "object") return null;
-    if (typeof obj.message === "string") return obj.message;
-    if (typeof obj.msg === "string") return obj.msg;
-    if (typeof obj.error === "string") return obj.error;
+    if (!obj || typeof obj !== 'object') return null;
+    if (typeof obj.message === 'string') return obj.message;
+    if (typeof obj.msg === 'string') return obj.msg;
+    if (typeof obj.error === 'string') return obj.error;
     return null;
   };
 
@@ -52,12 +51,12 @@ export const extractErrorMessage = (error: any): string | null => {
 
   const detail = data.detail;
   if (detail) {
-    if (typeof detail === "string") return detail;
+    if (typeof detail === 'string') return detail;
     if (Array.isArray(detail)) {
       for (const item of detail) {
         const itemMsg = fromObject(item);
         if (itemMsg) return itemMsg;
-        if (typeof item === "string") return item;
+        if (typeof item === 'string') return item;
       }
     }
     const detailMsg = fromObject(detail);
@@ -66,12 +65,12 @@ export const extractErrorMessage = (error: any): string | null => {
 
   const errors = data.errors;
   if (errors) {
-    if (typeof errors === "string") return errors;
+    if (typeof errors === 'string') return errors;
     if (Array.isArray(errors)) {
       for (const item of errors) {
         const itemMsg = fromObject(item);
         if (itemMsg) return itemMsg;
-        if (typeof item === "string") return item;
+        if (typeof item === 'string') return item;
       }
     }
     const errorsMsg = fromObject(errors);
@@ -92,15 +91,15 @@ apiClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error("API error response:", error.response);
+    console.error('API error response:', error.response);
     // console.error("API error response:", error.config.url);
 
-    if (error.config.url === "/user/me") {    
-      window.dispatchEvent(new CustomEvent("auth:unauthorized"));
+    if (error.config.url === '/user/me') {
+      window.dispatchEvent(new CustomEvent('auth:unauthorized'));
       if (error.response?.status === 401 || error.response?.status === 403) {
         return Promise.reject(error);
       }
-    } 
+    }
     // else if (error.response?.status === 401) {
     //   // Dispatch unauthorized for any 401 to ensure the user gets logged out if their session expires
     //   window.dispatchEvent(new CustomEvent("auth:unauthorized"));
@@ -108,10 +107,13 @@ apiClient.interceptors.response.use(
 
     if (!error.config?.skipErrorToast) {
       const serverMessage = extractErrorMessage(error);
-      console.log("Extracted server error message:", serverMessage);
+      console.log('Extracted server error message:', serverMessage);
 
       const errorMessage = serverMessage || error.config?.errorMessage;
-      if (errorMessage && !errorMessage.toLowerCase().includes("unauthorized access")) {
+      if (
+        errorMessage &&
+        !errorMessage.toLowerCase().includes('unauthorized access')
+      ) {
         toast.error(errorMessage);
       }
     }

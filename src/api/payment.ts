@@ -7,13 +7,19 @@ export interface WalletBalanceResponse {
     user_id?: string;
     service: string;
     is_balance_available: boolean;
-    available_balance: number ;
+    available_balance: number;
   };
 }
 
-export async function getWalletBalance(service: string, userId?: string): Promise<WalletBalanceResponse> {
+export async function getWalletBalance(
+  service: string,
+  userId?: string
+): Promise<WalletBalanceResponse> {
   const payload = userId ? { user_id: userId, userId } : {};
-  const response = await apiClient.post<WalletBalanceResponse>(`/wallet/balance/${encodeURIComponent(service)}`, payload);
+  const response = await apiClient.post<WalletBalanceResponse>(
+    `/wallet/balance/${encodeURIComponent(service)}`,
+    payload
+  );
   return response.data;
 }
 
@@ -42,8 +48,13 @@ export interface CreateOrderResponse {
   };
 }
 
-export async function createPaymentOrder(payload: CreateOrderPayload): Promise<CreateOrderResponse> {
-  const response = await apiClient.post<CreateOrderResponse>(`/payments/create-order`, payload);
+export async function createPaymentOrder(
+  payload: CreateOrderPayload
+): Promise<CreateOrderResponse> {
+  const response = await apiClient.post<CreateOrderResponse>(
+    `/payments/create-order`,
+    payload
+  );
   return response.data;
 }
 
@@ -64,8 +75,13 @@ export interface ValidatePaymentResponse {
   };
 }
 
-export async function validatePayment(payload: ValidatePaymentPayload): Promise<ValidatePaymentResponse> {
-  const response = await apiClient.post<ValidatePaymentResponse>(`/payments/validate-payment`, payload);
+export async function validatePayment(
+  payload: ValidatePaymentPayload
+): Promise<ValidatePaymentResponse> {
+  const response = await apiClient.post<ValidatePaymentResponse>(
+    `/payments/validate-payment`,
+    payload
+  );
   return response.data;
 }
 
@@ -78,10 +94,10 @@ export interface PendingPayment {
   currency?: string;
   service: string;
   created_at?: string;
-  notes?:{
-    user_id:string,
-    services_breakup?:ServiceBreakup[]
-  }
+  notes?: {
+    user_id: string;
+    services_breakup?: ServiceBreakup[];
+  };
 }
 
 export interface PendingOrderResponse {
@@ -99,21 +115,23 @@ export interface PendingPaymentsResponse {
   data: PendingOrderResponse;
 }
 
-export async function getPendingPayments(custId?: string): Promise<PendingPaymentsResponse> {
+export async function getPendingPayments(
+  custId?: string
+): Promise<PendingPaymentsResponse> {
   // const params = new URLSearchParams({ service });
   const payload = custId ? { cust_id: custId } : {};
 
-  const response = await apiClient.post<PendingPaymentsResponse >(
+  const response = await apiClient.post<PendingPaymentsResponse>(
     `/payments/pending`,
     payload,
     {
       headers: {
         'Content-Type': 'application/json',
       },
-    },
+    }
   );
   const data = response.data;
-  console.log("Pending payment response : ",data);
-  
+  console.log('Pending payment response : ', data);
+
   return response.data;
 }

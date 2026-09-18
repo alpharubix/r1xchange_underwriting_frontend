@@ -1,20 +1,24 @@
 import { useState } from 'react';
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
+} from '@/components/ui/select';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { requestLoan } from '@/api/money';
 
-export default function AccessMoneyReportView({ selectedCustomer }: { selectedCustomer: any }) {
+export default function AccessMoneyReportView({
+  selectedCustomer,
+}: {
+  selectedCustomer: any;
+}) {
   const [loanType, setLoanType] = useState('Personal Loan');
   const [customLoanType, setCustomLoanType] = useState('');
   const [amount, setAmount] = useState<string>('');
@@ -38,14 +42,17 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
       const payload = {
         cust_id: selectedCustomer.id,
         loan_type: finalLoanType,
-        amount: Number(amount)
+        amount: Number(amount),
       };
       const res = await requestLoan(payload);
       toast.success(res.message || 'Loan request submitted successfully!');
-      
+
       const storageKey = `submitted_access_${selectedCustomer.id}`;
-      const submitted = JSON.parse(localStorage.getItem(storageKey) || "[]");
-      const newSubmitted = [...submitted, { ...payload, timestamp: new Date().toISOString() }];
+      const submitted = JSON.parse(localStorage.getItem(storageKey) || '[]');
+      const newSubmitted = [
+        ...submitted,
+        { ...payload, timestamp: new Date().toISOString() },
+      ];
       localStorage.setItem(storageKey, JSON.stringify(newSubmitted));
 
       setAmount('');
@@ -53,7 +60,8 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
       setCustomLoanType('');
     } catch (error: any) {
       console.error(error);
-      const msg = error?.response?.data?.message || 'Failed to submit loan request';
+      const msg =
+        error?.response?.data?.message || 'Failed to submit loan request';
       toast.error(msg);
     } finally {
       setIsSubmitting(false);
@@ -64,22 +72,32 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
     <div className="animate-in fade-in duration-200">
       <div className="mb-6">
         <h3 className="text-lg font-bold text-slate-900">Access Money</h3>
-        <p className="text-sm text-slate-500 mt-1">Request a loan or credit facility for this customer.</p>
+        <p className="text-sm text-slate-500 mt-1">
+          Request a loan or credit facility for this customer.
+        </p>
       </div>
 
       <Card className="max-w-md border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
         <CardContent className="p-6">
           <form onSubmit={handleSubmit} className="space-y-6">
-
             <div className="space-y-2">
-              <Label htmlFor="loanType" className="text-sm font-medium text-slate-700">Loan Type</Label>
+              <Label
+                htmlFor="loanType"
+                className="text-sm font-medium text-slate-700"
+              >
+                Loan Type
+              </Label>
               <Select value={loanType} onValueChange={setLoanType}>
                 <SelectTrigger id="loanType" className="w-full h-10">
                   <SelectValue placeholder="Select a loan type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="anchor_channel_fin">Anchor Channel Fin</SelectItem>
-                  <SelectItem value="open_channel_fin">Open Channel Fin</SelectItem>
+                  <SelectItem value="anchor_channel_fin">
+                    Anchor Channel Fin
+                  </SelectItem>
+                  <SelectItem value="open_channel_fin">
+                    Open Channel Fin
+                  </SelectItem>
                   <SelectItem value="unsecured_od">Unsecured OD</SelectItem>
                   <SelectItem value="unsecured_tl">Unsecured TL</SelectItem>
                   <SelectItem value="vehicle_loan">Vehicle Loan</SelectItem>
@@ -90,7 +108,12 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
 
             {loanType === 'Others' && (
               <div className="space-y-2 animate-in slide-in-from-top-2 duration-200">
-                <Label htmlFor="customLoanType" className="text-sm font-medium text-slate-700">Specify Loan Type</Label>
+                <Label
+                  htmlFor="customLoanType"
+                  className="text-sm font-medium text-slate-700"
+                >
+                  Specify Loan Type
+                </Label>
                 <Input
                   id="customLoanType"
                   type="text"
@@ -103,7 +126,12 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
             )}
 
             <div className="space-y-2">
-              <Label htmlFor="amount" className="text-sm font-medium text-slate-700">Amount</Label>
+              <Label
+                htmlFor="amount"
+                className="text-sm font-medium text-slate-700"
+              >
+                Amount
+              </Label>
               <Input
                 id="amount"
                 type="number"
@@ -120,7 +148,9 @@ export default function AccessMoneyReportView({ selectedCustomer }: { selectedCu
               className="w-full bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl"
               disabled={isSubmitting}
             >
-              {isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+              {isSubmitting ? (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              ) : null}
               Submit Request
             </Button>
           </form>

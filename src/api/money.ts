@@ -27,27 +27,39 @@ export interface RectifyMoneyResponse {
   accounts: RectifyMoneyAccount[];
 }
 
-export async function getSaveMoneyReports(custId: string, referenceId: string): Promise<SaveMoneyResponse> {
-  const response = await apiClient.get<SaveMoneyResponse>(`/save-money/${encodeURIComponent(custId)}`, {
-    params: { reference_id: referenceId }
-  });
+export async function getSaveMoneyReports(
+  custId: string,
+  referenceId: string
+): Promise<SaveMoneyResponse> {
+  const response = await apiClient.get<SaveMoneyResponse>(
+    `/save-money/${encodeURIComponent(custId)}`,
+    {
+      params: { reference_id: referenceId },
+    }
+  );
   if (response.data && response.data.accounts) {
-    response.data.accounts = response.data.accounts.map(acc => ({
+    response.data.accounts = response.data.accounts.map((acc) => ({
       ...acc,
-      check_box_initial: acc.check_box
+      check_box_initial: acc.check_box,
     }));
   }
   return response.data;
 }
 
-export async function getRectifyMoneyReports(custId: string, referenceId: string): Promise<RectifyMoneyResponse> {
-  const response = await apiClient.get<RectifyMoneyResponse>(`/rectify/${encodeURIComponent(custId)}`, {
-    params: { reference_id: referenceId }
-  });
+export async function getRectifyMoneyReports(
+  custId: string,
+  referenceId: string
+): Promise<RectifyMoneyResponse> {
+  const response = await apiClient.get<RectifyMoneyResponse>(
+    `/rectify/${encodeURIComponent(custId)}`,
+    {
+      params: { reference_id: referenceId },
+    }
+  );
   if (response.data && response.data.accounts) {
-    response.data.accounts = response.data.accounts.map(acc => ({
+    response.data.accounts = response.data.accounts.map((acc) => ({
       ...acc,
-      check_box_initial: acc.check_box
+      check_box_initial: acc.check_box,
     }));
   }
   return response.data;
@@ -63,13 +75,25 @@ export interface SubmitSelectionsPayload {
   selected_accounts: SelectedAccount[];
 }
 
-export async function submitSaveMoneySelections(custId: string, data: SubmitSelectionsPayload): Promise<{ message: string }> {
-  const response = await apiClient.post<{ message: string }>(`/save-money/${encodeURIComponent(custId)}/submit-selections`, data);
+export async function submitSaveMoneySelections(
+  custId: string,
+  data: SubmitSelectionsPayload
+): Promise<{ message: string }> {
+  const response = await apiClient.post<{ message: string }>(
+    `/save-money/${encodeURIComponent(custId)}/submit-selections`,
+    data
+  );
   return response.data;
 }
 
-export async function submitRectifyMoneySelections(custId: string, data: SubmitSelectionsPayload): Promise<{ message: string }> {
-  const response = await apiClient.post<{ message: string }>(`/rectify/${encodeURIComponent(custId)}/submit-selections`, data);
+export async function submitRectifyMoneySelections(
+  custId: string,
+  data: SubmitSelectionsPayload
+): Promise<{ message: string }> {
+  const response = await apiClient.post<{ message: string }>(
+    `/rectify/${encodeURIComponent(custId)}/submit-selections`,
+    data
+  );
   return response.data;
 }
 
@@ -83,7 +107,12 @@ export interface RequestLoanResponse {
   message: string;
 }
 
-export async function requestLoan(payload: RequestLoanPayload): Promise<RequestLoanResponse> {
-  const response = await apiClient.post<RequestLoanResponse>(`/access-money/loan-request`, payload);
+export async function requestLoan(
+  payload: RequestLoanPayload
+): Promise<RequestLoanResponse> {
+  const response = await apiClient.post<RequestLoanResponse>(
+    `/access-money/loan-request`,
+    payload
+  );
   return response.data;
 }

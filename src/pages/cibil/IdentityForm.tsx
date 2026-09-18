@@ -43,7 +43,11 @@ const identityTypeOptions = [
   { value: 'VOTER_ID', label: 'Voter ID', placeholder: 'ABC1234567' },
   { value: 'NREGA', label: 'NREGA Job Card', placeholder: 'RJ1234567890' },
   { value: 'RATION_CARD', label: 'Ration Card', placeholder: 'RC123456789' },
-  { value: 'CIN', label: 'Company Identification Number (CIN)', placeholder: 'L12345MH2024PLC123456' },
+  {
+    value: 'CIN',
+    label: 'Company Identification Number (CIN)',
+    placeholder: 'L12345MH2024PLC123456',
+  },
   { value: 'GSTIN', label: 'GSTIN', placeholder: '27ABCDE1234F1Z5' },
 ];
 
@@ -80,22 +84,23 @@ const stateOptions = [
   { value: "WB", label: "West Bengal" },
 
   // Union Territories
-  { value: "AN", label: "Andaman and Nicobar Islands" },
-  { value: "CH", label: "Chandigarh" },
+  { value: 'AN', label: 'Andaman and Nicobar Islands' },
+  { value: 'CH', label: 'Chandigarh' },
   {
-    value: "DN",
-    label: "Dadra and Nagar Haveli and Daman and Diu",
+    value: 'DN',
+    label: 'Dadra and Nagar Haveli and Daman and Diu',
   },
-  { value: "DL", label: "Delhi (NCT)" },
-  { value: "JK", label: "Jammu and Kashmir" },
-  { value: "LA", label: "Ladakh" },
-  { value: "LD", label: "Lakshadweep" },
-  { value: "PY", label: "Puducherry" },
-
+  { value: 'DL', label: 'Delhi (NCT)' },
+  { value: 'JK', label: 'Jammu and Kashmir' },
+  { value: 'LA', label: 'Ladakh' },
+  { value: 'LD', label: 'Lakshadweep' },
+  { value: 'PY', label: 'Puducherry' },
 ];
 
-
-async function submitIdentityDetails(payload: CibilIdentityPayload, custId?: string) {
+async function submitIdentityDetails(
+  payload: CibilIdentityPayload,
+  custId?: string
+) {
   const response = await generateCibilOtp(payload, undefined, custId);
 
   return {
@@ -109,7 +114,8 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
   const [fieldErrors, setFieldErrors] = useState<CibilFieldErrors>({});
   const [identityType, setIdentityType] = useState('PAN');
   const identityMutation = useMutation({
-    mutationFn: (payload: CibilIdentityPayload) => submitIdentityDetails(payload, custId),
+    mutationFn: (payload: CibilIdentityPayload) =>
+      submitIdentityDetails(payload, custId),
     onSuccess: (response) => {
       setFieldErrors({});
       toast.success('Identity details submitted. OTP has been initiated.');
@@ -182,7 +188,6 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
       nextFieldErrors.identity = 'Identity is required';
     }
 
-
     if (Object.keys(nextFieldErrors).length > 0) {
       setFieldErrors(nextFieldErrors);
       return;
@@ -194,9 +199,8 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
   const getIdentityPlaceholder = () => {
     return (
-      identityTypeOptions.find(
-        (identity) => identity.value === identityType
-      )?.placeholder || 'ABCDE1234F'
+      identityTypeOptions.find((identity) => identity.value === identityType)
+        ?.placeholder || 'ABCDE1234F'
     );
   };
 
@@ -227,7 +231,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="firstName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               First Name
             </label>
             <input
@@ -235,14 +242,19 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
               type="text"
               className={getInputClassName('first_name')}
               value={formValues.first_name}
-              onChange={(event) => updateField('first_name', event.target.value)}
+              onChange={(event) =>
+                updateField('first_name', event.target.value)
+              }
               placeholder="Rahul"
               required
             />
             {renderFieldError('first_name')}
           </div>
           <div>
-            <label htmlFor="middleName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="middleName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Middle Name
             </label>
             <input
@@ -250,13 +262,18 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
               type="text"
               className={getInputClassName('middle_name')}
               value={formValues.middle_name}
-              onChange={(event) => updateField('middle_name', event.target.value)}
+              onChange={(event) =>
+                updateField('middle_name', event.target.value)
+              }
               placeholder="Optional"
             />
             {renderFieldError('middle_name')}
           </div>
           <div>
-            <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="lastName"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Last Name
             </label>
             <input
@@ -274,7 +291,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="dob"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Date of Birth
             </label>
             <input
@@ -290,7 +310,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('date_of_birth')}
           </div>
           <div>
-            <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="gender"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Gender
             </label>
             <select
@@ -309,7 +332,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('gender')}
           </div>
           <div>
-            <label htmlFor="mobile" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="mobile"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Mobile Number
             </label>
             <input
@@ -331,7 +357,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
         <div className="grid grid-cols-1 gap-4">
           <div>
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="address"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Address
             </label>
             <input
@@ -346,7 +375,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('address')}
           </div>
           <div>
-            <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="state"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               State
             </label>
             <select
@@ -356,9 +388,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
               onChange={(event) => updateField('state', event.target.value)}
               required
             >
-              <option value="" >
-                -- Select State --
-              </option>
+              <option value="">-- Select State --</option>
               {stateOptions.map((stateCode) => (
                 <option key={stateCode.value} value={stateCode.value}>
                   {stateCode.value} - {stateCode.label}
@@ -368,7 +398,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('state')}
           </div>
           <div>
-            <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="pincode"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Pincode
             </label>
             <input
@@ -388,7 +421,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
         <div className="grid grid-cols-1 md:grid-cols-[180px_1fr] gap-4 border-t border-gray-100 pt-6">
           <div>
-            <label htmlFor="idType" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="idType"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               ID Type
             </label>
             <select
@@ -407,7 +443,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('identityType')}
           </div>
           <div>
-            <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="idNumber"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               ID Number
             </label>
             <input
@@ -415,9 +454,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
               type="text"
               className={`${getInputClassName('identity')} uppercase`}
               value={formValues.identity}
-              onChange={(event) =>
-                updateIdentityField(event.target.value)
-              }
+              onChange={(event) => updateIdentityField(event.target.value)}
               placeholder={getIdentityPlaceholder()}
               required
             />

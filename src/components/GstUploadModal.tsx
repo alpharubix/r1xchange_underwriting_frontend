@@ -2,7 +2,7 @@
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, FileText } from 'lucide-react';
-import GstWorkflow from "@/components/gst/GstWorkflow";
+import GstWorkflow from '@/components/gst/GstWorkflow';
 
 interface GstUploadModalProps {
   isOpen: boolean;
@@ -10,7 +10,11 @@ interface GstUploadModalProps {
   custId?: string;
 }
 
-export default function GstUploadModal({ isOpen, onClose, custId }: GstUploadModalProps) {
+export default function GstUploadModal({
+  isOpen,
+  onClose,
+  custId,
+}: GstUploadModalProps) {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) onClose();
@@ -25,8 +29,8 @@ export default function GstUploadModal({ isOpen, onClose, custId }: GstUploadMod
     <AnimatePresence>
       <motion.div
         className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-[rgba(0,0,0,0.5)] backdrop-blur"
-        initial={{ opacity: 0 ,backgroundColor: 'rgba(0, 0, 0, 0)'}}
-        animate={{ opacity: 1 ,backdropFilter: 'blur(6px)'}}
+        initial={{ opacity: 0, backgroundColor: 'rgba(0, 0, 0, 0)' }}
+        animate={{ opacity: 1, backdropFilter: 'blur(6px)' }}
         exit={{ opacity: 0 }}
       >
         <motion.div
@@ -41,14 +45,21 @@ export default function GstUploadModal({ isOpen, onClose, custId }: GstUploadMod
           >
             <X className="h-5 w-5" />
           </button>
-          
+
           <div className="p-6 pb-0">
             <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
               <FileText className="h-6 w-6 text-[#002366]" />
               GST Analysis
             </h2>
-            <p className="text-gray-500 mt-1">Authenticate and process your GST data</p>
-            {custId && <p className="text-gray-500 mt-1 font-medium text-sm">Target Customer ID: <span className="text-[#002366] font-semibold">{custId}</span></p>}
+            <p className="text-gray-500 mt-1">
+              Authenticate and process your GST data
+            </p>
+            {custId && (
+              <p className="text-gray-500 mt-1 font-medium text-sm">
+                Target Customer ID:{' '}
+                <span className="text-[#002366] font-semibold">{custId}</span>
+              </p>
+            )}
           </div>
 
           <div className="p-6 pt-0">
