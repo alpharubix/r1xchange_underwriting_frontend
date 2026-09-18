@@ -2,7 +2,7 @@ import { useState, useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
-import PaymentModal from "@/components/PaymentModal";
+import PaymentModal from "@/components/cart/PaymentModal";
 import { getPricingDetails } from "@/lib/paymentUtils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";

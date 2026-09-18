@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BriefcaseBusiness } from 'lucide-react';
+import { BriefcaseBusiness, WrenchIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -20,7 +20,7 @@ import { KycModal } from '@/components/KycModal';
 import HomeIntro from '@/components/HomeIntro';
 import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
-import PaymentModal from '@/components/PaymentModal';
+import PaymentModal from '@/components/cart/PaymentModal';
 import { getPricingDetails } from '@/lib/paymentUtils';
 
 import { getWalletBalance } from '@/api/payment';
@@ -214,7 +214,7 @@ export default function DashboardPage() {
       onClick: () => {
         void handleModuleClick('BSA', () => setIsModalOpen(true));
       },
-      disabled: false,
+      disabled: true,
     },
     {
       title: 'GSTR Analysis',
@@ -323,7 +323,7 @@ export default function DashboardPage() {
                           : 'cursor-pointer border-[#002366]/20 hover:-translate-y-1 hover:border-[#002366]/50 hover:shadow-lg'
                   }`}
                 >
-                  <div className="flex h-full min-h-0 flex-col">
+          <div className={`flex h-full min-h-0 flex-col ${item.disabled ? '' : ''} `}>
                     {/* Card Top */}
                     <div className="flex items-start gap-4 p-5">
                       <div
@@ -331,16 +331,17 @@ export default function DashboardPage() {
                           item.disabled ? 'bg-gray-200' : 'bg-blue-50'
                         }`}
                       >
-                        {item.icon}
+                        {item.disabled ? <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-wrench-off"><path d="M10.747 5.093a6 6 0 0 1 6.841-2.882c.438.12.54.662.219.984L14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.106-3.105c.32-.322.863-.22.983.218a6 6 0 0 1-2.882 6.842"/><path d="m13.5 13.5-7.88 7.88a1 1 0 0 1-2.999-3l7.88-7.88"/><path d="m2 2 20 20"/></svg>
+               : item.icon}
                       </div>
 
                       <div className="min-w-0 pt-1">
                         <h3 className="text-xl font-bold leading-tight text-[#002366]">
-                          {item.title}
+                          {item.disabled ? 'BSA Service Unavailable' : item.title}
                         </h3>
 
-                        <p className="mt-1 text-xs leading-5 text-[#5c6590]">
-                          {item.description}
+                        <p className={`mt-1 text-xs leading-5 text-[#5c6590] ${item.disabled && 'text-red-500'}`}>
+                          {item.disabled ? 'This service is currently unavailable.' : item.description}
                         </p>
                       </div>
                     </div>

@@ -10,7 +10,8 @@
     Eye,
     FileSpreadsheet,
     Loader2,
-    ArrowLeft
+    ArrowLeft,
+    AlertTriangle
   } from 'lucide-react';
   import OverviewMonthlyWise from "./bsa/OverviewMonthlyWise";
   import SummeryOfDebitAndCredit from "./bsa/SummaryOfDebitAndCredit";
@@ -25,10 +26,11 @@
   import { getWalletBalance } from '@/api/payment';
   import { toast } from 'sonner';
   import { useQuery } from '@tanstack/react-query';
-  import PaymentModal from "@/components/PaymentModal";
+  import PaymentModal from "@/components/cart/PaymentModal";
   import PayerSelectionModal from '@/components/PayerSelectionModal';
   import { createPaymentOrder, getPendingPayments } from '@/api/payment';
   import { getUserBsaReports, getUserGstReports, getUserItrReports, getUserCibilReports } from '@/api/user';
+  
   import WalletModal from '@/pages/AnchorLogin/WalletModal';
 
   interface Customer {
@@ -123,6 +125,10 @@
   };
 
   export default function ServiceReport({ selectedCustomer, onBack }: ServiceReportProps) {
+
+    // for blocking 
+    const isBsaBlocked = true;
+
     const [reportsSubTab, setReportsSubTab] = useState<"bsa" | "gst" | "itr" | "cibil" | "save_money" | "rectify_money" | "access_money" | "wallet">("bsa");
     const [slideDirection, setSlideDirection] = useState(0);
     const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
@@ -151,6 +157,8 @@
       amount: 0,
       onSuccess: () => { }
     });
+
+   
 
     const [payerSelectionConfig, setPayerSelectionConfig] = useState<{
       isOpen: boolean;
@@ -376,10 +384,24 @@
                   }`}
               >
                 <span
-                  className={`h-2 w-2 rounded-full shrink-0 transition-colors ${isActive ? "bg-emerald-400" : "bg-slate-400"
-                    }`}
+                  className={`h-2 w-2 rounded-full shrink-0 transition-colors ${
+                    tab === "bsa" && isBsaBlocked
+                      ? "bg-amber-400"
+                      : isActive ? "bg-emerald-400" : "bg-slate-400"
+                  }`}
                 />
                 <span>{tabLabels[tab]}</span>
+                {tab === "bsa" && isBsaBlocked && (
+                  <span
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold transition-colors ${
+                      isActive
+                        ? "bg-amber-400/20 text-amber-200 border border-amber-300/30"
+                        : "bg-amber-100 text-amber-700 border border-amber-200"
+                    }`}
+                  >
+                    Unavailable
+                  </span>
+                )}
               </button>
             );
           })}
@@ -400,6 +422,24 @@
               {reportsSubTab === "bsa" && (
                 viewingBsaReport ? (
                   <div className="space-y-6 animate-in fade-in duration-200">
+                    {isBsaBlocked && (
+                      <div className="flex items-start sm:items-center gap-3.5 p-4 bg-amber-50/90 border border-amber-200/90 rounded-2xl text-amber-900 shadow-sm">
+                        <div className="p-2.5 bg-amber-100 text-amber-700 rounded-xl shrink-0 flex items-center justify-center">
+                          <AlertTriangle className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-sm font-bold text-amber-900">
+                              BSA is temporarily unavailable
+                            </h4>
+                          </div>
+                          <p className="text-xs text-amber-700/90 mt-0.5 font-medium">
+                            Bank Statement Analysis (BSA) is temporarily unavailable. Report generation and viewing are currently paused.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
                       <div className="flex items-center gap-4">
                         <Button
@@ -414,9 +454,18 @@
                         </span>
                       </div>
                       <Button
-                        onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
-                        disabled={isCheckingWallet}
-                        className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
+                        onClick={() => {
+                          if (isBsaBlocked) {
+                            toast.error("BSA is temporarily unavailable");
+                            return;
+                          }
+                          handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true));
+                        }}
+                        disabled={isBsaBlocked ? true : isCheckingWallet}
+                        className={`bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer ${
+                          isBsaBlocked ? "opacity-60 cursor-not-allowed" : ""
+                        }`}
+                        title={isBsaBlocked ? "BSA is temporarily unavailable" : undefined}
                       >
                         {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                         + Create New BSA Report
@@ -476,15 +525,45 @@
                   </div>
                 ) : (
                   <div className="space-y-6 animate-in fade-in duration-200">
+                    {isBsaBlocked && (
+                      <div className="flex items-start sm:items-center gap-3.5 p-4 bg-amber-50/90 border border-amber-200/90 rounded-2xl text-amber-900 shadow-sm">
+                        <div className="p-2.5 bg-amber-100 text-amber-700 rounded-xl shrink-0 flex items-center justify-center">
+                          <AlertTriangle className="h-5 w-5" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2">
+                            <h4 className="text-sm font-bold text-amber-900">
+                              BSA is temporarily unavailable
+                            </h4>
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-200/80 text-amber-800 tracking-wide uppercase">
+                              Notice
+                            </span>
+                          </div>
+                          <p className="text-xs text-amber-700/90 mt-0.5 font-medium">
+                            Bank Statement Analysis (BSA) is temporarily unavailable. Generating new reports and viewing reports are currently paused.
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                       <div>
                         <h3 className="text-lg font-bold text-slate-900">BSA Reports</h3>
                         <p className="text-xs text-slate-500 mt-0.5">Bank Statement Analysis Reports</p>
                       </div>
                       <Button
-                        onClick={() => handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true))}
-                        disabled={isCheckingWallet}
-                        className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
+                        onClick={() => {
+                          if (isBsaBlocked) {
+                            toast.error("BSA is temporarily unavailable");
+                            return;
+                          }
+                          handleCreateReport('BSA', 'BSA', 565, () => setIsBsaModalOpen(true));
+                        }}
+                        disabled={isBsaBlocked ? true : isCheckingWallet}
+                        className={`bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer ${
+                          isBsaBlocked ? "opacity-60 cursor-not-allowed" : ""
+                        }`}
+                        title={isBsaBlocked ? "BSA is temporarily unavailable" : undefined}
                       >
                         {isCheckingWallet ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
                         + Create New BSA Report
@@ -537,10 +616,20 @@
                                         <button
                                           type="button"
                                           onClick={() => {
+                                            if (isBsaBlocked) {
+                                              toast.error("BSA is temporarily unavailable");
+                                              return;
+                                            }
+
                                             setViewingBsaReport(report);
                                           }}
-                                          className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
-                                          title="View Report"
+                                          disabled={isBsaBlocked}
+                                          className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 transition-colors shadow-sm ${
+                                            isBsaBlocked
+                                              ? "opacity-50 cursor-not-allowed bg-slate-50"
+                                              : "hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 cursor-pointer"
+                                          }`}
+                                          title={isBsaBlocked ? "BSA is temporarily unavailable" : "View Report"}
                                         >
                                           <Eye className="h-3.5 w-3.5" />
                                           View Report

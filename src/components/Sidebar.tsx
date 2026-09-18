@@ -1,4 +1,4 @@
-﻿import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   LogOut,
@@ -14,6 +14,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "sonner";
 import { useMe } from "@/hooks/useUser";
 import { useLogout } from "@/hooks/useAuth";
 import r1xchangeLogoWhiteWebView from "../assets/r1xchangeLogoWhiteWebView.svg";
@@ -38,11 +39,22 @@ export function SidebarProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-const navItems = [
+interface NavItem {
+  icon: React.ComponentType<{ className?: string }>;
+  label: string;
+  path?: string;
+  Disabled?: boolean;
+  disabled?: boolean;
+  subItems?: { label: string; path: string }[];
+}
+
+const navItems: NavItem[] = [
   { icon: LayoutDashboard, label: "Dashboard", path: "/home/dashboard" },
   {
     icon: Building2,
     label: "BSA Reports",
+    Disabled: true,
+
     subItems: [
       { label: "Summary of Debit and Credit", path: "/bsa/summary-of-debit-and-credit" },
       { label: "Cash Flow", path: "/bsa/cash-flow" },
@@ -109,7 +121,7 @@ export function AppSidebar() {
 
   const { data: user, isLoading: userLoading } = useMe();
 
-  
+
   const displayName = user?.customer_name || user?.email_id || "User";
   const displayEmail = user?.email_id || "";
   const displayCompany = user?.company_name || "";
@@ -146,12 +158,12 @@ export function AppSidebar() {
         )}
       >
         <div className="h-20 w-96 flex items-center justify-center">
-  <img
-    src={r1xchangeLogoWhiteWebView}
-    alt="R1Xchange Logo"
-    className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
-  />
-</div>
+          <img
+            src={r1xchangeLogoWhiteWebView}
+            alt="R1Xchange Logo"
+            className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
+          />
+        </div>
         {/* {!collapsed && (
           <div className="animate-fade-in overflow-hidden">
             <p className="text-base font-bold text-white tracking-wide">R1Xchange</p>
@@ -166,8 +178,9 @@ export function AppSidebar() {
           </p>
         )}
         {navItems.map((item) => {
+          const isDisabled = Boolean(item.Disabled || item.disabled);
           const hasSubItems = !!item.subItems;
-          const isExpanded = expandedMenus[item.label];
+          const isExpanded = !isDisabled && expandedMenus[item.label];
           const isActive = item.path
             ? location.pathname === item.path
             : item.subItems?.some(sub => location.pathname === sub.path);
@@ -176,6 +189,10 @@ export function AppSidebar() {
             <div key={item.label}>
               <button
                 onClick={() => {
+                  if (isDisabled) {
+                    toast.error(`${item.label} is temporarily unavailable`);
+                    return;
+                  }
                   if (hasSubItems) {
                     if (collapsed) {
                       setCollapsed(false);
@@ -190,15 +207,35 @@ export function AppSidebar() {
                 className={cn(
                   "sidebar-item w-full",
                   isActive && !hasSubItems && "active",
-                  collapsed && "justify-center px-0"
+                  collapsed && "justify-center px-0",
+                  isDisabled && "opacity-60 cursor-not-allowed hover:bg-transparent"
                 )}
-                title={collapsed ? item.label : undefined}
+                title={
+                  isDisabled
+                    ? `${item.label} (Temporarily unavailable)`
+                    : collapsed
+                      ? item.label
+                      : undefined
+                }
               >
-                <item.icon
-                  className={cn("h-5 w-5 shrink-0", isActive ? "text-white" : "text-white/70")}
-                />
+                <div className="relative flex items-center justify-center shrink-0">
+                  <item.icon
+                    className={cn(
+                      "h-5 w-5 shrink-0",
+                      isActive ? "text-white" : isDisabled ? "text-white/40" : "text-white/70"
+                    )}
+                  />
+                  {isDisabled && collapsed && (
+                    <span className="absolute -top-1 -right-1 h-2 w-2 rounded-full bg-red-500 ring-2 ring-[#002366]" />
+                  )}
+                </div>
                 {!collapsed && <span className="truncate">{item.label}</span>}
-                {!collapsed && hasSubItems && (
+                {!collapsed && isDisabled && (
+                  <span className="ml-auto px-1.5 py-0.5 rounded text-[9px] font-semibold tracking-wide uppercase bg-red-400/20 text-red-300 border border-red-400/30">
+                    Unavailable
+                  </span>
+                )}
+                {!collapsed && !isDisabled && hasSubItems && (
                   <div className="ml-auto">
                     {isExpanded ? (
                       <ChevronDown className="h-4 w-4" />
@@ -207,25 +244,25 @@ export function AppSidebar() {
                     )}
                   </div>
                 )}
-                {!collapsed && isActive && !hasSubItems && (
+                {!collapsed && !isDisabled && isActive && !hasSubItems && (
                   <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
                 )}
               </button>
 
-              {!collapsed && hasSubItems && isExpanded && (
+              {!collapsed && hasSubItems && isExpanded && !isDisabled && (
                 <div className="mt-1 flex flex-col space-y-1 pl-9 pr-2 overflow-hidden animate-accordion-down">
                   {item.subItems!.map((sub) => {
                     const isSubActive = location.pathname === sub.path;
                     return (
                       <button
-                      key={sub.path}
-                      type="button"
-                      onClick={() => navigate(sub.path)}
-                      className={cn(
-                        "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
-                        isSubActive && "text-white font-medium bg-white/20"
-                      )}
-                        >
+                        key={sub.path}
+                        type="button"
+                        onClick={() => navigate(sub.path)}
+                        className={cn(
+                          "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
+                          isSubActive && "text-white font-medium bg-white/20"
+                        )}
+                      >
                         <span className="truncate">{sub.label}</span>
                         {isSubActive && (
                           <span className="ml-auto h-1.5 w-1.5 rounded-full bg-white" />
@@ -245,9 +282,9 @@ export function AppSidebar() {
           onClick={handleLogout}
           disabled={logoutMutation.isPending}
           className={cn(
-  "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
-  collapsed && "justify-center px-0"
-)}
+            "sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors",
+            collapsed && "justify-center px-0"
+          )}
           title={collapsed ? "Logout" : undefined}
           id="logout-btn"
         >

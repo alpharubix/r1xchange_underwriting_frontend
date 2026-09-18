@@ -372,8 +372,8 @@ export default function PaymentModal({
                 y: 10,
               }}
               className={`relative z-10 flex min-h-[600px] max-h-[95vh] h-auto w-full ${isCartPayment
-                  ? 'max-w-2xl'
-                  : 'max-w-md'
+                ? 'max-w-2xl'
+                : 'max-w-md'
                 } flex-col overflow-hidden rounded-3xl bg-white shadow-2xl`}
             >
               {/* Header */}
@@ -399,7 +399,8 @@ export default function PaymentModal({
 
                 <div>
                   <p className="mt-1 text-sm font-medium text-blue-100">
-                    Unlock access to generate this report.
+                    
+                    
                   </p>
                 </div>
               </div>
@@ -668,7 +669,7 @@ export default function PaymentModal({
                     </Button>
                   )}
                 </div>
-               </div>
+              </div>
             </motion.div>
           </div>
         </div>
