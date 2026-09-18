@@ -238,7 +238,7 @@ export default function BankAccountsPage() {
                           ========================= */}
 
                       {reportsVisible ? (
-                        <div className="absolute inset-0 z-20 rounded-xl bg-white p-5 animate-in fade-in duration-200">
+                        <div className="flex h-full flex-col animate-in fade-in duration-200">
                           <div className="flex h-full flex-col ">
                             {/* Reports Header */}
                             <div className="flex items-start justify-between gap-3 ">
