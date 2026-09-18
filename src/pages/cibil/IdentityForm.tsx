@@ -48,7 +48,7 @@ const identityTypeOptions = [
 ];
 
 const stateOptions = [
- 
+
   // States
   { value: "AP", label: "Andhra Pradesh" },
   { value: "AR", label: "Arunachal Pradesh" },
@@ -73,7 +73,7 @@ const stateOptions = [
   { value: "RJ", label: "Rajasthan" },
   { value: "SK", label: "Sikkim" },
   { value: "TN", label: "Tamil Nadu" },
-  { value: "TS", label: "Telangana" },
+  { value: "TG", label: "Telangana" },
   { value: "TR", label: "Tripura" },
   { value: "UP", label: "Uttar Pradesh" },
   { value: "UK", label: "Uttarakhand" },
@@ -143,7 +143,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
     setFormValues((current) => ({
       ...current,
       [field]: value,
-    }));  
+    }));
   };
 
   const updateIdentityField = (value: string) => {
@@ -201,9 +201,8 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
   };
 
   const getInputClassName = (field: CibilGenerateOtpField) => {
-    return `w-full px-4 py-2 border rounded-md focus:ring-[#002366] focus:border-[#002366] ${
-      fieldErrors[field] ? 'border-red-400' : 'border-gray-300'
-    }`;
+    return `w-full px-4 py-2 border rounded-md focus:ring-[#002366] focus:border-[#002366] ${fieldErrors[field] ? 'border-red-400' : 'border-gray-300'
+      }`;
   };
 
   const renderFieldError = (field: CibilGenerateOtpField) => {
@@ -392,20 +391,20 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             <label htmlFor="idType" className="block text-sm font-medium text-gray-700 mb-1">
               ID Type
             </label>
-          <select
-            id="idType"
-            className={`${getInputClassName('identityType')} bg-white`}
-            value={identityType}
-            onChange={(event) => updateIdentityType(event.target.value)}
-            required
-          >
-          {identityTypeOptions.map((identity) => (
-            <option key={identity.value} value={identity.value}>
-              {identity.label}
-            </option>
-          ))}
-         </select>
-          {renderFieldError('identityType')}
+            <select
+              id="idType"
+              className={`${getInputClassName('identityType')} bg-white`}
+              value={identityType}
+              onChange={(event) => updateIdentityType(event.target.value)}
+              required
+            >
+              {identityTypeOptions.map((identity) => (
+                <option key={identity.value} value={identity.value}>
+                  {identity.label}
+                </option>
+              ))}
+            </select>
+            {renderFieldError('identityType')}
           </div>
           <div>
             <label htmlFor="idNumber" className="block text-sm font-medium text-gray-700 mb-1">

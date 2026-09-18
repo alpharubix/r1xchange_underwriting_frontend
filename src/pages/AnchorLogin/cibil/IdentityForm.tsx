@@ -72,7 +72,7 @@ const stateOptions = [
   { value: "RJ", label: "Rajasthan" },
   { value: "SK", label: "Sikkim" },
   { value: "TN", label: "Tamil Nadu" },
-  { value: "TS", label: "Telangana" },
+  { value: "TG", label: "Telangana" },
   { value: "TR", label: "Tripura" },
   { value: "UP", label: "Uttar Pradesh" },
   { value: "UK", label: "Uttarakhand" },
