@@ -21,7 +21,7 @@ import {
 } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import BankAccountDetails from './BankAccountDetails';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 interface MonthlyBreakdown {
@@ -38,10 +38,14 @@ interface SummaryData {
   total: any;
 }
 
-export default function SummaryOfDebitAndCredit() {
+export default function SummaryOfDebitAndCredit({
+  accountNumber: propAccountNumber,
+}: { accountNumber?: string } = {}) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const selectedAccountNumber =
+    propAccountNumber ||
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
@@ -275,7 +279,15 @@ export default function SummaryOfDebitAndCredit() {
             </p>
             <Button
               type="button"
-              onClick={() => navigate('/bsa/bank-accounts')}
+              onClick={() => {
+                if (searchParams.get('bsaView')) {
+                  searchParams.delete('bsaView');
+                  searchParams.delete('accountNumber');
+                  setSearchParams(searchParams);
+                } else {
+                  navigate('/bsa/bank-accounts');
+                }
+              }}
               className="mt-4 bg-[#002366] hover:bg-[#001744] text-white"
             >
               Back to Bank Accounts

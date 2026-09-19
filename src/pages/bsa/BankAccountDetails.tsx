@@ -25,10 +25,14 @@ function BankAccountDetails() {
 
   const entries = Object.entries(accountDetails);
 
-  const isOpening = (key: string) => key.toLowerCase().includes('open') && key.toLowerCase().includes('bal');
-  const isClosing = (key: string) => key.toLowerCase().includes('clos') && key.toLowerCase().includes('bal');
+  const isOpening = (key: string) =>
+    key.toLowerCase().includes('open') && key.toLowerCase().includes('bal');
+  const isClosing = (key: string) =>
+    key.toLowerCase().includes('clos') && key.toLowerCase().includes('bal');
 
-  const normalTiles = entries.filter(([key]) => !isOpening(key) && !isClosing(key));
+  const normalTiles = entries.filter(
+    ([key]) => !isOpening(key) && !isClosing(key)
+  );
   const openingBalance = entries.find(([key]) => isOpening(key));
   const closingBalance = entries.find(([key]) => isClosing(key));
 

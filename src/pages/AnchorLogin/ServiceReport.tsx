@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import IndividualOverview from '@/pages/bsa/individual/Overview';
+import IndividualEodAnalysis from '@/pages/bsa/individual/EodAnalysis';
+import IndividualLoanTransactions from '@/pages/bsa/individual/LoanTransactions';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,9 +11,6 @@ import ItrUploadModal from '@/components/ItrUploadModal';
 import GstUploadModal from '@/components/GstUploadModal';
 import CibilUploadModal from '@/components/CibilUploadModal';
 import { Eye, FileSpreadsheet, Loader2, ArrowLeft } from 'lucide-react';
-import OverviewMonthlyWise from './bsa/OverviewMonthlyWise';
-import SummeryOfDebitAndCredit from './bsa/SummaryOfDebitAndCredit';
-import CashFlow from './bsa/cashFlow/CashFlow';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
@@ -24,12 +25,15 @@ import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';
 import { createPaymentOrder, getPendingPayments } from '@/api/payment';
 import {
-  getUserBsaReports,
   getUserGstReports,
   getUserItrReports,
   getUserCibilReports,
 } from '@/api/user';
 import WalletModal from '@/pages/AnchorLogin/WalletModal';
+import BankAccountsPage from '@/pages/bsa/BankAccountsPage';
+import SummeryOfDebitAndCredit from '@/pages/bsa/SummaryOfDebitAndCredit';
+import OverviewMonthlyWise from '@/pages/bsa/OverviewMonthlyWise';
+import CashFlow from '@/pages/bsa/cashFlow/CashFlow';
 
 interface Customer {
   id: string;
@@ -126,6 +130,7 @@ export default function ServiceReport({
   selectedCustomer,
   onBack,
 }: ServiceReportProps) {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [reportsSubTab, setReportsSubTab] = useState<
     | 'bsa'
     | 'gst'
@@ -137,16 +142,14 @@ export default function ServiceReport({
     | 'wallet'
   >('bsa');
   const [slideDirection, setSlideDirection] = useState(0);
+  const bsaView = searchParams.get('bsaView');
+  const accountNumber = searchParams.get('accountNumber');
   const [isBsaModalOpen, setIsBsaModalOpen] = useState(false);
   const [isItrModalOpen, setIsItrModalOpen] = useState(false);
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
   const [isCibilModalOpen, setIsCibilModalOpen] = useState(false);
 
-  const [viewingBsaReport, setViewingBsaReport] = useState<any | null>(null);
-  const [bsaDetailTab, setBsaDetailTab] = useState<
-    'overview' | 'summary' | 'cashflow'
-  >('overview');
-  const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
+      const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
   const [viewingItrReport, setViewingItrReport] = useState<any | null>(null);
   const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(
     null
@@ -268,42 +271,14 @@ export default function ServiceReport({
     };
   }, [selectedCustomer]);
 
-  const { data: bsaReports = [], isLoading: isBsaLoading } = useQuery({
-    queryKey: ['reports', 'bsa', selectedCustomer.id],
-    queryFn: async () => {
-      const data = await getUserBsaReports(selectedCustomer.id);
-      return data.map((item: any) => ({
-        id: item._id || item.id || '',
-        ReportId:
-          item.report_id ||
-          item.reportId ||
-          item.reference_id ||
-          item.last_merged_reference_id ||
-          item.lastMergedReferenceId ||
-          item.id ||
-          '',
-        bsaFromDate:
-          item.bsa_from_date || item.bsaFromDate || item.from_date || '',
-        bsaToDate: item.bsa_to_date || item.bsaToDate || item.to_date || '',
-        tenure: item.tenure || '',
-        generatedOn: formatDateTime(
-          item.created_at ||
-            item.generatedOn ||
-            item.generated_on ||
-            item.created_on ||
-            ''
-        ),
-      }));
-    },
-    enabled: !!selectedCustomer?.id && reportsSubTab === 'bsa',
-  });
-
+  
   const { data: gstReports = [], isLoading: isGstLoading } = useQuery({
     queryKey: ['reports', 'gst', selectedCustomer.id],
     queryFn: async () => {
       const data = await getUserGstReports(selectedCustomer.id);
       return data.map((item: any) => ({
         id: item._id || item.id || '',
+        accountNumber: item.account_number || item.accountNumber || '',
         reportId:
           item.report_id ||
           item.reportId ||
@@ -350,6 +325,7 @@ export default function ServiceReport({
       const data = await getUserItrReports(selectedCustomer.id);
       return data.map((item: any) => ({
         id: item._id || item.id || '',
+        accountNumber: item.account_number || item.accountNumber || '',
         reportId:
           item.report_id ||
           item.reportId ||
@@ -378,6 +354,7 @@ export default function ServiceReport({
       const data = await getUserCibilReports(selectedCustomer.id);
       return data.map((item: any) => ({
         id: item._id || item.id || '',
+        accountNumber: item.account_number || item.accountNumber || '',
         reportId:
           item.report_id ||
           item.reportId ||
@@ -506,7 +483,6 @@ export default function ServiceReport({
                 const oldIndex = tabsList.indexOf(reportsSubTab);
                 setSlideDirection(newIndex > oldIndex ? 1 : -1);
                 setReportsSubTab(tab);
-                setViewingBsaReport(null);
                 setViewingGstReport(null);
                 setViewingItrReport(null);
                 setViewingCibilReport(null);
@@ -536,213 +512,63 @@ export default function ServiceReport({
             exit="exit"
             transition={{ duration: 0.25, ease: 'easeInOut' }}
           >
-            {reportsSubTab === 'bsa' &&
-              (viewingBsaReport ? (
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-4">
-                    <div className="flex items-center gap-4">
-                      <Button
-                        variant="outline"
-                        onClick={() => setViewingBsaReport(null)}
-                        className="flex items-center gap-2 border-[#002366] text-[#002366] hover:bg-[#002366]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
-                      >
-                        <ArrowLeft className="h-4 w-4" /> Back to BSA Reports
-                        List
-                      </Button>
-                      <span className="text-xs font-semibold text-slate-500">
-                        Viewing Report: {viewingBsaReport.ReportId}
-                      </span>
-                    </div>
-                    <Button
-                      onClick={() =>
-                        handleCreateReport('BSA', 'BSA', 565, () =>
-                          setIsBsaModalOpen(true)
-                        )
-                      }
-                      disabled={isCheckingWallet}
-                      className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                    >
-                      {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : null}
-                      + Create New BSA Report
-                    </Button>
-                  </div>
-
-                  <div className="flex border-b border-slate-100 gap-6">
-                    {(['overview', 'summary', 'cashflow'] as const).map(
-                      (tab) => {
-                        const labels: Record<string, string> = {
-                          overview: 'Month-Wise Overview',
-                          summary: 'Summary of Debit & Credit',
-                          cashflow: 'Cash Flow',
-                        };
-                        const isActive = bsaDetailTab === tab;
-                        return (
-                          <button
-                            key={tab}
-                            onClick={() => setBsaDetailTab(tab)}
-                            className={`pb-2 text-xs font-bold transition-all relative cursor-pointer ${isActive ? 'text-[#002366]' : 'text-slate-400 hover:text-slate-600'}`}
+            {reportsSubTab === 'bsa' && (
+                  <div className="animate-in fade-in duration-200">
+                    {!bsaView ? (
+                      <>
+                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                          <div>
+                            <h3 className="text-lg font-bold text-slate-900">
+                              BSA Reports
+                            </h3>
+                            <p className="text-xs text-slate-500 mt-0.5">
+                              Bank Statement Analysis Reports
+                            </p>
+                          </div>
+                          <Button
+                            onClick={() =>
+                              handleCreateReport('BSA', 'BSA', 565, () =>
+                                setIsBsaModalOpen(true)
+                              )
+                            }
+                            disabled={isCheckingWallet}
+                            className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
                           >
-                            {labels[tab]}
-                            {isActive && (
-                              <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#002366] rounded-full animate-fade-in" />
-                            )}
-                          </button>
-                        );
-                      }
-                    )}
-                  </div>
+                            {isCheckingWallet ? (
+                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                            ) : null}
+                            + Create New BSA Report
+                          </Button>
+                        </div>
+                        <BankAccountsPage custId={selectedCustomer.id} hideHeader={true} isAnchor={true} />
+                      </>
+                    ) : (
+                      <div className="space-y-4">
+                        <Button
+                          variant="outline"
+                          onClick={() => {
+                            searchParams.delete('bsaView');
+                            searchParams.delete('accountNumber');
+                            setSearchParams(searchParams);
+                          }}
+                          className="flex items-center gap-2 border-[#002366] text-[#002366] hover:bg-[#002366]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
+                        >
+                          <ArrowLeft className="h-4 w-4" /> Back to Bank Accounts
+                        </Button>
 
-                  <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-6">
-                    {bsaDetailTab === 'overview' && (
-                      <OverviewMonthlyWise
-                        custId={selectedCustomer.id}
-                        reportId={viewingBsaReport.id}
-                        fromDate={viewingBsaReport.bsaFromDate}
-                        toDate={viewingBsaReport.bsaToDate}
-                      />
-                    )}
-                    {bsaDetailTab === 'summary' && (
-                      <SummeryOfDebitAndCredit
-                        custId={selectedCustomer.id}
-                        reportId={viewingBsaReport.id}
-                        fromDate={viewingBsaReport.bsaFromDate}
-                        toDate={viewingBsaReport.bsaToDate}
-                      />
-                    )}
-                    {bsaDetailTab === 'cashflow' && (
-                      <CashFlow
-                        custId={selectedCustomer.id}
-                        reportId={viewingBsaReport.id}
-                        fromDate={viewingBsaReport.bsaFromDate}
-                        toDate={viewingBsaReport.bsaToDate}
-                      />
-                    )}
-                  </div>
-                </div>
-              ) : (
-                <div className="space-y-6 animate-in fade-in duration-200">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <h3 className="text-lg font-bold text-slate-900">
-                        BSA Reports
-                      </h3>
-                      <p className="text-xs text-slate-500 mt-0.5">
-                        Bank Statement Analysis Reports
-                      </p>
-                    </div>
-                    <Button
-                      onClick={() =>
-                        handleCreateReport('BSA', 'BSA', 565, () =>
-                          setIsBsaModalOpen(true)
-                        )
-                      }
-                      disabled={isCheckingWallet}
-                      className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                    >
-                      {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : null}
-                      + Create New BSA Report
-                    </Button>
-                  </div>
-
-                  <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse text-sm">
-                          <thead>
-                            <tr className="border-b border-[#f1f5f9] text-slate-400 font-bold text-xs uppercase tracking-wider bg-slate-50/50">
-                              <th className="py-3 px-4 font-semibold text-slate-500">
-                                Report Id
-                              </th>
-                              <th className="py-3 px-4 font-semibold text-slate-500">
-                                BSA From Date
-                              </th>
-                              <th className="py-3 px-4 font-semibold text-slate-500">
-                                BSA To Date
-                              </th>
-
-                              <th className="py-3 px-4 font-semibold text-slate-500">
-                                Generated On
-                              </th>
-                              <th className="py-3 px-4 font-semibold text-center text-slate-500">
-                                Actions
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y divide-[#f1f5f9] font-medium text-slate-700">
-                            {isBsaLoading ? (
-                              <tr>
-                                <td
-                                  colSpan={6}
-                                  className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
-                                >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
-                                </td>
-                              </tr>
-                            ) : bsaReports.length === 0 ? (
-                              <tr>
-                                <td
-                                  colSpan={6}
-                                  className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
-                                >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <FileSpreadsheet className="h-8 w-8 text-slate-300" />
-                                    <span>No reports generated yet</span>
-                                  </div>
-                                </td>
-                              </tr>
-                            ) : (
-                              bsaReports.map((report) => (
-                                <tr
-                                  key={report.id}
-                                  className="hover:bg-slate-50/20 transition-colors"
-                                >
-                                  <td className="py-4 px-4 text-slate-500">
-                                    {report.ReportId}
-                                  </td>
-                                  <td className="py-4 px-4 font-bold text-slate-800">
-                                    {formatDateOnly(report.bsaFromDate)}
-                                  </td>
-                                  <td className="py-4 px-4 text-slate-600">
-                                    {formatDateOnly(report.bsaToDate)}
-                                  </td>
-
-                                  <td className="py-4 px-4 text-slate-800">
-                                    {formatDateTime(report.generatedOn)}
-                                  </td>
-                                  <td className="py-4 px-4 text-center">
-                                    <div className="flex items-center justify-center gap-2">
-                                      <button
-                                        type="button"
-                                        onClick={() => {
-                                          setViewingBsaReport(report);
-                                        }}
-                                        className="inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 hover:text-[#002366] hover:border-[#002366] hover:bg-blue-50/50 transition-colors shadow-sm cursor-pointer"
-                                        title="View Report"
-                                      >
-                                        <Eye className="h-3.5 w-3.5" />
-                                        View Report
-                                      </button>
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))
-                            )}
-                          </tbody>
-                        </table>
+                        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-6">
+                          {bsaView === 'individual_overview' && <IndividualOverview accountNumber={accountNumber || undefined} />}
+                          {bsaView === 'individual_eod' && <IndividualEodAnalysis accountNumber={accountNumber || undefined} />}
+                          {bsaView === 'individual_loan' && <IndividualLoanTransactions accountNumber={accountNumber || undefined} />}
+                          {bsaView === 'summary' && <SummeryOfDebitAndCredit accountNumber={accountNumber || undefined} />}
+                          {bsaView === 'cashflow' && <CashFlow accountNumber={accountNumber || undefined} />}
+                          {bsaView === 'overview' && <OverviewMonthlyWise accountNumber={accountNumber || undefined} />}
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                </div>
-              ))}
-
-            {reportsSubTab === 'gst' &&
+                    )}
+                  </div>
+                )}
+              {reportsSubTab === 'gst' &&
               (viewingGstReport ? (
                 <GstReportPage
                   gstReferenceId={viewingGstReport.reportId}

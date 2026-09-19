@@ -13,7 +13,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 
-import { 
+import {
   getBankAccounts,
   type BankAccounts,
   getDateRange,
@@ -22,7 +22,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 function formatDate(value?: string | null) {
   if (!value) return '-';
@@ -44,8 +44,13 @@ function getAccountKey(account: BankAccounts, index: number) {
     .join('-');
 }
 
-export default function BankAccountsPage() {
+export default function BankAccountsPage({
+  custId,
+  hideHeader,
+  isAnchor,
+}: { custId?: string; hideHeader?: boolean; isAnchor?: boolean } = {}) {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   /*
    * Controls whether reports are displayed
    * for each individual account.
@@ -70,8 +75,8 @@ export default function BankAccountsPage() {
     isError,
     refetch,
   } = useQuery({
-    queryKey: ['bsa', 'bank-accounts'],
-    queryFn: getBankAccounts,
+    queryKey: ['bsa', 'bank-accounts', custId],
+    queryFn: () => getBankAccounts(custId),
     staleTime: 1000 * 60 * 5,
     retry: 1,
   });
@@ -135,30 +140,34 @@ export default function BankAccountsPage() {
         {/* =========================
             PAGE HEADER
             ========================= */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h1 className="text-2xl font-bold text-slate-950">Bank Accounts</h1>
+        {!hideHeader && (
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <h1 className="text-2xl font-bold text-slate-950">
+                Bank Accounts
+              </h1>
 
-            <p className="mt-1 text-sm text-slate-500">
-              BSA account details available for this customer.
-            </p>
+              <p className="mt-1 text-sm text-slate-500">
+                BSA account details available for this customer.
+              </p>
+            </div>
+
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => refetch()}
+              disabled={isFetching}
+              className="w-full transition-all duration-200 hover:shadow-sm sm:w-auto"
+            >
+              {isFetching ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4" />
+              )}
+              Refresh
+            </Button>
           </div>
-
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => refetch()}
-            disabled={isFetching}
-            className="w-full transition-all duration-200 hover:shadow-sm sm:w-auto"
-          >
-            {isFetching ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4" />
-            )}
-            Refresh
-          </Button>
-        </div>
+        )}
 
         {/* =========================
             ACCOUNTS CONTAINER
@@ -282,9 +291,22 @@ export default function BankAccountsPage() {
                                         'selected_bsa_account_number',
                                         accountNumber
                                       );
-                                      navigate('/bsa/individual/overview', {
-                                        state: { accountNumber },
-                                      });
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set(
+                                          'bsaView',
+                                          'individual_overview'
+                                        );
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate('/bsa/individual/overview', {
+                                          state: { accountNumber },
+                                        });
+                                      }
                                     }}
                                     className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#002366]/20 hover:bg-[#002366]/5 hover:text-[#002366] hover:shadow-sm"
                                   >
@@ -305,9 +327,25 @@ export default function BankAccountsPage() {
                                         'selected_bsa_account_number',
                                         accountNumber
                                       );
-                                      navigate('/bsa/individual/eod-analysis', {
-                                        state: { accountNumber },
-                                      });
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set(
+                                          'bsaView',
+                                          'individual_eod'
+                                        );
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate(
+                                          '/bsa/individual/eod-analysis',
+                                          {
+                                            state: { accountNumber },
+                                          }
+                                        );
+                                      }
                                     }}
                                     className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#002366]/20 hover:bg-[#002366]/5 hover:text-[#002366] hover:shadow-sm"
                                   >
@@ -328,12 +366,25 @@ export default function BankAccountsPage() {
                                         'selected_bsa_account_number',
                                         accountNumber
                                       );
-                                      navigate(
-                                        '/bsa/individual/loan-transactions',
-                                        {
-                                          state: { accountNumber },
-                                        }
-                                      );
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set(
+                                          'bsaView',
+                                          'individual_loan'
+                                        );
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate(
+                                          '/bsa/individual/loan-transactions',
+                                          {
+                                            state: { accountNumber },
+                                          }
+                                        );
+                                      }
                                     }}
                                     className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#002366]/20 hover:bg-[#002366]/5 hover:text-[#002366] hover:shadow-sm"
                                   >
@@ -357,12 +408,22 @@ export default function BankAccountsPage() {
                                         'selected_bsa_account_number',
                                         accountNumber
                                       );
-                                      navigate(
-                                        '/bsa/summary-of-debit-and-credit',
-                                        {
-                                          state: { accountNumber },
-                                        }
-                                      );
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set('bsaView', 'summary');
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate(
+                                          '/bsa/summary-of-debit-and-credit',
+                                          {
+                                            state: { accountNumber },
+                                          }
+                                        );
+                                      }
                                     }}
                                     disabled={!accountNumber}
                                   >
@@ -381,9 +442,19 @@ export default function BankAccountsPage() {
                                     className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#002366]/20 hover:bg-[#002366]/5 hover:text-[#002366] hover:shadow-sm"
 
                                     onClick={() => {
-                                      navigate('/bsa/cash-flow', {
-                                        state: { accountNumber },
-                                      });
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set('bsaView', 'cashflow');
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate('/bsa/cash-flow', {
+                                          state: { accountNumber },
+                                        });
+                                      }
                                     }}
                                   >
                                     <div className="flex items-center gap-3">
@@ -400,7 +471,17 @@ export default function BankAccountsPage() {
                                     type="button"
                                     className="w-full rounded-lg border border-slate-200 bg-slate-50 p-3 text-left text-sm font-medium text-slate-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#002366]/20 hover:bg-[#002366]/5 hover:text-[#002366] hover:shadow-sm"
                                     onClick={() => {
-                                      navigate('/bsa/overview-monthly-wise');
+                                      if (isAnchor) {
+                                        searchParams.set('module', 'bsa');
+                                        searchParams.set('bsaView', 'overview');
+                                        searchParams.set(
+                                          'accountNumber',
+                                          accountNumber
+                                        );
+                                        setSearchParams(searchParams);
+                                      } else {
+                                        navigate('/bsa/overview-monthly-wise');
+                                      }
                                     }}
                                   >
                                     <div className="flex items-center gap-3">

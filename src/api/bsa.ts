@@ -50,13 +50,13 @@ export async function getDateRange(accountNumber: string): Promise<DateRange> {
   return response.data.data;
 }
 
-export async function getBankAccounts(): Promise<BankAccounts[]> {
+export async function getBankAccounts(custId?: string): Promise<BankAccounts[]> {
   const response = await apiClient.get<BankAccountsResponse>(
     '/bsa/bank-accounts',
     {
-      // params:{cust_id:cust_id |null},
+      params: custId ? { cust_id: custId } : undefined,
       errorMessage:
-        'Failed to fetch the bank Accounts . Please Try again ! {PRATHAM}',
+        'Failed to fetch the bank Accounts . Please Try again !',
     }
   );
   return Array.isArray(response.data?.data) ? response.data.data : [];

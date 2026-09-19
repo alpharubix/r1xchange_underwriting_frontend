@@ -1,11 +1,10 @@
-
 import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCcw } from 'lucide-react';
 import BankAccountDetails from '../BankAccountDetails';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 
 interface SummaryLoanTranx {
   month: string;
@@ -25,11 +24,15 @@ interface LoanTransactionData {
   details_of_loan_transaction: DetailLoanTranx[];
 }
 
-export default function IndividualLoanTransactions() {
+export default function IndividualLoanTransactions({
+  accountNumber: propAccountNumber,
+}: { accountNumber?: string } = {}) {
   const location = useLocation();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedAccountNumber =
+    propAccountNumber ||
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
@@ -91,7 +94,15 @@ export default function IndividualLoanTransactions() {
             </p>
             <Button
               type="button"
-              onClick={() => navigate('/bsa/bank-accounts')}
+              onClick={() => {
+                if (searchParams.get('bsaView')) {
+                  searchParams.delete('bsaView');
+                  searchParams.delete('accountNumber');
+                  setSearchParams(searchParams);
+                } else {
+                  navigate('/bsa/bank-accounts');
+                }
+              }}
               className="mt-4 bg-[#002366] hover:bg-[#001744] text-white"
             >
               Back to Bank Accounts

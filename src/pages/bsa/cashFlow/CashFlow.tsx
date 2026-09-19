@@ -26,15 +26,18 @@ import BankAccountDetails from '../BankAccountDetails';
 import { useLocation } from 'react-router-dom';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
-export default function CashFlow() {
+export default function CashFlow({
+  accountNumber: propAccountNumber,
+}: { accountNumber?: string } = {}) {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
 
   const location = useLocation();
-
+  
   const selectedAccountNumber =
+    propAccountNumber ||
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
