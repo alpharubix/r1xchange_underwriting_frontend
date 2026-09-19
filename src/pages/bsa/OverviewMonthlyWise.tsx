@@ -564,15 +564,20 @@ const ROWS: RowConfig[] = [
   },
 ];
 
-export default function OverviewMonthlyWise() {
+export default function OverviewMonthlyWise({
+  accountNumber: propAccountNumber,
+}: { accountNumber?: string } = {}) {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
   const [appliedToDate, setAppliedToDate] = useState('');
 
   const location = useLocation();
+  // const navigate = useNavigate();
+  // const [searchParams, setSearchParams] = useSearchParams();
 
   const selectedAccountNumber =
+    propAccountNumber ||
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
     sessionStorage.getItem('selected_bsa_account_number') ||
     '';
