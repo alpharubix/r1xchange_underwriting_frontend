@@ -45,32 +45,56 @@ export const downloadItrReport = async (
     params.itr_reference_id = finalReportId;
   }
 
+  const payload = {
+    cust_id: finalCustId,
+    report_id: finalReportId,
+    itr_reference_id: finalReportId,
+  };
+
+  const candidateEndpoints = [
+    { method: 'post', url: '/itr/export-report' },
+    { method: 'get', url: '/itr/export-report' },
+    { method: 'post', url: '/itr/export_report' },
+    { method: 'get', url: '/itr/export_report' },
+    { method: 'post', url: '/itr/export' },
+    { method: 'get', url: '/itr/export' },
+    { method: 'post', url: '/itr/download-report' },
+    { method: 'get', url: '/itr/download-report' },
+  ];
+
   try {
-    let response;
-    try {
-      response = await apiClient.post(
-        '/itr/export-report',
-        {
-          cust_id: finalCustId,
-          report_id: finalReportId,
-          itr_reference_id: finalReportId,
-        },
-        {
-          params,
-          responseType: 'blob',
-          skipErrorToast: true,
+    let response: any = null;
+    let lastError: any = null;
+
+    for (const candidate of candidateEndpoints) {
+      try {
+        if (candidate.method === 'post') {
+          response = await apiClient.post(candidate.url, payload, {
+            params,
+            responseType: 'blob',
+            skipErrorToast: true,
+          });
+        } else {
+          response = await apiClient.get(candidate.url, {
+            params,
+            responseType: 'blob',
+            skipErrorToast: true,
+          });
         }
-      );
-    } catch (err: any) {
-      if (err.response?.status === 405) {
-        response = await apiClient.get('/itr/export-report', {
-          params,
-          responseType: 'blob',
-          skipErrorToast: true,
-        });
-      } else {
-        throw err;
+        if (response && response.status >= 200 && response.status < 300) {
+          break;
+        }
+      } catch (err: any) {
+        lastError = err;
+        if (err.response?.status === 404 || err.response?.status === 405) {
+          continue;
+        }
+        break;
       }
+    }
+
+    if (!response) {
+      throw lastError || new Error('Failed to download ITR report');
     }
 
     let filename = `ITR_Report${finalCustId ? `_${finalCustId}` : ''}.xlsx`;
