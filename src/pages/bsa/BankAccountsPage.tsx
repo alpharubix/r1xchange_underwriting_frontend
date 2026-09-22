@@ -11,18 +11,22 @@ import {
   Activity,
   PieChart,
   ChevronRight,
+  Download,
 } from 'lucide-react';
 
+import { downloadBsaReport } from '@/api/export';
 import {
   getBankAccounts,
   type BankAccounts,
   getDateRange,
   type DateRange,
 } from '@/api/bsa';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 function formatDate(value?: string | null) {
   if (!value) return '-';
@@ -67,6 +71,60 @@ export default function BankAccountsPage({
    * Stores BSA date range for every account.
    */
   const [dateRanges, setDateRanges] = useState<Record<string, DateRange>>({});
+
+  /*
+   * Track report export download status
+   */
+  const [downloadingReport, setDownloadingReport] = useState<string | null>(
+    null
+  );
+
+  const handleExport = async (
+    accountNumber: string,
+    rawAccountId?: string | number | null,
+    isIndividual?: boolean
+  ) => {
+    const account_number = String(accountNumber || '');
+    const account_id = String(rawAccountId || accountNumber || '');
+    if (!account_number && !account_id) {
+      toast.error('Account details are required for export', {
+        id: 'export-toast',
+      });
+      return;
+    }
+
+    const reportDescription = isIndividual
+      ? 'Overview, EOD Analysis, Loan Transactions'
+      : 'Summary, Cashflow, Overview';
+
+    try {
+      setDownloadingReport(account_number || account_id);
+      toast.loading(
+        `Downloading 3 BSA report files (${reportDescription})...`,
+        {
+          id: 'export-toast',
+        }
+      );
+
+      await downloadBsaReport({
+        account_number,
+        account_id,
+      });
+
+      toast.success(
+        `All 3 BSA report files (${reportDescription}) downloaded successfully!`,
+        {
+          id: 'export-toast',
+        }
+      );
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to download BSA report', {
+        id: 'export-toast',
+      });
+    } finally {
+      setDownloadingReport(null);
+    }
+  };
 
   const {
     data: accounts = [],
@@ -261,19 +319,57 @@ export default function BankAccountsPage({
                                   Select a report to continue
                                 </p>
                               </div>
+                              <div className="flex items-center gap-1.5">
+                                 <button
+                                   type="button"
+                                    onClick={() =>
+                                      handleExport(
+                                        accountNumber,
+                                        account.account_id ?? account.accountId,
+                                        modulesAvailable
+                                      )
+                                    }
+                                     disabled={
+                                       downloadingReport ===
+                                       String(
+                                         accountNumber ||
+                                           account.account_id ||
+                                           account.accountId
+                                       )
+                                     }
+                                     className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold bg-[#002366] text-white transition-all duration-200 hover:bg-[#001a4d] hover:shadow-xs cursor-pointer disabled:opacity-50"
+                                     title={`Download All 3 Files (${
+                                       modulesAvailable
+                                         ? 'Overview, EOD Analysis, Loan Transactions'
+                                         : 'Summary, Cashflow, Overview'
+                                     })`}
+                                  >
+                                    {downloadingReport ===
+                                    String(
+                                      accountNumber ||
+                                        account.account_id ||
+                                        account.accountId
+                                    ) ? (
+                                      <Loader2 className="h-3 w-3 animate-spin" />
+                                    ) : (
+                                      <Download className="h-3 w-3 text-emerald-400" />
+                                    )}
+                                    import
+                                  </button>
 
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setShowReports((prev) => ({
-                                    ...prev,
-                                    [accountNumber]: false,
-                                  }))
-                                }
-                                className="rounded-md px-2 py-1 text-xs font-medium text-slate-500 transition-all duration-200 hover:bg-slate-100 hover:text-slate-700"
-                              >
-                                Back
-                              </button>
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setShowReports((prev) => ({
+                                      ...prev,
+                                      [accountNumber]: false,
+                                    }))
+                                  }
+                                  className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold bg-[#002366] text-white transition-all duration-200 hover:bg-[#001a4d] hover:shadow-xs cursor-pointer disabled:opacity-50"
+                                >
+                                  Back
+                                </button>
+                              </div>
                             </div>
 
                             {/* =========================

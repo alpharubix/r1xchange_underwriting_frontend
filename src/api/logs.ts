@@ -62,23 +62,34 @@ export interface LogItem {
 }
 
 export interface LogsResponse {
-  page: number;
-  limit: number;
-  total_logs: number;
-  total_pages: number;
-  logs: LogItem[];
+  page?: number;
+  limit?: number;
+  total_logs?: number;
+  total_pages?: number;
+  logs?: LogItem[];
+  data?: LogItem[];
   total_records?: number;
-  'page-info'?: {
+  total_data?: number;
+  page_info?: {
     page: number;
     limit: number;
-    total_records: number;
+    total_data?: number;
+    total_records?: number;
     total_pages: number;
-    logs: LogItem[];
+    logs?: LogItem[];
+  };
+  "page-info"?: {
+    page: number;
+    limit: number;
+    total_records?: number;
+    total_pages: number;
+    logs?: LogItem[];
   };
 }
 
 export interface LogFilters {
   page?: number;
+  limit?: number;
   status_filter?: string;
   method?: string;
   status_code?: number | string;

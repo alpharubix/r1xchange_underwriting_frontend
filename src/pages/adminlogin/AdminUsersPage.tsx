@@ -8,17 +8,17 @@ import {
   X,
   Check,
   AlertTriangle,
-} from 'lucide-react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import { getUsersList } from '@/api/user';
-import AdminSidebar from './sidebarpage';
-import AdminAdminsPage from './AdminAdminsPage';
-import AdminAnchorsPage from './AdminAnchorsPage';
-import AdminLogsPage from './AdminLogsPage';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+} from "lucide-react";
+import { useParams, useNavigate, } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { getUsersList, extractPaginatedData } from "@/api/user";
+import AdminSidebar from "./sidebarpage";
+import AdminAdminsPage from "./AdminAdminsPage";
+import AdminAnchorsPage from "./AdminAnchorsPage";
+import AdminLogsPage from "./AdminLogsPage";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface RecordItem {
   accountid: string;
@@ -149,17 +149,31 @@ export default function AdminDashboardPage() {
     }
   }, [tab]);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize,] = useState(10);
+
+  const queryParams = useMemo(() => ({
+    page: currentPage,
+    limit: pageSize,
+  }), [currentPage, pageSize]);
+
   const { data: fetchedUsers, isLoading } = useQuery({
-    queryKey: ['admin', 'users-list'],
-    queryFn: getUsersList,
-    enabled: activeTab === 'user',
+    queryKey: ["admin", "users-list", currentPage, pageSize],
+    queryFn: () => getUsersList(queryParams),
+    enabled: activeTab === "user",
+    placeholderData: (previousData) => previousData,
   });
+
+  const paginationData = useMemo(() => {
+    return extractPaginatedData<any>(fetchedUsers, currentPage, pageSize);
+  }, [fetchedUsers, currentPage, pageSize]);
 
   const [usersList, setUsersList] = useState<RecordItem[]>([]);
 
   useEffect(() => {
-    if (fetchedUsers) {
-      const mapped = fetchedUsers.map((user: any, index: number) => ({
+    if (paginationData.items) {
+      const mapped = paginationData.items.map((user: any, index: number) => ({
         accountid: findAccountId(user, index),
         emailid:
           user.emailid || user.email_id || user.emailId || user.email || '',
@@ -217,7 +231,7 @@ export default function AdminDashboardPage() {
       }));
       setUsersList(mapped);
     }
-  }, [fetchedUsers]);
+  }, [paginationData.items]);
 
   // Filter input states
   const [filterAccId, setFilterAccId] = useState('');
@@ -228,10 +242,6 @@ export default function AdminDashboardPage() {
   const [filterGstNumber, setFilterGstNumber] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterAnchorId, setFilterAnchorId] = useState('');
-
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
 
   // Modal states for inspecting
   const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(
@@ -298,7 +308,7 @@ export default function AdminDashboardPage() {
   ]);
 
   // Reset pagination on tab change or filters change
-  useMemo(() => {
+  useEffect(() => {
     setCurrentPage(1);
   }, [
     activeTab,
@@ -312,13 +322,24 @@ export default function AdminDashboardPage() {
     filterAnchorId,
   ]);
 
+  const isServerPaginated = paginationData.is_server_paginated;
+
+  const totalPages = isServerPaginated
+    ? paginationData.total_pages
+    : Math.max(1, Math.ceil(filteredList.length / pageSize));
+
+  const totalRecords = isServerPaginated
+    ? paginationData.total_records
+    : filteredList.length;
+
   // Paginated list
   const paginatedList = useMemo(() => {
+    if (isServerPaginated) {
+      return filteredList;
+    }
     const startIndex = (currentPage - 1) * pageSize;
     return filteredList.slice(startIndex, startIndex + pageSize);
-  }, [filteredList, currentPage, pageSize]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
+  }, [filteredList, isServerPaginated, currentPage, pageSize]);
 
   console.log('activeTab', activeTab);
 
@@ -664,33 +685,18 @@ export default function AdminDashboardPage() {
                     {/* ─── PAGINATION ─── */}
                     <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4 gap-4">
                       <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                        Showing{' '}
+                        Showing{" "}
                         <span className="text-slate-800">
-                          {filteredList.length === 0
-                            ? 0
-                            : (currentPage - 1) * pageSize + 1}
-                        </span>{' '}
-                        to{' '}
+                          {totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+                        </span>{" "}
+                        to{" "}
                         <span className="text-slate-800">
-                          {Math.min(
-                            currentPage * pageSize,
-                            filteredList.length
-                          )}
-                        </span>{' '}
-                        of{' '}
-                        <span className="text-slate-800">
-                          {filteredList.length}
-                        </span>{' '}
-                        results
+                          {Math.min(currentPage * pageSize, totalRecords)}
+                        </span>{" "}
+                        of <span className="text-slate-800">{totalRecords}</span> results
                       </div>
 
                       <div className="flex items-center gap-6">
-                        {/* Page size dropdown */}
-                        <div className="flex items-center gap-2">
-                          <select>
-                            <option value={10}>10</option>
-                          </select>
-                        </div>
 
                         <div className="flex items-center gap-1.5">
                           <button
@@ -715,19 +721,15 @@ export default function AdminDashboardPage() {
                           </span>
 
                           <button
-                            onClick={() =>
-                              setCurrentPage((prev) =>
-                                Math.min(prev + 1, totalPages)
-                              )
-                            }
-                            disabled={currentPage === totalPages}
+                            onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                            disabled={currentPage >= totalPages}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                           >
                             <ChevronRight className="h-4 w-4" />
                           </button>
                           <button
                             onClick={() => setCurrentPage(totalPages)}
-                            disabled={currentPage === totalPages}
+                            disabled={currentPage >= totalPages}
                             className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                           >
                             <ChevronsRight className="h-4 w-4" />

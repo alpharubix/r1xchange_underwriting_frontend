@@ -1,11 +1,13 @@
-﻿import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChevronLeft, FileText, ArrowRight } from 'lucide-react';
+import { ChevronLeft, FileText, ArrowRight, Download, Loader2 } from 'lucide-react';
 import GstOverviewTab from './gst-reports/GstOverviewTab';
 import TopSuppliersCustomersTab from './gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from './gst-reports/MonthlySummaryTab';
 import { useQuery } from '@tanstack/react-query';
-import { getGstHistory } from '@/api/gst';
+import { getGstHistory, downloadGstReport } from '@/api/gst';
+import { toast } from 'sonner';
 
 export default function GstReportPage() {
   const location = useLocation();
@@ -14,6 +16,7 @@ export default function GstReportPage() {
   const custId = searchParams.get('cust_id') || undefined;
   const state = location.state as { gst_reference_id?: string };
   const stateRefId = state?.gst_reference_id;
+  const [isExporting, setIsExporting] = useState(false);
 
   const { data: historyData, isLoading: isHistoryLoading } = useQuery({
     queryKey: ['gstHistory', custId],
@@ -27,6 +30,33 @@ export default function GstReportPage() {
   );
 
   const gstReferenceId = stateRefId || latestCompletedReport?.reference_id;
+
+  const handleExport = async () => {
+    if (!gstReferenceId) {
+      toast.error('GST reference ID is required for export', {
+        id: 'gst-export',
+      });
+      return;
+    }
+
+    try {
+      setIsExporting(true);
+      toast.loading(
+        'Downloading GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)...',
+        { id: 'gst-export' }
+      );
+      await downloadGstReport(gstReferenceId);
+      toast.success('GSTR Report downloaded successfully!', {
+        id: 'gst-export',
+      });
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to download GSTR report', {
+        id: 'gst-export',
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   if (!gstReferenceId) {
     if (isHistoryLoading) {
@@ -72,17 +102,34 @@ export default function GstReportPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="space-y-6">
-        <div className="flex items-center space-x-4 mb-8">
-          <button
-            onClick={() => navigate('/gst/history')}
-            className="p-2 bg-white border border-gray-200 rounded-md hover:bg-gray-200 transition-colors"
-          >
-            <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-black " />
-          </button>
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900">GSTR Report</h1>
-            <p className="text-gray-500 mt-1">Ref ID: {gstReferenceId}</p>
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={() => navigate('/gst/history')}
+              className="p-2 bg-white border border-gray-200 rounded-md hover:bg-gray-200 transition-colors"
+            >
+              <ChevronLeft className="w-5 h-5 text-gray-600 hover:text-black " />
+            </button>
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">GSTR Report</h1>
+              <p className="text-gray-500 mt-1">Ref ID: {gstReferenceId}</p>
+            </div>
           </div>
+
+          <button
+            type="button"
+            onClick={handleExport}
+            disabled={isExporting}
+            className="inline-flex items-center gap-2 rounded-md bg-[#002366] px-3.5 py-2 text-xs font-semibold text-white transition-all duration-200 hover:bg-[#001a4d] hover:shadow-xs cursor-pointer disabled:opacity-50"
+            title="Download GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)"
+          >
+            {isExporting ? (
+              <Loader2 className="h-4 w-4 animate-spin text-white" />
+            ) : (
+              <Download className="h-4 w-4 text-emerald-400" />
+            )}
+            <span>Export Report</span>
+          </button>
         </div>
 
         <Tabs defaultValue="overview" className="w-full">

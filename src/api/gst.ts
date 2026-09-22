@@ -266,3 +266,80 @@ export const getGstMonthlySummary = async (
   );
   return response.data;
 };
+
+/**
+ * Download GST report Excel file from /gst/export-report
+ * Sends { gst_reference_id } in the request body.
+ */
+export const downloadGstReport = async (
+  gst_reference_id: string
+): Promise<void> => {
+  try {
+    const response = await apiClient.post(
+      '/gst/export-report',
+      {
+        gst_reference_id,
+        reference_id: gst_reference_id,
+      },
+      {
+        responseType: 'blob',
+        skipErrorToast: true,
+      }
+    );
+
+    let filename = `GSTR_Report_${gst_reference_id}.xlsx`;
+    const rawDisposition =
+      response.headers?.['content-disposition'] ||
+      response.headers?.['Content-Disposition'];
+    const disposition =
+      typeof rawDisposition === 'string' ? rawDisposition : undefined;
+
+    if (disposition) {
+      const match = disposition.match(/filename=["']?([^"';]+)["']?/);
+      if (match && match[1]) {
+        filename = match[1].trim();
+      }
+    }
+
+    const contentType =
+      typeof response.headers?.['content-type'] === 'string'
+        ? response.headers['content-type']
+        : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    const blob = new Blob([response.data], { type: contentType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+    document.body.removeChild(link);
+  } catch (error: any) {
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text();
+        const json = JSON.parse(text);
+        const serverMsg =
+          json.detail?.message ||
+          json.detail ||
+          json.message ||
+          'Failed to download GST report';
+        throw new Error(
+          typeof serverMsg === 'string' ? serverMsg : JSON.stringify(serverMsg)
+        );
+      } catch (parseErr: any) {
+        if (parseErr.message && !parseErr.message.includes('JSON')) {
+          throw parseErr;
+        }
+      }
+    }
+    const msg =
+      error.response?.data?.detail?.message ||
+      error.response?.data?.message ||
+      error.message ||
+      'Failed to download GST report';
+    throw new Error(msg);
+  }
+};

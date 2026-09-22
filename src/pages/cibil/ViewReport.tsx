@@ -1,6 +1,9 @@
-﻿import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CibilReportTabs from '@/components/cibil/CibilReportTabs';
+import { downloadCibilReport } from '@/api/cibil';
+import { toast } from 'sonner';
+import { Download, Loader2 } from 'lucide-react';
 
 type ViewReportProps = {
   reference_id?: string;
@@ -20,9 +23,35 @@ export default function ViewReport({
   const navigate = useNavigate();
   const referenceId = propReferenceId || routeReferenceId;
 
+  const [isExporting, setIsExporting] = useState(false);
+
   useEffect(() => {
     document.title = 'View CIBIL Report';
   }, []);
+
+  const handleExport = async () => {
+    if (!referenceId) {
+      toast.error('Reference ID is missing.');
+      return;
+    }
+    try {
+      setIsExporting(true);
+      toast.loading(
+        'Downloading CIBIL Report (Overview, Account Summary, Payments History, Analysis)...',
+        { id: 'cibil-export' }
+      );
+      await downloadCibilReport(referenceId);
+      toast.success('CIBIL Report downloaded successfully!', {
+        id: 'cibil-export',
+      });
+    } catch (error: any) {
+      toast.error(error?.message || 'Failed to download CIBIL report', {
+        id: 'cibil-export',
+      });
+    } finally {
+      setIsExporting(false);
+    }
+  };
 
   const handleBack = () => {
     if (onBack) {
@@ -74,6 +103,19 @@ export default function ViewReport({
           <div className="flex flex-wrap gap-3">
             <button
               type="button"
+              onClick={handleExport}
+              disabled={isExporting}
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 disabled:opacity-50 cursor-pointer"
+            >
+              {isExporting ? (
+                <Loader2 className="h-4 w-4 animate-spin text-[#002366]" />
+              ) : (
+                <Download className="h-4 w-4 text-[#002366]" />
+              )}
+              Export
+            </button>
+            <button
+              type="button"
               onClick={handleBack}
               className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
             >
@@ -94,3 +136,4 @@ export default function ViewReport({
     </div>
   );
 }
+

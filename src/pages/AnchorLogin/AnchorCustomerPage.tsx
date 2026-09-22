@@ -245,46 +245,24 @@ export default function AnchorCustomerPage() {
   };
 
   useEffect(() => {
-    if (fetchedUsers && fetchedUsers.length > 0) {
-      // console.log("Syncing fetchedUsers to customers state:", fetchedUsers);
-      const mapped = fetchedUsers.map((user: any) => ({
-        id:
-          user._id ||
-          user.user_id ||
-          user.userId ||
-          user.id ||
-          user.account_id ||
-          user.accountId ||
-          user.accountid ||
-          '',
-        name:
-          user.customer_name ||
-          user.customerName ||
-          user.customername ||
-          user.name ||
-          user.username ||
-          user.userName ||
-          '',
-        phone:
-          user.phone_no || user.phoneNo || user.phone || user.phoneNumber || '',
-        company_name:
-          user.company_name || user.companyName || user.companyname || '',
-        gst_no:
-          user.gst_no ||
-          user.gstNo ||
-          user.gst_number ||
-          user.gstNumber ||
-          user.gstnumber ||
-          user.gst ||
-          '',
-        status: user.status || user.Status || 'Active',
-        anchor_id: user.anchor_id || user.anchorId || user.anchorid || '',
-        created_by: user.created_by || user.createdBy || user.createdBy || '',
-        updated_by: user.updated_by || user.updatedBy || user.updatedBy || '',
-        bsa: getFlagValue(user, 'bsa'),
-        gst: getFlagValue(user, 'gst'),
-        itr: getFlagValue(user, 'itr'),
-        cibil: getFlagValue(user, 'cibil'),
+    const rawList = Array.isArray(fetchedUsers)
+      ? fetchedUsers
+      : (fetchedUsers?.data ?? fetchedUsers?.users ?? fetchedUsers?.customers ?? []);
+    if (rawList && rawList.length > 0) {
+      const mapped = rawList.map((user: any) => ({
+        id: user._id || user.user_id || user.userId || user.id || user.account_id || user.accountId || user.accountid || "",
+        name: user.customer_name || user.customerName || user.customername || user.name || user.username || user.userName || "",
+        phone: user.phone_no || user.phoneNo || user.phone || user.phoneNumber || "",
+        company_name: user.company_name || user.companyName || user.companyname || "",
+        gst_no: user.gst_no || user.gstNo || user.gst_number || user.gstNumber || user.gstnumber || user.gst || "",
+        status: user.status || user.Status || "Active",
+        anchor_id: user.anchor_id || user.anchorId || user.anchorid || "",
+        created_by: user.created_by || user.createdBy || user.createdBy || "",
+        updated_by: user.updated_by || user.updatedBy || user.updatedBy || "",
+        bsa: getFlagValue(user, "bsa"),
+        gst: getFlagValue(user, "gst"),
+        itr: getFlagValue(user, "itr"),
+        cibil: getFlagValue(user, "cibil"),
       }));
       setCustomers(mapped);
     }

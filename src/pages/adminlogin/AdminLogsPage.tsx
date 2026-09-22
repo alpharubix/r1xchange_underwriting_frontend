@@ -227,14 +227,27 @@ export default function AdminLogsPage() {
     placeholderData: (previousData) => previousData,
   });
 
-  const logsList: LogItem[] = data?.logs || data?.['page-info']?.logs || [];
-  const totalPages = data?.total_pages || data?.['page-info']?.total_pages || 1;
+  const pageInfo = data?.page_info || (data as any)?.["page-info"] || (data as any)?.data?.page_info;
+  const logsList: LogItem[] =
+    data?.logs ||
+    pageInfo?.logs ||
+    (data as any)?.data ||
+    [];
+  const totalPages =
+    pageInfo?.total_pages ||
+    data?.total_pages ||
+    1;
   const totalRecords =
+    pageInfo?.total_data ??
+    pageInfo?.total_records ??
+    data?.total_data ??
     data?.total_logs ??
     data?.total_records ??
-    data?.['page-info']?.total_records ??
     0;
-  const limit = data?.limit || data?.['page-info']?.limit || 10;
+  const limit =
+    pageInfo?.limit ||
+    data?.limit ||
+    10;
 
   // Active inspected log payload formatting
   const currentPayloadRaw =

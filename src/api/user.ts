@@ -18,22 +18,115 @@ export const getMe = async (): Promise<UserProfile> => {
   return response.data?.data ?? response.data;
 };
 
-export const getUsersList = async (): Promise<any[]> => {
-  const response = await apiClient.get('/admin/users-list');
-  const data = response.data?.data ?? response.data;
-  return Array.isArray(data) ? data : data?.users || [];
+export interface PageInfo {
+  page: number;
+  limit: number;
+  total_pages: number;
+  total_data?: number;
+  total_records?: number;
+  logs?: any[];
+  [key: string]: any;
+}
+
+export interface PaginatedListResult<T = any> {
+  items: T[];
+  page_info?: PageInfo;
+  total_pages: number;
+  total_records: number;
+  current_page: number;
+  limit: number;
+  is_server_paginated: boolean;
+}
+
+export const extractPaginatedData = <T = any>(
+  rawResponse: any,
+  fallbackPage: number = 1,
+  fallbackLimit: number = 10
+): PaginatedListResult<T> => {
+  if (!rawResponse) {
+    return {
+      items: [],
+      total_pages: 1,
+      total_records: 0,
+      current_page: fallbackPage,
+      limit: fallbackLimit,
+      is_server_paginated: false,
+    };
+  }
+
+  // If rawResponse is directly an array
+  if (Array.isArray(rawResponse)) {
+    return {
+      items: rawResponse,
+      total_pages: Math.max(1, Math.ceil(rawResponse.length / fallbackLimit)),
+      total_records: rawResponse.length,
+      current_page: fallbackPage,
+      limit: fallbackLimit,
+      is_server_paginated: false,
+    };
+  }
+
+  // Extract page_info (handle both page_info and page-info)
+  const page_info: PageInfo | undefined =
+    rawResponse.page_info ||
+    rawResponse["page-info"] ||
+    rawResponse.data?.page_info ||
+    rawResponse.data?.["page-info"];
+
+  // Extract items list from various possible response formats
+  let items: T[] = [];
+  if (Array.isArray(rawResponse.data)) {
+    items = rawResponse.data;
+  } else if (Array.isArray(rawResponse.users)) {
+    items = rawResponse.users;
+  } else if (Array.isArray(rawResponse.admins)) {
+    items = rawResponse.admins;
+  } else if (Array.isArray(rawResponse.anchors)) {
+    items = rawResponse.anchors;
+  } else if (Array.isArray(rawResponse.logs)) {
+    items = rawResponse.logs;
+  } else if (rawResponse.data && Array.isArray(rawResponse.data.users)) {
+    items = rawResponse.data.users;
+  } else if (rawResponse.data && Array.isArray(rawResponse.data.admins)) {
+    items = rawResponse.data.admins;
+  } else if (rawResponse.data && Array.isArray(rawResponse.data.anchors)) {
+    items = rawResponse.data.anchors;
+  } else if (rawResponse.data && Array.isArray(rawResponse.data.logs)) {
+    items = rawResponse.data.logs;
+  } else if (Array.isArray(page_info?.logs)) {
+    items = page_info.logs as any;
+  }
+
+  const is_server_paginated = !!page_info?.total_pages;
+  const total_pages = page_info?.total_pages || rawResponse.total_pages || Math.max(1, Math.ceil(items.length / fallbackLimit));
+  const total_records = page_info?.total_data ?? page_info?.total_records ?? rawResponse.total_records ?? rawResponse.total_logs ?? items.length;
+  const current_page = page_info?.page || rawResponse.page || fallbackPage;
+  const limit = page_info?.limit || rawResponse.limit || fallbackLimit;
+
+  return {
+    items,
+    page_info,
+    total_pages,
+    total_records,
+    current_page,
+    limit,
+    is_server_paginated,
+  };
 };
 
-export const getAdminsList = async (): Promise<any[]> => {
-  const response = await apiClient.get('/admin/admins-list');
-  const data = response.data?.data ?? response.data;
-  return Array.isArray(data) ? data : data?.admins || [];
+export const getUsersList = async (params?: Record<string, any>): Promise<any> => {
+  const response = await apiClient.get("/admin/users-list", { params });
+  return response.data;
 };
 
-export const getAnchorsList = async (): Promise<any[]> => {
-  const response = await apiClient.get('/admin/anchors/anchor-list');
-  const data = response.data?.data ?? response.data;
-  return Array.isArray(data) ? data : data?.anchors || [];
+export const getAdminsList = async (params?: Record<string, any>): Promise<any> => {
+  const response = await apiClient.get("/admin/admins-list", { params });
+  return response.data;
+};
+
+export const getAnchorsList = async (params?: Record<string, any>): Promise<any> => {
+  const response = await apiClient.get("/admin/anchors/anchor-list", { params });
+  return response.data;
 };
 
 export const getAssociatedAnchorsList = async (): Promise<any[]> => {
@@ -42,14 +135,14 @@ export const getAssociatedAnchorsList = async (): Promise<any[]> => {
   return Array.isArray(data) ? data : data?.anchors || [];
 };
 
-export const getAnchorUsers = async (anchorId?: string): Promise<any[]> => {
-  const url = anchorId
-    ? `/anchor/users?_id=${encodeURIComponent(anchorId)}`
-    : '/anchor/users';
-  const response = await apiClient.get(url);
-  console.log('getAnchorUsers response raw:', response.data);
-  const data = response.data?.data ?? response.data;
-  return Array.isArray(data) ? data : data?.users || data?.customers || [];
+export const getAnchorUsers = async (anchorId?: string, params?: Record<string, any>): Promise<any> => {
+  const queryParams: Record<string, any> = { ...params };
+  if (anchorId) {
+    queryParams._id = anchorId;
+  }
+  const response = await apiClient.get("/anchor/users", { params: queryParams });
+  console.log("getAnchorUsers response raw:", response.data);
+  return response.data;
 };
 
 export const getUserBsaReports = async (id: string): Promise<any[]> => {

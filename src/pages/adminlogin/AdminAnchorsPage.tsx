@@ -7,15 +7,18 @@ import {
   ChevronsLeft,
   ChevronsRight,
   X,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { useQuery } from '@tanstack/react-query';
-import { getAnchorsList } from '@/api/user';
+  Eye,
+} from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { getAnchorsList, extractPaginatedData } from "@/api/user";
 
-interface RecordItem {
+export interface AnchorRecord {
+  _id: string;
   anchor_name: string;
   anchor_code: string;
   loginid: string;
@@ -27,44 +30,89 @@ interface RecordItem {
   updateby: string;
 }
 
+interface RecordItem extends AnchorRecord {}
+
+
 export default function AdminAnchorsPage() {
   const [anchorsList, setAnchorsList] = useState<RecordItem[]>([]);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [selectedAnchor, setSelectedAnchor] = useState<RecordItem | null>(null);
+
+  const anchorIdParam = searchParams.get("anchorId");
+
+  const queryParams = useMemo(() => ({
+    page: currentPage,
+    limit: pageSize,
+  }), [currentPage, pageSize]);
+
   // Fetch anchors list
   const { data: fetchedAnchors, isLoading } = useQuery({
-    queryKey: ['admin', 'anchors-list'],
-    queryFn: getAnchorsList,
+    queryKey: ["admin", "anchors-list", currentPage, pageSize],
+    queryFn: () => getAnchorsList(queryParams),
+    placeholderData: (previousData) => previousData,
   });
 
+  const paginationData = useMemo(() => {
+    return extractPaginatedData<any>(fetchedAnchors, currentPage, pageSize);
+  }, [fetchedAnchors, currentPage, pageSize]);
+
   useEffect(() => {
-    if (fetchedAnchors) {
-      const mapped = fetchedAnchors.map((anchor: any) => ({
-        anchor_name:
-          anchor.anchor_name ||
-          anchor.anchorName ||
-          anchor['anchor name'] ||
-          '',
-        anchor_code:
-          anchor.anchor_code ||
-          anchor.anchorCode ||
-          anchor['anchor code'] ||
-          '',
-        loginid: anchor.login_id || anchor.loginid || '',
-        is_active:
-          typeof anchor.is_active === 'boolean'
-            ? anchor.is_active
-            : anchor.is_active === 'true' ||
-              anchor.is_active === 1 ||
-              anchor.is_active === '1',
-        role: anchor.role || 'ANCHOR',
-        createat: anchor.created_at || anchor.createat || '',
-        updatedat: anchor.updated_at || anchor.updatedat || '',
-        createby: anchor.created_by || anchor.createby || '',
-        updateby: anchor.updated_by || anchor.updateby || '',
+    if (paginationData.items) {
+      const mapped = paginationData.items.map((anchor: any) => ({
+        _id: anchor._id || anchor.id || "",
+        anchor_name: anchor.anchor_name || anchor.anchorName || anchor["anchor name"] || "",
+        anchor_code: anchor.anchor_code || anchor.anchorCode || anchor["anchor code"] || "",
+        loginid: anchor.login_id || anchor.loginid || "",
+        is_active: typeof anchor.is_active === "boolean" ? anchor.is_active : anchor.is_active === "true" || anchor.is_active === 1 || anchor.is_active === "1",
+        role: anchor.role || "ANCHOR",
+        createat: anchor.created_at || anchor.createat || "",
+        updatedat: anchor.updated_at || anchor.updatedat || "",
+        createby: anchor.created_by || anchor.createby || "",
+        updateby: anchor.updated_by || anchor.updateby || "",
       }));
       setAnchorsList(mapped);
     }
-  }, [fetchedAnchors]);
+  }, [paginationData.items]);
+
+  const currentSelectedAnchor = useMemo(() => {
+    if (selectedAnchor) return selectedAnchor;
+    if (!anchorIdParam) return null;
+    return (
+      anchorsList.find(
+        (a) =>
+          (a._id && a._id === anchorIdParam) ||
+          a.anchor_code === anchorIdParam ||
+          a.loginid === anchorIdParam
+      ) || null
+    );
+  }, [selectedAnchor, anchorIdParam, anchorsList]);
+
+  const handleSelectAnchor = (anchor: RecordItem) => {
+    setSelectedAnchor(anchor);
+    setSearchParams(
+      (prev) => {
+        prev.set("anchorId", anchor.anchor_code || anchor._id || anchor.loginid || "");
+        return prev;
+      },
+      { replace: false }
+    );
+  };
+
+  const handleBackToAnchors = () => {
+    setSelectedAnchor(null);
+    setSearchParams(
+      (prev) => {
+        prev.delete("anchorId");
+        return prev;
+      },
+      { replace: false }
+    );
+  };
 
   // Filter input states
   const [filteranchorname, setFilteranchorname] = useState('');
@@ -76,10 +124,6 @@ export default function AdminAnchorsPage() {
   const [filterupdatedat, setFilterupdatedat] = useState('');
   const [filtercreateby, setFiltercreateby] = useState('');
   const [filterupdateby, setFilterupdateby] = useState('');
-
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
 
   // Modal states for inspecting/creating
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -179,13 +223,24 @@ export default function AdminAnchorsPage() {
     filterupdateby,
   ]);
 
+  const isServerPaginated = paginationData.is_server_paginated;
+
+  const totalPages = isServerPaginated
+    ? paginationData.total_pages
+    : Math.max(1, Math.ceil(filteredList.length / pageSize));
+
+  const totalRecords = isServerPaginated
+    ? paginationData.total_records
+    : filteredList.length;
+
   // Paginated list
   const paginatedList = useMemo(() => {
+    if (isServerPaginated) {
+      return filteredList;
+    }
     const startIndex = (currentPage - 1) * pageSize;
     return filteredList.slice(startIndex, startIndex + pageSize);
-  }, [filteredList, currentPage]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
+  }, [filteredList, isServerPaginated, currentPage, pageSize]);
 
   // Create Submit
   const handleCreateSubmit = (e: React.FormEvent) => {
@@ -220,6 +275,7 @@ export default function AdminAnchorsPage() {
     };
 
     const newRecord: RecordItem = {
+      _id: String(Date.now()),
       anchor_name: newFormData.anchor_name,
       anchor_code: newFormData.anchor_code,
       loginid: newFormData.loginid,
@@ -242,6 +298,26 @@ export default function AdminAnchorsPage() {
       role: 'ANCHOR',
     });
   };
+
+  if (currentSelectedAnchor) {
+    return (
+      <div className="p-8 bg-slate-50 min-h-screen space-y-6">
+        <button
+          onClick={handleBackToAnchors}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 px-4 py-2 rounded-xl shadow-sm hover:bg-slate-50 cursor-pointer"
+        >
+          ← Back to Anchors
+        </button>
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 space-y-4">
+          <h2 className="text-xl font-bold text-slate-900">
+            {currentSelectedAnchor.anchor_name} ({currentSelectedAnchor.anchor_code})
+          </h2>
+          <p className="text-sm text-slate-600">Login ID: {currentSelectedAnchor.loginid}</p>
+          <p className="text-sm text-slate-600">Role: {currentSelectedAnchor.role}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <main className="flex-1 flex flex-col h-full overflow-hidden">
@@ -453,68 +529,61 @@ export default function AdminAnchorsPage() {
                     <th className="py-4 px-6 min-w-[150px]">Updated At</th>
                     <th className="py-4 px-6 min-w-[120px]">Created By</th>
                     <th className="py-4 px-6 min-w-[120px]">Updated By</th>
+                    <th className="py-4 px-6 text-center min-w-[150px]">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
                   {isLoading ? (
                     <tr>
-                      <td
-                        colSpan={9}
-                        className="py-16 text-center text-slate-400 font-bold"
-                      >
+                      <td colSpan={10} className="py-16 text-center text-slate-400 font-bold">
                         Loading anchor records...
                       </td>
                     </tr>
                   ) : paginatedList.length > 0 ? (
                     paginatedList.map((item) => (
                       <tr
-                        key={item.anchor_code + '-' + item.loginid}
-                        onClick={() => setInspectedRecord(item)}
-                        className="transition-colors hover:bg-slate-50/40 cursor-pointer"
+                        key={item.anchor_code + "-" + item.loginid}
+                        onClick={() => handleSelectAnchor(item)}
+                        className="transition-colors hover:bg-slate-50/60 cursor-pointer group"
                       >
-                        <td className="py-4 px-6 text-slate-900 font-bold">
+                        <td className="py-4 px-6 text-slate-900 font-bold group-hover:text-blue-600 transition-colors">
                           {item.anchor_name}
                         </td>
-                        <td className="py-4 px-6 text-slate-700 font-semibold">
-                          {item.anchor_code}
-                        </td>
-                        <td className="py-4 px-6 text-slate-600 font-normal">
-                          {item.loginid}
-                        </td>
+                        <td className="py-4 px-6 text-slate-700 font-semibold">{item.anchor_code}</td>
+                        <td className="py-4 px-6 text-slate-600 font-normal">{item.loginid}</td>
                         <td className="py-4 px-6">
                           {item.is_active ? (
-                            <span className="inline-flex  font-bold px-2.5 py-0.5 rounded-full text-[10px] leading-5">
-                              true
+                            <span className="inline-flex font-bold px-2.5 py-0.5 rounded-full text-[10px] leading-5 bg-emerald-50 text-emerald-700 border border-emerald-200">
+                              Active
                             </span>
                           ) : (
-                            <span className="inline-flex  font-bold px-2.5 py-0.5 rounded-full text-[10px] leading-5">
-                              false
+                            <span className="inline-flex font-bold px-2.5 py-0.5 rounded-full text-[10px] leading-5 bg-slate-100 text-slate-600">
+                              Inactive
                             </span>
                           )}
                         </td>
-                        <td className="py-4 px-6 text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">
-                          {item.role}
-                        </td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">
-                          {item.createat}
-                        </td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">
-                          {item.updatedat}
-                        </td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">
-                          {item.createby}
-                        </td>
-                        <td className="py-4 px-6 text-slate-500 font-semibold">
-                          {item.updateby}
+                        <td className="py-4 px-6 text-[10px] font-extrabold tracking-wider text-slate-500 uppercase">{item.role}</td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.createat}</td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.updatedat}</td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.createby}</td>
+                        <td className="py-4 px-6 text-slate-500 font-semibold">{item.updateby}</td>
+                        <td className="py-4 px-6 text-center" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-center gap-2">
+                           
+                             <button
+                              onClick={() =>  handleSelectAnchor(item)}
+                              className="p-1.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+                              title="Inspect Details"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td
-                        colSpan={9}
-                        className="py-16 text-center text-slate-400 font-bold"
-                      >
+                      <td colSpan={10} className="py-16 text-center text-slate-400 font-bold">
                         No records match the applied filters.
                       </td>
                     </tr>
@@ -526,21 +595,20 @@ export default function AdminAnchorsPage() {
             {/* Pagination Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4 gap-4">
               <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                Showing{' '}
+                Showing{" "}
                 <span className="text-slate-800">
-                  {filteredList.length === 0
-                    ? 0
-                    : (currentPage - 1) * pageSize + 1}
-                </span>{' '}
-                to{' '}
+                  {totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+                </span>{" "}
+                to{" "}
                 <span className="text-slate-800">
-                  {Math.min(currentPage * pageSize, filteredList.length)}
-                </span>{' '}
-                of <span className="text-slate-800">{filteredList.length}</span>{' '}
-                results
+                  {Math.min(currentPage * pageSize, totalRecords)}
+                </span>{" "}
+                of <span className="text-slate-800">{totalRecords}</span> results
               </div>
 
               <div className="flex items-center gap-6">
+
+
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setCurrentPage(1)}
@@ -564,17 +632,15 @@ export default function AdminAnchorsPage() {
                   </span>
 
                   <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage >= totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setCurrentPage(totalPages)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage >= totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
                     <ChevronsRight className="h-4 w-4" />

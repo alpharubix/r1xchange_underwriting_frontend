@@ -1,28 +1,62 @@
 import apiClient from '@/lib/axios';
 
-export interface ExportBsaParams {
-  from_date: string;
-  to_date: string;
+export interface ExportBsaReportParams {
+  account_number?: string;
+  account_id?: string | number | null;
+  from_date?: string;
+  to_date?: string;
   cust_id?: string;
 }
 
 /**
- * Download the consolidated BSA Excel report from /v1/export/bsa
+ * Download the BSA Excel report (Summary, Cashflow, Overview) from /bsa/export-report
+ * Sends both { account_number, account_id } in the POST body to satisfy backend requirements.
  */
 export const downloadBsaReport = async (
-  params: ExportBsaParams
+  paramsOrAccountNumber: string | ExportBsaReportParams,
+  optionalAccountId?: string | number | null
 ): Promise<void> => {
-  try {
-    const response = await apiClient.get('/export/bsa', {
-      params,
-      responseType: 'blob',
-      skipErrorToast: true,
-    });
+  let account_number = '';
+  let account_id = '';
 
-    let filename = `BSA_Report_${params.from_date}_to_${params.to_date}.xlsx`;
-    const disposition =
+  if (
+    typeof paramsOrAccountNumber === 'object' &&
+    paramsOrAccountNumber !== null
+  ) {
+    account_number = String(
+      paramsOrAccountNumber.account_number ||
+        paramsOrAccountNumber.account_id ||
+        ''
+    );
+    account_id = String(
+      paramsOrAccountNumber.account_id ||
+        paramsOrAccountNumber.account_number ||
+        ''
+    );
+  } else {
+    account_number = String(paramsOrAccountNumber || '');
+    account_id = String(optionalAccountId || paramsOrAccountNumber || '');
+  }
+
+  try {
+    const response = await apiClient.post(
+      '/bsa/export-report',
+      {
+        account_number,
+        account_id,
+      },
+      {
+        responseType: 'blob',
+        skipErrorToast: true,
+      }
+    );
+
+    let filename = `Bsa_analysis_report_${account_number || account_id}.xlsx`;
+    const rawDisposition =
       response.headers?.['content-disposition'] ||
       response.headers?.['Content-Disposition'];
+    const disposition =
+      typeof rawDisposition === 'string' ? rawDisposition : undefined;
 
     if (disposition) {
       const match = disposition.match(/filename=["']?([^"';]+)["']?/);
@@ -31,8 +65,13 @@ export const downloadBsaReport = async (
       }
     }
 
+    const contentType =
+      typeof response.headers?.['content-type'] === 'string'
+        ? response.headers['content-type']
+        : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
     const blob = new Blob([response.data], {
-      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      type: contentType,
     });
 
     const downloadUrl = window.URL.createObjectURL(blob);
@@ -71,3 +110,7 @@ export const downloadBsaReport = async (
     throw new Error(msg);
   }
 };
+
+export const downloadAll3ReportFiles = downloadBsaReport;
+export { downloadItrReport } from './itr';
+export { downloadCibilReport } from './cibil';

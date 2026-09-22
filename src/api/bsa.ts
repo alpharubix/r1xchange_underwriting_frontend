@@ -11,6 +11,8 @@ export interface BsaBankAccount {
 }
 
 export interface BankAccounts {
+  account_id?: string | number | null;
+  accountId?: string | number | null;
   entityName?: string | null;
   entityType?: string | null;
   accountNumber?: string | null;

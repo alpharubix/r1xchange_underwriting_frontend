@@ -356,7 +356,7 @@ export default function DashboardPage() {
 
                           {item.moduleId && (
                             <div
-                              className="flex h-7 bg-amber-100 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1"
+                              className="flex h-7 items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 p-1"
                               onClick={(event) => event.stopPropagation()}
                             >
                               <button

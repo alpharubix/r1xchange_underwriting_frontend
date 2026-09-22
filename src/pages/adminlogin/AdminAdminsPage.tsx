@@ -7,13 +7,13 @@ import {
   ChevronsLeft,
   ChevronsRight,
   X,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { toast } from 'sonner';
-import { useQuery } from '@tanstack/react-query';
-import { getAdminsList } from '@/api/user';
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
+import { getAdminsList, extractPaginatedData } from "@/api/user";
 
 interface RecordItem {
   loginid: string;
@@ -26,25 +26,38 @@ interface RecordItem {
 export default function AdminAdminsPage() {
   const [adminsList, setAdminsList] = useState<RecordItem[]>([]);
 
+  // Pagination states
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize] = useState(10);
+
+  const queryParams = useMemo(() => ({
+    page: currentPage,
+    limit: pageSize,
+  }), [currentPage, pageSize]);
+
   // Fetch admin list
   const { data: fetchedAdmins, isLoading } = useQuery({
-    queryKey: ['admin', 'admins-list'],
-    queryFn: getAdminsList,
+    queryKey: ["admin", "admins-list", currentPage, pageSize],
+    queryFn: () => getAdminsList(queryParams),
+    placeholderData: (previousData) => previousData,
   });
 
+  const paginationData = useMemo(() => {
+    return extractPaginatedData<any>(fetchedAdmins, currentPage, pageSize);
+  }, [fetchedAdmins, currentPage, pageSize]);
+
   useEffect(() => {
-    if (fetchedAdmins) {
-      const mapped = fetchedAdmins.map((admin: any) => ({
-        loginid: admin.login_id || admin.loginid || '',
-        adminstatus:
-          admin.admin_status || admin.adminstatus || admin.status || 'Active',
-        role: admin.role || 'ADMIN',
-        createat: admin.created_at || admin.createat || '',
-        updatedat: admin.updated_at || admin.updatedat || '',
+    if (paginationData.items) {
+      const mapped = paginationData.items.map((admin: any) => ({
+        loginid: admin.login_id || admin.loginid || "",
+        adminstatus: admin.admin_status || admin.adminstatus || admin.status || "Active",
+        role: admin.role || "ADMIN",
+        createat: admin.created_at || admin.createat || "",
+        updatedat: admin.updated_at || admin.updatedat || "",
       }));
       setAdminsList(mapped);
     }
-  }, [fetchedAdmins]);
+  }, [paginationData.items]);
 
   // Filter input states
   const [filterloginid, setFilterloginid] = useState('');
@@ -52,10 +65,6 @@ export default function AdminAdminsPage() {
   const [filterrole, setFilterrole] = useState('');
   const [filtercreateat, setFiltercreateat] = useState('');
   const [filterupdatedat, setFilterupdatedat] = useState('');
-
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
 
   // Modal states for inspecting/creating
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -116,13 +125,24 @@ export default function AdminAdminsPage() {
     filterupdatedat,
   ]);
 
+  const isServerPaginated = paginationData.is_server_paginated;
+
+  const totalPages = isServerPaginated
+    ? paginationData.total_pages
+    : Math.max(1, Math.ceil(filteredList.length / pageSize));
+
+  const totalRecords = isServerPaginated
+    ? paginationData.total_records
+    : filteredList.length;
+
   // Paginated list
   const paginatedList = useMemo(() => {
+    if (isServerPaginated) {
+      return filteredList;
+    }
     const startIndex = (currentPage - 1) * pageSize;
     return filteredList.slice(startIndex, startIndex + pageSize);
-  }, [filteredList, currentPage]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
+  }, [filteredList, isServerPaginated, currentPage, pageSize]);
 
   // Create Submit
   const handleCreateSubmit = (e: React.FormEvent) => {
@@ -359,21 +379,20 @@ export default function AdminAdminsPage() {
             {/* Pagination Controls */}
             <div className="flex flex-col sm:flex-row items-center justify-between border-t border-slate-200 bg-slate-50/50 px-6 py-4 gap-4">
               <div className="text-xs text-slate-500 font-bold uppercase tracking-wider">
-                Showing{' '}
+                Showing{" "}
                 <span className="text-slate-800">
-                  {filteredList.length === 0
-                    ? 0
-                    : (currentPage - 1) * pageSize + 1}
-                </span>{' '}
-                to{' '}
+                  {totalRecords === 0 ? 0 : (currentPage - 1) * pageSize + 1}
+                </span>{" "}
+                to{" "}
                 <span className="text-slate-800">
-                  {Math.min(currentPage * pageSize, filteredList.length)}
-                </span>{' '}
-                of <span className="text-slate-800">{filteredList.length}</span>{' '}
-                results
+                  {Math.min(currentPage * pageSize, totalRecords)}
+                </span>{" "}
+                of <span className="text-slate-800">{totalRecords}</span> results
               </div>
 
               <div className="flex items-center gap-6">
+               
+
                 <div className="flex items-center gap-1.5">
                   <button
                     onClick={() => setCurrentPage(1)}
@@ -397,17 +416,15 @@ export default function AdminAdminsPage() {
                   </span>
 
                   <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
-                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+                    disabled={currentPage >= totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
                     <ChevronRight className="h-4 w-4" />
                   </button>
                   <button
                     onClick={() => setCurrentPage(totalPages)}
-                    disabled={currentPage === totalPages}
+                    disabled={currentPage >= totalPages}
                     className="flex h-8 w-8 items-center justify-center rounded-lg bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-50 transition-all shadow-sm"
                   >
                     <ChevronsRight className="h-4 w-4" />

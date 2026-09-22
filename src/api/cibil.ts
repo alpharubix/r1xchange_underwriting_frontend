@@ -291,3 +291,101 @@ export async function getCibilWebhookStatus(
     'Unable to fetch CIBIL report status.'
   );
 }
+
+/**
+ * Download CIBIL Excel/PDF report (Overview, Account Summary, Payments History, Analysis) from /cibil/export-report
+ * Sends { reference_id } in the request body.
+ */
+export const downloadCibilReport = async (
+  referenceId: string
+): Promise<void> => {
+  if (!referenceId) {
+    throw new Error('Reference ID is required to download CIBIL report');
+  }
+
+  const params = { reference_id: referenceId };
+
+  try {
+    let response;
+    try {
+      response = await apiClient.post(
+        '/cibil/export-report',
+        {
+          reference_id: referenceId,
+          cibil_reference_id: referenceId,
+        },
+        {
+          params,
+          responseType: 'blob',
+          skipErrorToast: true,
+        }
+      );
+    } catch (err: any) {
+      if (err.response?.status === 405) {
+        response = await apiClient.get('/cibil/export-report', {
+          params,
+          responseType: 'blob',
+          skipErrorToast: true,
+        });
+      } else {
+        throw err;
+      }
+    }
+
+    let filename = `CIBIL_Report_${referenceId}.xlsx`;
+    const rawDisposition =
+      response.headers?.['content-disposition'] ||
+      response.headers?.['Content-Disposition'];
+    const disposition =
+      typeof rawDisposition === 'string' ? rawDisposition : undefined;
+
+    if (disposition) {
+      const match = disposition.match(/filename=["']?([^"';]+)["']?/);
+      if (match && match[1]) {
+        filename = match[1].trim();
+      }
+    }
+
+    const contentType =
+      typeof response.headers?.['content-type'] === 'string'
+        ? response.headers['content-type']
+        : 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+
+    const blob = new Blob([response.data], { type: contentType });
+    const downloadUrl = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+
+    window.URL.revokeObjectURL(downloadUrl);
+    document.body.removeChild(link);
+  } catch (error: any) {
+    if (error.response?.data instanceof Blob) {
+      try {
+        const text = await error.response.data.text();
+        const json = JSON.parse(text);
+        const serverMsg =
+          json.detail?.message ||
+          json.detail ||
+          json.message ||
+          'Failed to download CIBIL report';
+        throw new Error(
+          typeof serverMsg === 'string' ? serverMsg : JSON.stringify(serverMsg)
+        );
+      } catch (parseErr: any) {
+        if (parseErr.message && !parseErr.message.includes('JSON')) {
+          throw parseErr;
+        }
+      }
+    }
+    const msg =
+      error.response?.data?.detail?.message ||
+      error.response?.data?.message ||
+      error.message ||
+      'Failed to download CIBIL report';
+    throw new Error(msg);
+  }
+};
+

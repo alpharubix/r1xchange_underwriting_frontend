@@ -16,7 +16,9 @@ import {
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useMe } from '@/hooks/useUser';
 import { useLogout } from '@/hooks/useAuth';
+import { downloadItrReport } from '@/api/itr';
 import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+
 import { toast } from 'sonner';
 
 interface SidebarContextValue {
@@ -59,6 +61,7 @@ const navItems = [
     icon: PieChart,
     label: 'ITR',
     subItems: [
+      { label: 'Export', path: '/itr/export', disabled: false },
       { label: 'Tax Calculation', path: '/itr/itr-tax-calculation', disabled: false },
       { label: 'Balance Sheet', path: '/itr/balance-sheet', disabled: false },
       {
@@ -67,6 +70,7 @@ const navItems = [
         disabled: false,
       },
       { label: 'Ratio Analysis', path: '/itr/ratio-analysis', disabled: false },
+      
     ],
   },
   {
@@ -245,7 +249,32 @@ export function AppSidebar() {
                       <button
                         key={sub.path}
                         type="button"
-                        onClick={() => navigate(sub.path)}
+                        onClick={async () => {
+                          if (sub.disabled) {
+                            toast.error(`${sub.label} is temporarily unavailable`);
+                            return;
+                          }
+                          if (sub.path === '/itr/export') {
+                            try {
+                              toast.loading(
+                                'Downloading ITR Report (Tax Calculation, Balance Sheet, Profit & Loss, Ratio Analysis)...',
+                                { id: 'itr-export-sidebar' }
+                              );
+                              await downloadItrReport();
+                              toast.success('ITR Report downloaded successfully!', {
+                                id: 'itr-export-sidebar',
+                              });
+                            } catch (err: any) {
+                              toast.error(err?.message || 'Failed to download ITR report', {
+                                id: 'itr-export-sidebar',
+                              });
+                            }
+                            return;
+                          }
+                          if (sub.path) {
+                            navigate(sub.path);
+                          }
+                        }}
                         className={cn(
                           'sidebar-item cursor-pointer flex items-center w-full px-3 py-2 rounded-lg text-sm text-white/70 hover:text-white hover:bg-white/10 transition-colors',
                           isSubActive && 'text-white font-medium bg-white/20'
