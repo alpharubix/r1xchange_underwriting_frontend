@@ -128,7 +128,7 @@ export default function GstReportPage() {
             ) : (
               <Download className="h-4 w-4 text-emerald-400" />
             )}
-            <span>Export Report</span>
+            <span>Export</span>
           </button>
         </div>
 

@@ -354,7 +354,7 @@ export default function BankAccountsPage({
                                     ) : (
                                       <Download className="h-3 w-3 text-emerald-400" />
                                     )}
-                                    import
+                                    Export
                                   </button>
 
                                 <button
