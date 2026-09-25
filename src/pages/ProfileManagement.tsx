@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMe } from '@/hooks/useUser';
 import { updateProfile } from '@/api/user';
+import {toast as NewToast} from 'sonner' ;
 import {
   Pencil,
   X,
@@ -127,6 +128,7 @@ export default function ProfileManagement() {
   const [editMode, setEditMode] = useState(false);
   const [toast, setToast] = useState(false);
 
+  
   const defaultForm: ProfileForm = {
     customer_name: '',
     phone: '',
@@ -210,6 +212,7 @@ export default function ProfileManagement() {
       setEditMode(false);
 
       setToast(true);
+      NewToast.success('Profile updated successfully!');
       setTimeout(() => setToast(false), 3000);
     } catch (error) {
       console.error(error);
@@ -348,11 +351,16 @@ export default function ProfileManagement() {
                 />
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+              onClick={!editMode &&(
+                () => NewToast.error("Click on Edit button to update your profile")
+              )}
+              >
                 <InfoField
                   icon={User}
                   label="Customer Name"
                   value={userData?.customer_name ?? 'N/A'}
+                  
                 />
                 <InfoField
                   icon={Building2}
