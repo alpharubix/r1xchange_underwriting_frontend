@@ -143,7 +143,8 @@ export default function PaymentModal({
 
   // const cartGrandTotal = Number((cartSubtotal + cartIgst).toFixed(2));
   const cartGrandTotal = Math.floor(Number(cartSubtotal) + Number(cartIgst));
-  const payableAmount = isCartPayment ? cartGrandTotal : amount;
+  const payableAmount = isCartPayment ? cartGrandTotal : cartGrandTotal;
+
   console.log("Payable amount ",payableAmount)
   const periodFeature =
     pricing.period !== 'N/A'
@@ -162,10 +163,10 @@ export default function PaymentModal({
     try {
       setIsProcessing(true);
 
-      // const razorpayKey =
-      //   import.meta.env.VITE_RAZOR_PAY_KEY_ID ||
-      //   import.meta.env.VITE_RAZORPAY_KEY_ID;
-      const razorpayKey = "rzp_test_TV7hB4PLNUBB63"
+      const razorpayKey =
+        import.meta.env.VITE_RAZOR_PAY_KEY_ID ||
+        import.meta.env.VITE_RAZORPAY_KEY_ID;
+      // const razorpayKey = "rzp_test_TV7hB4PLNUBB63"
 
       if (!razorpayKey) {
         toast.error(
