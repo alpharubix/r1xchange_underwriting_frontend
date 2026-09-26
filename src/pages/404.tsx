@@ -1,6 +1,6 @@
 ﻿import { ArrowLeft, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/r1xchangeLogoWhiteWebView.svg';
+import logo from '../assets/crispLogoWhite.svg';
 
 export default function NotF() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function NotF() {
             <img
               key={i}
               src={logo}
-              alt="r1xchange logo"
+              alt="CRISP logo"
               className="h-15 w-15 object-contain"
             />
           ))}

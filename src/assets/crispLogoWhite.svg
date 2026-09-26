@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 90" role="img" aria-label="CRISP">
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-width="6">
+    <path d="M66 27a24 24 0 1 0 0 36" />
+  </g>
+  <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
+  <text x="101" y="55" fill="#ffffff" font-family="Manrope, Arial, sans-serif" font-size="39" font-weight="800" letter-spacing="2">CRISP</text>
+  <text x="104" y="74" fill="#c9daf1" font-family="DM Sans, Arial, sans-serif" font-size="9" font-weight="600" letter-spacing="2">FINANCIAL INTELLIGENCE</text>
+</svg>

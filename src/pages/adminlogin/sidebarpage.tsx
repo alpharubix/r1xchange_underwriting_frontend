@@ -74,7 +74,7 @@ export default function AdminSidebar() {
           {!sidebarCollapsed && (
             <div className="flex flex-col">
               <span className="font-extrabold text-sm tracking-widest text-white uppercase">
-                R1Xchange
+                CRISP
               </span>
               <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest leading-none mt-0.5">
                 Underwriting

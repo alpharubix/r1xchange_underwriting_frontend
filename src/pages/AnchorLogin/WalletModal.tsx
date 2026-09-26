@@ -18,7 +18,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 interface Customer {
@@ -163,9 +163,9 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
         key: razorpayKey,
         amount: payment.amount,
         currency: payment.currency || 'INR',
-        name: 'R1Xchange Underwriting',
+        name: 'CRISP',
         description: `Payment for ${payment.service} report`,
-        image: window.location.origin + r1xchangeLogoWhiteWebView,
+        image: window.location.origin + crispLogoWhiteWebView,
         order_id: payment.id,
         handler: async function (response: any) {
           try {

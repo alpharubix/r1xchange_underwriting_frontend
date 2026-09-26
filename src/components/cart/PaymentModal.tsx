@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import { logoBase64 } from '@/assets/logoBase64';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { getPricingDetails } from '@/lib/paymentUtils';
 
@@ -110,13 +110,6 @@ export default function PaymentModal({
     CIBIL: 'CIBIL Credit Report',
   };
 
-  const servicePeriods: Record<string, string> = {
-    BSA: '(12 month period for 1 Bank Acc.)',
-    GST: '(12 month period for 1 GST No.)',
-    ITR: '(2 Financial Years for 1 Business)',
-    CIBIL: '(Credit Bureau Records till date)',
-  };
-
   const cartLines = (servicesBreakup || []).map((item) => {
     const itemPricing = getPricingDetails(item.service, 0);
 
@@ -124,7 +117,7 @@ export default function PaymentModal({
       ...item,
       ...itemPricing,
       label: serviceLabels[item.service] || item.service,
-      periodLabel: servicePeriods[item.service] || '',
+      periodLabel: itemPricing.periodLabel,
       lineAmount: itemPricing.base * item.qty,
       lineTotal: itemPricing.total * item.qty,
     };
@@ -214,11 +207,11 @@ export default function PaymentModal({
 
         currency: orderData.currency,
 
-        name: 'R1Xchange Underwriting',
+        name: 'CRISP',
 
         description: `Payment for ${moduleName} report`,
 
-        image: logoBase64,
+        image: window.location.origin + crispLogoWhiteWebView,
 
         order_id: orderData.order_id,
 

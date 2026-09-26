@@ -55,6 +55,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handle = () => {
       clearAuth();
       const path = window.location.pathname.toLowerCase();
+      if (path === '/' || path === '/pricing' || path.startsWith('/products/')) {
+        return;
+      }
       if (path.includes('/anchors')) {
         navigate('/anchors/login');
       } else if (path.includes('/admins')) {
@@ -95,7 +98,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       const currentPath = window.location.pathname.toLowerCase();
       const isLoginOrAuthPage =
-        currentPath === '/' ||
         currentPath === '/login' ||
         currentPath === '/signup' ||
         currentPath === '/forgot-password' ||

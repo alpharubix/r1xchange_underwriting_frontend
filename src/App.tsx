@@ -10,6 +10,21 @@ import ExistingReports from './pages/cibil/ExistingReports';
 import ViewReport from './pages/cibil/ViewReport';
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
+const MarketingHomePage = lazy(() =>
+  import('@/pages/marketing/MarketingSite').then((module) => ({
+    default: module.HomePage,
+  }))
+);
+const MarketingProductPage = lazy(() =>
+  import('@/pages/marketing/MarketingSite').then((module) => ({
+    default: module.ProductPage,
+  }))
+);
+const MarketingPricingPage = lazy(() =>
+  import('@/pages/marketing/MarketingSite').then((module) => ({
+    default: module.PricingPage,
+  }))
+);
 const AnchorLoginPage = lazy(
   () => import('./pages/AnchorLogin/AnchorLoginPage')
 );
@@ -89,7 +104,12 @@ function App() {
                 }
               >
                 <Routes>
-                  {/* Public routes */}
+                  {/* Public marketing routes */}
+                  <Route path="/" element={<MarketingHomePage />} />
+                  <Route path="/products/:slug" element={<MarketingProductPage />} />
+                  <Route path="/pricing" element={<MarketingPricingPage />} />
+
+                  {/* Public account routes */}
                   <Route element={<PublicRoute />}>
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/signup" element={<SignupPage />} />
@@ -236,8 +256,6 @@ function App() {
                     </Route>
                   </Route>
 
-                  {/* Default redirect */}
-                  <Route path="/" element={<Navigate to="/login" replace />} />
                   <Route path="*" element={<NotF />} />
                 </Routes>
               </Suspense>

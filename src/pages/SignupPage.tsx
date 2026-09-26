@@ -25,8 +25,8 @@ import {
 } from '@/components/ui/card';
 import { registerSchema, type RegisterFormValues } from '@/lib/zod-schemas';
 import { useRegister, getApiError } from '@/hooks/useAuth';
-import r1xchangeLogoBlackWebView from '../assets/r1xchangeLogoBlackWebView.svg';
-import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
+import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
 import HomeIntro from '@/components/HomeIntro';
 
 const passwordRules = [
@@ -82,14 +82,14 @@ export default function SignupPage() {
             <div className="float-animation mb-8 inline-flex h">
               <div className="flex h-80 w-80 items-center justify-center">
                 <img
-                  src={r1xchangeLogoWhiteWebView}
-                  alt="R1Xchange logo"
+                  src={crispLogoWhiteWebView}
+                  alt="CRISP logo"
                   className="hover:scale-[1.02] transition-transform duration-500 "
                 />
               </div>
             </div>
             <h1 className="text-4xl font-bold text-white mb-4 leading-tight">
-              R1Xchange
+              CRISP
               <br />
               <span className="text-white/70">Create your account </span>
             </h1>
@@ -122,7 +122,7 @@ export default function SignupPage() {
             {/* Mobile Logo */}
             <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
               <div className="flex h-24 w-24 items-center justify-center">
-                <img src={r1xchangeLogoBlackWebView} alt="R1Xchange logo" />
+                <img src={crispLogoBlackWebView} alt="CRISP logo" />
               </div>
             </div>
 

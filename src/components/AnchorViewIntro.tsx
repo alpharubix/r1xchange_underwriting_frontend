@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { getAnchorBrand } from '@/lib/brandLogo';
 
@@ -64,15 +64,15 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
             {brand.logo ? (
               <div className="flex flex-col items-center justify-center gap-10 md:gap-16 w-full max-w-5xl px-4">
                 <div className="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16 w-full">
-                  {/* R1Xchange Side */}
+                  {/* CRISP side */}
                   <div className="flex flex-col items-center justify-center gap-6">
                     <img
-                      src={r1xchangeLogoWhiteWebView}
-                      alt="R1Xchange Logo"
+                      src={crispLogoWhiteWebView}
+                      alt="CRISP logo"
                       className="h-28 md:h-40 w-auto object-contain select-none drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
                     />
                     <p className="text-white/95 font-extrabold tracking-[0.3em] text-xl md:text-2xl uppercase font-sans">
-                      R1Xchange
+                      CRISP
                     </p>
                   </div>
 

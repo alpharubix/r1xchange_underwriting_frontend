@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 
 export default function HomeIntro() {
   const [show, setShow] = useState(false);
@@ -52,8 +52,8 @@ export default function HomeIntro() {
             }}
           >
             <img
-              src={r1xchangeLogoWhiteWebView}
-              alt="R1Xchange"
+              src={crispLogoWhiteWebView}
+              alt="CRISP"
               className="w-[420px] md:w-[550px] "
             />
             {companyName ? (
@@ -69,7 +69,7 @@ export default function HomeIntro() {
               </div>
             ) : (
               <p className="mt-6 text-center text-xl font-semibold tracking-[0.3em] text-white/50">
-                Welcome to <span className="text-white">R1Xchange</span>
+                Welcome to <span className="text-white">CRISP</span>
               </p>
             )}
           </motion.div>

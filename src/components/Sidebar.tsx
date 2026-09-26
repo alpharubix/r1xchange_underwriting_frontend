@@ -17,7 +17,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMe } from '@/hooks/useUser';
 import { useLogout } from '@/hooks/useAuth';
 import { downloadItrReport } from '@/api/itr';
-import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
 
 import { toast } from 'sonner';
 
@@ -154,14 +154,14 @@ export function AppSidebar() {
       >
         <div className="h-20 w-96 flex items-center justify-center">
           <img
-            src={r1xchangeLogoWhiteWebView}
-            alt="R1Xchange Logo"
+            src={crispLogoWhiteWebView}
+            alt="CRISP logo"
             className="h-auto w-1/3 object-contain scale-[2.6] hover:scale-[2.4] transition-transform duration-300"
           />
         </div>
         {/* {!collapsed && (
           <div className="animate-fade-in overflow-hidden">
-            <p className="text-base font-bold text-white tracking-wide">R1Xchange</p>
+            <p className="text-base font-bold text-white tracking-wide">CRISP</p>
           </div>
         )} */}
       </div>

@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { getWalletBalance } from '@/api/payment';
-import r1xchangeLogoBlackWebView from '@/assets/r1xchangeLogoBlackWebView.svg';
+import crispLogoBlackWebView from '@/assets/crispLogoBlack.svg';
 import { useNavigate } from 'react-router-dom';
 
 interface WalletProtectedComponentProps {
@@ -52,8 +52,8 @@ export default function WalletProtectedComponent({
         {/* Logo */}
         <div className="mb-8 flex items-center justify-center">
           <img
-            src={r1xchangeLogoBlackWebView}
-            alt="R1Xchange"
+            src={crispLogoBlackWebView}
+            alt="CRISP"
             className="h-30 w-auto animate-float"
           />
         </div>

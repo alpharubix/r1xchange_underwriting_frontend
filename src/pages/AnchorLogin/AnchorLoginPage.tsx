@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { z } from 'zod';
 import { useAnchorLogin, getApiError } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 
 const loginSchema = z.object({
   id: z.string().min(1, 'ID is required'),
@@ -133,8 +133,8 @@ export default function AnchorLoginPage() {
 
         <div className="relative z-10 flex items-center gap-4">
           <img
-            src={r1xchangeLogoWhiteWebView}
-            alt="R1Xchange Logo"
+            src={crispLogoWhiteWebView}
+            alt="CRISP logo"
             className="h-32 w-auto object-contain select-none"
           />
         </div>
@@ -156,7 +156,7 @@ export default function AnchorLoginPage() {
 
         {/* Footer Credit */}
         <div className="relative z-10 text-xs text-white/40 font-medium tracking-wide">
-          © 2025 R1Xchange. All rights reserved.
+          © 2025 CRISP. All rights reserved.
         </div>
       </div>
 

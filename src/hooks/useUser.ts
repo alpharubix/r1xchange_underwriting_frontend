@@ -15,7 +15,7 @@ export function useMe() {
       } catch (err) {
         if (isAdmin) {
           return {
-            email_id: 'admin@r1xchange.com',
+            email_id: 'admin@crisp.example',
             customer_name: 'Admin User',
             role: storedRole || 'admin',
           } as UserProfile;

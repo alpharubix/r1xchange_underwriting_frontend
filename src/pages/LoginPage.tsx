@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/card';
 import { loginSchema, type LoginFormValues } from '@/lib/zod-schemas';
 // import { useLogin, getApiError } from "@/hooks/useAuth";
-import r1xchangeLogoBlackWebView from '../assets/r1xchangeLogoBlackWebView.svg';
-import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
+import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
 import { useLogin } from '@/hooks/useAuth';
 // import HomeIntro from "@/components/HomeIntro";
 
@@ -61,8 +61,8 @@ export default function LoginPage() {
             <div className="float-animation mb-8 inline-flex">
               <div className="flex h-80 w-80 items-center justify-center rounded-3xl  ">
                 <img
-                  src={r1xchangeLogoWhiteWebView}
-                  alt="R1Xchange logo"
+                  src={crispLogoWhiteWebView}
+                  alt="CRISP logo"
                   className="hover:scale-[1.02] transition-transform duration-500"
                 />
               </div>
@@ -70,7 +70,7 @@ export default function LoginPage() {
             <h1 className="text-4xl font-bold text-white mb-4 leading-tight">
               Welcome Back to
               <br />
-              <span className="text-white/70">R1Xchange</span>
+              <span className="text-white/70">CRISP</span>
             </h1>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default function LoginPage() {
             {/* Mobile Logo */}
             <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
               <div className="flex h-24 w-24 items-center justify-center rounded-xl">
-                <img src={r1xchangeLogoBlackWebView} alt="R1Xchange logo" />
+                <img src={crispLogoBlackWebView} alt="CRISP logo" />
               </div>
             </div>
 

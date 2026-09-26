@@ -37,8 +37,8 @@ import {
   useResetPassword,
   getApiError,
 } from '@/hooks/useAuth';
-import r1xchangeLogoBlackWebView from '../assets/r1xchangeLogoBlackWebView.svg';
-import r1xchangeLogoWhiteWebView from '../assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
+import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
 const passwordRules = [
   { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
   { label: 'Contains uppercase letter', test: (p: string) => /[A-Z]/.test(p) },
@@ -431,8 +431,8 @@ export default function ForgotPasswordPage() {
           <div className="float-animation mb-8 inline-flex">
             <div className="flex h-80 w-80 items-center justify-center rounded-3xl">
               <img
-                src={r1xchangeLogoWhiteWebView}
-                alt="r1xchange logo"
+                src={crispLogoWhiteWebView}
+                alt="CRISP logo"
                 className="hover:scale-110 transition-transform duration-500"
               />
             </div>
@@ -440,7 +440,7 @@ export default function ForgotPasswordPage() {
           <h1 className="text-4xl font-bold text-white mb-4 leading-tight ">
             Account Recovery
             <br />
-            <span className="text-white/70">R1Xchange</span>
+            <span className="text-white/70">CRISP</span>
           </h1>
           <p className="text-white/60 text-lg leading-relaxed">
             Don't worry, we'll help you get back in.
@@ -482,8 +482,8 @@ export default function ForgotPasswordPage() {
           <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
             <div className="flex h-44 w-44 items-center justify-center rounded-xl">
               <img
-                src={r1xchangeLogoBlackWebView}
-                alt="R1Xchange logo"
+                src={crispLogoBlackWebView}
+                alt="CRISP logo"
                 className="hover:scale-110 transition-transform duration-500"
               />
             </div>

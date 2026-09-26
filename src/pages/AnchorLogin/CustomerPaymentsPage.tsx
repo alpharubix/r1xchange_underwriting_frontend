@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
 import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound } from "lucide-react";
 import { toast } from "sonner";
-import r1xchangeLogoWhiteWebView from "@/assets/r1xchangeLogoWhiteWebView.svg";
+import crispLogoWhiteWebView from "@/assets/crispLogoWhite.svg";
 
 export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
@@ -146,9 +146,9 @@ export default function CustomerPaymentsPage() {
         // Pending orders already contain Razorpay's amount in paise.
         amount: payment.amount,
         currency: payment.currency || 'INR',
-        name: 'R1Xchange Underwriting',
+        name: 'CRISP',
         description: `Payment for ${payment.service} report`,
-        image: window.location.origin + r1xchangeLogoWhiteWebView,
+        image: window.location.origin + crispLogoWhiteWebView,
         order_id: payment.id,
         handler: async function (response: any) {
           try {

@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { useAdminLogin } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import characterLaptop from '@/assets/character_laptop.jpg';
-import r1xchangeLogoWhiteWebView from '@/assets/r1xchangeLogoWhiteWebView.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
 
 const adminLoginSchema = z.object({
   id: z.string().min(1, 'ID is required'),
@@ -106,8 +106,8 @@ export default function AdminLoginPage() {
             <div className="space-y-3 text-left">
               <div className="flex items-center gap-4">
                 <img
-                  src={r1xchangeLogoWhiteWebView}
-                  alt="R1Xchange logo"
+                  src={crispLogoWhiteWebView}
+                  alt="CRISP logo"
                   className="h-24 md:h-28 w-auto object-contain drop-shadow-lg"
                 />
                 <div className="h-8 w-[2px] bg-white/30 rounded-full" />
