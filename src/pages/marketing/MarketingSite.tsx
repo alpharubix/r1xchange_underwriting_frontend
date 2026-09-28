@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
+﻿import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   Activity,
@@ -402,7 +402,7 @@ function Footer() {
       <div className="footer-top"><div className="footer-brand-block"><Brand /><p>Financial clarity for better-informed decisions.</p><a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrsip.com <ArrowUpRight size={14} /></a></div>
         {groups.map((group) => <div className="footer-group" key={group.title}><h3>{group.title}</h3>{group.links.map((item) => item.to.startsWith('/') ? <Link to={item.to} key={item.label}>{item.label}</Link> : <a href={item.to} key={item.label}>{item.label}</a>)}</div>)}
       </div>
-      <div className="footer-bottom"><span>© {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
+      <div className="footer-bottom"><span>Â© {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
     </footer>
   );
 }
@@ -446,7 +446,7 @@ function ServiceShowcase() {
         return (
           <>
             <strong>Cashflow, EOD, Loan Transaction and many more...</strong>
-            <div className="service-ad-bars"><i><span>₹1.2L</span></i><i><span>₹3.4L</span></i><i><span>₹1.8L</span></i><i><span>₹5.0L</span></i><i><span>₹4.2L</span></i><i><span>₹7.1L</span></i><i><span>₹5.8L</span></i><i><span>₹8.9L</span></i></div>
+            <div className="service-ad-bars"><i><span>â‚¹1.2L</span></i><i><span>â‚¹3.4L</span></i><i><span>â‚¹1.8L</span></i><i><span>â‚¹5.0L</span></i><i><span>â‚¹4.2L</span></i><i><span>â‚¹7.1L</span></i><i><span>â‚¹5.8L</span></i><i><span>â‚¹8.9L</span></i></div>
             <div className="service-ad-mini-row"><span /><span /><span /></div>
           </>
         );
@@ -455,10 +455,10 @@ function ServiceShowcase() {
           <>
             <strong>Top Suppliers</strong>
             <div className="service-ad-lines">
-              <div className="line-item"><div className="line-bar b1"><span>₹8.42L</span></div></div>
-              <div className="line-item"><div className="line-bar b2"><span>₹6.15L</span></div></div>
-              <div className="line-item"><div className="line-bar b3"><span>₹4.80L</span></div></div>
-              <div className="line-item"><div className="line-bar b4"><span>₹2.95L</span></div></div>
+              <div className="line-item"><div className="line-bar b1"><span>â‚¹8.42L</span></div></div>
+              <div className="line-item"><div className="line-bar b2"><span>â‚¹6.15L</span></div></div>
+              <div className="line-item"><div className="line-bar b3"><span>â‚¹4.80L</span></div></div>
+              <div className="line-item"><div className="line-bar b4"><span>â‚¹2.95L</span></div></div>
             </div>
           </>
         );
@@ -478,7 +478,7 @@ function ServiceShowcase() {
           <>
             <strong>Income & Expenses</strong>
             <div className="service-ad-bars type-itr">
-              <i><span>₹12.4L</span></i><i><span>₹8.2L</span></i><i><span>₹15.1L</span></i><i><span>₹10.5L</span></i><i><span>₹18.0L</span></i>
+              <i><span>â‚¹12.4L</span></i><i><span>â‚¹8.2L</span></i><i><span>â‚¹15.1L</span></i><i><span>â‚¹10.5L</span></i><i><span>â‚¹18.0L</span></i>
             </div>
             <div className="service-ad-mini-row short"><span /><span /><span /></div>
           </>
@@ -550,7 +550,7 @@ function GstScreenPreview({ stepIndex }: { stepIndex: number }) {
     return <><div className="gst-preview-report-head"><strong>GSTR Report</strong><button><ArrowUpRight size={10} /> Export Report</button></div><div className="gst-preview-tabs"><b>GSTR Overview</b><span>Top Suppliers & Customers</span><span>Monthly Summary</span></div><div className="gst-preview-report-lines"><span /><span /><span /><span /><span /></div></>;
   };
 
-  return <div className="gst-screen-preview"><div className="gst-preview-top"><span><FileChartColumnIncreasing size={14} /> GST Analysis</span><small>CRISP</small></div><div className="gst-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className="gst-preview-content">{renderContent()}</div></div>;
+  return <div className="gst-screen-preview"><div className="gst-preview-top"><span><FileChartColumnIncreasing size={14} /> GST Analysis</span><small>CRISP</small></div><div className="gst-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? 'âœ“' : index + 1}</i>{label}</span>)}</div><div className="gst-preview-content">{renderContent()}</div></div>;
 }
 
 function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
@@ -567,8 +567,8 @@ function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
   const analysisRows = ['Agriculture Loan', 'Auto Loan', 'Business Loan', 'Consumer Loan', 'Credit Card', 'Education Loan', 'Gold Loan', 'Housing Loan', 'Loan against Securities', 'Other', 'Overdraft & Cash Credit', 'Personal Loan', 'Property Loan', 'total'];
   const renderActiveReportPanel = () => {
     if (activeReportTab === 'overview') return null;
-    if (activeReportTab === 'account') return <div className="cibil-tab-panel"><div className="cibil-tab-switch"><b>Active Accounts</b><span>Closed Accounts</span></div><div className="cibil-tab-summary"><span><small>TOTAL CREDIT LIMIT</small><strong>₹8,050</strong></span><span><small>CURRENT BALANCE</small><strong>₹7,839</strong></span><span><small>OVERDUE BALANCE</small><strong className="cibil-negative">₹12</strong></span></div><small className="cibil-tab-kicker">OTHER (1)</small><div className="cibil-account-row"><span className="cibil-account-icon"><Landmark size={14} /></span><span><strong>Slice Small Finance Bank Limited</strong><small>Acct: XXXX6135 · Opened: 30-11-2021</small></span><b>₹7,839 <em>₹12 overdue</em></b><ChevronDown size={13} /></div></div>;
-    if (activeReportTab === 'payments') return <div className="cibil-tab-panel cibil-payments-panel"><div className="cibil-timeline-switch"><b>Active Timeline</b><span>Closed Timeline</span></div><div className="cibil-payment-account"><div><span className="cibil-account-icon"><Landmark size={14} /></span><strong>Personal Loan<small>Acct No: XXX X6135</small></strong></div><span>Limit: <b>₹8,050</b> <i /> Reported Date: <b>15-06-2026</b></span></div><div className="cibil-payment-grid"><div className="cibil-payment-months"><span>YEAR</span>{['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'].map((month) => <span key={month}>{month}</span>)}</div>{paymentYears.map((row) => <div className="cibil-payment-year" key={row.year}><strong>▦ {row.year}</strong>{row.cells.map((cell, index) => <span className={cell === '-' ? 'empty' : cell.includes('XXX') && row.year === '2023' && (index === 2 || index === 3) ? 'muted' : ''} key={`${row.year}-${index}`}>{cell}</span>)}</div>)}</div><div className="cibil-payment-legend"><strong>CIBIL LEGEND & ABBREVIATIONS</strong><span><i className="legend-on-time" />000 <small>Payments are being timely made with zero days past due.</small></span><span><i className="legend-not-reported" />XXX <small>Payment information has not been reported to CIBIL.</small></span><span><i className="legend-standard" />STD <small>Payments are being made within 90 days of due date.</small></span></div></div>;
+    if (activeReportTab === 'account') return <div className="cibil-tab-panel"><div className="cibil-tab-switch"><b>Active Accounts</b><span>Closed Accounts</span></div><div className="cibil-tab-summary"><span><small>TOTAL CREDIT LIMIT</small><strong>â‚¹8,050</strong></span><span><small>CURRENT BALANCE</small><strong>â‚¹7,839</strong></span><span><small>OVERDUE BALANCE</small><strong className="cibil-negative">â‚¹12</strong></span></div><small className="cibil-tab-kicker">OTHER (1)</small><div className="cibil-account-row"><span className="cibil-account-icon"><Landmark size={14} /></span><span><strong>Slice Small Finance Bank Limited</strong><small>Acct: XXXX6135 Â· Opened: 30-11-2021</small></span><b>â‚¹7,839 <em>â‚¹12 overdue</em></b><ChevronDown size={13} /></div></div>;
+    if (activeReportTab === 'payments') return <div className="cibil-tab-panel cibil-payments-panel"><div className="cibil-timeline-switch"><b>Active Timeline</b><span>Closed Timeline</span></div><div className="cibil-payment-account"><div><span className="cibil-account-icon"><Landmark size={14} /></span><strong>Personal Loan<small>Acct No: XXX X6135</small></strong></div><span>Limit: <b>â‚¹8,050</b> <i /> Reported Date: <b>15-06-2026</b></span></div><div className="cibil-payment-grid"><div className="cibil-payment-months"><span>YEAR</span>{['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'].map((month) => <span key={month}>{month}</span>)}</div>{paymentYears.map((row) => <div className="cibil-payment-year" key={row.year}><strong>â–¦ {row.year}</strong>{row.cells.map((cell, index) => <span className={cell === '-' ? 'empty' : cell.includes('XXX') && row.year === '2023' && (index === 2 || index === 3) ? 'muted' : ''} key={`${row.year}-${index}`}>{cell}</span>)}</div>)}</div><div className="cibil-payment-legend"><strong>CIBIL LEGEND & ABBREVIATIONS</strong><span><i className="legend-on-time" />000 <small>Payments are being timely made with zero days past due.</small></span><span><i className="legend-not-reported" />XXX <small>Payment information has not been reported to CIBIL.</small></span><span><i className="legend-standard" />STD <small>Payments are being made within 90 days of due date.</small></span></div></div>;
     return <div className="cibil-tab-panel cibil-analysis-panel"><div className="cibil-analysis-title"><ChartNoAxesCombined size={14} /><strong>CREDIT FACILITY &amp; DELAYS ANALYSIS</strong></div><div className="cibil-analysis-table"><div className="cibil-analysis-head"><span>LOAN TYPE</span><span>TOTAL FACILITIES</span><span>FACILITIES IN LAST 12M</span><span>DELAYED PAYMENT PERCENTAGE<br /><small>OVERALL TRACK &nbsp;&nbsp;&nbsp; LAST 12M</small></span><span>DEFAULT CHANGE LAST 12M</span></div>{analysisRows.map((row) => <div className={`cibil-analysis-row ${row === 'Personal Loan' ? 'highlight' : ''}`} key={row}><strong>{row}</strong><span>{row === 'Personal Loan' ? '1' : '-'}</span><span>-</span><span>{row === 'Personal Loan' ? '' : '-'}</span><span>-</span></div>)}</div></div>;
   };
   const renderContent = () => {
@@ -581,10 +581,10 @@ function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
     if (stepIndex === 2) {
       return <><div className="cibil-preview-status cibil-preview-processing"><span className="gst-preview-spinner" /><strong>Fetching CIBIL report</strong></div><div className="cibil-preview-progress"><span /></div><small>Checking report status. This may take a moment.</small><button className="cibil-preview-secondary">View Previous Reports <ArrowUpRight size={10} /></button></>;
     }
-    return <><div className="cibil-preview-report-header"><div><small>CIBIL REPORT</small><strong>Report Sections</strong><span>Reference ID: <b>9fe98b63-ba1a-4ce1-9a4e-58cf0a3921f6</b></span></div><div className="cibil-preview-report-actions"><button><ArrowUpRight size={10} /> Export</button><button>Back</button><button className="cibil-preview-new">Start New CIBIL Flow</button></div></div><div className="cibil-preview-tabs">{reportTabs.map((tab) => <button type="button" className={activeReportTab === tab.key ? 'active' : ''} onClick={() => setActiveReportTab(tab.key)} key={tab.key}>{tab.label}</button>)}</div>{renderActiveReportPanel()}{activeReportTab === 'overview' && <><div className="cibil-report-overview"><div className="cibil-score-card"><small>BUREAU SCORE</small><strong>729</strong><em>EQUIFAX SCORE</em><b>GOOD</b><span>Healthy credit history. Very good loan approvals.</span></div><div className="cibil-profile-card"><strong>PERSONAL & IDENTIFICATION PROFILE</strong><div className="cibil-profile-grid"><span><small>FULL NAME</small><b>Mr. Crisp</b></span><span><small>DATE OF BIRTH (AGE)</small><b>13-05-2000 (26 Yrs) | Male</b></span><span><small>PAN NUMBER</small><b>AABBB1234D</b></span><span><small>EMAIL ADDRESS</small><b>crisp@gmail.com</b></span><span><small>OCCUPATION</small><b>Business Owner</b></span><span><small>ANNUAL INCOME</small><b>₹0</b></span></div></div></div><div className="cibil-metric-grid"><div><small>TOTAL ACCOUNTS</small><strong>1</strong><span>Accounts</span></div><div><small>ACTIVE ACCOUNTS</small><strong>1</strong><span className="cibil-positive">Active</span></div><div><small>OVERDUE ACCOUNTS</small><strong>0</strong><span className="cibil-negative">OVERDUE</span></div><div><small>TOTAL OVERDUE AMOUNT</small><strong>₹0</strong></div></div><div className="cibil-bottom-metrics"><div className="cibil-debt-card"><small>OUTSTANDING DEBT</small><strong>₹7,839</strong><span>TOTAL OUTSTANDING BALANCE</span></div><div><small>CREDIT LIMIT</small><strong>₹8,050</strong><span>MAXIMUM AMOUNT SANCTIONED</span></div><div className="cibil-date-card"><span><small>OLDEST OPEN DATE</small><b>30-11-2021</b></span><span><small>RECENT OPEN DATE</small><b>30-11-2021</b></span><em>Accounts as Guarantor <b>0</b></em></div></div></>}</>;
+    return <><div className="cibil-preview-report-header"><div><small>CIBIL REPORT</small><strong>Report Sections</strong><span>Reference ID: <b>9fe98b63-ba1a-4ce1-9a4e-58cf0a3921f6</b></span></div><div className="cibil-preview-report-actions"><button><ArrowUpRight size={10} /> Export</button><button>Back</button><button className="cibil-preview-new">Start New CIBIL Flow</button></div></div><div className="cibil-preview-tabs">{reportTabs.map((tab) => <button type="button" className={activeReportTab === tab.key ? 'active' : ''} onClick={() => setActiveReportTab(tab.key)} key={tab.key}>{tab.label}</button>)}</div>{renderActiveReportPanel()}{activeReportTab === 'overview' && <><div className="cibil-report-overview"><div className="cibil-score-card"><small>BUREAU SCORE</small><strong>729</strong><em>EQUIFAX SCORE</em><b>GOOD</b><span>Healthy credit history. Very good loan approvals.</span></div><div className="cibil-profile-card"><strong>PERSONAL & IDENTIFICATION PROFILE</strong><div className="cibil-profile-grid"><span><small>FULL NAME</small><b>Mr. Crisp</b></span><span><small>DATE OF BIRTH (AGE)</small><b>13-05-2000 (26 Yrs) | Male</b></span><span><small>PAN NUMBER</small><b>AABBB1234D</b></span><span><small>EMAIL ADDRESS</small><b>crisp@gmail.com</b></span><span><small>OCCUPATION</small><b>Business Owner</b></span><span><small>ANNUAL INCOME</small><b>â‚¹0</b></span></div></div></div><div className="cibil-metric-grid"><div><small>TOTAL ACCOUNTS</small><strong>1</strong><span>Accounts</span></div><div><small>ACTIVE ACCOUNTS</small><strong>1</strong><span className="cibil-positive">Active</span></div><div><small>OVERDUE ACCOUNTS</small><strong>0</strong><span className="cibil-negative">OVERDUE</span></div><div><small>TOTAL OVERDUE AMOUNT</small><strong>â‚¹0</strong></div></div><div className="cibil-bottom-metrics"><div className="cibil-debt-card"><small>OUTSTANDING DEBT</small><strong>â‚¹7,839</strong><span>TOTAL OUTSTANDING BALANCE</span></div><div><small>CREDIT LIMIT</small><strong>â‚¹8,050</strong><span>MAXIMUM AMOUNT SANCTIONED</span></div><div className="cibil-date-card"><span><small>OLDEST OPEN DATE</small><b>30-11-2021</b></span><span><small>RECENT OPEN DATE</small><b>30-11-2021</b></span><em>Accounts as Guarantor <b>0</b></em></div></div></>}</>;
   };
 
-  return <div className="cibil-screen-preview"><div className="cibil-preview-top"><span><Fingerprint size={14} /> CIBIL Score</span><small>CRISP</small></div><div className="cibil-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className={`cibil-preview-content ${stepIndex === 0 ? 'cibil-preview-identity' : ''}`}>{renderContent()}</div></div>;
+  return <div className="cibil-screen-preview"><div className="cibil-preview-top"><span><Fingerprint size={14} /> CIBIL Score</span><small>CRISP</small></div><div className="cibil-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? 'âœ“' : index + 1}</i>{label}</span>)}</div><div className={`cibil-preview-content ${stepIndex === 0 ? 'cibil-preview-identity' : ''}`}>{renderContent()}</div></div>;
 }
 
 function KycScreenPreview({ stepIndex }: { stepIndex: number }) {
@@ -592,12 +592,12 @@ function KycScreenPreview({ stepIndex }: { stepIndex: number }) {
   const renderContent = () => {
     if (stepIndex === 0) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>Identity Verification</strong><small>Verify your Aadhaar details to continue</small></span></div><label>Aadhaar Number</label><div className="kyc-preview-input">Enter 12-digit Aadhaar number</div><button>Send OTP <ArrowRight size={11} /></button></>;
     if (stepIndex === 1) return <><div className="kyc-preview-status"><span className="health-dot" /><strong>OTP sent to your registered mobile</strong></div><label>Enter Aadhaar OTP</label><div className="kyc-preview-input kyc-preview-otp">_ _ _ _ _ _</div><button>Verify Aadhaar <ArrowRight size={11} /></button></>;
-    if (stepIndex === 2) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>DigiLocker consent</strong><small>Approve consent to retrieve your documents</small></span></div><div className="kyc-preview-consent"><span className="kyc-preview-lock">✓</span><span><strong>Secure DigiLocker session</strong><small>Waiting for consent approval</small></span><ArrowUpRight size={13} /></div><button>Open DigiLocker <ArrowUpRight size={11} /></button></>;
+    if (stepIndex === 2) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>DigiLocker consent</strong><small>Approve consent to retrieve your documents</small></span></div><div className="kyc-preview-consent"><span className="kyc-preview-lock">âœ“</span><span><strong>Secure DigiLocker session</strong><small>Waiting for consent approval</small></span><ArrowUpRight size={13} /></div><button>Open DigiLocker <ArrowUpRight size={11} /></button></>;
     if (stepIndex === 3) return <><div className="kyc-preview-status kyc-preview-processing"><span className="gst-preview-spinner" /><strong>Checking DigiLocker session</strong></div><div className="kyc-preview-progress"><span /></div><small>Fetching verified documents</small></>;
     return <><div className="kyc-preview-heading"><FileSearch size={16} /><span><strong>Available Documents</strong><small>Documents returned after verification</small></span></div><div className="kyc-preview-documents"><span><FileSearch size={13} /><b>Aadhaar Card</b><em>Verified</em></span><span><FileSearch size={13} /><b>PAN Card</b><em>Available</em></span></div></>;
   };
 
-  return <div className="kyc-screen-preview"><div className="kyc-preview-top"><span><ShieldCheck size={14} /> KYC Verification</span><small>CRISP</small></div><div className="kyc-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className="kyc-preview-content">{renderContent()}</div></div>;
+  return <div className="kyc-screen-preview"><div className="kyc-preview-top"><span><ShieldCheck size={14} /> KYC Verification</span><small>CRISP</small></div><div className="kyc-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? 'âœ“' : index + 1}</i>{label}</span>)}</div><div className="kyc-preview-content">{renderContent()}</div></div>;
 }
 
 function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Workflow[] }) {
@@ -651,20 +651,20 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
 }
 
 const bsaPreviewRows = [
-  ['Cash Deposit', '₹10,000.00', '₹0.00', '₹10,000.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Cheque Receipts', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Online Receipts', '₹5,62,360.34', '₹14,713.00', '₹23,496.97', '₹91,281.00', '₹23,767.00', '₹50,052.00', '₹2,79,637.37', '₹70,333.00', '₹9,080.00'],
-  ['Bank Instrument', '₹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
-  ['Forex Remittance', '₹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
-  ['Refund/Reversal', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Other Receipts', '₹800.00', '₹0.00', '₹0.00', '₹500.00', '₹0.00', '₹300.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Salary Income', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Rent Income', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Interest Income', '₹29.00', '₹0.00', '₹0.00', '₹10.00', '₹0.00', '₹0.00', '₹19.00', '₹0.00', '₹0.00'],
-  ['Loan Received', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Insurance', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Investment Receipt', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Total Receipts', '₹5,73,189.34', '-', '-', '-', '-', '-', '-', '-', '-'],
+  ['Cash Deposit', 'â‚¹10,000.00', 'â‚¹0.00', 'â‚¹10,000.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Cheque Receipts', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Online Receipts', 'â‚¹5,62,360.34', 'â‚¹14,713.00', 'â‚¹23,496.97', 'â‚¹91,281.00', 'â‚¹23,767.00', 'â‚¹50,052.00', 'â‚¹2,79,637.37', 'â‚¹70,333.00', 'â‚¹9,080.00'],
+  ['Bank Instrument', 'â‚¹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
+  ['Forex Remittance', 'â‚¹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
+  ['Refund/Reversal', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Other Receipts', 'â‚¹800.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹500.00', 'â‚¹0.00', 'â‚¹300.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Salary Income', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Rent Income', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Interest Income', 'â‚¹29.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹10.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹19.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Loan Received', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Insurance', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Investment Receipt', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00', 'â‚¹0.00'],
+  ['Total Receipts', 'â‚¹5,73,189.34', '-', '-', '-', '-', '-', '-', '-', '-'],
 ];
 
 function BsaReportPreview() {
@@ -701,7 +701,7 @@ function BsaReportMontage() {
         <div className={`bsa-montage-layer ${layer.className}`} key={layer.title}>
           <div className="bsa-layer-title"><span>{layer.title}</span><small>Refresh</small></div>
           <div className="bsa-layer-head"><span>Particulars</span><span>Overall/Total</span><span>Aug 2026</span></div>
-          {layer.values.map((value, index) => <div className="bsa-layer-row" key={value}><span>{value}</span><strong>{index % 2 === 0 ? '₹2,260.78' : '₹0.00'}</strong><span>{index % 2 === 0 ? '₹5,73,189.34' : '-'}</span></div>)}
+          {layer.values.map((value, index) => <div className="bsa-layer-row" key={value}><span>{value}</span><strong>{index % 2 === 0 ? 'â‚¹2,260.78' : 'â‚¹0.00'}</strong><span>{index % 2 === 0 ? 'â‚¹5,73,189.34' : '-'}</span></div>)}
         </div>
       ))}
       <div className="bsa-montage-main"><BsaReportPreview /></div>
@@ -732,13 +732,13 @@ export function HomePage() {
 export function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
-  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Let’s find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
+  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Letâ€™s find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
 </main></MarketingLayout>;
   const Icon = product.icon;
   return (
     <MarketingLayout>
       <main className="product-page">
-        <section className={`product-hero product-hero-${product.slug}`}><div className="product-hero-inner"><div className="product-hero-copy"><div className="breadcrumbs"><Link to="/">Home</Link><ChevronRight size={13} /><span>{product.acronym}</span></div><span className="product-page-label"><Icon size={16} /> {product.acronym} · {product.fullName}</span><h1>{product.headline}</h1><p>{product.description}</p><div className="hero-actions"><ActionLink to="/signup">Get started</ActionLink><a className="text-link" href="#overview">Explore capabilities <ArrowRight size={16} /></a></div></div><div className="product-hero-art"><div className="product-art-grid" />{product.slug === 'bsa' ? <BsaReportMontage /> : <div className="product-art-core"><span className={`product-icon product-icon-${product.slug}`}><Icon size={27} /></span><small>{product.acronym} ANALYSIS</small><strong>Verification<br />Completed.</strong><div className="art-signal"><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div><div className="art-secure"><ShieldCheck size={15} /> Structured insights</div></div>}<div className="art-note"><span className="health-dot" /> ANALYSIS READY <ArrowUpRight size={14} /></div></div></div></section>
+        <section className={`product-hero product-hero-${product.slug}`}><div className="product-hero-inner"><div className="product-hero-copy"><div className="breadcrumbs"><Link to="/">Home</Link><ChevronRight size={13} /><span>{product.acronym}</span></div><span className="product-page-label"><Icon size={16} /> {product.acronym} Â· {product.fullName}</span><h1>{product.headline}</h1><p>{product.description}</p><div className="hero-actions"><ActionLink to="/signup">Get started</ActionLink><a className="text-link" href="#overview">Explore capabilities <ArrowRight size={16} /></a></div></div><div className="product-hero-art"><div className="product-art-grid" />{product.slug === 'bsa' ? <BsaReportMontage /> : <div className="product-art-core"><span className={`product-icon product-icon-${product.slug}`}><Icon size={27} /></span><small>{product.acronym} ANALYSIS</small><strong>Verification<br />Completed.</strong><div className="art-signal"><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div><div className="art-secure"><ShieldCheck size={15} /> Structured insights</div></div>}<div className="art-note"><span className="health-dot" /> ANALYSIS READY <ArrowUpRight size={14} /></div></div></div></section>
         <section className="product-overview section-pad" id="overview"><div className="overview-copy reveal"><span className="eyebrow">THE OVERVIEW</span><h2>{product.fullName}</h2></div><div className="overview-detail reveal"><p>{product.overview}</p><div className="overview-stat"></div></div></section>
         <section className="capabilities-section section-pad">
           <div className="center-heading reveal">
@@ -793,8 +793,8 @@ export function PricingPage() {
                 <span className="product-icon"><Icon size={20} /></span>
                 <span className="plan-name">{product.acronym}</span>
                 <p className="plan-audience">{product.fullName}</p>
-                <div className="plan-price"><strong>₹{price}</strong></div>
-                <p className="price-period">{priceDisplay === 'inclusive' ? `Includes ₹${pricing.gst} GST at 18%` : `₹${pricing.gst} GST at 18% added`} · {pricing.periodLabel}</p>
+                <div className="plan-price"><strong>â‚¹{price}</strong></div>
+                <p className="price-period">{priceDisplay === 'inclusive' ? `Includes â‚¹${pricing.gst} GST at 18%` : `â‚¹${pricing.gst} GST at 18% added`} Â· {pricing.periodLabel}</p>
                 <Link className="button button-primary plan-button" to="/signup">Get started <ArrowUpRight size={16} /></Link>
                 <div className="plan-divider" />
                 <span className="plan-includes">IN THIS SERVICE</span>
@@ -813,9 +813,9 @@ export function PricingPage() {
               <thead><tr><th>Workflow</th>{billableProducts.map((product) => <th key={product.slug}>{product.acronym}<span>{product.fullName}</span></th>)}</tr></thead>
               <tbody>
                 {pricingComparisons.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{billableProducts.map((product) => <td key={product.slug}>{row.values[product.slug]}</td>)}</tr>)}
-                <tr><th scope="row">Service amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
-                <tr><th scope="row">GST (18%)</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
-                <tr><th scope="row">Total amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
+                <tr><th scope="row">Service amount</th>{billableProducts.map((product) => <td key={product.slug}>â‚¹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
+                <tr><th scope="row">GST (18%)</th>{billableProducts.map((product) => <td key={product.slug}>â‚¹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
+                <tr><th scope="row">Total amount</th>{billableProducts.map((product) => <td key={product.slug}>â‚¹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
                 <tr><th scope="row">Service period</th>{billableProducts.map((product) => <td key={product.slug}>{getPricingDetails(product.acronym, 0).periodLabel}</td>)}</tr>
               </tbody>
             </table>
@@ -848,7 +848,7 @@ export function PricingPage() {
         <section className="pricing-contact" id="contact">
           <div className="pricing-contact-inner reveal">
             <span className="eyebrow eyebrow-light">QUESTIONS ABOUT A SERVICE?</span>
-            <h2>Let’s talk BSA, GST,<br />ITR, or CIBIL.</h2>
+            <h2>Letâ€™s talk BSA, GST,<br />ITR, or CIBIL.</h2>
             <p>Ask the CRISP team about the service workflow that fits your needs.</p>
             <button type="button" className="button button-secondary" onClick={() => setIsSupportOpen(true)}>Contact our team <ArrowUpRight size={16} /></button>
           </div>
@@ -895,6 +895,7 @@ function SupportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
     </div>
   );
 }
+
 
 
 

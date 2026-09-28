@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -149,7 +149,7 @@ export default function LoginPage() {
                       <Input
                         id="login-password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                         className={`pl-10 transition-transform duration-200 focus:scale-105 ${errors.email_id ? 'border-red-400 focus-visible:ring-red-300' : 'focus:p-2 m-0'}`}
                         autoComplete="current-password"
                         {...register('password')}
@@ -224,4 +224,5 @@ export default function LoginPage() {
     </>
   );
 }
+
 

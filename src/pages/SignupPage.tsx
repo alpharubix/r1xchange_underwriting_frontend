@@ -1,4 +1,4 @@
-import { useState } from 'react';
+ï»¿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -254,7 +254,7 @@ export default function SignupPage() {
                       <Input
                         id="signup-password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                         className={`pl-10 pr-10 ${errors.password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
                         autoComplete="new-password"
                         {...register('password')}
@@ -327,7 +327,7 @@ export default function SignupPage() {
                       <Input
                         id="signup-confirm-password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="••••••••"
+                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
                         className={`pl-10 ${errors.confirm_password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
                         autoComplete="new-password"
                         {...register('confirm_password')}
@@ -378,4 +378,5 @@ export default function SignupPage() {
     </>
   );
 }
+
 
