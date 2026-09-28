@@ -16,7 +16,6 @@ import {
   Landmark,
   Menu,
   ShieldCheck,
-  Sparkles,
   X,
   type LucideIcon,
 } from 'lucide-react';
