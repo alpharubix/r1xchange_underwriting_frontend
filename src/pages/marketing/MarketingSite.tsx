@@ -21,9 +21,10 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { getPricingDetails } from '@/lib/paymentUtils';
-import { clientLogos } from './clientLogos';
+
 import bsaAccessFromDashboard from "@/assets/bsaAccessFromDashboard.png"
 import bsaUploadScreenshot from '@/assets/UploadBankStatementPdf.png';
+import crispLogoBlack from '@/assets/crispLogoBlack.svg';
 import './marketing.css';
 
 type Product = {
@@ -145,6 +146,30 @@ const products: Product[] = [
       { title: 'View or export the report', description: 'Follow its status, then review the report sections or open an existing report.' },
     ],
   },
+  {
+    slug: 'kyc',
+    acronym: 'KYC',
+    name: 'Identity verification',
+    fullName: 'Know Your Customer',
+    description: 'Verify Aadhaar details, approve DigiLocker consent, and retrieve the customer documents available to the platform.',
+    headline: 'Verify identity with a guided KYC flow.',
+    overview: 'The KYC workflow checks whether documents are already available, verifies Aadhaar by OTP when needed, opens a DigiLocker consent session, and then lists the documents returned for review.',
+    icon: ShieldCheck,
+    capabilities: [
+      { title: 'Aadhaar verification', description: 'Enter a 12-digit Aadhaar number and verify the OTP sent to the registered mobile number.' },
+      { title: 'DigiLocker consent', description: 'Open the secure DigiLocker session and approve consent for document retrieval.' },
+      { title: 'Document retrieval', description: 'Fetch the documents available after consent, including Aadhaar Card and PAN Card where returned.' },
+      { title: 'Existing document check', description: 'If documents already exist, the platform can take you directly to the available document list.' },
+    ],
+    benefits: ['Follow a clear Aadhaar and OTP verification flow.', 'Approve DigiLocker consent from the guided session.', 'Review the documents returned by the verification provider.', 'Continue from existing documents when the platform already has a completed KYC session.'],
+    steps: [
+      { title: 'Open KYC', description: 'Choose KYC from the dashboard to begin identity verification.' },
+      { title: 'Enter Aadhaar details', description: 'For a new verification, enter the 12-digit Aadhaar number and request an OTP.' },
+      { title: 'Verify the Aadhaar OTP', description: 'Enter the six-digit OTP sent to the registered mobile number.' },
+      { title: 'Give DigiLocker consent', description: 'Open the DigiLocker session link and approve consent while the platform checks the session status.' },
+      { title: 'View available documents', description: 'Review the documents returned by DigiLocker, such as Aadhaar Card or PAN Card.' },
+    ],
+  },
 ];
 
 const pricingComparisons: { label: string; values: Record<string, string> }[] = [
@@ -185,6 +210,8 @@ const pricingComparisons: { label: string; values: Record<string, string> }[] = 
     },
   },
 ];
+
+const billableProducts = products.filter((product) => product.slug !== 'kyc');
 
 const workflows: Workflow[] = [
   {
@@ -272,8 +299,7 @@ const workflows: Workflow[] = [
 function Brand() {
   return (
     <Link className="brand" to="/" aria-label="CRISP home">
-      {/* <span className="brand-mark"><Activity size={19} strokeWidth={2.5} /></span> */}
-      <span>CRISP</span>
+      <img src={crispLogoBlack} alt="CRISP" style={{ height: '32px' }} />
     </Link>
   );
 }
@@ -357,16 +383,16 @@ function Navbar() {
 function Footer() {
   const groups = [
     { title: 'Services', links: products.map((product) => ({ label: product.acronym, to: `/products/${product.slug}` })) },
-    { title: 'Company', links: [{ label: 'About', to: '#company' }, { label: 'Contact', to: 'mailto:hello@crisp.example' }] },
+    { title: 'Company', links: [{ label: 'About', to: '#company' }, { label: 'Contact', to: 'mailto:support@checkcrisp.com' }] },
     { title: 'Resources', links: [{ label: 'Documentation', to: '#resources' }, { label: 'Insights', to: '#resources' }, { label: 'FAQs', to: '#resources' }] },
     { title: 'Legal', links: [{ label: 'Privacy policy', to: '#privacy' }, { label: 'Terms & conditions', to: '#terms' }] },
   ];
   return (
     <footer className="site-footer" id="company">
-      <div className="footer-top"><div className="footer-brand-block"><Brand /><p>Financial clarity for better-informed decisions.</p><a href="mailto:hello@crisp.example">hello@crisp.example <ArrowUpRight size={14} /></a></div>
+      <div className="footer-top"><div className="footer-brand-block"><Brand /><p>Financial clarity for better-informed decisions.</p><a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrsip.com <ArrowUpRight size={14} /></a></div>
         {groups.map((group) => <div className="footer-group" key={group.title}><h3>{group.title}</h3>{group.links.map((item) => item.to.startsWith('/') ? <Link to={item.to} key={item.label}>{item.label}</Link> : <a href={item.to} key={item.label}>{item.label}</a>)}</div>)}
       </div>
-      <div className="footer-bottom"><span>© {new Date().getFullYear()} CRISP Financial Technologies</span><span>Developed by CRISP tech team</span></div>
+      <div className="footer-bottom"><span>© {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
     </footer>
   );
 }
@@ -393,36 +419,39 @@ function MarketingLayout({ children }: { children: ReactNode }) {
   return <div className="marketing-site"><Navbar />{children}<Footer /></div>;
 }
 
-function HeroVisual() {
+
+
+function ServiceShowcase() {
+  const adCopy: Record<string, { label: string; title: string; description: string; points: string[] }> = {
+    bsa: { label: 'BANK STATEMENT ANALYSIS', title: 'Turn every transaction into a clearer signal.', description: 'Upload statements, review each bank account, and move from raw activity to useful financial context.', points: ['Overview and EOD Analysis', 'Cash Flow and Debit & Credit', 'Loan Transactions and Monthly Overview'] },
+    gst: { label: 'GST INTELLIGENCE', title: 'Know the business behind the GSTIN.', description: 'Run a GST analysis, follow the submission status, and open a complete GSTR report when it is ready.', points: ['GSTIN and business details', 'OTP authentication when required', 'GSTR Overview and monthly summaries'] },
+    cibil: { label: 'CIBIL CREDIT INTELLIGENCE', title: 'See credit history in one complete view.', description: 'Verify customer identity, fetch the report, and review the credit signals that shape your next decision.', points: ['Identity and OTP verification', 'Account and payment history', 'Analysis with exportable reports'] },
+    itr: { label: 'INCOME TAX RETURN', title: 'Make income verification easier to review.', description: 'Connect ITR data and explore the statements that bring income, assets, liabilities, and ratios together.', points: ['Tax Calculation and Balance Sheet', 'Profit and Loss Statement', 'Ratio Analysis and full export'] },
+    kyc: { label: 'IDENTITY VERIFICATION', title: 'Verify identity with a guided KYC flow.', description: 'Verify Aadhaar details, approve DigiLocker consent, and retrieve the customer documents available to the platform.', points: ['Aadhaar and OTP verification', 'DigiLocker consent session', 'Retrieve available documents'] },
+  };
+
   return (
-    <div className="hero-visual" aria-label="Financial insights dashboard preview">
-      <div className="visual-orbit orbit-one" /><div className="visual-orbit orbit-two" />
-      <div className="dashboard-window">
-        <div className="dash-topbar"><span className="dash-brand"><span className="dash-brand-mark"><Activity size={13} /></span> CRISP INTELLIGENCE</span><span className="dash-date">Portfolio overview <ChevronDown size={12} /></span><span className="dash-avatar">AM</span></div>
-        <div className="dash-content">
-          <div className="dash-heading"><div><small>FINANCIAL SNAPSHOT</small><strong>Assessment overview</strong></div><span className="dash-period">Last 6 months</span></div>
-          <div className="metric-grid">
-            <div className="metric-card"><span>Monthly inflow</span><strong>₹ 8.42L</strong><small className="metric-positive">↗ 12.8% <i>vs. prior period</i></small></div>
-            <div className="metric-card"><span>Cash flow health</span><strong className="health-score">82 <em>/ 100</em></strong><small><span className="health-dot" /> Healthy profile</small></div>
-          </div>
-          <div className="chart-card"><div className="chart-head"><span>Cash flow trend</span><span><i className="legend-inflow" /> Inflow <i className="legend-outflow" /> Outflow</span></div>
-            <div className="chart-area"><div className="chart-labels"><span>₹10L</span><span>₹7.5L</span><span>₹5L</span><span>₹2.5L</span></div><svg viewBox="0 0 470 125" preserveAspectRatio="none" role="img" aria-label="Cash flow trend rising steadily over six months"><defs><linearGradient id="chartFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stopColor="#4b86c8" stopOpacity=".19" /><stop offset="1" stopColor="#4b86c8" stopOpacity="0" /></linearGradient></defs><path d="M0,97 C30,91 35,77 68,81 S113,57 145,69 S193,79 220,51 S270,64 296,43 S340,57 368,29 S420,36 470,13 L470,125 L0,125Z" fill="url(#chartFill)" /><path d="M0,97 C30,91 35,77 68,81 S113,57 145,69 S193,79 220,51 S270,64 296,43 S340,57 368,29 S420,36 470,13" fill="none" stroke="#052967" strokeWidth="2.5" vectorEffect="non-scaling-stroke" /><path d="M0,111 C30,108 40,93 68,101 S111,84 145,94 S194,90 220,79 S266,89 296,74 S344,82 368,62 S423,70 470,54" fill="none" stroke="#b5c7c3" strokeWidth="1.8" strokeDasharray="4 5" vectorEffect="non-scaling-stroke" /></svg></div>
-            <div className="chart-months"><span>Oct</span><span>Nov</span><span>Dec</span><span>Jan</span><span>Feb</span><span>Mar</span></div>
-          </div>
-          <div className="dash-footer"><span><span className="secure-icon"><ShieldCheck size={14} /></span> Data encrypted and secure</span><span>Updated just now <span className="live-dot" /></span></div>
+    <section className="service-showcase section-pad" aria-label="Explore CRISP services">
+      <div className="service-showcase-heading reveal"><div><span className="eyebrow">CHOOSE YOUR LENS</span><h2>One platform.<br /><span>Five ways to see more.</span></h2></div><p>Start with the service that matches the question in front of you. Each workflow turns a different source of financial information into a decision-ready view.</p></div>
+
+      <div className="service-ad-marquee">
+        <div className="service-ad-track">
+          {[0, 1].map((copyIndex) => (
+            <div className="service-ad-group" key={copyIndex} aria-hidden={copyIndex === 1}>
+              {products.map((product) => {
+                const Icon = product.icon;
+                const copy = adCopy[product.slug];
+                return (
+                  <div className={`service-ad service-ad-${product.slug}`} key={`${copyIndex}-${product.slug}`}>
+                    <div className="service-ad-copy"><span className="service-ad-label">{copy.label}</span><h3>{copy.title}</h3><p>{copy.description}</p><ul>{copy.points.map((point) => <li key={point}><Check size={13} />{point}</li>)}</ul><Link className="service-ad-link" to={`/products/${product.slug}`}>Explore {product.acronym} <ArrowUpRight size={15} /></Link></div>
+                    <div className="service-ad-visual"><div className="service-ad-glow" /><div className="service-ad-window"><div className="service-ad-window-top"><span><Icon size={13} /> CRISP {product.acronym}</span><small>LIVE VIEW</small></div><div className="service-ad-window-body"><span className="service-ad-window-label">{product.acronym} WORKSPACE</span><strong>{product.slug === 'bsa' ? 'Bank accounts' : product.slug === 'gst' ? 'GST Analysis' : product.slug === 'cibil' ? 'Report Sections' : 'Financial statements'}</strong><div className="service-ad-bars"><i /><i /><i /><i /><i /><i /><i /><i /></div><div className="service-ad-mini-row"><span /><span /><span /></div><div className="service-ad-mini-row short"><span /><span /><span /></div></div></div><div className="service-ad-badge"><span className="health-dot" /> {product.acronym} READY <ArrowUpRight size={12} /></div></div>
+                  </div>
+                );
+              })}
+            </div>
+          ))}
         </div>
       </div>
-      <div className="floating-insight"><span className="floating-icon"><Sparkles size={15} /></span><span><small>INSIGHT DETECTED</small><strong>Income trend is stable</strong></span><span className="insight-check"><Check size={14} /></span></div>
-      <div className="floating-score"><span className="score-ring"><ShieldCheck size={19} /></span><span><small>PROFILE SIGNAL</small><strong>Strong</strong></span></div>
-      <span className="visual-caption"><span /> SIGNALS, MADE CLEAR</span>
-    </div>
-  );
-}
-
-function LogoMarquee() {
-  return (
-    <section className="logo-section" aria-label="Supply chain finance clients">
-      <div className="logo-marquee"><div className="logo-track">{[0, 1].map((copy) => <div className="logo-group" key={copy} aria-hidden={copy === 1}>{clientLogos.map((client) => <span className="client-wordmark" key={`${copy}-${client.name}`}><img src={client.image} alt={copy === 1 ? '' : `${client.name} logo`} decoding="async" /></span>)}</div>)}</div></div>
     </section>
   );
 }
@@ -490,6 +519,19 @@ function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
   return <div className="cibil-screen-preview"><div className="cibil-preview-top"><span><Fingerprint size={14} /> CIBIL Score</span><small>CRISP</small></div><div className="cibil-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className={`cibil-preview-content ${stepIndex === 0 ? 'cibil-preview-identity' : ''}`}>{renderContent()}</div></div>;
 }
 
+function KycScreenPreview({ stepIndex }: { stepIndex: number }) {
+  const progressLabels = ['Aadhaar', 'OTP', 'DigiLocker', 'Documents'];
+  const renderContent = () => {
+    if (stepIndex === 0) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>Identity Verification</strong><small>Verify your Aadhaar details to continue</small></span></div><label>Aadhaar Number</label><div className="kyc-preview-input">Enter 12-digit Aadhaar number</div><button>Send OTP <ArrowRight size={11} /></button></>;
+    if (stepIndex === 1) return <><div className="kyc-preview-status"><span className="health-dot" /><strong>OTP sent to your registered mobile</strong></div><label>Enter Aadhaar OTP</label><div className="kyc-preview-input kyc-preview-otp">_ _ _ _ _ _</div><button>Verify Aadhaar <ArrowRight size={11} /></button></>;
+    if (stepIndex === 2) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>DigiLocker consent</strong><small>Approve consent to retrieve your documents</small></span></div><div className="kyc-preview-consent"><span className="kyc-preview-lock">✓</span><span><strong>Secure DigiLocker session</strong><small>Waiting for consent approval</small></span><ArrowUpRight size={13} /></div><button>Open DigiLocker <ArrowUpRight size={11} /></button></>;
+    if (stepIndex === 3) return <><div className="kyc-preview-status kyc-preview-processing"><span className="gst-preview-spinner" /><strong>Checking DigiLocker session</strong></div><div className="kyc-preview-progress"><span /></div><small>Fetching verified documents</small></>;
+    return <><div className="kyc-preview-heading"><FileSearch size={16} /><span><strong>Available Documents</strong><small>Documents returned after verification</small></span></div><div className="kyc-preview-documents"><span><FileSearch size={13} /><b>Aadhaar Card</b><em>Verified</em></span><span><FileSearch size={13} /><b>PAN Card</b><em>Available</em></span></div></>;
+  };
+
+  return <div className="kyc-screen-preview"><div className="kyc-preview-top"><span><ShieldCheck size={14} /> KYC Verification</span><small>CRISP</small></div><div className="kyc-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className="kyc-preview-content">{renderContent()}</div></div>;
+}
+
 function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Workflow[] }) {
   return (
     <section className="workflow-section section-pad" id="how-it-works">
@@ -527,6 +569,7 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
                     )}
                     {workflow.slug === 'gst' && <GstScreenPreview stepIndex={index} />}
                     {workflow.slug === 'cibil' && <CibilScreenPreview stepIndex={index} />}
+                    {workflow.slug === 'kyc' && <KycScreenPreview stepIndex={index} />}
                   </div>
                 </div>
               ))}
@@ -608,11 +651,8 @@ export function HomePage() {
   return (
     <MarketingLayout>
       <main>
-        <section className="hero-section"><div className="hero-inner"><div className="hero-copy"><span className="hero-kicker"><span className="kicker-dot" /> FINANCIAL INTELLIGENCE, IN FOCUS</span><h1>See the full picture.<br /><span>Decide with clarity.</span></h1><p>One intelligent platform for financial analysis and underwriting. Bring better signals together, and move forward with confidence.</p><div className="hero-actions"><ActionLink to="/signup">Get started</ActionLink><a className="text-link" href="#platform">Discover the platform <ArrowRight size={16} /></a></div><div className="hero-proof"><div className="proof-avatars"><span>R</span><span>F</span><span>A</span><span>+</span></div><p><strong>Built for the people behind every decision.</strong><br />Clearer insights. More considered reviews.</p></div></div><HeroVisual /></div>
-          <div className="hero-footnote"><span>01 / FINANCIAL CLARITY</span><span>ANALYSE <i /> UNDERWRITE <i /> ADVANCE</span></div>
-        </section>
-        <LogoMarquee />
-        <section className="products-section section-pad" id="platform"><div className="section-heading reveal"><div><span className="eyebrow">ONE PLATFORM, FOUR LENSES</span><h2>Financial data,<br /><span>made decision-ready.</span></h2></div><p>Bring the right signals into one clear view. A connected toolkit for the information that shapes an underwriting decision.</p></div><div className="product-grid">{products.map((product) => <ProductCard product={product} key={product.slug} />)}</div></section>
+        <ServiceShowcase />
+        <section className="products-section section-pad" id="platform"><div className="section-heading reveal"><div><span className="eyebrow">ONE PLATFORM, FIVE LENSES</span><h2>Financial data,<br /><span>made decision-ready.</span></h2></div><p>Bring the right signals into one clear view. A connected toolkit for the information that shapes an underwriting decision.</p></div><div className="product-grid">{products.map((product) => <ProductCard product={product} key={product.slug} />)}</div></section>
         <WorkflowGallery />
         <section className="insight-section"><div className="insight-inner"><div className="insight-copy reveal"><span className="eyebrow eyebrow-light">A BETTER WAY TO REVIEW</span><h2>From scattered inputs<br />to a <span>clearer decision.</span></h2><p>Financial information deserves more than a quick glance. CRISP helps teams find the useful signals, see them in context, and focus on what matters.</p><ActionLink to="/products/bsa" secondary>Explore the platform</ActionLink></div><div className="insight-list reveal"><div className="insight-row"><span className="insight-number">01</span><span className="insight-row-icon"><ChartNoAxesCombined size={19} /></span><span><strong>See patterns sooner</strong><small>Turn raw financial activity into structured, readable insights.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">02</span><span className="insight-row-icon"><CircleDollarSign size={19} /></span><span><strong>Understand the whole picture</strong><small>Bring income, credit, and business signals together.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">03</span><span className="insight-row-icon"><ShieldCheck size={19} /></span><span><strong>Move forward with confidence</strong><small>Give every review a more consistent foundation.</small></span><ArrowUpRight size={16} /></div><div className="insight-stamp"><span>CRP</span><small>INTELLIGENCE<br />IN EVERY SIGNAL</small></div></div></div></section>
         <section className="closing-cta"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><div className="closing-content reveal"><span className="eyebrow">A CLEARER VIEW STARTS HERE</span><h2>Make your next decision<br /><span>a more informed one.</span></h2><p>Bring your financial assessment workflow into sharper focus.</p><ActionLink to="/signup">Get started with CRISP</ActionLink></div></section>
@@ -674,7 +714,7 @@ export function PricingPage() {
           </div>
         </section>
         <section className="plans-grid section-pad" aria-label="Service pricing">
-          {products.map((product) => {
+          {billableProducts.map((product) => {
             const Icon = product.icon;
             const pricing = getPricingDetails(product.acronym, 0);
             const price = priceDisplay === 'inclusive' ? pricing.total : pricing.base;
@@ -700,13 +740,13 @@ export function PricingPage() {
           </div>
           <div className="comparison-wrap reveal">
             <table className="comparison-table">
-              <thead><tr><th>Workflow</th>{products.map((product) => <th key={product.slug}>{product.acronym}<span>{product.fullName}</span></th>)}</tr></thead>
+              <thead><tr><th>Workflow</th>{billableProducts.map((product) => <th key={product.slug}>{product.acronym}<span>{product.fullName}</span></th>)}</tr></thead>
               <tbody>
-                {pricingComparisons.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{products.map((product) => <td key={product.slug}>{row.values[product.slug]}</td>)}</tr>)}
-                <tr><th scope="row">Service amount</th>{products.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
-                <tr><th scope="row">GST (18%)</th>{products.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
-                <tr><th scope="row">Total amount</th>{products.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
-                <tr><th scope="row">Service period</th>{products.map((product) => <td key={product.slug}>{getPricingDetails(product.acronym, 0).periodLabel}</td>)}</tr>
+                {pricingComparisons.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{billableProducts.map((product) => <td key={product.slug}>{row.values[product.slug]}</td>)}</tr>)}
+                <tr><th scope="row">Service amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
+                <tr><th scope="row">GST (18%)</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
+                <tr><th scope="row">Total amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
+                <tr><th scope="row">Service period</th>{billableProducts.map((product) => <td key={product.slug}>{getPricingDetails(product.acronym, 0).periodLabel}</td>)}</tr>
               </tbody>
             </table>
           </div>
