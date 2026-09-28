@@ -1,4 +1,4 @@
-ï»¿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -10,7 +10,7 @@ import {
   User,
   Building2,
   Phone,
-  ArrowRight,
+  ArrowRight, ArrowLeft,
   Check,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -116,8 +116,11 @@ export default function SignupPage() {
           </div>
         </div>
 
-        {/* Right Panel */}
-        <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 p-6 overflow-y-auto border-3 border-red">
+                {/* Right Panel */}
+        <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 p-6 overflow-y-auto relative">
+          <Link to="/" className="absolute top-6 right-6 lg:right-8 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors bg-white hover:bg-gray-50 px-4 py-2 rounded-full border border-gray-200 shadow-sm z-50">
+            <ArrowLeft size={16} /> Go Home
+          </Link>
           <div className="w-full max-w-md  animate-fade-in">
             {/* Mobile Logo */}
             <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
@@ -251,7 +254,7 @@ export default function SignupPage() {
                       <Input
                         id="signup-password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                        placeholder="••••••••"
                         className={`pl-10 pr-10 ${errors.password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
                         autoComplete="new-password"
                         {...register('password')}
@@ -324,7 +327,7 @@ export default function SignupPage() {
                       <Input
                         id="signup-confirm-password"
                         type={showPassword ? 'text' : 'password'}
-                        placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+                        placeholder="••••••••"
                         className={`pl-10 ${errors.confirm_password ? 'border-red-400 focus-visible:ring-red-300' : ''}`}
                         autoComplete="new-password"
                         {...register('confirm_password')}
@@ -375,3 +378,4 @@ export default function SignupPage() {
     </>
   );
 }
+

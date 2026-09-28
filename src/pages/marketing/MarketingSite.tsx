@@ -1,4 +1,4 @@
-import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   Activity,
@@ -24,7 +24,7 @@ import { getPricingDetails } from '@/lib/paymentUtils';
 
 import bsaAccessFromDashboard from "@/assets/bsaAccessFromDashboard.png"
 import bsaUploadScreenshot from '@/assets/UploadBankStatementPdf.png';
-import crispLogoBlack from '@/assets/crispLogoBlack.svg';
+import crispLogoBlack from '@/assets/crispLogoRedesign.png'
 import './marketing.css';
 
 type Product = {
@@ -299,7 +299,7 @@ const workflows: Workflow[] = [
 function Brand() {
   return (
     <Link className="brand" to="/" aria-label="CRISP home">
-      <img src={crispLogoBlack} alt="CRISP" style={{ height: '32px' }} />
+      <img src={crispLogoBlack} alt="CRISP" style={{ height: '67px' }} />
     </Link>
   );
 }
@@ -317,6 +317,7 @@ function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileProductsOpen, setMobileProductsOpen] = useState(false);
   const location = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setProductsOpen(false);
@@ -324,14 +325,24 @@ function Navbar() {
     setMobileProductsOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setProductsOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [navRef]);
+
   return (
     <header className="site-header">
       <div className="nav-shell">
         <Brand />
 
-        <nav className="desktop-nav" aria-label="Main navigation">
-          <div className="nav-products-wrap" onClick={() =>{ !productsOpen ? setProductsOpen(true) : setProductsOpen(false)}} >
-            <button className={`nav-link ${productsOpen ? 'nav-link-active' : ''}`} aria-expanded={productsOpen} onClick={() => setProductsOpen(true)}>
+        <nav className="desktop-nav" aria-label="Main navigation" ref={navRef}>
+          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() =>{ !productsOpen ? setProductsOpen(true) : setProductsOpen(false)}} >
+            <button className='nav-link' style={{ fontSize: '15px', fontWeight: 600, color: '', fontFamily: 'inherit' }} onClick={() => setProductsOpen(true)}>
               Services <ChevronDown size={14} />
             </button>
             {productsOpen && (
@@ -357,7 +368,7 @@ function Navbar() {
             )}
           </div>
           <Link className="nav-link" to="/pricing">Pricing</Link>
-          <a className="nav-link" href="#company">Company</a>
+          <a className="nav-link" href="/pricing#contact">Contact us</a>
         </nav>
         <div className="nav-actions">
           <Link className="login-link" to="/login">Log in</Link>
@@ -426,16 +437,16 @@ function ServiceShowcase() {
     bsa: { label: 'BANK STATEMENT ANALYSIS', title: 'Turn every transaction into a clearer signal.', description: 'Upload statements, review each bank account, and move from raw activity to useful financial context.', points: ['Overview and EOD Analysis', 'Cash Flow and Debit & Credit', 'Loan Transactions and Monthly Overview'] },
     gst: { label: 'GST INTELLIGENCE', title: 'Know the business behind the GSTIN.', description: 'Run a GST analysis, follow the submission status, and open a complete GSTR report when it is ready.', points: ['GSTIN and business details', 'OTP authentication when required', 'GSTR Overview and monthly summaries'] },
     cibil: { label: 'CIBIL CREDIT INTELLIGENCE', title: 'See credit history in one complete view.', description: 'Verify customer identity, fetch the report, and review the credit signals that shape your next decision.', points: ['Identity and OTP verification', 'Account and payment history', 'Analysis with exportable reports'] },
-    itr: { label: 'INCOME TAX RETURN', title: 'Make income verification easier to review.', description: 'Connect ITR data and explore the statements that bring income, assets, liabilities, and ratios together.', points: ['Tax Calculation and Balance Sheet', 'Profit and Loss Statement', 'Ratio Analysis and full export'] },
+    itr: { label: 'INCOME TAX RETURN', title: 'Make income verification easier to review.', description: 'Connect ITR data and explore the statements that bring income, Income, Assets, and ratios together.', points: ['Tax Calculation and Balance Sheet', 'Profit and Loss Statement', 'Ratio Analysis and full export'] },
     kyc: { label: 'IDENTITY VERIFICATION', title: 'Verify identity with a guided KYC flow.', description: 'Verify Aadhaar details, approve DigiLocker consent, and retrieve the customer documents available to the platform.', points: ['Aadhaar and OTP verification', 'DigiLocker consent session', 'Retrieve available documents'] },
   };
 
   const renderVisualBody = (slug: string) => {
-    switch (slug) {
+    switch (slug) { 
       case 'bsa':
         return (
           <>
-            <strong>Cashflow & EOD</strong>
+            <strong>Cashflow, EOD, Loan Transaction and many more...</strong>
             <div className="service-ad-bars"><i><span>₹1.2L</span></i><i><span>₹3.4L</span></i><i><span>₹1.8L</span></i><i><span>₹5.0L</span></i><i><span>₹4.2L</span></i><i><span>₹7.1L</span></i><i><span>₹5.8L</span></i><i><span>₹8.9L</span></i></div>
             <div className="service-ad-mini-row"><span /><span /><span /></div>
           </>
@@ -466,7 +477,7 @@ function ServiceShowcase() {
       case 'itr':
         return (
           <>
-            <strong>Income & Assets</strong>
+            <strong>Income & Expenses</strong>
             <div className="service-ad-bars type-itr">
               <i><span>₹12.4L</span></i><i><span>₹8.2L</span></i><i><span>₹15.1L</span></i><i><span>₹10.5L</span></i><i><span>₹18.0L</span></i>
             </div>
@@ -714,7 +725,7 @@ export function HomePage() {
         <WorkflowGallery />
         <section className="insight-section"><div className="insight-inner"><div className="insight-copy reveal"><span className="eyebrow eyebrow-light">A BETTER WAY TO REVIEW</span><h2>From scattered inputs<br />to a <span>clearer decision.</span></h2><p>Financial information deserves more than a quick glance. CRISP helps teams find the useful signals, see them in context, and focus on what matters.</p><ActionLink to="/products/bsa" secondary>Explore the platform</ActionLink></div><div className="insight-list reveal"><div className="insight-row"><span className="insight-number">01</span><span className="insight-row-icon"><ChartNoAxesCombined size={19} /></span><span><strong>See patterns sooner</strong><small>Turn raw financial activity into structured, readable insights.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">02</span><span className="insight-row-icon"><CircleDollarSign size={19} /></span><span><strong>Understand the whole picture</strong><small>Bring income, credit, and business signals together.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">03</span><span className="insight-row-icon"><ShieldCheck size={19} /></span><span><strong>Move forward with confidence</strong><small>Give every review a more consistent foundation.</small></span><ArrowUpRight size={16} /></div><div className="insight-stamp"><span>CRP</span><small>INTELLIGENCE<br />IN EVERY SIGNAL</small></div></div></div></section>
         <section className="closing-cta"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><div className="closing-content reveal"><span className="eyebrow">A CLEARER VIEW STARTS HERE</span><h2>Make your next decision<br /><span>a more informed one.</span></h2><p>Bring your financial assessment workflow into sharper focus.</p><ActionLink to="/signup">Get started with CRISP</ActionLink></div></section>
-      </main>
+</main>
     </MarketingLayout>
   );
 }
@@ -722,13 +733,14 @@ export function HomePage() {
 export function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
-  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Let’s find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink></main></MarketingLayout>;
+  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Let’s find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
+</main></MarketingLayout>;
   const Icon = product.icon;
   return (
     <MarketingLayout>
       <main className="product-page">
-        <section className={`product-hero product-hero-${product.slug}`}><div className="product-hero-inner"><div className="product-hero-copy"><div className="breadcrumbs"><Link to="/">Home</Link><ChevronRight size={13} /><span>{product.acronym}</span></div><span className="product-page-label"><Icon size={16} /> {product.acronym} · {product.fullName}</span><h1>{product.headline}</h1><p>{product.description}</p><div className="hero-actions"><ActionLink to="/signup">Get started</ActionLink><a className="text-link" href="#overview">Explore capabilities <ArrowRight size={16} /></a></div></div><div className="product-hero-art"><div className="product-art-grid" />{product.slug === 'bsa' ? <BsaReportMontage /> : <div className="product-art-core"><span className={`product-icon product-icon-${product.slug}`}><Icon size={27} /></span><small>{product.acronym} ANALYSIS</small><strong>Signals in<br />context.</strong><div className="art-signal"><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div><div className="art-secure"><ShieldCheck size={15} /> Structured insights</div></div>}<div className="art-note"><span className="health-dot" /> ANALYSIS READY <ArrowUpRight size={14} /></div></div></div></section>
-        <section className="product-overview section-pad" id="overview"><div className="overview-copy reveal"><span className="eyebrow">THE OVERVIEW</span><h2>Useful context for<br /><span>better-informed reviews.</span></h2></div><div className="overview-detail reveal"><p>{product.overview}</p><div className="overview-stat"><span className="overview-stat-icon"><Sparkles size={17} /></span><span><strong>More than a document.</strong><small>A structured view of the signals that matter to your assessment.</small></span></div></div></section>
+        <section className={`product-hero product-hero-${product.slug}`}><div className="product-hero-inner"><div className="product-hero-copy"><div className="breadcrumbs"><Link to="/">Home</Link><ChevronRight size={13} /><span>{product.acronym}</span></div><span className="product-page-label"><Icon size={16} /> {product.acronym} · {product.fullName}</span><h1>{product.headline}</h1><p>{product.description}</p><div className="hero-actions"><ActionLink to="/signup">Get started</ActionLink><a className="text-link" href="#overview">Explore capabilities <ArrowRight size={16} /></a></div></div><div className="product-hero-art"><div className="product-art-grid" />{product.slug === 'bsa' ? <BsaReportMontage /> : <div className="product-art-core"><span className={`product-icon product-icon-${product.slug}`}><Icon size={27} /></span><small>{product.acronym} ANALYSIS</small><strong>Verification<br />Completed.</strong><div className="art-signal"><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /><span /></div><div className="art-secure"><ShieldCheck size={15} /> Structured insights</div></div>}<div className="art-note"><span className="health-dot" /> ANALYSIS READY <ArrowUpRight size={14} /></div></div></div></section>
+        <section className="product-overview section-pad" id="overview"><div className="overview-copy reveal"><span className="eyebrow">THE OVERVIEW</span><h2>{product.fullName}</h2></div><div className="overview-detail reveal"><p>{product.overview}</p><div className="overview-stat"></div></div></section>
         <section className="capabilities-section section-pad">
           <div className="center-heading reveal">
             <span className="eyebrow">CAPABILITIES</span>
@@ -752,13 +764,14 @@ export function ProductPage() {
         <section className="benefits-section"><div className="benefits-inner"><div className="benefits-title reveal"><span className="eyebrow eyebrow-light">IN THE WORKFLOW</span><h2>Clarity that<br /><span>moves work forward.</span></h2></div><div className="benefit-list reveal">{product.benefits.map((benefit, index) => <div className="benefit-row" key={benefit}><span>0{index + 1}</span><p>{benefit}</p><Check size={16} /></div>)}</div></div></section>
         <section className="process-section section-pad"><div className="center-heading reveal"><span className="eyebrow">HOW IT WORKS</span><h2>A thoughtful process.<br /><span>A clearer outcome.</span></h2></div><div className="process-grid">{product.steps.map((step, index) => <article className="process-step reveal" key={step.title}><span className="process-index">0{index + 1}<span /></span><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></section>
         <section className="product-cta"><div className="product-cta-inner reveal"><span className="eyebrow">READY FOR A CLEARER VIEW?</span><h2>Bring better context<br />to your next decision.</h2><p>Start building a more informed financial assessment workflow.</p><ActionLink to="/signup">Get started with {product.acronym}</ActionLink></div></section>
-      </main>
+</main>
     </MarketingLayout>
   );
 }
 
 export function PricingPage() {
-  const [priceDisplay, setPriceDisplay] = useState<'before-tax' | 'inclusive'>('inclusive');
+  const [priceDisplay, setPriceDisplay] = useState<'before-tax' | 'inclusive'>('before-tax');
+  const [isSupportOpen, setIsSupportOpen] = useState(false);
   return (
     <MarketingLayout>
       <main className="pricing-page">
@@ -833,16 +846,62 @@ export function PricingPage() {
             </article>
           </div>
         </section>
-        <section className="pricing-contact">
+        <section className="pricing-contact" id="contact">
           <div className="pricing-contact-inner reveal">
             <span className="eyebrow eyebrow-light">QUESTIONS ABOUT A SERVICE?</span>
             <h2>Let’s talk BSA, GST,<br />ITR, or CIBIL.</h2>
             <p>Ask the CRISP team about the service workflow that fits your needs.</p>
-            <a className="button button-secondary" href="mailto:ashok.m@r1xchange.com">Contact our team <ArrowUpRight size={16} /></a>
+            <button type="button" className="button button-secondary" onClick={() => setIsSupportOpen(true)}>Contact our team <ArrowUpRight size={16} /></button>
           </div>
           <div className="contact-mark"><Banknote size={34} /></div>
         </section>
-      </main>
+        <SupportModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+</main>
     </MarketingLayout>
   );
 }
+
+
+
+
+function SupportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  if (!isOpen) return null;
+  return (
+    <div className="support-modal-overlay" onClick={onClose}>
+      <div className="support-modal-content" onClick={(e) => e.stopPropagation()}>
+        <div className="support-modal-header">
+          <h3>Raise a Support Ticket</h3>
+          <button onClick={onClose}><X size={20} /></button>
+        </div>
+        <form className="support-form" onSubmit={(e) => { e.preventDefault(); alert('Ticket submitted successfully! Our team will get back to you soon.'); onClose(); }}>
+          <label>Name</label>
+          <input type="text" required placeholder="Your full name" />
+          <label>Email Address</label>
+          <input type="email" required placeholder="name@company.com" />
+          <label>Service Area</label>
+          <select required>
+             <option value="">Select a service...</option>
+             <option value="bsa">Bank Statement Analysis</option>
+             <option value="gst">GST Intelligence</option>
+             <option value="itr">ITR Verification</option>
+             <option value="cibil">CIBIL Report</option>
+             <option value="kyc">KYC</option>
+             <option value="other">Other / General</option>
+          </select>
+          <label>How can we help?</label>
+          <textarea required rows={4} placeholder="Describe your issue or question..." />
+          <button type="submit" className="button button-primary">Submit Ticket</button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+
+
+
+
+
