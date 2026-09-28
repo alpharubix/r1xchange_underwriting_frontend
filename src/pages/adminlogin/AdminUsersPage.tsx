@@ -234,6 +234,7 @@ export default function AdminDashboardPage() {
   }, [paginationData.items]);
 
   // Filter input states
+<<<<<<< Updated upstream
   const [filterAccId, setFilterAccId] = useState('');
   const [filterEmailId, setFilterEmailId] = useState('');
   const [filterCustomerName, setFilterCustomerName] = useState('');
@@ -242,6 +243,16 @@ export default function AdminDashboardPage() {
   const [filterGstNumber, setFilterGstNumber] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterAnchorId, setFilterAnchorId] = useState('');
+=======
+  const [filterAccId, setFilterAccId] = useState("");
+  const [filterEmailId, setFilterEmailId] = useState("");
+  const [filterCustomerName, setFilterCustomerName] = useState("");
+  const [filterPhone, setFilterPhone] = useState("");
+  const [filterCompanyName, setFilterCompanyName] = useState("");
+  const [filterGstNumber, setFilterGstNumber] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [filterAnchorId, setFilterAnchorId] = useState("");
+>>>>>>> Stashed changes
 
   // Modal states for inspecting
   const [inspectedRecord, setInspectedRecord] = useState<RecordItem | null>(
@@ -341,7 +352,13 @@ export default function AdminDashboardPage() {
     return filteredList.slice(startIndex, startIndex + pageSize);
   }, [filteredList, isServerPaginated, currentPage, pageSize]);
 
+<<<<<<< Updated upstream
   console.log('activeTab', activeTab);
+=======
+
+
+  console.log("activeTab", activeTab)
+>>>>>>> Stashed changes
 
   return (
     <div className="flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
@@ -697,6 +714,10 @@ export default function AdminDashboardPage() {
                       </div>
 
                       <div className="flex items-center gap-6">
+<<<<<<< Updated upstream
+=======
+                        
+>>>>>>> Stashed changes
 
                         <div className="flex items-center gap-1.5">
                           <button

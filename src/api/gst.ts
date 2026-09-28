@@ -342,4 +342,5 @@ export const downloadGstReport = async (
       'Failed to download GST report';
     throw new Error(msg);
   }
+  
 };

@@ -249,6 +249,10 @@ export default function AnchorCustomerPage() {
       ? fetchedUsers
       : (fetchedUsers?.data ?? fetchedUsers?.users ?? fetchedUsers?.customers ?? []);
     if (rawList && rawList.length > 0) {
+<<<<<<< Updated upstream
+=======
+      // console.log("Syncing fetchedUsers to customers state:", fetchedUsers);
+>>>>>>> Stashed changes
       const mapped = rawList.map((user: any) => ({
         id: user._id || user.user_id || user.userId || user.id || user.account_id || user.accountId || user.accountid || "",
         name: user.customer_name || user.customerName || user.customername || user.name || user.username || user.userName || "",
