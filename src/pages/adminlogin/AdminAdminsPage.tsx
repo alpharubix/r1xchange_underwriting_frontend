@@ -60,11 +60,19 @@ export default function AdminAdminsPage() {
   }, [paginationData.items]);
 
   // Filter input states
+<<<<<<< Updated upstream
   const [filterloginid, setFilterloginid] = useState('');
   const [filteradminstatus, setFilteradminstatus] = useState('');
   const [filterrole, setFilterrole] = useState('');
   const [filtercreateat, setFiltercreateat] = useState('');
   const [filterupdatedat, setFilterupdatedat] = useState('');
+=======
+  const [filterloginid, setFilterloginid] = useState("");
+  const [filteradminstatus, setFilteradminstatus] = useState("");
+  const [filterrole, setFilterrole] = useState("");
+  const [filtercreateat, setFiltercreateat] = useState("");
+  const [filterupdatedat, setFilterupdatedat] = useState("");
+>>>>>>> Stashed changes
 
   // Modal states for inspecting/creating
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);

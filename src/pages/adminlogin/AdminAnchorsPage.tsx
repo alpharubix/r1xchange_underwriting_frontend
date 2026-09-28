@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";
 import { getAnchorsList, extractPaginatedData } from "@/api/user";
+<<<<<<< Updated upstream
 
 export interface AnchorRecord {
   _id: string;
@@ -29,6 +30,11 @@ export interface AnchorRecord {
   createby: string;
   updateby: string;
 }
+=======
+import AnchorUsersView, { type AnchorRecord } from "./AnchorUsersView";
+
+interface RecordItem extends AnchorRecord {}
+>>>>>>> Stashed changes
 
 interface RecordItem extends AnchorRecord {}
 
@@ -96,7 +102,11 @@ export default function AdminAnchorsPage() {
     setSelectedAnchor(anchor);
     setSearchParams(
       (prev) => {
+<<<<<<< Updated upstream
         prev.set("anchorId", anchor.anchor_code || anchor._id || anchor.loginid || "");
+=======
+        prev.set("anchorId", anchor.anchor_code || anchor._id || anchor.loginid);
+>>>>>>> Stashed changes
         return prev;
       },
       { replace: false }
@@ -115,6 +125,7 @@ export default function AdminAnchorsPage() {
   };
 
   // Filter input states
+<<<<<<< Updated upstream
   const [filteranchorname, setFilteranchorname] = useState('');
   const [filteranchorcode, setFilteranchorcode] = useState('');
   const [filterloginid, setFilterloginid] = useState('');
@@ -124,6 +135,17 @@ export default function AdminAnchorsPage() {
   const [filterupdatedat, setFilterupdatedat] = useState('');
   const [filtercreateby, setFiltercreateby] = useState('');
   const [filterupdateby, setFilterupdateby] = useState('');
+=======
+  const [filteranchorname, setFilteranchorname] = useState("");
+  const [filteranchorcode, setFilteranchorcode] = useState("");
+  const [filterloginid, setFilterloginid] = useState("");
+  const [filterisactive, setFilterisactive] = useState("all");
+  const [filterrole, setFilterrole] = useState("");
+  const [filtercreateat, setFiltercreateat] = useState("");
+  const [filterupdatedat, setFilterupdatedat] = useState("");
+  const [filtercreateby, setFiltercreateby] = useState("");
+  const [filterupdateby, setFilterupdateby] = useState("");
+>>>>>>> Stashed changes
 
   // Modal states for inspecting/creating
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -300,6 +322,7 @@ export default function AdminAnchorsPage() {
   };
 
   if (currentSelectedAnchor) {
+<<<<<<< Updated upstream
     return (
       <div className="p-8 bg-slate-50 min-h-screen space-y-6">
         <button
@@ -317,6 +340,9 @@ export default function AdminAnchorsPage() {
         </div>
       </div>
     );
+=======
+    return <AnchorUsersView anchor={currentSelectedAnchor} onBack={handleBackToAnchors} />;
+>>>>>>> Stashed changes
   }
 
   return (
@@ -570,7 +596,11 @@ export default function AdminAnchorsPage() {
                         <td className="py-4 px-6 text-center" onClick={(e) => e.stopPropagation()}>
                           <div className="flex items-center justify-center gap-2">
                            
+<<<<<<< Updated upstream
                              <button
+=======
+                            <button
+>>>>>>> Stashed changes
                               onClick={() =>  handleSelectAnchor(item)}
                               className="p-1.5 rounded-xl border border-slate-200 text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
                               title="Inspect Details"
