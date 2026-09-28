@@ -684,7 +684,7 @@ export default function IndividualEodAnalysis({
         <CardHeader className="flex flex-row items-center justify-between bg-gray-50 border-b pb-4">
           <div>
             <CardTitle className="text-xl text-black">
-              Overview Details
+              EOD Analysis
             </CardTitle>
             <CardDescription>
               {appliedFromDate && appliedToDate && (
