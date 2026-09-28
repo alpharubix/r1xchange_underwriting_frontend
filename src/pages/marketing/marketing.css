@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
 .cibil-preview-report-header { display: flex; align-items: flex-start; justify-content: space-between; padding-bottom: 9px; border-bottom: 1px solid #e2e9f0; }
 .cibil-preview-report-header small { display: block; color: #6e87a5; font-size: 6px; font-weight: 800; letter-spacing: .5px; }
 .cibil-preview-report-header strong { display: block; margin-top: 3px; color: #052967; font-family: 'Manrope', sans-serif; font-size: 16px; }
@@ -22,8 +24,6 @@
 .cibil-bottom-metrics { display: grid; grid-template-columns: .8fr .8fr 1.4fr; gap: 7px; margin-top: 8px; }.cibil-bottom-metrics strong { display: block; margin-top: 8px; color: #172b45; font-size: 16px; }.cibil-bottom-metrics span { display: block; margin-top: 8px; color: #8191a5; font-size: 5px; }
 .cibil-debt-card { color: #fff; background: #052967 !important; }.cibil-debt-card small, .cibil-debt-card span { color: #c5d7f0; }.cibil-debt-card strong { color: #fff; }
 .cibil-date-card { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }.cibil-date-card span { margin-top: 0; }.cibil-date-card span b { display: block; margin-top: 5px; color: #304763; font-size: 9px; }.cibil-date-card em { display: flex; grid-column: 1 / -1; justify-content: space-between; padding-top: 8px; border-top: 1px solid #edf1f5; color: #71849a; font-size: 6px; font-style: normal; }.cibil-date-card em b { color: #304763; }
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
-
 .marketing-site {
   --ink: #172b45;
   --ink-soft: #304c6c;
