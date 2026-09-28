@@ -430,6 +430,63 @@ function ServiceShowcase() {
     kyc: { label: 'IDENTITY VERIFICATION', title: 'Verify identity with a guided KYC flow.', description: 'Verify Aadhaar details, approve DigiLocker consent, and retrieve the customer documents available to the platform.', points: ['Aadhaar and OTP verification', 'DigiLocker consent session', 'Retrieve available documents'] },
   };
 
+  const renderVisualBody = (slug: string) => {
+    switch (slug) {
+      case 'bsa':
+        return (
+          <>
+            <strong>Cashflow & EOD</strong>
+            <div className="service-ad-bars"><i><span>₹1.2L</span></i><i><span>₹3.4L</span></i><i><span>₹1.8L</span></i><i><span>₹5.0L</span></i><i><span>₹4.2L</span></i><i><span>₹7.1L</span></i><i><span>₹5.8L</span></i><i><span>₹8.9L</span></i></div>
+            <div className="service-ad-mini-row"><span /><span /><span /></div>
+          </>
+        );
+      case 'gst':
+        return (
+          <>
+            <strong>Top Suppliers</strong>
+            <div className="service-ad-lines">
+              <div className="line-item"><div className="line-bar b1"><span>₹8.42L</span></div></div>
+              <div className="line-item"><div className="line-bar b2"><span>₹6.15L</span></div></div>
+              <div className="line-item"><div className="line-bar b3"><span>₹4.80L</span></div></div>
+              <div className="line-item"><div className="line-bar b4"><span>₹2.95L</span></div></div>
+            </div>
+          </>
+        );
+      case 'cibil':
+        return (
+          <>
+            <strong>Credit Profile</strong>
+            <div className="service-ad-metrics">
+              <div className="metric"><span>Score</span><strong>782</strong><span className="hover-tip">Excellent</span></div>
+              <div className="metric"><span>Accounts</span><strong>12</strong><span className="hover-tip">Active: 4</span></div>
+              <div className="metric"><span>Enquiries</span><strong>3</strong><span className="hover-tip">Last 30d: 0</span></div>
+            </div>
+          </>
+        );
+      case 'itr':
+        return (
+          <>
+            <strong>Income & Assets</strong>
+            <div className="service-ad-bars type-itr">
+              <i><span>₹12.4L</span></i><i><span>₹8.2L</span></i><i><span>₹15.1L</span></i><i><span>₹10.5L</span></i><i><span>₹18.0L</span></i>
+            </div>
+            <div className="service-ad-mini-row short"><span /><span /><span /></div>
+          </>
+        );
+      case 'kyc':
+      default:
+        return (
+          <>
+            <strong>Verification Match</strong>
+            <div className="service-ad-kyc">
+              <div className="kyc-doc"><div className="doc-icon" /> <div className="doc-lines"><span /><span /></div> <span className="hover-tip">Aadhaar: Verified</span></div>
+              <div className="kyc-doc"><div className="doc-icon" /> <div className="doc-lines"><span /><span /></div> <span className="hover-tip">PAN: Match 98%</span></div>
+            </div>
+          </>
+        );
+    }
+  };
+
   return (
     <section className="service-showcase section-pad" aria-label="Explore CRISP services">
       <div className="service-showcase-heading reveal"><div><span className="eyebrow">CHOOSE YOUR LENS</span><h2>One platform.<br /><span>Five ways to see more.</span></h2></div><p>Start with the service that matches the question in front of you. Each workflow turns a different source of financial information into a decision-ready view.</p></div>
@@ -444,7 +501,7 @@ function ServiceShowcase() {
                 return (
                   <div className={`service-ad service-ad-${product.slug}`} key={`${copyIndex}-${product.slug}`}>
                     <div className="service-ad-copy"><span className="service-ad-label">{copy.label}</span><h3>{copy.title}</h3><p>{copy.description}</p><ul>{copy.points.map((point) => <li key={point}><Check size={13} />{point}</li>)}</ul><Link className="service-ad-link" to={`/products/${product.slug}`}>Explore {product.acronym} <ArrowUpRight size={15} /></Link></div>
-                    <div className="service-ad-visual"><div className="service-ad-glow" /><div className="service-ad-window"><div className="service-ad-window-top"><span><Icon size={13} /> CRISP {product.acronym}</span><small>LIVE VIEW</small></div><div className="service-ad-window-body"><span className="service-ad-window-label">{product.acronym} WORKSPACE</span><strong>{product.slug === 'bsa' ? 'Bank accounts' : product.slug === 'gst' ? 'GST Analysis' : product.slug === 'cibil' ? 'Report Sections' : 'Financial statements'}</strong><div className="service-ad-bars"><i /><i /><i /><i /><i /><i /><i /><i /></div><div className="service-ad-mini-row"><span /><span /><span /></div><div className="service-ad-mini-row short"><span /><span /><span /></div></div></div><div className="service-ad-badge"><span className="health-dot" /> {product.acronym} READY <ArrowUpRight size={12} /></div></div>
+                    <div className="service-ad-visual"><div className="service-ad-glow" /><div className="service-ad-window"><div className="service-ad-window-top"><span><Icon size={13} /> CRISP {product.acronym}</span><small>LIVE VIEW</small></div><div className="service-ad-window-body"><span className="service-ad-window-label">{product.acronym} WORKSPACE</span>{renderVisualBody(product.slug)}</div></div><div className="service-ad-badge"><span className="health-dot" /> {product.acronym} READY <ArrowUpRight size={12} /></div></div>
                   </div>
                 );
               })}
@@ -453,6 +510,7 @@ function ServiceShowcase() {
         </div>
       </div>
     </section>
+
   );
 }
 
