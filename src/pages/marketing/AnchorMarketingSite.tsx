@@ -2500,8 +2500,7 @@ export default function AnchorMarketingSite() {
                             <p className="text-[9px] font-bold text-slate-500 mb-1">ITR</p>
                             <p className="text-sm font-bold text-[#001845]">Rs.0</p>
                           </div>
-                          <div className="bg-white border border-slate-100 rounded-xl p-4 flex flex-col items-center shadow-sm">
-                            <div className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center text-slate-400 mb-2"><ShieldCheck size={10} /></div>
+                          <div className="bg-white border border-slate-100 rounded-xl p-4 flex flex-col items-center shadow-sm">                     <div className="w-6 h-6 border border-slate-200 rounded flex items-center justify-center text-slate-400 mb-2"><ShieldCheck size={10} /></div>
                             <p className="text-[9px] font-bold text-slate-500 mb-1">CIBIL</p>
                             <p className="text-sm font-bold text-[#001845]">Rs.643</p>
                           </div>
