@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   Activity,

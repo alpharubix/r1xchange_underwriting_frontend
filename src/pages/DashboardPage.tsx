@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 
 import { KycModal } from '@/components/KycModal';
-import HomeIntro from '@/components/HomeIntro';
+
 import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
 import PaymentModal from '@/components/cart/PaymentModal';
@@ -47,7 +47,6 @@ export default function DashboardPage() {
   const [highlightedService, setHighlightedService] = useState<
     string | undefined
   >(undefined);
-  const [showHomeIntro, setShowHomeIntro] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -148,16 +147,10 @@ export default function DashboardPage() {
     }
   };
 
-  // Company Name + Home Intro
+  // Company Name
   useEffect(() => {
     setCompanyName(sessionStorage.getItem('company_name') ?? '');
-
-    const shouldShowIntro = sessionStorage.getItem('show_home_intro');
-
-    if (shouldShowIntro === 'true') {
-      setShowHomeIntro(true);
-      sessionStorage.removeItem('show_home_intro');
-    }
+    sessionStorage.removeItem('show_home_intro');
   }, []);
 
   // Highlight Service
@@ -261,8 +254,6 @@ export default function DashboardPage() {
 
   return (
     <>
-      {showHomeIntro && <HomeIntro />}
-
       <div className="relative flex min-h-screen flex-col p-7 pb-4 animate-fade-in">
         {/* Header */}
         <div className="mb-7 flex items-center justify-between">

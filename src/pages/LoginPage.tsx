@@ -1,11 +1,12 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Lock, Mail, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { HomeIcon } from 'lucide-react';
 import {
   Card,
   CardContent,
@@ -37,7 +38,6 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
-  sessionStorage.setItem('show_home_intro', 'true');
   const onSubmit = (values: LoginFormValues) => {
     loginMutation.mutate(values);
   };
@@ -77,8 +77,9 @@ export default function LoginPage() {
 
                 {/* Right Panel */}
         <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 p-6 relative">
-          <Link to="/" className="absolute top-6 right-6 lg:right-8 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors bg-white hover:bg-gray-50 px-4 py-2 rounded-full border border-gray-200 shadow-sm z-50">
-            <ArrowLeft size={16} /> Go Home
+          <Link to="/" className="absolute top-6 right-6 lg:right-8 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors z-50">
+            <HomeIcon className="h-5 w-5" />
+            Go Home
           </Link>
           <div className="w-full max-w-md animate-fade-in">
             {/* Mobile Logo */}

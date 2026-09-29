@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 :root {
   --font-sm: 16px;
   --font-md: 24px;
@@ -148,7 +148,6 @@
 .service-ad-badge { position: absolute; right: 3px; bottom: 10px; display: flex; align-items: center; gap: 6px; padding: 9px 11px; border: 1px solid #d9e5f1; border-radius: 5px; color: #486580; background: rgba(255,255,255,.96); box-shadow: 0 9px 22px rgba(35, 65, 100, .11); font-size: var(--font-sm); font-weight: 800; transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.6s ease; }
 .service-ad:hover .service-ad-badge { transform: translateY(-8px) scale(1.1); box-shadow: 0 15px 30px rgba(35, 65, 100, .18); }
 @keyframes service-ad-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
 
 .cibil-preview-report-header { display: flex; align-items: flex-start; justify-content: space-between; padding-bottom: 9px; border-bottom: 1px solid #e2e9f0; }
 .cibil-preview-report-header small { display: block; color: #6e87a5; font-size: var(--font-sm); font-weight: 800; letter-spacing: .5px; }
