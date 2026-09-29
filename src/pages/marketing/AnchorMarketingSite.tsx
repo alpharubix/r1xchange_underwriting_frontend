@@ -684,7 +684,7 @@ export default function AnchorMarketingSite() {
                 Streamline your onboarding process. Easily add new customers, track their business details, and monitor the real-time status of their BSA, GST, ITR, and CIBIL verifications from a single unified view.
               </p>
               <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Bulk customer import capabilities</li>
+                <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Customer Reports import capabilities</li>
                 <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Real-time verification status indicators</li>
                 <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Centralized customer repository</li>
               </ul>
@@ -707,10 +707,10 @@ export default function AnchorMarketingSite() {
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-4">Centralized Wallet & Payments</h2>
               <p className="text-lg text-slate-600 mb-6">
-                Take control of your service expenditures. Recharge Individual wallet and seamlessly assign payment requests for BSA, GST, ITR or CIBIL services directly to your customers.
+                Take control of your service expenditures. Recharge Individual wallet or seamlessly assign payment requests for BSA, GST, ITR or CIBIL services directly to your customers.
               </p>
               <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Unified ledger management</li>
+                <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Individual wallet balance management</li>
                 <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Instant service deductions</li>
                 <li className="flex items-start gap-2 text-slate-700"><Check size={18} className="text-green-500 mt-0.5" /> Transparent transaction history</li>
               </ul>
