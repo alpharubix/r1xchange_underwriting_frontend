@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { getWalletBalance } from '@/api/payment';
-import crispLogoBlackWebView from '@/assets/crispLogoBlack.svg';
+import crispLogoBlackWebView from '@/assets/crispLogoRedesign.png';
 import { useNavigate } from 'react-router-dom';
 
 interface WalletProtectedComponentProps {

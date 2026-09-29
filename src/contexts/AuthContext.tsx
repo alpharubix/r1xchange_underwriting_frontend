@@ -1,4 +1,4 @@
-import React, {
+﻿import React, {
   createContext,
   useContext,
   useCallback,
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const handle = () => {
       clearAuth();
       const path = window.location.pathname.toLowerCase();
-      if (path === '/' || path === '/pricing' || path.startsWith('/products/')) {
+      if (path === '/' || path === '/pricing' || path.startsWith('/products/') || path === '/anchors') {
         return;
       }
       if (path.includes('/anchors')) {
@@ -154,3 +154,4 @@ export function useAuthContext() {
     throw new Error('useAuthContext must be used within <AuthProvider>');
   return ctx;
 }
+

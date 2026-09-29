@@ -15,8 +15,8 @@ import {
 } from '@/components/ui/card';
 import { loginSchema, type LoginFormValues } from '@/lib/zod-schemas';
 // import { useLogin, getApiError } from "@/hooks/useAuth";
-import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
-import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
+import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
+import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 import { useLogin } from '@/hooks/useAuth';
 // import HomeIntro from "@/components/HomeIntro";
 
@@ -119,7 +119,7 @@ export default function LoginPage() {
                         id="login-email"
                         type="email"
                         placeholder="admin@example.com"
-                        className={`pl-10 transition-transform duration-200 focus:scale-105 ${errors.email_id ? 'border-red-400 focus-visible:ring-red-300' : 'focus:p-2 m-0'}`}
+                        className={`pl-10 transition-transform duration-200 text-bold focus:scale-105 ${errors.email_id ? 'border-red-400 focus-visible:ring-red-300' : 'focus:p-2 m-0'}`}
                         autoComplete="email"
                         {...register('email_id')}
                       />

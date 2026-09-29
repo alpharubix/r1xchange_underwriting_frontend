@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { z } from 'zod';
 import { useAnchorLogin, getApiError } from '@/hooks/useAuth';
 import { toast } from 'sonner';
-import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 
 const loginSchema = z.object({
   id: z.string().min(1, 'ID is required'),
@@ -161,7 +162,13 @@ export default function AnchorLoginPage() {
       </div>
 
       {/* Right Login Panel */}
-      <div className="flex w-full items-center justify-center p-6 md:w-1/2">
+      <div className="relative flex w-full items-center justify-center p-6 md:w-1/2">
+        <Link 
+          to="/anchors" 
+          className="absolute top-8 right-8 flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#002366] transition-colors bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm border border-slate-200"
+        >
+          <ArrowLeft className="w-4 h-4" /> Go Home
+        </Link>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -193,7 +200,7 @@ export default function AnchorLoginPage() {
                       id="id"
                       type="text"
                       placeholder="ID"
-                      className="h-11 pl-11 pr-4 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner focus:shadow-inner border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base  placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
                       autoComplete="off"
                       {...register('id')}
                     />
@@ -213,7 +220,7 @@ export default function AnchorLoginPage() {
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
-                      className="h-11 pl-11 pr-11 border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base shadow-none placeholder:text-gray-400"
+                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner focus:shadow-inner  focus:ring-[#002366] text-base  placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
                       autoComplete="new-password"
                       {...register('password')}
                     />

@@ -25,6 +25,8 @@ const MarketingPricingPage = lazy(() =>
     default: module.PricingPage,
   }))
 );
+const AnchorMarketingSite = lazy(() => import('./pages/marketing/AnchorMarketingSite').then(m => m));
+const ContactSalesPage = lazy(() => import('./pages/ContactSalesPage'));
 const AnchorLoginPage = lazy(
   () => import('./pages/AnchorLogin/AnchorLoginPage')
 );
@@ -120,9 +122,12 @@ function App() {
                   </Route>
 
                   {/* Anchor Login Page */}
+                  <Route path="/anchors" element={<AnchorMarketingSite />} />
+        <Route path="/anchors/products/:slug" element={<AnchorMarketingSite />} />
                   <Route path="/anchors/login" element={<AnchorLoginPage />} />
+              <Route path="/contact" element={<ContactSalesPage />} />
                   <Route path="/Anchors/login" element={<AnchorLoginPage />} />
-
+                  
                   {/* Admin Login Page */}
                   <Route path="/admins/login" element={<AdminLoginPage />} />
                   <Route path="/Admins/login" element={<AdminLoginPage />} />
@@ -269,3 +274,5 @@ function App() {
 }
 
 export default App;
+
+

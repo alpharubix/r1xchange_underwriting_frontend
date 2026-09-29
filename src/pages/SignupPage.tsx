@@ -25,8 +25,8 @@ import {
 } from '@/components/ui/card';
 import { registerSchema, type RegisterFormValues } from '@/lib/zod-schemas';
 import { useRegister, getApiError } from '@/hooks/useAuth';
-import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
-import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
+import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
+import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 import HomeIntro from '@/components/HomeIntro';
 
 const passwordRules = [

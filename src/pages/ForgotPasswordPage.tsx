@@ -37,8 +37,8 @@ import {
   useResetPassword,
   getApiError,
 } from '@/hooks/useAuth';
-import crispLogoBlackWebView from '../assets/crispLogoBlack.svg';
-import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
+import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
+import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 const passwordRules = [
   { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
   { label: 'Contains uppercase letter', test: (p: string) => /[A-Z]/.test(p) },

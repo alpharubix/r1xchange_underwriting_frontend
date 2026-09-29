@@ -1,6 +1,6 @@
 ﻿import { ArrowLeft, Home } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import logo from '../assets/crispLogoWhite.svg';
+import logo from '../assets/crispLogoRedesign.png';
 
 export default function NotF() {
   const navigate = useNavigate();

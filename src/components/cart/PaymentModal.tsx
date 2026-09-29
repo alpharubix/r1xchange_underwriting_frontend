@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
-import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { getPricingDetails } from '@/lib/paymentUtils';
 

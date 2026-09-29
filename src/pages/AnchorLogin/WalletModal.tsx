@@ -18,7 +18,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { toast } from 'sonner';
-import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 interface Customer {

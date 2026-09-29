@@ -303,7 +303,7 @@ function Brand() {
   );
 }
 
-function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
+export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
   return (
     <Link className={secondary ? 'button button-secondary' : 'button button-primary'} to={to}>
       {children}<ArrowUpRight size={16} strokeWidth={2} />
@@ -407,7 +407,7 @@ function Footer() {
   );
 }
 
-function MarketingLayout({ children }: { children: ReactNode }) {
+export function MarketingLayout({ children }: { children: ReactNode }) {
   const location = useLocation();
   useEffect(() => {
     const nodes = document.querySelectorAll<HTMLElement>('.reveal:not(.is-visible)');
@@ -732,7 +732,7 @@ export function HomePage() {
 export function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
-  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Letâ€™s find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
+  if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Let's find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
 </main></MarketingLayout>;
   const Icon = product.icon;
   return (
@@ -848,7 +848,7 @@ export function PricingPage() {
         <section className="pricing-contact" id="contact">
           <div className="pricing-contact-inner reveal">
             <span className="eyebrow eyebrow-light">QUESTIONS ABOUT ÷ SERVICE?</span>
-            <h2>Letâ€™s talk BSA, GST,<br />ITR, or CIBIL.</h2>
+            <h2>Let's talk BSA, GST,<br />ITR, or CIBIL.</h2>
             <p>Ask the CRISP team about the service workflow that fits your needs.</p>
             <button type="button" className="button button-secondary" onClick={() => setIsSupportOpen(true)}>Contact our team <ArrowUpRight size={16} /></button>
           </div>

@@ -17,7 +17,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useMe } from '@/hooks/useUser';
 import { useLogout } from '@/hooks/useAuth';
 import { downloadItrReport } from '@/api/itr';
-import crispLogoWhiteWebView from '../assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 
 import { toast } from 'sonner';
 

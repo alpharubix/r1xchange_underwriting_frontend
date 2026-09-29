@@ -1,4 +1,5 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;﻿500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
 :root {
   --font-sm: 16px;
   --font-md: 24px;
@@ -204,9 +205,18 @@
   top: 0;
   z-index: 30;
   height: 76px;
-  border-bottom: 1px solid rgba(220, 232, 226, .78);
+  /* border-bottom: 1px solid rgba(220, 232, 226, .78); */
   background: rgba(255, 255, 255, .91);
   backdrop-filter: blur(16px);
+  border-bottom: 2px solid transparent;
+  border-image: linear-gradient(
+  90deg,
+  transparent 0%,
+  #0f24e8 20%,
+  #5480ba 50%,
+  #0c267d 80%,
+  transparent 100%
+) 1;
 }
 .site-header::after {
   content: '';
@@ -444,8 +454,20 @@
 .closing-ornament span { position: absolute; inset: 0; border: 1px solid rgba(51, 105, 174, .1); border-radius: 50%; }
 .closing-ornament span:nth-child(2) { inset: 40px; }.closing-ornament span:nth-child(3) { inset: 80px; }
 
-.site-footer { padding: 58px max(44px, calc((100vw - 1192px) / 2)) 20px; background: #fff; }
+.site-footer { 
+  padding: 58px max(44px, calc((100vw - 1192px) / 2)) 20px; 
+  background: #fff; }
 .footer-top { display: grid; grid-template-columns: 1.7fr repeat(4, 1fr); gap: 33px; padding-bottom: 48px; }
+
+.footer-top-anchor{
+   display: grid;
+    grid-template-columns:
+     1.7fr repeat(4, 1fr);
+      gap: 33px;
+     padding-bottom: 48px; 
+     margin-top: -80px;
+     
+  }
 .footer-brand-block > p { max-width: 210px; margin: 15px 0 12px; color: #77857f; font-size: var(--font-sm); line-height: 1.6; }
 .footer-brand-block > a { display: inline-flex; align-items: center; gap: 5px; color: #53766a; font-size: var(--font-sm); font-weight: 600; }
 .footer-group { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
@@ -974,6 +996,7 @@
 .support-form textarea { flex: 1; min-height: 120px; resize: none; }
 .support-form input:focus, .support-form select:focus, .support-form textarea:focus { outline: none; border-color: #2866b2; box-shadow: 0 0 0 3px rgba(40,102,178,0.1); }
 .support-form .button-primary { margin-top: 10px; min-height: 48px; }
+
 
 
 

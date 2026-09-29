@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { getAnchorBrand } from '@/lib/brandLogo';
 

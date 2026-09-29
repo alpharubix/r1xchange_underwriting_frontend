@@ -11,7 +11,7 @@ import { z } from 'zod';
 import { useAdminLogin } from '@/hooks/useAuth';
 import { toast } from 'sonner';
 import characterLaptop from '@/assets/character_laptop.jpg';
-import crispLogoWhiteWebView from '@/assets/crispLogoWhite.svg';
+import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 
 const adminLoginSchema = z.object({
   id: z.string().min(1, 'ID is required'),
