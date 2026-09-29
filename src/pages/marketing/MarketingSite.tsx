@@ -768,100 +768,103 @@ export function ProductPage() {
   );
 }
 
-export function PricingPage() {
+export function PricingSection() {
   const [priceDisplay, setPriceDisplay] = useState<'before-tax' | 'inclusive'>('before-tax');
   const [isSupportOpen, setIsSupportOpen] = useState(false);
   return (
-    <MarketingLayout>
-      <main className="pricing-page">
-        <section className="pricing-hero">
-          <span className="eyebrow">PRICING BY SERVICE</span>
-          <h1>Choose the analysis<br /><span>your workflow needs.</span></h1>
-          <p>See each service price, the 18% GST, and exactly what the price covers.</p>
-          <div className={`billing-toggle ${priceDisplay === 'inclusive' ? 'billing-toggle-right' : ''}`} role="group" aria-label="Tax display">
-            <button type="button" className={priceDisplay === 'before-tax' ? 'selected' : ''} aria-pressed={priceDisplay === 'before-tax'} onClick={() => setPriceDisplay('before-tax')}>Before GST</button>
-            <button type="button" className={priceDisplay === 'inclusive' ? 'selected' : ''} aria-pressed={priceDisplay === 'inclusive'} onClick={() => setPriceDisplay('inclusive')}>Incl. 18% GST</button>
-          </div>
-        </section>
-        <section className="plans-grid section-pad" aria-label="Service pricing">
-          {billableProducts.map((product) => {
-            const Icon = product.icon;
-            const pricing = getPricingDetails(product.acronym, 0);
-            const price = priceDisplay === 'inclusive' ? pricing.total : pricing.base;
-            return (
-              <article className="plan-card reveal" key={product.slug}>
-                <span className="product-icon"><Icon size={20} /></span>
-                <span className="plan-name">{product.acronym}</span>
-                <p className="plan-audience">{product.fullName}</p>
-                <div className="plan-price"><strong>₹{price}</strong></div>
-                <p className="price-period">{priceDisplay === 'inclusive' ? `Includes ₹${pricing.gst} GST at 18%` : `₹${pricing.gst} GST at 18% added`} · {pricing.periodLabel}</p>
-                <Link className="button button-primary plan-button" to="/signup">Get started <ArrowUpRight size={16} /></Link>
-                <div className="plan-divider" />
-                <span className="plan-includes">IN THIS SERVICE</span>
-                <ul>{product.capabilities.map((capability) => <li key={capability.title}><Check size={15} />{capability.title}</li>)}</ul>
-              </article>
-            );
-          })}
-        </section>
-        <section className="comparison-section section-pad">
-          <div className="comparison-heading reveal">
-            <div><span className="eyebrow">COMPARE SERVICES</span><h2>What each service includes.</h2></div>
-            <p>Each column pairs a service with its report workflow, covered period, and price.</p>
-          </div>
-          <div className="comparison-wrap reveal">
-            <table className="comparison-table">
-              <thead><tr><th>Workflow</th>{billableProducts.map((product) => <th key={product.slug}>{product.acronym}<span>{product.fullName}</span></th>)}</tr></thead>
-              <tbody>
-                {pricingComparisons.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{billableProducts.map((product) => <td key={product.slug}>{row.values[product.slug]}</td>)}</tr>)}
-                <tr><th scope="row">Service amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
-                <tr><th scope="row">GST (18%)</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
-                <tr><th scope="row">Total amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
-                <tr><th scope="row">Service period</th>{billableProducts.map((product) => <td key={product.slug}>{getPricingDetails(product.acronym, 0).periodLabel}</td>)}</tr>
-              </tbody>
-            </table>
-          </div>
-          <p className="pricing-note">Prices shown here match the service prices in the app.</p>
-        </section>
-        <section className="pricing-value-section section-pad">
-          <div className="center-heading reveal">
-            <span className="eyebrow">CLEAR SERVICE PRICING</span>
-            <h2>Know what you are<br /><span>paying for.</span></h2>
-          </div>
-          <div className="pricing-value-grid">
-            <article className="pricing-value-card reveal">
-              <span className="pricing-value-icon"><CircleDollarSign size={20} /></span>
-              <h3>Choose by service</h3>
-              <p>Select BSA, GST, ITR, or CIBIL based on the report workflow you need.</p>
+    <div className="pricing-page" id="pricing">
+      <section className="pricing-hero">
+        <span className="eyebrow">PRICING BY SERVICE</span>
+        <h1>Choose the analysis<br /><span>your workflow needs.</span></h1>
+        <p>See each service price, the 18% GST, and exactly what the price covers.</p>
+        <div className={`billing-toggle ${priceDisplay === 'inclusive' ? 'billing-toggle-right' : ''}`} role="group" aria-label="Tax display">
+          <button type="button" className={priceDisplay === 'before-tax' ? 'selected' : ''} aria-pressed={priceDisplay === 'before-tax'} onClick={() => setPriceDisplay('before-tax')}>Before GST</button>
+          <button type="button" className={priceDisplay === 'inclusive' ? 'selected' : ''} aria-pressed={priceDisplay === 'inclusive'} onClick={() => setPriceDisplay('inclusive')}>Incl. 18% GST</button>
+        </div>
+      </section>
+      <section className="plans-grid section-pad" aria-label="Service pricing">
+        {billableProducts.map((product) => {
+          const Icon = product.icon;
+          const pricing = getPricingDetails(product.acronym, 0);
+          const price = priceDisplay === 'inclusive' ? pricing.total : pricing.base;
+          return (
+            <article className="plan-card reveal" key={product.slug}>
+              <span className="product-icon"><Icon size={20} /></span>
+              <span className="plan-name">{product.acronym}</span>
+              <p className="plan-audience">{product.fullName}</p>
+              <div className="plan-price"><strong>₹{price}</strong></div>
+              <p className="price-period">{priceDisplay === 'inclusive' ? `Includes ₹${pricing.gst} GST at 18%` : `₹${pricing.gst} GST at 18% added`}   {pricing.periodLabel}</p>
+              <Link className="button button-primary plan-button" to="/signup">Get started <ArrowUpRight size={16} /></Link>
+              <div className="plan-divider" />
+              <span className="plan-includes">IN THIS SERVICE</span>
+              <ul>{product.capabilities.map((capability) => <li key={capability.title}><Check size={15} />{capability.title}</li>)}</ul>
             </article>
-            <article className="pricing-value-card reveal">
-              <span className="pricing-value-icon"><FileChartColumnIncreasing size={20} /></span>
-              <h3>Know the covered period</h3>
-              <p>See the unit before you start: one bank account or GST number for 12 months, one business for two financial years, or CIBIL records to date.</p>
-            </article>
-            <article className="pricing-value-card reveal">
-              <span className="pricing-value-icon"><ShieldCheck size={20} /></span>
-              <h3>See the full total</h3>
-              <p>Review the service amount, 18% GST, and GST-inclusive total before checkout.</p>
-            </article>
-          </div>
-        </section>
-        <section className="pricing-contact" id="contact">
-          <div className="pricing-contact-inner reveal">
-            <span className="eyebrow eyebrow-light">QUESTIONS ABOUT ÷ SERVICE?</span>
-            <h2>Let's talk BSA, GST,<br />ITR, or CIBIL.</h2>
-            <p>Ask the CRISP team about the service workflow that fits your needs.</p>
-            <button type="button" className="button button-secondary" onClick={() => setIsSupportOpen(true)}>Contact our team <ArrowUpRight size={16} /></button>
-          </div>
-          <div className="contact-mark"><Banknote size={34} /></div>
-        </section>
-        <SupportModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
-</main>
-    </MarketingLayout>
+          );
+        })}
+      </section>
+      <section className="comparison-section section-pad">
+        <div className="comparison-heading reveal">
+          <div><span className="eyebrow">COMPARE SERVICES</span><h2>What each service includes.</h2></div>
+          <p>Each column pairs a service with its report workflow, covered period, and price.</p>
+        </div>
+        <div className="comparison-wrap reveal">
+          <table className="comparison-table">
+            <thead><tr><th>Workflow</th>{billableProducts.map((product) => <th key={product.slug}>{product.acronym}<span>{product.fullName}</span></th>)}</tr></thead>
+            <tbody>
+              {pricingComparisons.map((row) => <tr key={row.label}><th scope="row">{row.label}</th>{billableProducts.map((product) => <td key={product.slug}>{row.values[product.slug]}</td>)}</tr>)}
+              <tr><th scope="row">Service amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).base}</td>)}</tr>
+              <tr><th scope="row">GST (18%)</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).gst}</td>)}</tr>
+              <tr><th scope="row">Total amount</th>{billableProducts.map((product) => <td key={product.slug}>₹{getPricingDetails(product.acronym, 0).total}</td>)}</tr>
+              <tr><th scope="row">Service period</th>{billableProducts.map((product) => <td key={product.slug}>{getPricingDetails(product.acronym, 0).periodLabel}</td>)}</tr>
+            </tbody>
+          </table>
+        </div>
+        <p className="pricing-note">Prices shown here match the service prices in the app.</p>
+      </section>
+      <section className="pricing-value-section section-pad">
+        <div className="center-heading reveal">
+          <span className="eyebrow">CLEAR SERVICE PRICING</span>
+          <h2>Know what you are<br /><span>paying for.</span></h2>
+        </div>
+        <div className="pricing-value-grid">
+          <article className="pricing-value-card reveal">
+            <span className="pricing-value-icon"><CircleDollarSign size={20} /></span>
+            <h3>Choose by service</h3>
+            <p>Select BSA, GST, ITR, or CIBIL based on the report workflow you need.</p>
+          </article>
+          <article className="pricing-value-card reveal">
+            <span className="pricing-value-icon"><FileChartColumnIncreasing size={20} /></span>
+            <h3>Know the covered period</h3>
+            <p>See the unit before you start: one bank account or GST number for 12 months, one business for two financial years, or CIBIL records to date.</p>
+          </article>
+          <article className="pricing-value-card reveal">
+            <span className="pricing-value-icon"><ShieldCheck size={20} /></span>
+            <h3>See the full total</h3>
+            <p>Review the service amount, 18% GST, and GST-inclusive total before checkout.</p>
+          </article>
+        </div>
+      </section>
+      <section className="pricing-contact" id="contact">
+        <div className="pricing-contact-inner reveal">
+          <span className="eyebrow eyebrow-light">QUESTIONS ABOUT A SERVICE?</span>
+          <h2>Let's talk BSA, GST,<br />ITR, or CIBIL.</h2>
+          <p>Ask the CRISP team about the service workflow that fits your needs.</p>
+          <button type="button" className="button button-secondary" onClick={() => setIsSupportOpen(true)}>Contact our team <ArrowUpRight size={16} /></button>
+        </div>
+        <div className="contact-mark"><Banknote size={34} /></div>
+      </section>
+      <SupportModal isOpen={isSupportOpen} onClose={() => setIsSupportOpen(false)} />
+    </div>
   );
 }
 
-
-
+export function PricingPage() {
+  return (
+    <MarketingLayout>
+      <PricingSection />
+    </MarketingLayout>
+  );
+}
 
 function SupportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   if (!isOpen) return null;

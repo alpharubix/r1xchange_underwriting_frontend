@@ -1,3 +1,4 @@
+import { PricingSection } from './MarketingSite';
 import React, { useEffect, useState} from 'react';
 import { 
   Eye,ShieldCheck,Building,CheckCircle2,Clock,TrendingUp,User,ChevronLeft,RefreshCw,Filter,Calendar,PieChart,ArrowRightLeft,Activity,ArrowLeftRight,BarChart2,Download} from 'lucide-react';
@@ -310,9 +311,9 @@ function AnchorNavbar() {
       icon: <IndianRupee size={23} />,
     },
     {
-      name: "Wallet Dashboard",
-      subtitle: "Individual Wallet Control",
-      description: "Centralized hub to recharge individual wallet and seamlessly manage all payment requests.",
+      name: "Pricing",
+        subtitle: "Clear Service Pricing",
+        description: "Choose by service, know the covered period, and see the full total before checkout.",
       icon: <Wallet size={23} />,
     }
   ];
@@ -395,9 +396,7 @@ function AnchorNavbar() {
             )}
           </div>
 
-          <a className="nav-link" href="#wallet">
-            Wallet
-          </a>
+          <a className="nav-link" href="#pricings">Pricing</a>
 
           <a className="nav-link" href="#hierarchy">
             Hierarchy
@@ -1739,7 +1738,7 @@ export default function AnchorMarketingSite() {
                           <p className="text-[11px] text-slate-500 mb-1">Fetch and analyze your ITR data securely</p>
                           <p className="text-[11px] font-semibold text-[#002366]">Creating for Customer: 69e539ec4a...</p>
                         </div>
-                        <div className="text-slate-400">�</div>
+                        <div className="text-slate-400"> </div>
                       </div>
                       
                       <div className="p-6">
@@ -2449,7 +2448,7 @@ export default function AnchorMarketingSite() {
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold text-xl">3</div>
                   <h3 className="text-2xl font-bold text-slate-900">Access New Capital</h3>
                   <p className="text-slate-600 text-lg">
-                    Once the profile is optimized, originate new credit seamlessly. Request diverse loan types�from Unsecured ODs to Vehicle Loans�with one click, mapping directly to your underwriting engines.
+                    Once the profile is optimized, originate new credit seamlessly. Request diverse loan types from Unsecured ODs to Vehicle Loans with one click, mapping directly to your underwriting engines.
                   </p>
                 </div>
               </div>
@@ -2515,7 +2514,8 @@ export default function AnchorMarketingSite() {
           </div>
         </section>
 
-          {/* Closing CTA */}
+          <div id="pricings"><PricingSection /></div>
+        {/* Closing CTA */}
         <section className="closing-cta" style={{ background: '#002366', color: 'white', padding: '100px 20px', textAlign: 'center' }}>
           <div className="closing-content reveal">
             <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1rem',color:'whitesmoke' }}>Ready to empower your network?</h2>
