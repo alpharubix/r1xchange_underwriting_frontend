@@ -766,6 +766,7 @@ function BsaReportPreview() {
 }
 
 const bsaReportLayers = [
+  { title: 'Overview', className: 'bsa-layer-summary', values: ['Opening Balance', 'Max EOD', 'Average EOD', 'Closing Balance'] },
   { title: 'EOD Analysis', className: 'bsa-layer-eod', values: ['Opening Balance', 'Max EOD', 'Average EOD', 'Closing Balance'] },
   { title: 'Cash Flow Statement', className: 'bsa-layer-cashflow', values: ['Total Inflow (%)', 'Inflows/Revenue', 'OutFlows/Expenses', 'Gross Inflow/Profit'] },
   { title: 'Summary of Debit and Credit', className: 'bsa-layer-summary', values: ['Total Credits', 'Total Debits', 'Net Movement', 'Monthly Summary'] },
