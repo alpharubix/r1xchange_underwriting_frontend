@@ -553,8 +553,22 @@ function ServiceShowcase() {
                 const copy = adCopy[product.slug];
                 return (
                   <div className={`service-ad service-ad-${product.slug}`} key={`${copyIndex}-${product.slug}`}>
-                    <div className="service-ad-copy"><span className="service-ad-label">{copy.label}</span><h3>{copy.title}</h3><p>{copy.description}</p><ul>{copy.points.map((point) => <li key={point}><Check size={13} />{point}</li>)}</ul><Link className="service-ad-link" to={`/products/${product.slug}`}>Explore {product.acronym} <ArrowUpRight size={15} /></Link></div>
-                    <div className="service-ad-visual"><div className="service-ad-glow" /><div className="service-ad-window"><div className="service-ad-window-top"><span><Icon size={13} /> CRISP {product.acronym}</span><small>LIVE VIEW</small></div><div className="service-ad-window-body"><span className="service-ad-window-label">{product.acronym} WORKSPACE</span>{renderVisualBody(product.slug)}</div></div><div className="service-ad-badge"><span className="health-dot" /> {product.acronym} READY <ArrowUpRight size={12} /></div></div>
+                    <div className="service-ad-copy">
+                      <span className="service-ad-label">{copy.label}</span>
+                      <h3>{copy.title}</h3>
+                      <p>{copy.description}</p>
+                      <ul>{copy.points.map((point) => <li key={point}><Check size={13} />{point}</li>)}</ul>
+                      <Link className="service-ad-link "  to={`/products/${product.slug}`}>
+                      Explore {product.acronym} <ArrowUpRight size={15} /></Link></div>
+                    <div className="service-ad-visual">
+                      <div className="service-ad-glow" />
+                      <div className="service-ad-window">
+                        <div className="service-ad-window-top">
+                          <span>
+                          <Icon size={13} /> CRISP {product.acronym}</span><small>
+                          LIVE VIEW</small></div>
+                          <div className="service-ad-window-body">
+                          <span className="service-ad-window-label">{product.acronym} WORKSPACE</span>{renderVisualBody(product.slug)}</div></div><div className="service-ad-badge"><span className="health-dot" /> {product.acronym} READY <ArrowUpRight size={12} /></div></div>
                   </div>
                 );
               })}
@@ -569,7 +583,7 @@ function ServiceShowcase() {
 
 function ProductCard({ product }: { product: Product }) {
   const Icon = product.icon;
-  return <Link className="product-card reveal" to={`/products/${product.slug}`}><span className={`product-icon product-icon-${product.slug}`}><Icon size={21} strokeWidth={1.8} /></span><span className="card-kicker">{product.acronym}</span><h3>{product.name}</h3><p className="product-full-name">{product.fullName}</p><p className="product-description">{product.description}</p><span className="card-link">Explore {product.acronym}<ArrowRight size={15} /></span><span className="card-corner"><ArrowUpRight size={16} /></span></Link>;
+  return <Link className="product-card reveal" to={`/products/${product.slug}`}><span className={`product-icon product-icon-${product.slug}`}><Icon size={21} strokeWidth={1.8} /></span><span className="card-kicker">{product.acronym}</span><h3>{product.name}</h3><p className="product-full-name">{product.fullName}</p><p className="product-description">{product.description}</p><span className="hidden-service-link ">Explore {product.acronym}<ArrowRight size={15} /></span><span className="card-corner"><ArrowUpRight size={16} /></span></Link>;
 }
 
 function GstScreenPreview({ stepIndex }: { stepIndex: number }) {
@@ -801,10 +815,10 @@ export function HomePage() {
     <MarketingLayout>
       <main>
         <ServiceShowcase />
-        <section className="products-section section-pad" id="platform"><div className="section-heading reveal"><div><span className="eyebrow">ONE PLATFORM, FIVE LENSES</span><h2>Financial data,<br /><span>made decision-ready.</span></h2></div><p>Bring the right signals into one clear view. ÷ connected toolkit for the information that shapes an underwriting decision.</p></div><div className="product-grid">{products.map((product) => <ProductCard product={product} key={product.slug} />)}</div></section>
+        <section className="products-section section-pad" id="platform"><div className="section-heading reveal"><div><span className="eyebrow">ONE PLATFORM, FIVE LENSES</span><h2>Financial data,<br /><span>made decision-ready.</span></h2></div><p>Bring the right signals into one clear view.  connected toolkit for the information that shapes an underwriting decision.</p></div><div className="product-grid">{products.map((product) => <ProductCard product={product} key={product.slug} />)}</div></section>
         <WorkflowGallery />
         <section className="insight-section"><div className="insight-inner"><div className="insight-copy reveal"><span className="eyebrow eyebrow-light">÷ BETTER WAY TO REVIEW</span><h2>From scattered inputs<br />to a <span>clearer decision.</span></h2><p>Financial information deserves more than a quick glance. CRISP helps teams find the useful signals, see them in context, and focus on what matters.</p><ActionLink to="/products/bsa" secondary>Explore the platform</ActionLink></div><div className="insight-list reveal"><div className="insight-row"><span className="insight-number">01</span><span className="insight-row-icon"><ChartNoAxesCombined size={19} /></span><span><strong>See patterns sooner</strong><small>Turn raw financial activity into structured, readable insights.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">02</span><span className="insight-row-icon"><CircleDollarSign size={19} /></span><span><strong>Understand the whole picture</strong><small>Bring income, credit, and business signals together.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">03</span><span className="insight-row-icon"><ShieldCheck size={19} /></span><span><strong>Move forward with confidence</strong><small>Give every review a more consistent foundation.</small></span><ArrowUpRight size={16} /></div><div className="insight-stamp"><span>CRP</span><small>INTELLIGENCE<br />IN EVERY SIGNAL</small></div></div></div></section>
-        <section className="closing-cta"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><div className="closing-content reveal"><span className="eyebrow">÷ CLEARER VIEW STARTS HERE</span><h2>Make your next decision<br /><span>a more informed one.</span></h2><p>Bring your financial assessment workflow into sharper focus.</p><ActionLink to="/signup">Get started with CRISP</ActionLink></div></section>
+        <section className="closing-cta"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><div className="closing-content reveal"><span className="eyebrow"> CLEARER VIEW STARTS HERE</span><h2>Make your next decision<br /><span>a more informed one.</span></h2><p>Bring your financial assessment workflow into sharper focus.</p><ActionLink to="/signup">Get started with CRISP</ActionLink></div></section>
       </main>
     </MarketingLayout>
   );
@@ -842,8 +856,8 @@ export function ProductPage() {
         </section>
         <WorkflowGallery workflowsToShow={workflows.filter((workflow) => workflow.slug === product.slug)} />
         <section className="benefits-section"><div className="benefits-inner"><div className="benefits-title reveal"><span className="eyebrow eyebrow-light">IN THE WORKFLOW</span><h2>Clarity that<br /><span>moves work forward.</span></h2></div><div className="benefit-list reveal">{product.benefits.map((benefit, index) => <div className="benefit-row" key={benefit}><span>0{index + 1}</span><p>{benefit}</p><Check size={16} /></div>)}</div></div></section>
-        <section className="process-section section-pad"><div className="center-heading reveal"><span className="eyebrow">HOW IT WORKS</span><h2>÷ thoughtful process.<br /><span>÷ clearer outcome.</span></h2></div><div className="process-grid">{product.steps.map((step, index) => <article className="process-step reveal" key={step.title}><span className="process-index">0{index + 1}<span /></span><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></section>
-        <section className="product-cta"><div className="product-cta-inner reveal"><span className="eyebrow">READY FOR ÷ CLEARER VIEW?</span><h2>Bring better context<br />to your next decision.</h2><p>Start building a more informed financial assessment workflow.</p><ActionLink to="/signup">Get started with {product.acronym}</ActionLink></div></section>
+        <section className="process-section section-pad"><div className="center-heading reveal"><span className="eyebrow">HOW IT WORKS</span><h2>Thoughtful process.<br /><span>Clearer outcome.</span></h2></div><div className="process-grid">{product.steps.map((step, index) => <article className="process-step reveal" key={step.title}><span className="process-index">0{index + 1}<span /></span><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></section>
+        <section className="product-cta"><div className="product-cta-inner reveal"><span className="eyebrow">READY FOR CLEARER VIEW?</span><h2>Bring better context<br />to your next decision.</h2><p>Start building a more informed financial assessment workflow.</p><ActionLink to="/signup">Get started with {product.acronym}</ActionLink></div></section>
       </main>
     </MarketingLayout>
   );
@@ -916,7 +930,7 @@ export function PricingSection() {
           <article className="pricing-value-card reveal">
             <span className="pricing-value-icon"><FileChartColumnIncreasing size={20} /></span>
             <h3>Know the covered period</h3>
-            <p>See the unit before you start: one bank account or GST number for 12 months, one business for two financial years, or CIBIL records to date.</p>
+            <p>See the unit before you start one bank account or GST number for 12 months, one business for two financial years, or CIBIL records to date.</p>
           </article>
           <article className="pricing-value-card reveal">
             <span className="pricing-value-icon"><ShieldCheck size={20} /></span>
