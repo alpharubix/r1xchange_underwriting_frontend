@@ -258,14 +258,33 @@ function HierarchyMontage() {
 
 
 function Brand() {
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const handleClick = (e: React.MouseEvent) => {
+    if (window.scrollY < 50) {
+      e.preventDefault();
+      if (!isLaunching) {
+        setIsLaunching(true);
+        setTimeout(() => setIsLaunching(false), 1200);
+      }
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
-    <Link className="brand" to="/anchors" aria-label="CRISP Anchor Home">
-      <img src={crispLogoBlack} alt="CRISP" style={{ height: '67px' }} />
+    <Link className="brand" to="/anchors" aria-label="CRISP Anchor Home" onClick={handleClick}>
+      <img 
+        src={crispLogoBlack} 
+        alt="CRISP" 
+        className={isLaunching ? "logo-blast" : ""}
+        style={{ height: '67px' }} 
+      />
     </Link>
   );
 }
 
-function AnchorNavbar() {
+  function AnchorNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const location = useLocation();

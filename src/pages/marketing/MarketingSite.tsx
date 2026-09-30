@@ -26,6 +26,7 @@ import bsaUploadScreenshot from '@/assets/UploadBankStatementPdf.png';
 import crispLogoBlack from '@/assets/crispLogoRedesignFirstVersion.png'
 import './marketing.css';
 
+
 type Product = {
   slug: string;
   acronym: string;
@@ -296,14 +297,35 @@ const workflows: Workflow[] = [
 ];
 
 function Brand() {
+  const [isLaunching, setIsLaunching] = useState(false);
+
+  const handleClick = (e: React.MouseEvent) => {
+    // If we are already at the top, or just as a fun effect, trigger the launch!
+    if (window.scrollY < 50) {
+      e.preventDefault(); // Don't navigate if already at top
+      if (!isLaunching) {
+        setIsLaunching(true);
+        setTimeout(() => setIsLaunching(false), 1200); // Reset after animation
+      }
+    } else {
+      // Normal scroll to top behavior
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
   return (
-    <Link className="brand" to="/" aria-label="CRISP home">
-      <img src={crispLogoBlack} alt="CRISP" style={{ height: '70px' }} />
+    <Link className="brand" to="/" aria-label="CRISP home" onClick={handleClick}>
+      <img 
+        src={crispLogoBlack} 
+        alt="CRISP" 
+        className={isLaunching ? "logo-blast" : ""}
+        style={{ height: '70px', transition: 'transform 0.1s' }} 
+      />
     </Link>
   );
 }
 
-export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
+  export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
   return (
     <Link className={secondary ? 'button button-secondary' : 'button button-primary'} to={to}>
       {children}<ArrowUpRight size={16} strokeWidth={2} />
@@ -340,7 +362,7 @@ function Navbar() {
         <Brand />
 
         <nav className="desktop-nav" aria-label="Main navigation" ref={navRef}>
-          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() =>{ !productsOpen ? setProductsOpen(true) : setProductsOpen(false)}} >
+          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0 , behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() =>{ !productsOpen ? setProductsOpen(true) : setProductsOpen(false)}} >
             <button className='nav-link' style={{ fontSize: '15px', fontWeight: 600, color: '', fontFamily: 'inherit' }} onClick={() => setProductsOpen(true)}>
               Services <ChevronDown size={14} />
             </button>
@@ -355,7 +377,7 @@ function Navbar() {
                   {products.map((product) => {
                     const Icon = product.icon;
                     return (
-                      <Link className="mega-item" to={`/products/${product.slug}`} key={product.slug}>
+                      <Link className="mega-item" to={`/services/${product.slug}`} key={product.slug}>
                         <span className="mega-icon"><Icon size={18} /></span>
                         <span><strong>{product.acronym} <span>{product.fullName}</span></strong><small>{product.description}</small></span>
                         <ArrowUpRight className="mega-arrow" size={15} />
@@ -394,15 +416,25 @@ function Footer() {
   const groups = [
     { title: 'Services', links: products.map((product) => ({ label: product.acronym, to: `/products/${product.slug}` })) },
     { title: 'Company', links: [{ label: 'About', to: '#company' }, { label: 'Contact', to: 'mailto:support@checkcrisp.com' }] },
-    { title: 'Resources', links: [{ label: 'Documentation', to: '#resources' }, { label: 'Insights', to: '#resources' }, { label: 'FAQs', to: '#resources' }] },
+    // { 
+      // title: 'Resources', 
+      // links: 
+      // [
+        // { label: 'Documentation', to: '#resources' },
+        //  { label: 'Insights', to: '#resources' },
+        //  { label: 'FAQs', to: '#resources' }] },
     { title: 'Legal', links: [{ label: 'Privacy policy', to: '#privacy' }, { label: 'Terms & conditions', to: '#terms' }] },
   ];
   return (
     <footer className="site-footer" id="company">
-      <div className="footer-top"><div className="footer-brand-block"><Brand /><p>Financial clarity for better-informed decisions.</p><a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrsip.com <ArrowUpRight size={14} /></a></div>
+      <div className="footer-top ">
+        <div className="footer-brand-block">
+          <Brand />
+          <p>Financial clarity for better-informed decisions.</p>
+          <a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrsip.com <ArrowUpRight size={14} /></a></div>
         {groups.map((group) => <div className="footer-group" key={group.title}><h3>{group.title}</h3>{group.links.map((item) => item.to.startsWith('/') ? <Link to={item.to} key={item.label}>{item.label}</Link> : <a href={item.to} key={item.label}>{item.label}</a>)}</div>)}
       </div>
-      <div className="footer-bottom"><span>Â© {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
+      <div className="footer-bottom"><span>© {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
     </footer>
   );
 }

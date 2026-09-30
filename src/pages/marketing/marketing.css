@@ -456,7 +456,7 @@
 .site-footer { 
   padding: 58px max(44px, calc((100vw - 1192px) / 2)) 20px; 
   background: #fff; }
-.footer-top { display: grid; grid-template-columns: 1.7fr repeat(4, 1fr); gap: 33px; padding-bottom: 48px; }
+.footer-top { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 40px; padding-bottom: 48px; }
 
 .footer-top-anchor{
    display: grid;
@@ -725,7 +725,7 @@
   .product-card { display: flex; flex-direction: column; align-items: flex-start; padding: 22px 18px; border: 1px solid #dce8e1; border-radius: 7px; background: #fff; text-decoration: none; transition: transform .3s ease, box-shadow .3s ease, border-color .3s ease; aspect-ratio: 1 / 1; overflow: hidden; }
   .plans-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .insight-inner { gap: 70px; }
-  .footer-top { grid-template-columns: 1.5fr repeat(4, 1fr); gap: 20px; }
+  .footer-top { flex-wrap: wrap; gap: 20px; }
   .capability-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .section-pad { padding-right: 40px; padding-left: 40px; }
   .section-pad-home { padding-right: 20px; padding-left: 20px; }
@@ -854,7 +854,7 @@
   .closing-content h2 { font-size: var(--font-lg); }
   .closing-content > p { max-width: 300px; margin-right: auto; margin-left: auto; font-size: var(--font-sm); line-height: 1.6; }
   .site-footer { padding: 41px 21px 18px; }
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 30px 18px; padding-bottom: 31px; }
+  .footer-top { display: grid; grid-template-columns: 1fr 1fr; gap: 30px 18px; padding-bottom: 31px; }
   .footer-brand-block { grid-column: 1 / -1; }
   .footer-brand-block > p { max-width: 270px; }
   .footer-group { gap: 10px; }
@@ -1004,3 +1004,19 @@
 
 
 
+
+@keyframes blastOff {
+  0% { transform: translate(0, 0); }
+  10% { transform: translate(-6px, 0) rotate(-3deg); }
+  20% { transform: translate(6px, 0) rotate(3deg); }
+  30% { transform: translate(-6px, 0) rotate(-3deg); }
+  40% { transform: translate(6px, 0) rotate(3deg); }
+  50% { transform: translate(-6px, 0) rotate(-3deg); }
+  60% { transform: translate(6px, 0) rotate(3deg); }
+  75% { transform: translate(0, 0) rotate(0deg); }
+  100% { transform: translate(0, -600px) scale(0.8); opacity: 0; }
+}
+
+.logo-blast {
+  animation: blastOff 1.2s cubic-bezier(0.36, 0, 0.66, -0.56) forwards !important;
+}
