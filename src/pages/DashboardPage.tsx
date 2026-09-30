@@ -27,6 +27,7 @@ import { getWalletBalance } from '@/api/payment';
 import type { ServiceBreakup } from '@/api/payment';
 
 import { toast } from 'sonner';
+import HomeIntro from '@/components/HomeIntro';
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -254,6 +255,7 @@ export default function DashboardPage() {
 
   return (
     <>
+      <HomeIntro />
       <div className="relative flex min-h-screen flex-col p-7 pb-4 animate-fade-in">
         {/* Header */}
         <div className="mb-7 flex items-center justify-between">

@@ -35,6 +35,7 @@ import SuperAnchor from './SuperAnchor';
 import ServiceReport from './ServiceReport';
 import { getAnchorBrand } from '@/lib/brandLogo';
 import { Tooltip } from '@/components/ui/Tooltip';
+import AnchorViewIntro from '@/components/AnchorViewIntro';
 
 
 // Mock customer type definition
@@ -71,6 +72,21 @@ export default function AnchorCustomerPage() {
     userRole === 'super_anchor' ||
     userRole === 'super-anchor';
   const brand = getAnchorBrand(user);
+
+  const [showIntro, setShowIntro] = useState(() => {
+    return isSuperAnchor && !sessionStorage.getItem('anchor_intro_shown');
+  });
+
+  useEffect(() => {
+    if (!isSuperAnchor) {
+      setShowIntro(false);
+    }
+  }, [isSuperAnchor]);
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem('anchor_intro_shown', 'true');
+    setShowIntro(false);
+  };
 
   //filter data state
   const [filterUserId, setFilterUserId] = useState('');
@@ -503,7 +519,9 @@ export default function AnchorCustomerPage() {
   };
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#F0F1F5] text-[#1D1E2C] font-sans antialiased animate-fade-in">
+    <>
+      {showIntro && <AnchorViewIntro onComplete={handleIntroComplete} />}
+      <div className="flex h-screen w-screen overflow-hidden bg-[#F0F1F5] text-[#1D1E2C] font-sans antialiased animate-fade-in">
       {/* ─── SIDEBAR ─── */}
       <Sidebar
         sidebarCollapsed={sidebarCollapsed}
@@ -1441,5 +1459,6 @@ export default function AnchorCustomerPage() {
         )}
       </AnimatePresence>
     </div>
+    </>
   );
 }

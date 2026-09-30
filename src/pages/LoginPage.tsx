@@ -19,17 +19,14 @@ import { loginSchema, type LoginFormValues } from '@/lib/zod-schemas';
 import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 import { useLogin } from '@/hooks/useAuth';
-// import HomeIntro from "@/components/HomeIntro";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useLogin();
-  // const [homeIntroShown, setHomeIntroShown] = useState(false);
   sessionStorage.setItem(
     'company_name',
     loginMutation.data?.data?.company_name || ''
   );
-  // const hasShown = sessionStorage.getItem("home_introo");
   const {
     register,
     handleSubmit,
@@ -43,11 +40,7 @@ export default function LoginPage() {
   };
 
   return (
-    <>
-      {/* {hasShown == "true" && (
-        <HomeIntro />
-      )} */}
-      <div className="min-h-screen flex">
+    <div className="min-h-screen flex">
         {/* Left Panel */}
         <div className="hidden lg:flex w-1/2 bg-[#002366] flex-col items-center justify-center p-12 relative overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
@@ -225,7 +218,6 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
-    </>
   );
 }
 
