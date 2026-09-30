@@ -696,9 +696,9 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
 const bsaPreviewRows = [
   ['Cash Deposit', '₹10,000.00', '₹0.00', '₹10,000.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
   ['Cheque Receipts', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
-  ['Online Receipts', '₹5,62,360.34', '₹14,713.00', '₹23,496.97', '₹91,281.00', '₹23,767.00', '₹50,052.00', '₹2,79,637.37', '₹70,333.00', '₹9,080.00'],
+  ['Online Receipts', '₹5,360.34', '₹14,713.00', '₹23,496.97', '₹91,281.00', '₹23,767.00', '₹50,052.00', '₹2,79,637.37', '₹70,333.00', '₹9,080.00'],
   ['Bank Instrument', '₹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
-  ['Forex Remittance', '₹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
+  ['Utility Expense', '₹0.00', '-', '-', '-', '-', '-', '-', '-', '-'],
   ['Refund/Reversal', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
   ['Other Receipts', '₹800.00', '₹0.00', '₹0.00', '₹500.00', '₹0.00', '₹300.00', '₹0.00', '₹0.00', '₹0.00'],
   ['Salary Income', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00', '₹0.00'],
@@ -711,17 +711,54 @@ const bsaPreviewRows = [
 ];
 
 function BsaReportPreview() {
-  const months = ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'];
+  const months = ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026'];
   return (
     <div className="bsa-report-preview" aria-label="BSA Overview report preview">
       <div className="bsa-report-toolbar">
-        <div><strong>Overview Details</strong><span>From January 1st, 2026 To August 4th, 2026</span></div>
+        <div><strong>Cash Flow Details</strong><span>From January 1st, 2026 To May 4th, 2026</span></div>
         <button type="button" aria-label="Refresh report"><Activity size={12} /> Refresh</button>
       </div>
       <div className="bsa-report-scroll">
         <table>
-          <thead><tr><th>Particulars</th><th>Overall/Total</th>{months.map((month) => <th key={month}>{month}</th>)}</tr></thead>
-          <tbody>{bsaPreviewRows.map((row, index) => <tr className={index === 7 || index === 10 || index === 13 ? 'bsa-report-divider' : ''} key={row[0]}>{row.map((cell, cellIndex) => cellIndex === 0 ? <th scope="row" key={`${row[0]}-${cellIndex}`}>{cell}</th> : <td className={cellIndex === 1 || row[0] === 'Total Receipts' ? 'bsa-report-total' : ''} key={`${row[0]}-${cellIndex}`}>{cell}</td>)}</tr>)}</tbody>
+          <thead>
+            <tr>
+              <th>Particulars</th>
+              <th>Overall/Total</th>
+              {months.map((month) => <th key={month}>{month}</th>)}</tr></thead>
+          <tbody>
+  {bsaPreviewRows.map((row, index) => (
+    <tr
+      className={
+        index === 7 || index === 10 || index === 13
+          ? 'bsa-report-divider'
+          : ''
+      }
+      key={row[0]}
+    >
+      {row.slice(0, 7).map((cell, cellIndex) =>
+        cellIndex === 0 ? (
+          <th
+            scope="row"
+            key={`${row[0]}-${cellIndex}`}
+          >
+            {cell}
+          </th>
+        ) : (
+          <td
+            className={
+              cellIndex === 1 || row[0] === 'Total Receipts'
+                ? 'bsa-report-total'
+                : ''
+            }
+            key={`${row[0]}-${cellIndex}`}
+          >
+            {cell}
+          </td>
+        )
+      )}
+    </tr>
+  ))}
+</tbody>
         </table>
       </div>
     </div>
