@@ -65,7 +65,7 @@ const products: Product[] = [
     fullName: 'Bank Statement Analysis',
     description: 'Analyze each available bank account with Overview, EOD Analysis, Loan Transactions, Summary of Debit and Credit, Cash Flow, or Monthly Overview.',
     headline: 'Analyze multiple bank accounts, one account at a time.',
-    overview: 'BS÷ Reports lists the bank accounts available for a customer so each can be selected and reviewed separately. Depending on the account workflow, Available Reports includes Overview, EOD Analysis, and Loan Transactions, or Summary of Debit and Credit, Cash Flow, and Monthly Overview. Summary of Debit and Credit shows a monthwise breakdown of inflows and outflows; Cash Flow shows monthwise cash flow statement analysis.',
+    overview: 'BSA Reports lists the bank accounts available for a customer so each can be selected and reviewed separately. Depending on the account workflow, Available Reports includes Overview, EOD Analysis, and Loan Transactions, or Summary of Debit and Credit, Cash Flow, and Monthly Overview. Summary of Debit and Credit shows a monthwise breakdown of inflows and outflows; Cash Flow shows monthwise cash flow statement analysis.',
     icon: Landmark,
     capabilities: [
       { title: 'Multiple Bank Accounts', description: 'View the bank accounts available for a customer and open reports for each selected account.' },
@@ -222,10 +222,10 @@ const workflows: Workflow[] = [
     steps: [
       { title: 'Open Bank Statement Analysis', description: 'From the dashboard, choose Bank Statement Analysis to open the upload form.', screen: 'Dashboard -> Bank Statement Analysis',image:bsaAccessFromDashboard },
       { title: 'Upload the bank statement', description: 'Select one or more statement files. The platform accepts the uploaded files for processing.', screen: 'Upload Bank Statement', image: bsaUploadScreenshot, imageAlt: 'CRISP Upload Bank Statement page' },
-      { title: 'Select the company type', description: 'Choose Individual, Company, Sole Proprietorship, Trust, or Partnership so the statement is analyzed in the right business context.', screen: 'Upload Bank Statement -> Company Type', image: "", imageAlt: 'Open Company Type dropdown on the CRISP BS÷ upload page' },
-      { title: 'Select the account type', description: 'Choose Current, Savings, Over Draft (OD), or Cash Credit (CC) for the account being analyzed.', screen: 'Upload Bank Statement -> Account Type', image: bsaUploadScreenshot, imageAlt: 'Account Type field on the CRISP BS÷ upload page' },
+      { title: 'Select the company type', description: 'Choose Individual, Company, Sole Proprietorship, Trust, or Partnership so the statement is analyzed in the right business context.', screen: 'Upload Bank Statement -> Company Type', image: "", imageAlt: 'Open Company Type dropdown on the CRISP BSA upload page' },
+      { title: 'Select the account type', description: 'Choose Current, Savings, Over Draft (OD), or Cash Credit (CC) for the account being analyzed.', screen: 'Upload Bank Statement -> Account Type', image: bsaUploadScreenshot, imageAlt: 'Account Type field on the CRISP BSA upload page' },
       { title: 'Complete the account details and submit', description: 'Enter the account number, select the bank, and provide the file password when required. Submit the form to start processing.', screen: 'Upload Bank Statement -> Account Number, Bank, File Password' },
-      { title: 'Open the generated reports', description: 'After processing, choose the customer account and open the available reports: Overview, EOD Analysis, Loan Transactions, Summary of Debit and Credit, Cash Flow, or Monthly Overview.', screen: 'BS÷ Reports -> Bank Accounts -> Available Reports' },
+      { title: 'Open the generated reports', description: 'After processing, choose the customer account and open the available reports: Overview, EOD Analysis, Loan Transactions, Summary of Debit and Credit, Cash Flow, or Monthly Overview.', screen: 'BSA Reports -> Bank Accounts -> Available Reports' },
     ],
   },
   {
@@ -355,6 +355,16 @@ function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navRef]);
+  useEffect(() => {
+  if (window.location.hash === "#contact") {
+    setTimeout(() => {
+      document.getElementById("contact")?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }, 100);
+  }
+}, []);
 
   return (
     <header className="site-header">
@@ -377,7 +387,7 @@ function Navbar() {
                   {products.map((product) => {
                     const Icon = product.icon;
                     return (
-                      <Link className="mega-item" to={`/services/${product.slug}`} key={product.slug}>
+                      <Link className="mega-item" to={`/products/${product.slug}`} key={product.slug}>
                         <span className="mega-icon"><Icon size={18} /></span>
                         <span><strong>{product.acronym} <span>{product.fullName}</span></strong><small>{product.description}</small></span>
                         <ArrowUpRight className="mega-arrow" size={15} />
@@ -677,7 +687,7 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
           </article>
         ))}
       </div>
-      <p className="workflow-note">The BS÷ upload screenshot shown above is the exact image currently stored in this project. Other platform screens are identified by their live page or component name because no corresponding screenshot asset is stored in the repository.</p>
+      <p className="workflow-note">The BSA upload screenshot shown above is the exact image currently stored in this project. Other platform screens are identified by their live page or component name because no corresponding screenshot asset is stored in the repository.</p>
     </section>
   );
 }
@@ -702,7 +712,7 @@ const bsaPreviewRows = [
 function BsaReportPreview() {
   const months = ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026', 'Jun 2026', 'Jul 2026', 'Aug 2026'];
   return (
-    <div className="bsa-report-preview" aria-label="BS÷ Overview report preview">
+    <div className="bsa-report-preview" aria-label="BSA Overview report preview">
       <div className="bsa-report-toolbar">
         <div><strong>Overview Details</strong><span>From January 1st, 2026 To August 4th, 2026</span></div>
         <button type="button" aria-label="Refresh report"><Activity size={12} /> Refresh</button>
@@ -727,7 +737,7 @@ const bsaReportLayers = [
 
 function BsaReportMontage() {
   return (
-    <div className="bsa-report-montage" aria-label="BS÷ reports montage">
+    <div className="bsa-report-montage" aria-label="BSA reports montage">
       <div className="bsa-montage-backdrop" aria-hidden="true"><span /><span /><span /></div>
       {bsaReportLayers.map((layer) => (
         <div className={`bsa-montage-layer ${layer.className}`} key={layer.title}>
@@ -738,7 +748,7 @@ function BsaReportMontage() {
       ))}
       <div className="bsa-montage-main"><BsaReportPreview /></div>
       
-      <button type="button" className="bsa-montage-label" aria-label="Show all six BS÷ report views"><span className="health-dot" /> SIX REPORT VIEWS <ArrowUpRight size={12} /></button>
+      <button type="button" className="bsa-montage-label" aria-label="Show all six BSA report views"><span className="health-dot" /> SIX REPORT VIEWS <ArrowUpRight size={12} /></button>
       <div className="bsa-montage-popover" aria-hidden="true">
         <span className="bsa-popover-kicker">AVAILABLE REPORTS</span>
         {bsaReportLayers.map((layer, index) => <span className="bsa-popover-item" style={{ '--item-delay': `${index * 55}ms` } as CSSProperties} key={layer.title}><i className={`legend-dot legend-dot-${layer.className.replace('bsa-layer-', '')}`} />{layer.title}<ArrowUpRight size={10} /></span>)}

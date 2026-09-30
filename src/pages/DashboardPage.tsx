@@ -72,7 +72,7 @@ export default function DashboardPage() {
     {
       service: 'GST',
       label: 'Goods & Services Tax',
-      pricing: getPricingDetails('GST', 1),
+      pricing: getPricingDetails('GST', 2),
     },
     {
       service: 'ITR',

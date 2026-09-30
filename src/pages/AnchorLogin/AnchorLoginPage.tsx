@@ -24,6 +24,8 @@ export default function AnchorLoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const loginMutation = useAnchorLogin();
 
+
+  
   const {
     register,
     handleSubmit,
@@ -151,7 +153,7 @@ export default function AnchorLoginPage() {
               Credit & Receivables Intelligence Scoring Platform
             </span>
             <br />
-            <span className="inline-block mt-4">Underwriting Platform</span>
+           
           </h1>
         </div>
 

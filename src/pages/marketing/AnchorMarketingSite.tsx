@@ -4,7 +4,7 @@ import {
   Eye,ShieldCheck,Building,CheckCircle2,Clock,TrendingUp,User,ChevronLeft,RefreshCw,Filter,Calendar,PieChart,ArrowRightLeft,Activity,ArrowLeftRight,BarChart2,Download} from 'lucide-react';
   import { CreditCard,UploadCloud,Smartphone } from 'lucide-react';
 import { Menu, X, ChevronDown,ChevronRight, ArrowUpRight as ArrowUpRightIcon} from 'lucide-react';
-import crispLogoBlack from '@/assets/crispLogoBlack.svg';
+import crispLogoBlack from '@/assets/crispLogoRedesignFirstVersion.png';
 
 import { Link, useLocation } from 'react-router-dom';
 import { 

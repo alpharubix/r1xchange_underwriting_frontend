@@ -73,7 +73,7 @@ export default function LoginPage() {
               <span className="text-white/70">CRISP</span>
             </h1>
           </div>
-           <div className="absolute z-10 text-xs text-white/40 font-medium tracking-wide left-2 ">
+           <div className="absolute z-10 text-xs text-white/40 font-medium tracking-wide left-2 bottom-2">
           ©  2026 CRISP. All rights reserved.
           </div>
         </div>
