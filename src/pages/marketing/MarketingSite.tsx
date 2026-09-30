@@ -23,7 +23,7 @@ import { getPricingDetails } from '@/lib/paymentUtils';
 
 import bsaAccessFromDashboard from "@/assets/bsaAccessFromDashboard.png"
 import bsaUploadScreenshot from '@/assets/UploadBankStatementPdf.png';
-import crispLogoBlack from '@/assets/crispLogoRedesign.png'
+import crispLogoBlack from '@/assets/crispLogoRedesignFirstVersion.png'
 import './marketing.css';
 
 type Product = {
@@ -298,7 +298,7 @@ const workflows: Workflow[] = [
 function Brand() {
   return (
     <Link className="brand" to="/" aria-label="CRISP home">
-      <img src={crispLogoBlack} alt="CRISP" style={{ height: '67px' }} />
+      <img src={crispLogoBlack} alt="CRISP" style={{ height: '70px' }} />
     </Link>
   );
 }
