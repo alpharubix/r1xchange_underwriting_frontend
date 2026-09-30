@@ -39,7 +39,7 @@ export default function DashboardPage() {
 
   const [quantities, setQuantities] = useState<Record<string, number>>({
     BSA: 1,
-    GST: 1,
+    GST: 2,
     ITR: 1,
     CIBIL: 1,
   });
