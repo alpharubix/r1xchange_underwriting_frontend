@@ -268,7 +268,15 @@ function App() {
           </AuthProvider>
         </BrowserRouter>
       </QueryClientProvider>
-      <Toaster position="top-center" richColors />
+      <Toaster
+        position="top-center"
+        richColors
+        toastOptions={{
+          classNames: {
+            error: '!bg-[#eff6ff] !border-[#dbeafe] !text-[#1d4ed8]',
+          },
+        }}
+      />
     </>
   );
 }

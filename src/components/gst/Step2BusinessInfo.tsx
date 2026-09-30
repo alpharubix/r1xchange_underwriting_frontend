@@ -1,5 +1,6 @@
-﻿import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueries } from '@tanstack/react-query';
+    
 import { fetchBasicInfo, submitGst, getGstin, addNewGstin } from '@/api/gst';
 import { toast } from 'sonner';
 
@@ -10,6 +11,7 @@ interface Step2Props {
   onBack: () => void;
   onGstinChange: (newGstin: string) => void;
   custId?: string;
+  externalShowInstructions?: number;
 }
 
 const GSTIN_REGEX = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
@@ -20,12 +22,23 @@ export default function Step2BusinessInfo({
   onRequiresAuth,
   onGstinChange,
   custId,
+  externalShowInstructions,
 }: Step2Props) {
   const [fromMonth, setFromMonth] = useState('');
   const [toMonth, setToMonth] = useState('');
   const [needsAuth, setNeedsAuth] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGstin, setNewGstin] = useState('');
+  const [showInstructionsModal, setShowInstructionsModal] = useState(true);
+
+  useEffect(() => {
+    if (externalShowInstructions) {
+      setShowInstructionsModal(true);
+    }
+  }, [externalShowInstructions]);
+ 
+
+
 
   // Fetch list of GSTINs from the backend
   const {
@@ -590,6 +603,85 @@ export default function Step2BusinessInfo({
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* GST General Instructions Modal (shows for 10 seconds on step 2 load) */}
+      {showInstructionsModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+          <div className="bg-white rounded-xl shadow-xl border border-gray-100 max-w-xl w-full p-6 animate-in fade-in zoom-in duration-200">
+            <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
+              <h3 className="text-lg font-bold text-slate-700">
+                GST - General Instructions
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowInstructionsModal(false)}
+                className="text-gray-400 hover:text-gray-600 p-1 rounded-lg transition-colors cursor-pointer"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M6 18L18 6M6 6l12 12"
+                  />
+                </svg>
+              </button>
+            </div>
+
+            <ol className="space-y-3 text-sm text-slate-600 mb-6 leading-relaxed">
+              <li className="flex gap-2">
+                <span className="font-semibold text-slate-700 min-w-[20px]">
+                  1.
+                </span>
+                <span>
+                  Before you click on Provide Consent Button – Keep GST login
+                  Username ready.
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-slate-700 min-w-[20px]">
+                  2.
+                </span>
+                <span>Enter the OTP received on the given number.</span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-slate-700 min-w-[20px]">
+                  3.
+                </span>
+                <span>
+                  If the API access is not enabled on the GST Portal, Click on
+                  &quot;Steps To Enable API&quot; Button and follow the steps to
+                  enable it.
+                </span>
+              </li>
+              <li className="flex gap-2">
+                <span className="font-semibold text-slate-700 min-w-[20px]">
+                  4.
+                </span>
+                <span>
+                  Our application/personnel DO NOT have access to your
+                  credentials.
+                </span>
+              </li>
+            </ol>
+
+            <div className="flex items-center justify-end pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setShowInstructionsModal(false)}
+                className="px-5 py-2 text-sm font-medium text-white bg-[#002366] hover:bg-[#001744] border border-gray-200 rounded-lg transition-colors cursor-pointer"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

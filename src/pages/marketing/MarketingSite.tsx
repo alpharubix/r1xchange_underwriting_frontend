@@ -1,4 +1,4 @@
-﻿import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type CSSProperties, type ReactNode } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
 import {
   Activity,
@@ -220,7 +220,7 @@ const workflows: Workflow[] = [
     name: 'Bank Statement Analysis',
     purpose: 'Upload a bank statement, provide the account details, and review the generated account-level analysis.',
     steps: [
-      { title: 'Open Bank Statement Analysis', description: 'From the dashboard, choose Bank Statement Analysis to open the upload form.', screen: 'Dashboard -> Bank Statement Analysis',image:bsaAccessFromDashboard },
+      { title: 'Open Bank Statement Analysis', description: 'From the dashboard, choose Bank Statement Analysis to open the upload form.', screen: 'Dashboard -> Bank Statement Analysis', image: bsaAccessFromDashboard },
       { title: 'Upload the bank statement', description: 'Select one or more statement files. The platform accepts the uploaded files for processing.', screen: 'Upload Bank Statement', image: bsaUploadScreenshot, imageAlt: 'CRISP Upload Bank Statement page' },
       { title: 'Select the company type', description: 'Choose Individual, Company, Sole Proprietorship, Trust, or Partnership so the statement is analyzed in the right business context.', screen: 'Upload Bank Statement -> Company Type', image: "", imageAlt: 'Open Company Type dropdown on the CRISP BSA upload page' },
       { title: 'Select the account type', description: 'Choose Current, Savings, Over Draft (OD), or Cash Credit (CC) for the account being analyzed.', screen: 'Upload Bank Statement -> Account Type', image: bsaUploadScreenshot, imageAlt: 'Account Type field on the CRISP BSA upload page' },
@@ -315,17 +315,17 @@ function Brand() {
 
   return (
     <Link className="brand" to="/" aria-label="CRISP home" onClick={handleClick}>
-      <img 
-        src={crispLogoBlack} 
-        alt="CRISP" 
+      <img
+        src={crispLogoBlack}
+        alt="CRISP"
         className={isLaunching ? "logo-blast" : ""}
-        style={{ height: '70px', transition: 'transform 0.1s' }} 
+        style={{ height: '70px', transition: 'transform 0.1s' }}
       />
     </Link>
   );
 }
 
-  export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
+export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
   return (
     <Link className={secondary ? 'button button-secondary' : 'button button-primary'} to={to}>
       {children}<ArrowUpRight size={16} strokeWidth={2} />
@@ -356,15 +356,15 @@ function Navbar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [navRef]);
   useEffect(() => {
-  if (window.location.hash === "#contact") {
-    setTimeout(() => {
-      document.getElementById("contact")?.scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }, 100);
-  }
-}, []);
+    if (window.location.hash === "#contact") {
+      setTimeout(() => {
+        document.getElementById("contact")?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 100);
+    }
+  }, []);
 
   return (
     <header className="site-header">
@@ -372,7 +372,8 @@ function Navbar() {
         <Brand />
 
         <nav className="desktop-nav" aria-label="Main navigation" ref={navRef}>
-          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0 , behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() =>{ !productsOpen ? setProductsOpen(true) : setProductsOpen(false)}} >
+          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() => { !productsOpen ? setProductsOpen(true) : setProductsOpen(false) }} >
+
             <button className='nav-link' style={{ fontSize: '15px', fontWeight: 600, color: '', fontFamily: 'inherit' }} onClick={() => setProductsOpen(true)}>
               Services <ChevronDown size={14} />
             </button>
@@ -427,12 +428,12 @@ function Footer() {
     { title: 'Services', links: products.map((product) => ({ label: product.acronym, to: `/products/${product.slug}` })) },
     { title: 'Company', links: [{ label: 'About', to: '#company' }, { label: 'Contact', to: 'mailto:support@checkcrisp.com' }] },
     // { 
-      // title: 'Resources', 
-      // links: 
-      // [
-        // { label: 'Documentation', to: '#resources' },
-        //  { label: 'Insights', to: '#resources' },
-        //  { label: 'FAQs', to: '#resources' }] },
+    // title: 'Resources', 
+    // links: 
+    // [
+    // { label: 'Documentation', to: '#resources' },
+    //  { label: 'Insights', to: '#resources' },
+    //  { label: 'FAQs', to: '#resources' }] },
     { title: 'Legal', links: [{ label: 'Privacy policy', to: '#privacy' }, { label: 'Terms & conditions', to: '#terms' }] },
   ];
   return (
@@ -483,7 +484,7 @@ function ServiceShowcase() {
   };
 
   const renderVisualBody = (slug: string) => {
-    switch (slug) { 
+    switch (slug) {
       case 'bsa':
         return (
           <>
@@ -747,13 +748,13 @@ function BsaReportMontage() {
         </div>
       ))}
       <div className="bsa-montage-main"><BsaReportPreview /></div>
-      
+
       <button type="button" className="bsa-montage-label" aria-label="Show all six BSA report views"><span className="health-dot" /> SIX REPORT VIEWS <ArrowUpRight size={12} /></button>
       <div className="bsa-montage-popover" aria-hidden="true">
         <span className="bsa-popover-kicker">AVAILABLE REPORTS</span>
         {bsaReportLayers.map((layer, index) => <span className="bsa-popover-item" style={{ '--item-delay': `${index * 55}ms` } as CSSProperties} key={layer.title}><i className={`legend-dot legend-dot-${layer.className.replace('bsa-layer-', '')}`} />{layer.title}<ArrowUpRight size={10} /></span>)}
       </div>
-    </div>
+    </div >
   );
 }
 
@@ -766,7 +767,7 @@ export function HomePage() {
         <WorkflowGallery />
         <section className="insight-section"><div className="insight-inner"><div className="insight-copy reveal"><span className="eyebrow eyebrow-light">÷ BETTER WAY TO REVIEW</span><h2>From scattered inputs<br />to a <span>clearer decision.</span></h2><p>Financial information deserves more than a quick glance. CRISP helps teams find the useful signals, see them in context, and focus on what matters.</p><ActionLink to="/products/bsa" secondary>Explore the platform</ActionLink></div><div className="insight-list reveal"><div className="insight-row"><span className="insight-number">01</span><span className="insight-row-icon"><ChartNoAxesCombined size={19} /></span><span><strong>See patterns sooner</strong><small>Turn raw financial activity into structured, readable insights.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">02</span><span className="insight-row-icon"><CircleDollarSign size={19} /></span><span><strong>Understand the whole picture</strong><small>Bring income, credit, and business signals together.</small></span><ArrowUpRight size={16} /></div><div className="insight-row"><span className="insight-number">03</span><span className="insight-row-icon"><ShieldCheck size={19} /></span><span><strong>Move forward with confidence</strong><small>Give every review a more consistent foundation.</small></span><ArrowUpRight size={16} /></div><div className="insight-stamp"><span>CRP</span><small>INTELLIGENCE<br />IN EVERY SIGNAL</small></div></div></div></section>
         <section className="closing-cta"><div className="closing-ornament" aria-hidden="true"><span /><span /><span /></div><div className="closing-content reveal"><span className="eyebrow">÷ CLEARER VIEW STARTS HERE</span><h2>Make your next decision<br /><span>a more informed one.</span></h2><p>Bring your financial assessment workflow into sharper focus.</p><ActionLink to="/signup">Get started with CRISP</ActionLink></div></section>
-</main>
+      </main>
     </MarketingLayout>
   );
 }
@@ -775,7 +776,7 @@ export function ProductPage() {
   const { slug } = useParams();
   const product = products.find((item) => item.slug === slug);
   if (!product) return <MarketingLayout><main className="not-found"><span className="eyebrow">PRODUCT NOT FOUND</span><h1>Let's find a clearer path.</h1><ActionLink to="/">Back to home</ActionLink>
-</main></MarketingLayout>;
+  </main></MarketingLayout>;
   const Icon = product.icon;
   return (
     <MarketingLayout>
@@ -805,7 +806,7 @@ export function ProductPage() {
         <section className="benefits-section"><div className="benefits-inner"><div className="benefits-title reveal"><span className="eyebrow eyebrow-light">IN THE WORKFLOW</span><h2>Clarity that<br /><span>moves work forward.</span></h2></div><div className="benefit-list reveal">{product.benefits.map((benefit, index) => <div className="benefit-row" key={benefit}><span>0{index + 1}</span><p>{benefit}</p><Check size={16} /></div>)}</div></div></section>
         <section className="process-section section-pad"><div className="center-heading reveal"><span className="eyebrow">HOW IT WORKS</span><h2>÷ thoughtful process.<br /><span>÷ clearer outcome.</span></h2></div><div className="process-grid">{product.steps.map((step, index) => <article className="process-step reveal" key={step.title}><span className="process-index">0{index + 1}<span /></span><h3>{step.title}</h3><p>{step.description}</p></article>)}</div></section>
         <section className="product-cta"><div className="product-cta-inner reveal"><span className="eyebrow">READY FOR ÷ CLEARER VIEW?</span><h2>Bring better context<br />to your next decision.</h2><p>Start building a more informed financial assessment workflow.</p><ActionLink to="/signup">Get started with {product.acronym}</ActionLink></div></section>
-</main>
+      </main>
     </MarketingLayout>
   );
 }
@@ -924,13 +925,13 @@ function SupportModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
           <input type="email" required placeholder="name@company.com" />
           <label>Service Area</label>
           <select required>
-             <option value="">Select a service...</option>
-             <option value="bsa">Bank Statement Analysis</option>
-             <option value="gst">GST Intelligence</option>
-             <option value="itr">ITR Verification</option>
-             <option value="cibil">CIBIL Report</option>
-             <option value="kyc">KYC</option>
-             <option value="other">Other / General</option>
+            <option value="">Select a service...</option>
+            <option value="bsa">Bank Statement Analysis</option>
+            <option value="gst">GST Intelligence</option>
+            <option value="itr">ITR Verification</option>
+            <option value="cibil">CIBIL Report</option>
+            <option value="kyc">KYC</option>
+            <option value="other">Other / General</option>
           </select>
           <label>How can we help?</label>
           <textarea required rows={4} placeholder="Describe your issue or question..." />

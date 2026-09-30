@@ -36,6 +36,7 @@ import ServiceReport from './ServiceReport';
 import { getAnchorBrand } from '@/lib/brandLogo';
 import { Tooltip } from '@/components/ui/Tooltip';
 
+
 // Mock customer type definition
 interface Customer {
   id: string;
@@ -525,8 +526,17 @@ export default function AnchorCustomerPage() {
         {/* Top Header Block */}
         <header className="mx-6 mt-6 mb-2 bg-white rounded-3xl h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-sm border border-gray-100/80 transition-all">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-[#002366] text-white flex items-center justify-center font-black text-lg shadow-sm shrink-0">
-              C
+            <div className="h-9 w-9 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-sm shrink-0">
+              <svg
+                viewBox="15 15 70 60"
+                className="h-full w-full"
+                aria-label="CRISP logo mark"
+              >
+                <g fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="6">
+                  <path d="M66 27a24 24 0 1 0 0 36" />
+                </g>
+                <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
+              </svg>
             </div>
             <span className="font-['Space_Grotesk'] text-2xl font-black text-[#002366] tracking-tight flex items-center">
               CRISP

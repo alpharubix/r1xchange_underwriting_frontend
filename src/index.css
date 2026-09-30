@@ -73,12 +73,7 @@
   }
 
   .sidebar-item {
-    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg
-         text-white/80
-         hover:bg-white/65
-         hover:text-black
-         transition-all duration-200
-         cursor-pointer text-sm font-medium;
+    @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-white/80 hover:bg-white/65 hover:text-black transition-all duration-200 cursor-pointer text-sm font-medium;
   }
 
   .sidebar-item.active {
@@ -87,15 +82,11 @@
   }
 
   .btn-primary {
-    @apply bg-[#000080] hover:bg-[#008066] text-white font-semibold py-2.5 px-6
-           rounded-lg transition-all duration-200 shadow-md hover:shadow-lg
-           hover:translate-y-[-1px] active:translate-y-0;
+    @apply bg-[#000080] hover:bg-[#008066] text-white font-semibold py-2.5 px-6 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:translate-y-[-1px] active:translate-y-0;
   }
 
   .input-field {
-    @apply w-full px-4 py-3 rounded-lg border border-[#000080]/20 bg-white
-           focus:outline-none focus:ring-2 focus:ring-[#000080]/40 focus:border-[#000080]
-           text-gray-800 placeholder:text-gray-400 transition-all duration-200 text-sm;
+    @apply w-full px-4 py-3 rounded-lg border border-[#000080]/20 bg-white focus:outline-none focus:ring-2 focus:ring-[#000080]/40 focus:border-[#000080] text-gray-800 placeholder:text-gray-400 transition-all duration-200 text-sm;
   }
 }
 
@@ -139,20 +130,24 @@
 
 /* Animations */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-8px);
   }
 }
 
 @keyframes pulse-glow {
+
   0%,
   100% {
     box-shadow: 0 0 0 0 rgba(0, 0, 128, 0.2);
   }
+
   50% {
     box-shadow: 0 0 0 12px rgba(0, 0, 128, 0);
   }
@@ -165,13 +160,30 @@
 .pulse-glow {
   animation: pulse-glow 2s ease-in-out infinite;
 }
+
 @keyframes moveRight {
   0% {
     width: 100vw;
     transform: translateX(-20%);
   }
+
   100% {
     width: 100vw;
     transform: translateX(0px);
   }
+}
+
+/* Custom Error Toast styling override to match light blue info toast style */
+[data-sonner-toast][data-type='error'] {
+  background-color: #eff6ff !important;
+  border-color: #dbeafe !important;
+  color: #1d4ed8 !important;
+}
+
+[data-sonner-toast][data-type='error'] [data-icon] {
+  color: #2563eb !important;
+}
+
+[data-sonner-toast][data-type='error'] svg {
+  color: #2563eb !important;
 }

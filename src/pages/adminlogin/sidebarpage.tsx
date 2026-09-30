@@ -68,16 +68,25 @@ export default function AdminSidebar() {
         <div
           className={`flex items-center gap-3 overflow-hidden ${sidebarCollapsed ? 'justify-center w-full' : ''}`}
         >
-          <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center font-black text-lg text-[#000080] shadow-md shrink-0 transform hover:scale-[1.02] transition-transform">
-            R1
-          </div>
+          <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-md shadow-[#002366]/25 shrink-0">
+              <svg
+                viewBox="15 15 60 60"
+                className="h-full w-full"
+                aria-label="CRISP logo mark"
+              >
+                <g fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="6">
+                  <path d="M66 27a24 24 0 1 0 0 36" />
+                </g>
+                <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
+              </svg>
+              </div>
           {!sidebarCollapsed && (
             <div className="flex flex-col">
               <span className="font-extrabold text-sm tracking-widest text-white uppercase">
                 CRISP
               </span>
               <span className="text-[9px] font-bold text-blue-200 uppercase tracking-widest leading-none mt-0.5">
-                Underwriting
+                CREDIT INTELLIGENCE
               </span>
             </div>
           )}

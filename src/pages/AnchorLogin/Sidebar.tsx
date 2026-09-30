@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { getAnchorBrand } from '@/lib/brandLogo';
 
+
 interface SidebarProps {
   sidebarCollapsed: boolean;
   setSidebarCollapsed: (collapsed: boolean) => void;
@@ -55,8 +56,17 @@ export default function Sidebar({
           className={`flex flex-col ${sidebarCollapsed ? 'items-center' : ''}`}
         >
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center font-black text-xl shadow-md shadow-[#002366]/25 shrink-0">
-              C
+            <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-md shadow-[#002366]/25 shrink-0">
+              <svg
+                viewBox="15 15 60 60"
+                className="h-full w-full"
+                aria-label="CRISP logo mark"
+              >
+                <g fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="6">
+                  <path d="M66 27a24 24 0 1 0 0 36" />
+                </g>
+                <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
+              </svg>
             </div>
             {!sidebarCollapsed && (
               <div className="leading-tight">
@@ -64,7 +74,7 @@ export default function Sidebar({
                   CRISP
                 </div>
                 <div className="text-[9.5px] uppercase font-bold text-gray-400 tracking-[0.2em] mt-0.5">
-                  UNDERWRITING
+                  CREDIT INTELLIGENCE
                 </div>
               </div>
             )}

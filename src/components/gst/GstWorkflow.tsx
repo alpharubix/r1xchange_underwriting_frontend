@@ -1,21 +1,31 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Step1GstinEntry from './Step1GstinEntry';
 import Step2BusinessInfo from './Step2BusinessInfo';
 import Step3OtpValidation from './Step3OtpValidation';
 import Step4Processing from './Step4Processing';
 
+interface GstWorkflowProps {
+  custId?: string;
+  onComplete?: () => void;
+  externalShowInstructions?: number;
+  onStepChange?: (step: number) => void;
+}
+
 export default function GstWorkflow({
   custId,
   onComplete,
-}: {
-  custId?: string;
-  onComplete?: () => void;
-}) {
+  externalShowInstructions,
+  onStepChange,
+}: GstWorkflowProps) {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [gstin, setGstin] = useState<string>('');
   const [gstReferenceId, setGstReferenceId] = useState<string>('');
   const [fromMonth, setFromMonth] = useState<string>('');
   const [toMonth, setToMonth] = useState<string>('');
+
+  useEffect(() => {
+    onStepChange?.(currentStep);
+  }, [currentStep, onStepChange]);
 
   useEffect(() => {
     // Check if there's an ongoing processing session in localStorage
@@ -121,6 +131,7 @@ export default function GstWorkflow({
             onBack={() => setCurrentStep(1)}
             onGstinChange={handleGstinChange}
             custId={custId}
+            externalShowInstructions={externalShowInstructions}
           />
         )}
 
