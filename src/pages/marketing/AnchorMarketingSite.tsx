@@ -1,5 +1,7 @@
 import { PricingSection } from './MarketingSite';
-import React, { useEffect, useState} from 'react';
+import React, { useEffect, useState, useRef} from 'react';
+import InteractiveWalletMontage from '../../components/InteractiveWalletMontage';
+import InteractiveAnchorDashboardMontage from '../../components/InteractiveAnchorDashboardMontage';
 import { 
   Eye,ShieldCheck,Building,CheckCircle2,Clock,TrendingUp,User,ChevronLeft,RefreshCw,Filter,Calendar,PieChart,ArrowRightLeft,Activity,ArrowLeftRight,BarChart2,Download} from 'lucide-react';
   import { CreditCard,UploadCloud,Smartphone } from 'lucide-react';
@@ -22,243 +24,13 @@ import {
 } from 'lucide-react';
 import { ActionLink } from './MarketingSite';
 import './anchor-marketing.css'
-function AnchorDashboardMontage() {
-  return (
-    <div className="group flex h-[250px] w-full bg-slate-50 overflow-hidden rounded-xl border shadow-sm text-left hover:animatio">
-      <div className="transition-all duration-300 group-hover:translate-x-[-40px] w-16 bg-[#002366] shrink-0 flex flex-col items-center py-4 gap-4">
-        <div className="w-8 h-8 bg-white/20 rounded-md" />
-        <div className="w-6 h-6 bg-white/10 rounded-full mt-4" />
-        <div className="w-6 h-6 bg-white/10 rounded-full" />
-      </div>
-      <div className="flex-1 p-4 flex flex-col gap-4 transition-transform duration-300 group-hover:translate-x-[-20px] group-hover:bg-blue-50">
-        <div className="flex justify-between items-center border-b pb-2">
-          <div className="font-bold text-slate-800 text-sm">Customer Dashboard</div>
-          <div className="bg-[#002366] text-white text-[10px] px-2 py-1 rounded">Add Customer</div>
-        </div>
-        <div className="space-y-2">
-          <div className="flex justify-between text-[10px] text-slate-500 font-semibold px-2">
-            <span>NAME</span>
-            <span>BSA</span>
-            <span>GST</span>
-            <span>ITR</span>
-            <span>CIBIL</span>
-            <span>Save<br/> money</span>
-            <span>Acess<br/> Money</span>
-            <span>Rectify<br/> Money</span>
-            <span>Wallet</span>
-          </div>
-          {[1,2,3].map(i => (
-            <div key={i} className="flex justify-between items-center bg-white p-2 border rounded shadow-sm text-xs">
-              <span className="font-medium">Cust {i}</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-slate-300 font-bold">-</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-green-600 font-bold">?</span>
-              <span className="text-green-600 font-bold">?</span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function WalletMontage() {
-  const services = [
-    "BSA Report",
-    "GST Analysis",
-    "ITR Returns",
-    "CIBIL Score",
-  ];
-
-  return (
-    <div className="flex h-full w-full items-center justify-center rounded-xl border bg-slate-50 p-4 shadow-sm">
-      <div className="relative flex w-[700px] items-center justify-center">
-
-        {/* LEFT BAR */}
-        <div
-          className="
-            absolute
-            left-[20px]
-            top-[145px]
-            z-10
-            h-[90px]
-            w-[190px]
-            rounded-l-[18px]
-            bg-[#4a6fa8]
-            shadow-lg
-          "
-          style={{
-            transform: "skewY(-5deg)",
-          }}
-        >
-          <div
-            className="flex h-full items-center justify-end pr-6 text-white"
-            style={{
-              transform: "skewY(5deg)",
-            }}
-          >
-            <div className="text-right">
-              <div className="text-sm font-bold">
-                Secure
-              </div>
-              <div className="text-xs opacity-80">
-                Wallet
-              </div>
-            </div>
-          </div>
-        </div>
 
 
-        {/* RIGHT BAR */}
-        <div
-          className="
-            absolute
-            right-[20px]
-            top-[145px]
-            z-10
-            h-[90px]
-            w-[190px]
-            rounded-r-[18px]
-            bg-[#4a6fa8]
-            shadow-lg
-          "
-          style={{
-            transform: "skewY(-5deg)",
-          }}
-        >
-          <div
-            className="flex h-full items-center pl-6 text-white"
-            style={{
-              transform: "skewY(5deg)",
-            }}
-          >
-            <div>
-              <div className="text-sm font-bold">
-                You can pay
-              </div>
-
-              <div className="text-xs opacity-80">
-                Assign Customer
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        {/* WALLET */}
-        <div className="relative z-20 w-[360px] overflow-hidden rounded-2xl border bg-white shadow-xl">
-
-          {/* Header */}
-          <div className="flex items-center justify-between bg-[#002366] p-5 text-white">
-
-            <div>
-              <div className="text-base font-bold">
-                Individual Wallet
-              </div>
-
-              <div className="text-xs opacity-80">
-                Available Balance
-              </div>
-            </div>
-
-            <div className="text-3xl font-bold">
-              ₹5,000
-            </div>
-
-          </div>
-
-
-          {/* Services */}
-          <div className="space-y-4 p-5">
-
-            <div className="text-xs font-bold text-slate-500">
-              ASSIGN SERVICES
-            </div>
-
-            {services.map((mod) => (
-              <div
-                key={mod}
-                className="
-                  flex
-                  items-center
-                  justify-between
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  py-3
-                  text-sm
-                  text-slate-700
-                "
-              >
-                <span>{mod}</span>
-
-                <span className={`font-medium ${mod=="BSA Report" ? "text-green":"text-red-500 "}`}>
-                 ₹ {mod== "BSA Report" ? 565 :0}
-                </span>
-              </div>
-            ))}
-
-            <button
-              className="
-                w-full
-                rounded-lg
-                py-2.5
-                text-xs
-                font-bold
-                text-white
-              "
-            >
-              Recharge Wallet
-            </button>
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-  );
-}
-
-
-function HierarchyMontage() {
-  return (
-    <div className="flex h-[400px] w-full bg-slate-50 overflow-hidden rounded-xl border shadow-sm text-left p-4">
-      <div className="flex-1 bg-white border rounded shadow-sm p-3">
-        <div className="text-sm font-bold text-[#002366] mb-3 border-b pb-2">User Management</div>
-        <div className="space-y-3 pl-2 border-l-2 border-[#002366]/20">
-          <div className="relative">
-            <div className="absolute -left-3.5 top-1.5 w-3 h-0.5 bg-[#002366]/20" />
-            <div className="bg-slate-50 border p-2 rounded text-xs font-medium">User 1 -  <span className='font-thinner text-[#002366]/45 italic'>View Customers under User 1</span>  </div>
-          </div>
-          <div className="relative">
-            <div className="absolute -left-3.5 top-1.5 w-3 h-0.5 bg-[#002366]/20" />
-            <div className="bg-slate-50 border p-2 rounded text-xs font-medium">User 2 - <span className='font-thinner text-[#002366]/45 italic'>View Customers under User 2</span></div>
-          </div>
-          <div className='relative -top-5'>
-            .
-          </div>
-          <div className='relative -top-12'>
-            .
-          </div>
-          <div className='relative -top-20'>
-            .
-          </div>
-        </div>
-        <div className="-mt- bg-slate-100 border border-dashed border-slate-300 text-slate-500 text-[10px] font-bold text-center py-1.5 rounded w-full">+ Create User</div>
-      </div>
-    </div>
-  );
-}
-
-
-
+  
 function Brand() {
   const [isLaunching, setIsLaunching] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const hoverTimer = useRef<number | null>(null);
 
   const handleClick = (e: React.MouseEvent) => {
     if (window.scrollY < 50) {
@@ -272,19 +44,57 @@ function Brand() {
     }
   };
 
+  const handleMouseEnter = () => {
+    hoverTimer.current = window.setTimeout(() => setIsHovered(true), 1500);
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    setIsHovered(false);
+  };
+
   return (
-    <Link className="brand" to="/anchors" aria-label="CRISP Anchor Home" onClick={handleClick}>
-      <img 
-        src={crispLogoBlack} 
-        alt="CRISP" 
-        className={isLaunching ? "logo-blast" : ""}
-        style={{ height: '67px' }} 
-      />
+    <Link 
+      className="brand flex items-center relative h-[67px]" 
+      to="/anchors" 
+      aria-label="CRISP Anchor Home" 
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {isHovered ? (
+        <div className="flex flex-col justify-center animate-fade-in pl-2">
+          <span className="text-[#001845] font-bold text-2xl leading-none">CRISP</span>
+          <span className="text-slate-500 text-[10px] font-semibold tracking-widest uppercase mt-1 animate-pulse">Financial Intelligence</span>
+        </div>
+      ) : (
+        <img 
+          src={crispLogoBlack} 
+          alt="CRISP" 
+          className={isLaunching ? "logo-blast" : "animate-fade-in"}
+          style={{ height: '67px' }} 
+        />
+      )}
     </Link>
   );
 }
 
-  function AnchorNavbar() {
+function HierarchyMontage() {
+  return (
+    <div className="flex h-[400px] w-full bg-slate-50 overflow-hidden rounded-xl border shadow-sm text-left p-4">
+      <div className="flex-1 bg-white border rounded shadow-sm p-3">
+        <div className="text-sm font-bold text-slate-800 mb-2">Anchor Ecosystem</div>
+        <div className="space-y-2">
+          <div className="p-2 border rounded bg-slate-50 text-xs">Dealer 1</div>
+          <div className="p-2 border rounded bg-slate-50 text-xs ml-4">Borrower A</div>
+          <div className="p-2 border rounded bg-slate-50 text-xs ml-4">Borrower B</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AnchorNavbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
   const location = useLocation();
@@ -712,7 +522,7 @@ export default function AnchorMarketingSite() {
               </ul>
             </div>
             <div className="h-[400px] w-full relative">
-              <AnchorDashboardMontage />
+              <InteractiveAnchorDashboardMontage />
             </div>
           </div>
         </section>
@@ -721,7 +531,7 @@ export default function AnchorMarketingSite() {
         <section className="section-pad bg-white" id="wallet">
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-12 items-center reveal">
             <div className="h-[400px] w-full relative order-2 md:order-1">
-              <WalletMontage />
+              <InteractiveWalletMontage />
             </div>
             <div className="order-1 md:order-2">
               <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-[#002366]/10 text-[#002366]">
@@ -809,7 +619,7 @@ export default function AnchorMarketingSite() {
                   </div>
                   <div className="space-y-1.5 flex-1">
                     <div className="flex justify-between items-center text-[10px] text-slate-500 bg-white p-1.5 rounded shadow-sm">
-                      <span>Salary Credit</span><span className="text-green-500 font-medium">+?45,000</span>
+                      <span>Salary Credit</span><span className="text-green-500 font-medium">+45,000</span>
                     </div>
                     <div className="flex justify-between items-center text-[10px] text-slate-500 bg-white p-1.5 rounded shadow-sm">
                       <span>EMI Payment</span><span className="text-red-500 font-medium">-?12,400</span>

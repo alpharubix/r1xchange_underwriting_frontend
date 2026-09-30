@@ -298,34 +298,57 @@ const workflows: Workflow[] = [
 
 function Brand() {
   const [isLaunching, setIsLaunching] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+  const hoverTimer = useRef<number | null>(null);
 
   const handleClick = (e: React.MouseEvent) => {
-    // If we are already at the top, or just as a fun effect, trigger the launch!
     if (window.scrollY < 50) {
-      e.preventDefault(); // Don't navigate if already at top
+      e.preventDefault();
       if (!isLaunching) {
         setIsLaunching(true);
-        setTimeout(() => setIsLaunching(false), 1200); // Reset after animation
+        setTimeout(() => setIsLaunching(false), 1200);
       }
     } else {
-      // Normal scroll to top behavior
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
 
+  const handleMouseEnter = () => {
+    hoverTimer.current = window.setTimeout(() => setIsHovered(true), 1500); // Wait 1.5s
+  };
+
+  const handleMouseLeave = () => {
+    if (hoverTimer.current) clearTimeout(hoverTimer.current);
+    setIsHovered(false);
+  };
+
   return (
-    <Link className="brand" to="/" aria-label="CRISP home" onClick={handleClick}>
-      <img
-        src={crispLogoBlack}
-        alt="CRISP"
-        className={isLaunching ? "logo-blast" : ""}
-        style={{ height: '70px', transition: 'transform 0.1s' }}
-      />
+    <Link 
+      className="brand flex items-center relative h-[70px]" 
+      to="/" 
+      aria-label="CRISP home" 
+      onClick={handleClick}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      {isHovered ? (
+        <div className="flex flex-col justify-center animate-fade-in pl-2">
+          <span className="text-[#001845] font-bold text-2xl leading-none">CRISP</span>
+          <span className="text-slate-500 text-[10px] font-semibold tracking-widest uppercase mt-1 animate-pulse">Financial Intelligence</span>
+        </div>
+      ) : (
+        <img 
+          src={crispLogoBlack} 
+          alt="CRISP" 
+          className={isLaunching ? "logo-blast" : "animate-fade-in"}
+          style={{ height: '70px', transition: 'transform 0.1s' }} 
+        />
+      )}
     </Link>
   );
 }
 
-export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
+  export function ActionLink({ to, children, secondary = false }: { to: string; children: ReactNode; secondary?: boolean }) {
   return (
     <Link className={secondary ? 'button button-secondary' : 'button button-primary'} to={to}>
       {children}<ArrowUpRight size={16} strokeWidth={2} />
