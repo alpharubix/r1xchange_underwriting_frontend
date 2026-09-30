@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,7 +27,6 @@ import { registerSchema, type RegisterFormValues } from '@/lib/zod-schemas';
 import { useRegister, getApiError } from '@/hooks/useAuth';
 import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
-import HomeIntro from '@/components/HomeIntro';
 
 const passwordRules = [
   { label: 'At least 8 characters', test: (p: string) => p.length >= 8 },
@@ -66,9 +65,7 @@ export default function SignupPage() {
   };
 
   return (
-    <>
-      <HomeIntro />
-      <div className="min-h-screen flex">
+    <div className="min-h-screen flex">
         {/* Left Panel */}
         <div className="hidden lg:flex w-1/2 bg-[#002366] flex-col items-center justify-center p-12 relative overflow-hidden">
           <div className="absolute inset-0 overflow-hidden">
@@ -375,7 +372,6 @@ export default function SignupPage() {
           </div>
         </div>
       </div>
-    </>
   );
 }
 

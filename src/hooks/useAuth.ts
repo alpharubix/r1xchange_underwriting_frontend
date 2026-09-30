@@ -100,6 +100,7 @@ export function useLogin() {
       ) {
         navigate('/anchors/dashboard');
       } else {
+        sessionStorage.removeItem('home_intro_shown');
         navigate('/home/dashboard');
       }
     },
@@ -182,6 +183,7 @@ export function useAnchorLogin() {
         localStorage.setItem('user_role', role);
       }
 
+      sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
     },
   });
