@@ -502,8 +502,12 @@ function Brand() {
 function AnchorFooter() {
   const groups = [
     { title: 'Platform', links: [{ label: 'Customer Management', to: '#customers' }, { label: 'Wallet', to: '#wallet' }, { label: 'Hierarchy', to: '#hierarchy' }, { label: 'Service Reports', to: '#reports' }] },
-    { title: 'Company', links: [{ label: 'About', to: '#company' }, { label: 'Contact', to: 'mailto:support@checkcrisp.com' }] },
-    { title: 'Resources', links: [{ label: 'Documentation', to: '#resources' }, { label: 'FAQs', to: '#resources' }] },
+    { title: 'Company', links: [
+      // { label: 'About', to: '#company' }, 
+      { label: 'Contact', to: 'mailto:support@checkcrisp.com' }] },
+    // { title: 'Resources', links: [
+    //   { label: 'Documentation', to: '#resources' },
+    //    { label: 'FAQs', to: '#resources' }] },
     { title: 'Legal', links: [{ label: 'Privacy policy', to: '#privacy' }, { label: 'Terms & conditions', to: '#terms' }] },
   ];
   return (
@@ -514,7 +518,7 @@ function AnchorFooter() {
             <ArrowUpRightIcon size={14}/></a>
         </div>
 
-        {groups.map((group) => <div className="footer-group" key={group.title}><h3>{group.title}</h3>{group.links.map((item) => item.to.startsWith('/') ? <Link to={item.to} key={item.label}>{item.label}</Link> : <a href={item.to} key={item.label}>{item.label}</a>)}</div>)}
+        {groups.map((group) => <div className="footer-group" key={group.title}><h3 className='font-bold'>{group.title}</h3>{group.links.map((item) => item.to.startsWith('/') ? <Link to={item.to} key={item.label}>{item.label}</Link> : <a href={item.to} key={item.label}>{item.label}</a>)}</div>)}
       </div>
       <div className="footer-bottom"><span> {new Date().getFullYear()} AlphaRubix Info Tech</span><span>Developed by CRISP tech team</span></div>
     </footer>
