@@ -157,7 +157,7 @@ export default function AnchorLoginPage() {
 
         {/* Footer Credit */}
         <div className="relative z-10 text-xs text-white/40 font-medium tracking-wide">
-          © 2025 CRISP. All rights reserved.
+          ©  2026 CRISP. All rights reserved.
         </div>
       </div>
 

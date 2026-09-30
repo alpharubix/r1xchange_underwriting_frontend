@@ -1826,7 +1826,7 @@ export default function AnchorMarketingSite() {
                               <tr>
                                 <th className="py-1.5 px-3 text-left font-bold border-r border-[#001845]">Particulars</th>
                                 <th className="py-1.5 px-3 text-right font-bold border-r border-[#001845] w-24">2024</th>
-                                <th className="py-1.5 px-3 text-right font-bold w-24">2025</th>
+                                <th className="py-1.5 px-3 text-right font-bold w-24"> 2026</th>
                               </tr>
                             </thead>
                             <tbody>
@@ -1854,7 +1854,7 @@ export default function AnchorMarketingSite() {
                           <tr>
                             <th className="py-2 px-3 text-left font-bold border-r border-[#001845]">Particulars</th>
                             <th className="py-2 px-3 text-right font-bold border-r border-[#001845] w-24">2024</th>
-                            <th className="py-2 px-3 text-right font-bold w-24">2025</th>
+                            <th className="py-2 px-3 text-right font-bold w-24"> 2026</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -1898,7 +1898,7 @@ export default function AnchorMarketingSite() {
                             <tr>
                               <th className="py-1.5 px-3 text-left font-bold border-r border-[#001845]">Particulars</th>
                               <th className="py-1.5 px-3 text-right font-bold border-r border-[#001845] w-24">2024</th>
-                              <th className="py-1.5 px-3 text-right font-bold w-24">2025</th>
+                              <th className="py-1.5 px-3 text-right font-bold w-24"> 2026</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -1917,7 +1917,7 @@ export default function AnchorMarketingSite() {
                             <tr>
                               <th className="py-1.5 px-3 text-left font-bold border-r border-[#001845]">Particulars</th>
                               <th className="py-1.5 px-3 text-right font-bold border-r border-[#001845] w-24">2024</th>
-                              <th className="py-1.5 px-3 text-right font-bold w-24">2025</th>
+                              <th className="py-1.5 px-3 text-right font-bold w-24"> 2026</th>
                             </tr>
                           </thead>
                           <tbody>
@@ -2187,9 +2187,9 @@ export default function AnchorMarketingSite() {
                               <div className="flex-1 px-0.5"><div className="w-full py-1 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded text-center font-medium text-[6px]">000/XXX</div></div>
                               <div className="flex-1 px-0.5"><div className="w-full py-1 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded text-center font-medium text-[6px]">000/XXX</div></div>
                             </div>
-                            {/* 2025 */}
+                            {/*  2026 */}
                             <div className="flex items-center text-[7px]">
-                              <div className="w-8 font-bold text-slate-800 flex items-center gap-1"><Calendar size={8} /> 2025</div>
+                              <div className="w-8 font-bold text-slate-800 flex items-center gap-1"><Calendar size={8} />  2026</div>
                               <div className="flex-1 px-0.5"><div className="w-full py-1 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded text-center font-medium text-[6px]">000/XXX</div></div>
                               <div className="flex-1 px-0.5"><div className="w-full py-1 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded text-center font-medium text-[6px]">000/XXX</div></div>
                               <div className="flex-1 px-0.5"><div className="w-full py-1 bg-emerald-50 border border-emerald-200 text-emerald-600 rounded text-center font-medium text-[6px]">000/XXX</div></div>

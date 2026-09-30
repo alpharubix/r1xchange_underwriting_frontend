@@ -545,7 +545,7 @@ function GstScreenPreview({ stepIndex }: { stepIndex: number }) {
       return <><div className="gst-preview-status gst-preview-processing"><span className="gst-preview-spinner" /><strong>Analysis in progress</strong></div><div className="gst-preview-progress"><span /></div><small>Checking GST data and preparing your report</small></>;
     }
     if (stepIndex === 4) {
-      return <><div className="gst-preview-history-head"><strong>GST Analysis History</strong><button>New Analysis</button></div><div className="gst-preview-table"><span>GSTIN</span><span>Period</span><span>Status</span><b>29ABCDE1234F1Z5</b><b>Jan - Aug 2026</b><em>COMPLETED</em><b>27PQRSX5678K2Z6</b><b>Jan - Dec 2025</b><em>PROCESSING</em></div></>;
+      return <><div className="gst-preview-history-head"><strong>GST Analysis History</strong><button>New Analysis</button></div><div className="gst-preview-table"><span>GSTIN</span><span>Period</span><span>Status</span><b>29ABCDE1234F1Z5</b><b>Jan - Aug 2026</b><em>COMPLETED</em><b>27PQRSX5678K2Z6</b><b>Jan - Dec  2026</b><em>PROCESSING</em></div></>;
     }
     return <><div className="gst-preview-report-head"><strong>GSTR Report</strong><button><ArrowUpRight size={10} /> Export Report</button></div><div className="gst-preview-tabs"><b>GSTR Overview</b><span>Top Suppliers & Customers</span><span>Monthly Summary</span></div><div className="gst-preview-report-lines"><span /><span /><span /><span /><span /></div></>;
   };
@@ -559,7 +559,7 @@ function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
   const reportTabs = [{ key: 'overview', label: 'Overview' }, { key: 'account', label: 'Account Summary' }, { key: 'payments', label: 'Payments History' }, { key: 'analysis', label: 'Analysis' }] as const;
   const paymentYears = [
     { year: '2026', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '-', '-', '-', '-', '-', '-'] },
-    { year: '2025', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
+    { year: ' 2026', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
     { year: '2024', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
     { year: '2023', cells: ['000/XXX', '000/XXX', 'XXX/XXX', 'XXX/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
     { year: '2022', cells: ['-', '-', '-', '-', '-', '-', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
