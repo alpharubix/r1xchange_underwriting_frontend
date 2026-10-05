@@ -370,3 +370,33 @@ export const checkServiceConsent = async (
     status: response.status,
   };
 };
+
+// ─── Give Service Consent API ─────────────────────────────────────────────────
+
+export interface GiveServiceConsentResponse {
+  consent?: boolean;
+  status_code?: number;
+  data?: any;
+  message?: string;
+}
+
+export const giveServiceConsent = async (
+  service: string = 'gst'
+): Promise<{ data: GiveServiceConsentResponse; status: number }> => {
+  // const config = { params: { cust_id: data } };
+  const response = await apiClient.post(
+    `/user/give-consent/${service}`,
+    {
+      skipErrorToast: true,
+    }
+  );
+  return {
+    data: response.data,
+    status: response.status,
+  };
+};
+
+export const giveConsent = giveServiceConsent;
+
+
+

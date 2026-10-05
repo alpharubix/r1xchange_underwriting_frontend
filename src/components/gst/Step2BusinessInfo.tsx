@@ -7,6 +7,7 @@ import {
   getGstin,
   addNewGstin,
   checkServiceConsent,
+  giveServiceConsent,
 } from '@/api/gst';
 import { toast } from 'sonner';
 import GstTermsModal from '@/pages/gst/GstTerm&Condition';
@@ -322,8 +323,13 @@ export default function Step2BusinessInfo({
     handleConfirmStartAnalysis();
   };
 
-  const handleConfirmStartAnalysis = () => {
+  const handleConfirmStartAnalysis = async () => {
     setGstTermsAccepted(true);
+    try {
+      await giveServiceConsent('gst');
+    } catch (err) {
+      console.error('Error giving GST service consent:', err);
+    }
     submitMutation.mutate({
       gstin: activeGstin,
       from_month: fromMonth,

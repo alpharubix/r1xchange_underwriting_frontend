@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { generateCibilOtp, checkServiceConsent } from '@/api/cibil';
+import { generateCibilOtp, checkServiceConsent, giveServiceConsent } from '@/api/cibil';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -102,6 +102,11 @@ async function submitIdentityDetails(
   payload: CibilIdentityPayload,
   custId?: string
 ) {
+  try {
+    await giveServiceConsent('cibil');
+  } catch (err) {
+    console.error('Error giving CIBIL service consent:', err);
+  }
   const response = await generateCibilOtp(payload, undefined, custId);
 
   return {
