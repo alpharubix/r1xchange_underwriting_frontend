@@ -72,12 +72,14 @@ export default function WalletProtectedComponent({
       </div>
     );
   }
+  
   if (isLoading) {
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
-      <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-    </div>
-  );
+    console.log('Loading wallet balance...');
+  // return (
+  //   <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+  //     <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+  //   </div>
+  // );
 }
   const child = children as ReactElement<{
     isBalanceAvailable?: boolean;
