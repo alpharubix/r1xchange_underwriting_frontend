@@ -590,7 +590,7 @@ export default function Step2BusinessInfo({
                           ) : (
                             <button
                               type="submit"
-                              disabled={submitMutation.isPending}
+                              disabled={submitMutation.isPending || gstTermsAccepted==false}
                               className="bg-[#002366] hover:bg-[#001744] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                             >
                               {submitMutation.isPending ? (

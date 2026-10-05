@@ -515,8 +515,8 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
 
         <button
           type="submit"
-          disabled={identityMutation.isPending}
-          className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+          disabled={identityMutation.isPending || !isTncAccepted}
+          className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center cursor-pointer"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />

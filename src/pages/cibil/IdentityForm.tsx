@@ -550,8 +550,8 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
         <button
           type="submit"
-          disabled={identityMutation.isPending}
-          className="w-full bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          disabled={identityMutation.isPending || !cibilTermsAccepted}
+          className="w-full bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />

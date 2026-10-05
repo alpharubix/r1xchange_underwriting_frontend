@@ -61,6 +61,7 @@ export default function SignupPage() {
 
   const navigate = useNavigate();
   const passwordValue = watch('password', '');
+  const isTncAccepted = watch('checkbox');
   const passwordStrength = passwordRules.filter((r) =>
     r.test(passwordValue)
   ).length;
@@ -403,6 +404,7 @@ export default function SignupPage() {
                 {/* Submit */}
                 <Button
                   type="submit"
+                  disabled={registerMutation.isPending || !isTncAccepted}
                   className="w-full h-12 text-base gap-2 bg-[#002366] text-white font-semibold flex items-center justify-center border border-transparent transition-all duration-1000 ease-out hover:bg-gray-200 hover:text-black hover:border-black hover:shadow-lg"
                   id="signup-submit"
                 >
