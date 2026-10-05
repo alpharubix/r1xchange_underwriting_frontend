@@ -117,7 +117,8 @@ function App() {
                     <Route path="/signup" element={<SignupPage />} />
                     <Route
                       path="/forgot-password"
-                      element={<ForgotPasswordPage />}
+                      element={<ForgotPasswordPage />
+                      }
                     />
                   </Route>
 

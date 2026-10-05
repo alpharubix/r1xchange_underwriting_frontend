@@ -4,7 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { generateCibilOtp, giveServiceConsent } from '@/api/cibil';
+import { generateCibilOtp} from '@/api/cibil';
+import { checkServiceConsent,giveServiceConsent } from '@/api/user';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -107,7 +108,7 @@ async function submitIdentityDetails(payload: CibilIdentityPayload) {
   return {
     otp_flow_id: response.data.otp_flow_id,
     payload,
-  };
+  }; 
 }
 export default function IdentityForm({ onNext }: IdentityFormProps) {
   const [formValues, setFormValues] =

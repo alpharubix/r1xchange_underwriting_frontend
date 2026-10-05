@@ -6,13 +6,13 @@ import {
   submitGst,
   getGstin,
   addNewGstin,
-  checkServiceConsent,
-  giveServiceConsent,
 } from '@/api/gst';
+
+import { checkServiceConsent } from '@/api/user';
 import { toast } from 'sonner';
 import GstTermsModal from '@/pages/gst/GstTerm&Condition';
 
-interface Step2Props {
+interface Step2Props { 
   gstin: string;
   onSuccessSubmit: (gstReferenceId: string) => void;
   onRequiresAuth: (fromMonth: string, toMonth: string) => void;
@@ -75,7 +75,7 @@ export default function Step2BusinessInfo({
     return () => {
       isMounted = false;
     };
-  }, [custId]);
+  }, []);
 
 
 

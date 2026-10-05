@@ -418,29 +418,4 @@ export const checkServiceConsent = async (
 
 // ─── Give Service Consent API ─────────────────────────────────────────────────
 
-export interface GiveServiceConsentResponse {
-  consent?: boolean;
-  status_code?: number;
-  data?: any;
-  message?: string;
-}
-
-export const giveServiceConsent = async (
-  service: string = 'cibil'
-): Promise<{ data: GiveServiceConsentResponse; status: number }> => {
-  const response = await apiClient.post(
-    `/user/give-consent/${service}`,
-    {
-      skipErrorToast: true,
-    }
-  );
-  return {
-    data: response.data,
-    status: response.status,
-  };
-};
-
-export const giveConsent = giveServiceConsent;
-
-
 

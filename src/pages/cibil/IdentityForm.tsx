@@ -4,7 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { generateCibilOtp, checkServiceConsent, giveServiceConsent } from '@/api/cibil';
+import { generateCibilOtp} from '@/api/cibil';
+import {checkServiceConsent,giveServiceConsent } from '@/api/user';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -129,6 +130,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
       .then((res) => {
         if (!isMounted) return;
         const resData = res?.data;
+        console.log('CIBIL service consent check response:', resData);
         const hasConsent =
           resData?.consent === true ||
           resData?.data?.consent === true ||
@@ -155,7 +157,7 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
     return () => {
       isMounted = false;
     };
-  }, [custId]);
+  },[]);
   const identityMutation = useMutation({
     mutationFn: (payload: CibilIdentityPayload) =>
       submitIdentityDetails(payload, custId),
