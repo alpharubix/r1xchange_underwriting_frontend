@@ -19,7 +19,7 @@ export default function WalletProtectedComponent({
   const hasRedirected = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['wallet-access', service],
     queryFn: () => getWalletBalance(service),
     staleTime: 0,
@@ -28,9 +28,7 @@ export default function WalletProtectedComponent({
 
   useEffect(() => {
     if (
-      !isLoading &&
-      (isError || !data?.data?.is_balance_available) &&
-      !hasRedirected.current
+      !isLoading &&(isError || !data?.data?.is_balance_available) && !hasRedirected.current
     ) {
       hasRedirected.current = true;
       setIsRedirecting(true);
@@ -46,9 +44,7 @@ export default function WalletProtectedComponent({
     }
   }, [isLoading, isError, data?.data?.is_balance_available, service, navigate]);
 
-  if (isFetching) {
-    console.log('Fetching wallet balance...');
-  }
+ 
 
   if (isRedirecting) {
     return (
@@ -76,7 +72,13 @@ export default function WalletProtectedComponent({
       </div>
     );
   }
-
+  if (isLoading) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
+      <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+    </div>
+  );
+}
   const child = children as ReactElement<{
     isBalanceAvailable?: boolean;
   }>;
