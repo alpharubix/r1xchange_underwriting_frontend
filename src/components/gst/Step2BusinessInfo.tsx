@@ -1,10 +1,18 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useQuery, useMutation, useQueries } from '@tanstack/react-query';
-    
-import { fetchBasicInfo, submitGst, getGstin, addNewGstin } from '@/api/gst';
-import { toast } from 'sonner';
 
-interface Step2Props {
+import {
+  fetchBasicInfo,
+  submitGst,
+  getGstin,
+  addNewGstin,
+} from '@/api/gst';
+
+import { checkServiceConsent , giveServiceConsent} from '@/api/user';
+import { toast } from 'sonner';
+import GstTermsModal from '@/pages/gst/GstTerm&Condition';
+
+interface Step2Props { 
   gstin: string;
   onSuccessSubmit: (gstReferenceId: string) => void;
   onRequiresAuth: (fromMonth: string, toMonth: string) => void;
@@ -30,13 +38,45 @@ export default function Step2BusinessInfo({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGstin, setNewGstin] = useState('');
   const [showInstructionsModal, setShowInstructionsModal] = useState(true);
+  const [isGstTermsOpen, setIsGstTermsOpen] = useState(false);
+  const [gstTermsAccepted, setGstTermsAccepted] = useState(false);
+  const [isTermsDisabled, setIsTermsDisabled] = useState(false);
 
   useEffect(() => {
     if (externalShowInstructions) {
       setShowInstructionsModal(true);
     }
   }, [externalShowInstructions]);
- 
+
+  // Check Service Consent for 'gst' when component renders
+  useEffect(() => {
+    let isMounted = true;
+    checkServiceConsent('gst', custId)
+      .then((res) => {
+        if (!isMounted) return;
+        const resData = res?.data;
+        const hasConsent =
+          resData?.consent === true ||
+          resData?.data?.consent === true ||
+          (resData as any)?.is_consent_given === true;
+
+        if (hasConsent) {
+          setGstTermsAccepted(true);
+          setIsTermsDisabled(true);
+        } else {
+          setGstTermsAccepted(false);
+          setIsTermsDisabled(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Error checking GST service consent:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
 
 
 
@@ -70,9 +110,9 @@ export default function Step2BusinessInfo({
         ? gstinData.gst_number
         : typeof gstinData.gst_number === 'string'
           ? gstinData.gst_number
-              .split(',')
-              .map((g: string) => g.trim())
-              .filter(Boolean)
+            .split(',')
+            .map((g: string) => g.trim())
+            .filter(Boolean)
           : [];
       list = rawList
         .map((g: any) =>
@@ -151,9 +191,9 @@ export default function Step2BusinessInfo({
         ? gstinData.gst_number
         : typeof gstinData.gst_number === 'string'
           ? gstinData.gst_number
-              .split(',')
-              .map((g: string) => g.trim())
-              .filter(Boolean)
+            .split(',')
+            .map((g: string) => g.trim())
+            .filter(Boolean)
           : [];
       list = rawList
         .map((g: any) =>
@@ -177,7 +217,7 @@ export default function Step2BusinessInfo({
           ),
           ...list,
           ...(safePropGstin &&
-          GSTIN_REGEX.test(String(safePropGstin).toUpperCase().trim())
+            GSTIN_REGEX.test(String(safePropGstin).toUpperCase().trim())
             ? [String(safePropGstin).toUpperCase().trim()]
             : []),
         ])
@@ -275,6 +315,21 @@ export default function Step2BusinessInfo({
       return;
     }
 
+    if (!gstTermsAccepted) {
+      setIsGstTermsOpen(true);
+      return;
+    }
+
+    handleConfirmStartAnalysis();
+  };
+
+  const handleConfirmStartAnalysis = async () => {
+    setGstTermsAccepted(true);
+    try {
+      await giveServiceConsent('gst');
+    } catch (err) {
+      console.error('Error giving GST service consent:', err);
+    }
     submitMutation.mutate({
       gstin: activeGstin,
       from_month: fromMonth,
@@ -484,6 +539,33 @@ export default function Step2BusinessInfo({
                                 maxLength={6}
                               />
                             </div>
+                            <div className="flex items-center gap-2 pt-2 col-span-2">
+                              <input
+                                id="gstTerms"
+                                type="checkbox"
+                                className="h-4 w-4 rounded border-gray-300 text-[#002366] focus:ring-[#002366] accent-[#002366] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+                                checked={gstTermsAccepted}
+                                disabled={isTermsDisabled}
+                                onChange={(event) =>
+                                  setGstTermsAccepted(event.target.checked)
+                                }
+                                required={!isTermsDisabled}
+                              />
+                              <label
+                                htmlFor="gstTerms"
+                                className={`text-sm font-normal text-slate-700 ${isTermsDisabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
+                              >
+                                I agree to the{' '}
+                                <button
+                                  type="button"
+                                  disabled={isTermsDisabled}
+                                  onClick={() => setIsGstTermsOpen(true)}
+                                  className="text-blue-600 hover:underline font-medium focus:outline-none cursor-pointer disabled:no-underline disabled:cursor-not-allowed disabled:text-slate-500"
+                                >
+                                  GST terms and conditions
+                                </button>
+                              </label>
+                            </div>
                           </div>
 
                           {needsAuth ? (
@@ -508,7 +590,7 @@ export default function Step2BusinessInfo({
                           ) : (
                             <button
                               type="submit"
-                              disabled={submitMutation.isPending}
+                              disabled={submitMutation.isPending || gstTermsAccepted==false}
                               className="bg-[#002366] hover:bg-[#001744] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                             >
                               {submitMutation.isPending ? (
@@ -685,6 +767,13 @@ export default function Step2BusinessInfo({
           </div>
         </div>
       )}
+
+      {/* GST Terms & Conditions Modal */}
+      <GstTermsModal
+        isOpen={isGstTermsOpen}
+        onClose={() => setIsGstTermsOpen(false)}
+        onAccept={handleConfirmStartAnalysis}
+      />
     </div>
   );
 }

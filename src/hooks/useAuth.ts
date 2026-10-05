@@ -47,13 +47,8 @@ function getApiError(error: unknown): string {
 
 // ─── useRegister ─────────────────────────────────────────────────────────────
 export function useRegister() {
-  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: RegisterPayload) => registerUser(data),
-    onSuccess: () => {
-      // Registration complete — send user to login to sign in
-      navigate('/login');
-    },
   });
 }
 

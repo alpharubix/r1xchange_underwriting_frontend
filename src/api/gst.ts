@@ -342,5 +342,61 @@ export const downloadGstReport = async (
       'Failed to download GST report';
     throw new Error(msg);
   }
-  
 };
+
+// ─── Check Service Consent API ────────────────────────────────────────────────
+
+// export interface CheckServiceConsentResponse {
+//   consent?: boolean;
+//   status_code?: number;
+//   data?: {
+//     consent?: boolean;
+//     status_code?: number;
+//   };
+//   message?: string;
+// }
+
+// export const checkServiceConsent = async (
+//   service: string = 'gst',
+//   custId?: string
+// ): Promise<{ data: CheckServiceConsentResponse; status: number }> => {
+//   const config = custId ? { params: { cust_id: custId } } : {};
+//   const response = await apiClient.post(`/user/check-consent/${service}`, {
+//     ...config,
+//     skipErrorToast: true,
+//   });
+//   return {
+//     data: response.data,
+//     status: response.status,
+//   };
+// };
+
+// ─── Give Service Consent API ─────────────────────────────────────────────────
+
+// export interface GiveServiceConsentResponse {
+//   consent?: boolean;
+//   status_code?: number;
+//   data?: any;
+//   message?: string;
+// }
+
+// export const giveServiceConsent = async (
+//   service: string = 'gst'
+// ): Promise<{ data: GiveServiceConsentResponse; status: number }> => {
+//   // const config = { params: { cust_id: data } };
+//   const response = await apiClient.post(
+//     `/user/give-consent/${service}`,
+//     {
+//       skipErrorToast: true,
+//     }
+//   );
+//   return {
+//     data: response.data,
+//     status: response.status,
+//   };
+// };
+
+// export const giveConsent = giveServiceConsent;
+
+
+

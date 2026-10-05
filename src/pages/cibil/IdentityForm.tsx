@@ -1,10 +1,11 @@
-﻿import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { generateCibilOtp } from '@/api/cibil';
+import { generateCibilOtp} from '@/api/cibil';
+import { checkServiceConsent, giveServiceConsent } from '@/api/user';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -12,6 +13,7 @@ import type {
   CibilGenerateOtpField,
   CibilIdentityPayload,
 } from './types';
+import CibilTermsModal from './CibilTerms&Condition';
 
 interface IdentityFormProps {
   onNext: (payload: CibilIdentityPayload, otpFlowId: string) => void;
@@ -101,6 +103,11 @@ async function submitIdentityDetails(
   payload: CibilIdentityPayload,
   custId?: string
 ) {
+  try {
+    await giveServiceConsent('cibil');
+  } catch (err) {
+    console.error('Error giving CIBIL service consent:', err);
+  }
   const response = await generateCibilOtp(payload, undefined, custId);
 
   return {
@@ -113,6 +120,44 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
     useState<CibilIdentityPayload>(defaultValues);
   const [fieldErrors, setFieldErrors] = useState<CibilFieldErrors>({});
   const [identityType, setIdentityType] = useState('PAN');
+  const [cibilTermsAccepted, setCibilTermsAccepted] = useState(false);
+  const [isTermsDisabled, setIsTermsDisabled] = useState(false);
+  const [showCibilTermsModal, setShowCibilTermsModal] = useState(false);
+
+  useEffect(() => {
+    let isMounted = true;
+    checkServiceConsent('cibil', custId)
+      .then((res) => {
+        if (!isMounted) return;
+        const resData = res?.data;
+        console.log('CIBIL service consent check response:', resData);
+        const hasConsent =
+          resData?.consent === true ||
+          resData?.data?.consent === true ||
+          (resData as any)?.is_consent_given === true;
+
+        if (hasConsent) {
+          setCibilTermsAccepted(true);
+          setIsTermsDisabled(true);
+          setFieldErrors((current) => {
+            if (!current.cibilTerms) return current;
+            const next = { ...current };
+            delete next.cibilTerms;
+            return next;
+          });
+        } else {
+          setCibilTermsAccepted(false);
+          setIsTermsDisabled(false);
+        }
+      })
+      .catch((err) => {
+        console.error('Error checking CIBIL service consent:', err);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  },[]);
   const identityMutation = useMutation({
     mutationFn: (payload: CibilIdentityPayload) =>
       submitIdentityDetails(payload, custId),
@@ -186,6 +231,10 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
 
     if (!formValues.identity.trim()) {
       nextFieldErrors.identity = 'Identity is required';
+    }
+
+    if (!cibilTermsAccepted) {
+      nextFieldErrors.cibilTerms = 'Please accept the CIBIL terms and conditions';
     }
 
     if (Object.keys(nextFieldErrors).length > 0) {
@@ -461,11 +510,48 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
             {renderFieldError('identity')}
           </div>
         </div>
+        {/* Cibil terms and condition */}
+        <div>
+          <div className="flex items-center gap-2 pt-2">
+            <input
+              id="cibilTerms"
+              type="checkbox"
+              className="h-4 w-4 rounded border-gray-300 text-[#002366] focus:ring-[#002366] accent-[#002366] cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed"
+              checked={cibilTermsAccepted}
+              disabled={isTermsDisabled}
+              onChange={(event) => {
+                clearFieldError('cibilTerms');
+                setCibilTermsAccepted(event.target.checked);
+              }}
+              required={!isTermsDisabled}
+            />
+            <label
+              htmlFor="cibilTerms"
+              className={`text-sm font-normal text-gray-700 ${isTermsDisabled ? 'cursor-not-allowed opacity-75' : 'cursor-pointer'}`}
+            >
+              I agree to the{' '}
+              <button
+                type="button"
+                disabled={isTermsDisabled}
+                onClick={() => setShowCibilTermsModal(true)}
+                className="text-blue-600 hover:underline font-medium focus:outline-none disabled:no-underline disabled:cursor-not-allowed disabled:text-slate-500"
+              >
+                CIBIL terms and conditions
+              </button>
+            </label>
+          </div>
+          {renderFieldError('cibilTerms')}
+        </div>
+
+        <CibilTermsModal
+          isOpen={showCibilTermsModal}
+          onClose={() => setShowCibilTermsModal(false)}
+        />
 
         <button
           type="submit"
-          disabled={identityMutation.isPending}
-          className="w-full bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-70 flex justify-center items-center"
+          disabled={identityMutation.isPending || !cibilTermsAccepted}
+          className="w-full bg-[#002366] hover:bg-[#002366]/50 text-white font-medium py-2 px-4 rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />
@@ -476,3 +562,4 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
     </div>
   );
 }
+

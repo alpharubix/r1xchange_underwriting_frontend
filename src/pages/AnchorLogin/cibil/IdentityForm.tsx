@@ -1,10 +1,11 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
-import { generateCibilOtp } from '@/api/cibil';
+import { generateCibilOtp} from '@/api/cibil';
+import { giveServiceConsent } from '@/api/user';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -12,6 +13,7 @@ import type {
   CibilGenerateOtpField,
   CibilIdentityPayload,
 } from './types';
+import CibilTermsModal from '@/pages/cibil/CibilTerms&Condition';
 
 interface IdentityFormProps {
   onNext: (payload: CibilIdentityPayload, otpFlowId: string) => void;
@@ -96,17 +98,24 @@ const stateOptions = [
 ];
 
 async function submitIdentityDetails(payload: CibilIdentityPayload) {
+  try {
+    await giveServiceConsent('cibil');
+  } catch (err) {
+    console.error('Error giving CIBIL service consent:', err);
+  }
   const response = await generateCibilOtp(payload);
 
   return {
     otp_flow_id: response.data.otp_flow_id,
     payload,
-  };
+  }; 
 }
 export default function IdentityForm({ onNext }: IdentityFormProps) {
   const [formValues, setFormValues] =
     useState<CibilIdentityPayload>(defaultValues);
   const [fieldErrors, setFieldErrors] = useState<CibilFieldErrors>({});
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isTncAccepted, setIsTncAccepted] = useState(false);
   const [identityType, setIdentityType] = useState('PAN');
   const identityMutation = useMutation({
     mutationFn: submitIdentityDetails,
@@ -180,6 +189,10 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
 
     if (!formValues.identity.trim()) {
       nextFieldErrors.identity = 'Identity is required';
+    }
+
+    if (!isTncAccepted) {
+      nextFieldErrors.tnc = 'You must accept the Terms & Conditions';
     }
 
     if (Object.keys(nextFieldErrors).length > 0) {
@@ -457,10 +470,53 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
           </div>
         </div>
 
+        {/* Terms & Conditions */}
+        <div>
+          <div className="flex items-start gap-2 pt-2">
+            <input
+              id="tnc"
+              type="checkbox"
+              className="h-4 w-4 rounded-md border-gray-300 text-[#002366] focus:ring-[#002366] mt-1 cursor-pointer"
+              checked={isTncAccepted}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setIsTncAccepted(checked);
+                if (checked) {
+                  clearFieldError('tnc');
+                }
+              }}
+              required
+            />
+            <label
+              htmlFor="tnc"
+              className="text-sm text-gray-700 leading-relaxed cursor-pointer"
+            >
+              I accept the{' '}
+              <button
+                type="button"
+                onClick={() => setIsTermsOpen(true)}
+                className="text-sm font-medium text-[#002366] underline hover:text-[#001744] cursor-pointer"
+              >
+                Terms &amp; Conditions
+              </button>
+            </label>
+          </div>
+          {renderFieldError('tnc')}
+        </div>
+
+        <CibilTermsModal
+          isOpen={isTermsOpen}
+          onClose={() => setIsTermsOpen(false)}
+          onAccept={() => {
+            clearFieldError('tnc');
+            setIsTncAccepted(true);
+          }}
+        />
+
         <button
           type="submit"
-          disabled={identityMutation.isPending}
-          className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
+          disabled={identityMutation.isPending || !isTncAccepted}
+          className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center cursor-pointer"
         >
           {identityMutation.isPending ? (
             <Loader2 className="h-5 w-5 animate-spin mr-2" />
