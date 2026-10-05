@@ -19,7 +19,7 @@ export default function WalletProtectedComponent({
   const hasRedirected = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { data, isLoading, isFetching, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['wallet-access', service],
     queryFn: () => getWalletBalance(service),
     staleTime: 0,
