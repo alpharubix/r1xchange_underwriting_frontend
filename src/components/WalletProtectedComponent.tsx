@@ -3,7 +3,7 @@ import type { ReactElement, ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { getWalletBalance } from '@/api/payment';
-import crispLogoBlackWebView from '@/assets/crispLogoRedesign.png';
+import crispLogoBlackWebView from '@/assets/crispLogoBlack.svg';
 import { useNavigate } from 'react-router-dom';
 
 interface WalletProtectedComponentProps {
@@ -19,7 +19,7 @@ export default function WalletProtectedComponent({
   const hasRedirected = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['wallet-access', service],
     queryFn: () => getWalletBalance(service),
     staleTime: 0,
@@ -46,25 +46,25 @@ export default function WalletProtectedComponent({
     }
   }, [isLoading, isError, data?.data?.is_balance_available, service, navigate]);
 
-  // if (isFetching) {
-  //   return (
-  //     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
-  //       {/* Logo */}
-  //       <div className="mb-8 flex items-center justify-center">
-  //         <img
-  //           src={crispLogoBlackWebView}
-  //           alt="CRISP"
-  //           className="h-30 w-auto animate-float"
-  //         />
-  //       </div>
-  //       {/* Message */}
-  //       <h1 className="rounded-lg  p-5 text-center text-xl font-semibold text-gray-700 ">
-  //         Checking wallet balance for {service} reports...
-  //       </h1>
-  //       <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
-  //     </div>
-  //   );
-  // }
+  if (isFetching) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-white">
+        {/* Logo */}
+        <div className="mb-8 flex items-center justify-center">
+          <img
+            src={crispLogoBlackWebView}
+            alt="CRISP"
+            className="h-30 w-auto animate-float"
+          />
+        </div>
+        {/* Message */}
+        <h1 className="rounded-lg  p-5 text-center text-xl font-semibold text-gray-700 ">
+          Checking wallet balance for {service} reports...
+        </h1>
+        <Loader2 className="h-5 w-5 animate-spin text-gray-500" />
+      </div>
+    );
+  }
 
   if (isRedirecting) {
     return (
