@@ -5,7 +5,7 @@ import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { generateCibilOtp} from '@/api/cibil';
-import {checkServiceConsent,giveServiceConsent } from '@/api/user';
+import { checkServiceConsent, giveServiceConsent } from '@/api/user';
 import { mapCibilGenerateOtpError } from './errorMapping';
 import type {
   CibilFieldErrors,
@@ -562,3 +562,4 @@ export default function IdentityForm({ onNext, custId }: IdentityFormProps) {
     </div>
   );
 }
+

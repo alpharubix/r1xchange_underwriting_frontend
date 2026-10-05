@@ -8,7 +8,7 @@ import {
   addNewGstin,
 } from '@/api/gst';
 
-import { checkServiceConsent } from '@/api/user';
+import { checkServiceConsent , giveServiceConsent} from '@/api/user';
 import { toast } from 'sonner';
 import GstTermsModal from '@/pages/gst/GstTerm&Condition';
 

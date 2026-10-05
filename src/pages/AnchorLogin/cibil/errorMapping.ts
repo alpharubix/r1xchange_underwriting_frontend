@@ -28,6 +28,7 @@ const FIELD_LABELS: Record<CibilGenerateOtpField, string> = {
   pincode: 'Pincode',
   identity: 'Identity',
   identityType: 'Identity type',
+  tnc: '',
 };
 
 const FIELD_CODE_MAP: Partial<Record<string, CibilGenerateOtpField[]>> = {
@@ -229,3 +230,4 @@ export function mapCibilGenerateOtpError(error: unknown): CibilMappedError {
     globalError: message,
   };
 }
+

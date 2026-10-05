@@ -27,7 +27,6 @@ import {
 } from '@/components/ui/card';
 import { registerSchema, type RegisterFormValues } from '@/lib/zod-schemas';
 import { useRegister, getApiError } from '@/hooks/useAuth';
-import { checkServiceConsent } from '@/api/auth';
 import TermsAndConditionsModal from './Term&condition';
 import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
@@ -445,5 +444,8 @@ export default function SignupPage() {
 
   );
 }
+
+
+
 
 
