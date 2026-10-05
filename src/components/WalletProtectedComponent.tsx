@@ -19,7 +19,7 @@ export default function WalletProtectedComponent({
   const hasRedirected = useRef(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, isFetching, isError } = useQuery({
     queryKey: ['wallet-access', service],
     queryFn: () => getWalletBalance(service),
     staleTime: 0,
@@ -73,14 +73,14 @@ export default function WalletProtectedComponent({
     );
   }
   
-  if (isLoading) {
+  if (isFetching) {
     console.log('Loading wallet balance...');
-  // return (
-  //   <div className="fixed inset-0 z-50 flex items-center justify-center bg-white">
-  //     <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-  //   </div>
-  // );
-}
+    return (
+      <div className="flex h-[300px] w-full items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+      </div>
+    );
+  }
   const child = children as ReactElement<{
     isBalanceAvailable?: boolean;
   }>;
@@ -89,5 +89,6 @@ export default function WalletProtectedComponent({
     isBalanceAvailable: data?.data?.is_balance_available ?? false,
   });
 }
+
 
 
