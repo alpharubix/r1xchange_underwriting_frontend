@@ -13,7 +13,9 @@ export type CibilReportListItem = ApiCibilReportListItem;
 export type CibilWebhookStatus = ApiCibilWebhookStatus;
 
 export type CibilGenerateOtpField =
-  keyof GenerateCibilOtpRequest | 'identityType';
+  | keyof GenerateCibilOtpRequest
+  | 'identityType'
+  | 'tnc';
 
 export type CibilFieldErrors = Partial<Record<CibilGenerateOtpField, string>>;
 

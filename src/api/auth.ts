@@ -9,6 +9,7 @@ export interface RegisterPayload {
   email_id: string;
   password: string;
   site_code: string;
+  consent?: boolean;
 }
 
 export interface LoginPayload {
@@ -100,4 +101,34 @@ export const loginAdmin = async (data: AdminLoginPayload) => {
     errorMessage: 'Invalid credentials. Please try again.',
   });
   return response.data;
+};
+
+// ─── Check Service Consent API ────────────────────────────────────────────────
+
+export interface CheckServiceConsentResponse {
+  consent?: boolean;
+  status_code?: number;
+  data?: {
+    consent?: boolean;
+    status_code?: number;
+  };
+  message?: string;
+}
+
+export const checkServiceConsent = async (
+  service: string = 'user_policy',
+  userId?: string
+): Promise<{ data: CheckServiceConsentResponse; status: number }> => {
+  const payload = {
+
+    user_id: userId ? String(userId) : undefined,
+  };
+  const response = await apiClient.post(`/user/give-consent/${service}`, {
+    data: payload,
+    skipErrorToast: true,
+  });
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };

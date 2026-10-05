@@ -342,5 +342,31 @@ export const downloadGstReport = async (
       'Failed to download GST report';
     throw new Error(msg);
   }
-  
+};
+
+// ─── Check Service Consent API ────────────────────────────────────────────────
+
+export interface CheckServiceConsentResponse {
+  consent?: boolean;
+  status_code?: number;
+  data?: {
+    consent?: boolean;
+    status_code?: number;
+  };
+  message?: string;
+}
+
+export const checkServiceConsent = async (
+  service: string = 'gst',
+  custId?: string
+): Promise<{ data: CheckServiceConsentResponse; status: number }> => {
+  const config = custId ? { params: { cust_id: custId } } : {};
+  const response = await apiClient.get(`/user/check-consent/${service}`, {
+    ...config,
+    skipErrorToast: true,
+  });
+  return {
+    data: response.data,
+    status: response.status,
+  };
 };

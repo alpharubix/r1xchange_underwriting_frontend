@@ -39,6 +39,9 @@ export const registerSchema = z
         'Password must contain at least one special character'
       ),
     confirm_password: z.string().min(1, 'Please confirm your password'),
+    checkbox: z
+      .boolean()
+      .refine((val) => val === true, 'You must accept the terms and conditions'),
   })
   .refine((data) => data.password === data.confirm_password, {
     message: 'Passwords do not match',

@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
@@ -12,6 +12,7 @@ import type {
   CibilGenerateOtpField,
   CibilIdentityPayload,
 } from './types';
+import CibilTermsModal from '@/pages/cibil/CibilTerms&Condition';
 
 interface IdentityFormProps {
   onNext: (payload: CibilIdentityPayload, otpFlowId: string) => void;
@@ -107,6 +108,8 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
   const [formValues, setFormValues] =
     useState<CibilIdentityPayload>(defaultValues);
   const [fieldErrors, setFieldErrors] = useState<CibilFieldErrors>({});
+  const [isTermsOpen, setIsTermsOpen] = useState(false);
+  const [isTncAccepted, setIsTncAccepted] = useState(false);
   const [identityType, setIdentityType] = useState('PAN');
   const identityMutation = useMutation({
     mutationFn: submitIdentityDetails,
@@ -180,6 +183,10 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
 
     if (!formValues.identity.trim()) {
       nextFieldErrors.identity = 'Identity is required';
+    }
+
+    if (!isTncAccepted) {
+      nextFieldErrors.tnc = 'You must accept the Terms & Conditions';
     }
 
     if (Object.keys(nextFieldErrors).length > 0) {
@@ -456,6 +463,49 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
             {renderFieldError('identity')}
           </div>
         </div>
+
+        {/* Terms & Conditions */}
+        <div>
+          <div className="flex items-start gap-2 pt-2">
+            <input
+              id="tnc"
+              type="checkbox"
+              className="h-4 w-4 rounded-md border-gray-300 text-[#002366] focus:ring-[#002366] mt-1 cursor-pointer"
+              checked={isTncAccepted}
+              onChange={(e) => {
+                const checked = e.target.checked;
+                setIsTncAccepted(checked);
+                if (checked) {
+                  clearFieldError('tnc');
+                }
+              }}
+              required
+            />
+            <label
+              htmlFor="tnc"
+              className="text-sm text-gray-700 leading-relaxed cursor-pointer"
+            >
+              I accept the{' '}
+              <button
+                type="button"
+                onClick={() => setIsTermsOpen(true)}
+                className="text-sm font-medium text-[#002366] underline hover:text-[#001744] cursor-pointer"
+              >
+                Terms &amp; Conditions
+              </button>
+            </label>
+          </div>
+          {renderFieldError('tnc')}
+        </div>
+
+        <CibilTermsModal
+          isOpen={isTermsOpen}
+          onClose={() => setIsTermsOpen(false)}
+          onAccept={() => {
+            clearFieldError('tnc');
+            setIsTncAccepted(true);
+          }}
+        />
 
         <button
           type="submit"
