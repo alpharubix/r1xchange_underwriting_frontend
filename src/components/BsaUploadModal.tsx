@@ -181,7 +181,7 @@ export default function BsaUploadModal({
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="companyType">
-                  Company Type <span className="text-red-500">*</span>
+                  Entity Type <span className="text-red-500">*</span>
                 </Label>
                 <Select
                   value={formData.companyType}
@@ -190,11 +190,11 @@ export default function BsaUploadModal({
                   }
                 >
                   <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Select Company Type" />
+                    <SelectValue placeholder="Select Entity Type" />
                   </SelectTrigger>
                   <SelectContent style={{ zIndex: 99999 }}>
                     <SelectGroup>
-                      <SelectLabel>Company Type</SelectLabel>
+                      <SelectLabel>--Entity Type--</SelectLabel>
                       <SelectItem value="Individual">Individual</SelectItem>
                       <SelectItem value="Company">Company</SelectItem>
                       <SelectItem value="Sole_Proprietorship">
