@@ -196,7 +196,7 @@ export default function BsaUploadModal({
                     <SelectGroup>
                       <SelectLabel>--Entity Type--</SelectLabel>
                       <SelectItem value="Individual">Individual</SelectItem>
-                      <SelectItem value="Company">Company</SelectItem>
+                      <SelectItem value="Company">Private Limited & LLP</SelectItem>
                       <SelectItem value="Sole_Proprietorship">
                         Sole Proprietorship
                       </SelectItem>
