@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import apiClient, { extractErrorMessage } from '@/lib/axios';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
@@ -535,11 +535,21 @@ export default function DashboardPage() {
                         {isLoadingBanks ? (
                           <option disabled>Loading banks...</option>
                         ) : (
-                          banks?.map((bank, idx) => (
-                            <option key={idx} value={bank.code}>
-                              {bank.bankName}
-                            </option>
-                          ))
+                          banks?.map((bank: any, idx: number) => {
+                            const bankCode =
+                              typeof bank === 'string'
+                                ? bank
+                                : bank.code || bank.bank_code || bank.bankName;
+                            const bankName =
+                              typeof bank === 'string'
+                                ? bank
+                                : bank.bankName || bank.bank_name || bank.code;
+                            return (
+                              <option key={idx} value={bankCode}>
+                                {bankName}
+                              </option>
+                            );
+                          })
                         )}
                       </select>
                     </div>

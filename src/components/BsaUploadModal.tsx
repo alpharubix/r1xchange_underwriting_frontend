@@ -270,11 +270,21 @@ export default function BsaUploadModal({
                   <SelectGroup>
                     <SelectLabel>Available Banks</SelectLabel>
                     {!isLoadingBanks &&
-                      banks?.map((bank, idx) => (
-                        <SelectItem key={idx} value={bank.code}>
-                          {bank.bankName}
-                        </SelectItem>
-                      ))}
+                      banks?.map((bank: any, idx: number) => {
+                        const bankCode =
+                          typeof bank === 'string'
+                            ? bank
+                            : bank.code || bank.bank_code || bank.bankName;
+                        const bankName =
+                          typeof bank === 'string'
+                            ? bank
+                            : bank.bankName || bank.bank_name || bank.code;
+                        return (
+                          <SelectItem key={idx} value={bankCode}>
+                            {bankName}
+                          </SelectItem>
+                        );
+                      })}
                   </SelectGroup>
                 </SelectContent>
               </Select>

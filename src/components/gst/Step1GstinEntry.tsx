@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getGstin, updateGstin } from '@/api/gst';
 import { toast } from 'sonner';
@@ -18,7 +18,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   });
 
   useEffect(() => {
-    if (gstinData?.is_found && gstinData.gst_number) {
+    if (gstinData?.is_found && gstinData.gst_number && !gstinInput) {
       const rawGst = gstinData.gst_number;
       const gstinVal = Array.isArray(rawGst)
         ? rawGst[0]
@@ -32,10 +32,9 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
           : String(gstinVal || '').trim();
       if (cleanGstin) {
         setGstinInput(cleanGstin);
-        onNext(cleanGstin);
       }
     }
-  }, [gstinData, onNext]);
+  }, [gstinData, gstinInput]);
 
   const updateMutation = useMutation({
     mutationFn: (data: Parameters<typeof updateGstin>[0]) =>

@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getGstRefStatus } from '@/api/gst';
 import { useNavigate } from 'react-router-dom';
@@ -81,15 +81,25 @@ export default function Step4Processing({
           <p className="text-gray-500 mb-6 font-medium">
             Your GST data has been successfully processed.
           </p>
-          <button
-            onClick={() => {
-              if (onComplete) onComplete();
-              else navigate('/gst/history');
-            }}
-            className="bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-6 rounded-xl transition-colors shadow-md shadow-[#002366]/20 cursor-pointer"
-          >
-            {onComplete ? 'Close' : 'View History'}
-          </button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <button
+              onClick={() => {
+                navigate('/gst/reports');
+              }}
+              className="bg-[#002366] hover:bg-[#001744] text-white font-semibold py-2.5 px-6 rounded-xl transition-all shadow-md shadow-[#002366]/20 cursor-pointer w-full sm:w-auto"
+            >
+              View GST Reports
+            </button>
+            <button
+              onClick={() => {
+                if (onComplete) onComplete();
+                else navigate('/gst/history');
+              }}
+              className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-5 rounded-xl transition-colors cursor-pointer w-full sm:w-auto"
+            >
+              View History
+            </button>
+          </div>
         </div>
       ) : hasFailed ? (
         <div className="animate-in fade-in duration-300">

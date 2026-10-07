@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { validateOtp, submitGst, generateOtp } from '@/api/gst';
 import { toast } from 'sonner';
@@ -20,8 +20,8 @@ export default function Step3OtpValidation({
   onBack,
   custId,
 }: Step3Props) {
-  const [userName, setUserName] = useState('');
-  const [otp, setOtp] = useState('');
+  const [userName, setUserName] = useState('sharma_trading');
+  const [otp, setOtp] = useState('123456');
   const [otpReferenceId, setOtpReferenceId] = useState('');
   const [isValidated, setIsValidated] = useState(false);
 

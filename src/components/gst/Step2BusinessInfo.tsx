@@ -32,8 +32,8 @@ export default function Step2BusinessInfo({
   custId,
   externalShowInstructions,
 }: Step2Props) {
-  const [fromMonth, setFromMonth] = useState('');
-  const [toMonth, setToMonth] = useState('');
+  const [fromMonth, setFromMonth] = useState('042024');
+  const [toMonth, setToMonth] = useState('032025');
   const [needsAuth, setNeedsAuth] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newGstin, setNewGstin] = useState('');
@@ -330,11 +330,7 @@ export default function Step2BusinessInfo({
     } catch (err) {
       console.error('Error giving GST service consent:', err);
     }
-    submitMutation.mutate({
-      gstin: activeGstin,
-      from_month: fromMonth,
-      to_month: toMonth,
-    });
+    onRequiresAuth(fromMonth || '042024', toMonth || '032025');
   };
 
   return (

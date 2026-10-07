@@ -15,12 +15,15 @@ declare module 'axios' {
   }
 }
 
+import { mockAxiosAdapter } from '@/mocks/mockApi/adapter';
+
 const apiClient = axios.create({
   baseURL: ENV.VITE_BACKEND_BASE_URL || '/v1',
   headers: {
     'Content-Type': 'application/json',
   },
   withCredentials: true,
+  adapter: mockAxiosAdapter,
 });
 
 console.log('Base URL:', ENV.VITE_BACKEND_BASE_URL);
