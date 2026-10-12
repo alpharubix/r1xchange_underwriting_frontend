@@ -180,7 +180,7 @@ function App() {
                       element={<AnchorCustomerPage />}
                     />
                   </Route>
-                  <Route element={<ProtectedRoute />}>
+                  <Route element={<ProtectedRoute requiredPortal="user" />}>
                     <Route element={<DashboardLayout />}>
                       <Route
                         path="/home/dashboard"
