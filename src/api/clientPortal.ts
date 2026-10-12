@@ -32,26 +32,23 @@
 export type ClientPortal = "user" | "ANCHOR";
 
 export function getClientPortal(): ClientPortal {
-  const { hostname, pathname} = window.location;
+  const pathname = window.location.pathname.toLowerCase();
+  const storedRole = localStorage.getItem("user_role")?.toLowerCase();
 
+  const isAnchorRole =
+    storedRole === "anchor" ||
+    storedRole === "super_anchor" ||
+    storedRole === "superanchor" ||
+    storedRole === "super-anchor";
 
-    console.log("Hostname:", hostname);
-  console.log("Pathname:", pathname);
+  const isAnchorPath =
+    pathname === "/anchors" ||
+    pathname.startsWith("/anchors/") ||
+    pathname.startsWith("/anchors");
 
-  if (hostname === "localhost" || hostname === "127.0.0.1") {
-    return pathname === "/anchors" ||
-      pathname.startsWith("/anchors/")
-      ? "ANCHOR"
-      : "user";
-  }
-  console.log("path name :",pathname)
-  if (hostname === "checkcrisp.com" && (pathname === "/anchors" || pathname.startsWith("/anchors/"))) {
+  if (isAnchorPath || isAnchorRole) {
     return "ANCHOR";
   }
 
-  if (hostname === "checkcrisp.com") {
-    return "user";
-  }
-
-  throw new Error(`Unknown portal: ${hostname}${pathname}`);
+  return "user";
 }

@@ -24,12 +24,19 @@ export default function ProtectedRoute({requiredPortal}:ProtectedRouteProps) {
     return <Navigate to={loginPath} replace />;
   }
     
-  if (user?.portal !== requiredPortal) {
-    return <Navigate
-      to={requiredPortal === 'anchor' ? '/anchors/login' : '/login'}
-      replace
-      state={{ from: location }}
-    />;
+  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
+  const userRole = (user as any)?.role?.toLowerCase() || storedRole || 'user';
+  const isAnchor =
+    userRole === 'anchor' ||
+    userRole === 'super_anchor' ||
+    userRole === 'superanchor' ||
+    userRole === 'super-anchor';
+
+  const userPortal: 'user' | 'anchor' = (user as any)?.portal || (isAnchor ? 'anchor' : 'user');
+
+  if (userPortal !== requiredPortal) {
+    const destination = userPortal === 'anchor' ? '/anchors/dashboard' : '/home/dashboard';
+    return <Navigate to={destination} replace state={{ from: location }} />;
   }
 
   return <Outlet />;

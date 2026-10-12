@@ -1,8 +1,8 @@
-﻿import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function PublicRoute() {
-  const { isAuthenticated, isLoading } = useAuthContext();
+  const { isAuthenticated, isLoading, user } = useAuthContext();
 
   if (isLoading) {
     return (
@@ -15,6 +15,24 @@ export default function PublicRoute() {
   }
 
   if (isAuthenticated) {
+    const storedRole = localStorage.getItem('user_role')?.toLowerCase();
+    const userRole = (user as any)?.role?.toLowerCase() || storedRole || 'user';
+    const isAnchor =
+      userRole === 'anchor' ||
+      userRole === 'super_anchor' ||
+      userRole === 'superanchor' ||
+      userRole === 'super-anchor';
+    const isAdmin =
+      userRole === 'admin' ||
+      userRole === 'super_admin' ||
+      userRole === 'superadmin';
+
+    if (isAdmin) {
+      return <Navigate to="/admins/user" replace />;
+    }
+    if (isAnchor) {
+      return <Navigate to="/anchors/dashboard" replace />;
+    }
     return <Navigate to="/home/dashboard" replace />;
   }
 

@@ -64,26 +64,22 @@ export function useLogin() {
       toast.success(msg);
 
       const extractedRole = extractRoleFromMessage(msg);
-      if (extractedRole) {
-        localStorage.setItem('user_role', extractedRole);
-      }
+      const effectiveRole = extractedRole || 'user';
+      localStorage.setItem('user_role', effectiveRole);
 
-      let role = extractedRole || '';
+      let role = effectiveRole;
       try {
         const userProfile = await getMe();
-        const finalProfile = { ...userProfile };
-        if (extractedRole) {
-          finalProfile.role = extractedRole;
-        }
+        const profileRole = typeof userProfile.role === 'string' ? userProfile.role : role;
+        const finalProfile = { ...userProfile, role: profileRole, portal: 'user' as const };
+        localStorage.setItem('user_role', finalProfile.role);
         setUser(finalProfile);
         queryClient.setQueryData(['user', 'me'], finalProfile);
-        role = (finalProfile.role as string) || role;
+        role = finalProfile.role;
       } catch (err) {
         const user = data?.user || data?.data?.user || data?.data || {};
-        const finalUser = { ...user };
-        if (extractedRole) {
-          finalUser.role = extractedRole;
-        }
+        const finalUser = { ...user, role, portal: 'user' as const };
+        localStorage.setItem('user_role', role);
         setUser(finalUser);
         queryClient.setQueryData(['user', 'me'], finalUser);
         role = finalUser.role || role;
@@ -125,14 +121,14 @@ export function useAdminLogin() {
       try {
         const userProfile = await getMe();
         const role = extractedRole || userProfile.role || rawRole;
-        const fullUser = { ...userProfile, role };
+        const fullUser = { ...userProfile, role, portal: 'admin' as const };
         setUser(fullUser);
         queryClient.setQueryData(['user', 'me'], fullUser);
         localStorage.setItem('user_role', role);
       } catch (err) {
         const user = data?.user || data?.data?.user || data?.data || {};
         const role = extractedRole || user.role || rawRole;
-        const fullUser = { ...user, role };
+        const fullUser = { ...user, role, portal: 'admin' as const };
         setUser(fullUser);
         queryClient.setQueryData(['user', 'me'], fullUser);
         localStorage.setItem('user_role', role);
@@ -165,14 +161,14 @@ export function useAnchorLogin() {
       try {
         const userProfile = await getMe();
         const role = extractedRole || userProfile.role || rawRole;
-        const fullUser = { ...userProfile, role };
+        const fullUser = { ...userProfile, role, portal: 'anchor' as const };
         setUser(fullUser);
         queryClient.setQueryData(['user', 'me'], fullUser);
         localStorage.setItem('user_role', role);
       } catch (err) {
         const user = data?.user || data?.data?.user || data?.data || {};
         const role = extractedRole || user.role || rawRole;
-        const fullUser = { ...user, role };
+        const fullUser = { ...user, role, portal: 'anchor' as const };
         setUser(fullUser);
         queryClient.setQueryData(['user', 'me'], fullUser);
         localStorage.setItem('user_role', role);

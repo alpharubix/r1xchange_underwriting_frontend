@@ -101,9 +101,9 @@ apiClient.interceptors.response.use(
     console.error('API error response:', error.response);
     // console.error("API error response:", error.config.url);
 
-    if (error.config.url === '/user/me') {
-      window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+    if (error.config?.url === '/user/me') {
       if (error.response?.status === 401 || error.response?.status === 403) {
+        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
         return Promise.reject(error);
       }
     }

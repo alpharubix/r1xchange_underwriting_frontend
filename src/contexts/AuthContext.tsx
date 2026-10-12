@@ -1,4 +1,4 @@
-﻿import React, {
+import React, {
   createContext,
   useContext,
   useCallback,
@@ -16,6 +16,7 @@ interface AuthUser {
   anchor_name?: string;
   login_id?: string;
   role?: string;
+  portal?: 'user' | 'anchor' | 'admin';
   [key: string]: unknown;
 }
 
@@ -121,25 +122,26 @@ export function AuthProvider({
       typedUser.role ??
       (typedUser.data as { role?: string } | undefined)?.role;
 
-    const userRole = normalizeRole(apiRole);
-
-    // Do not infer a role from localStorage when the backend omits it.
-    if (!userRole) {
-      console.error(
-        'The /user/me response does not contain a valid role.'
-      );
-      return;
-    }
-
-    typedUser.role = userRole;
-
-    // Keep React Query data synchronized with the normalized role.
-    setUser(typedUser);
-
-    localStorage.setItem('user_role', userRole);
+    const storedRole = localStorage.getItem('user_role');
+    const normalizedApiRole = normalizeRole(apiRole);
+    // For regular users, backend MongoDB projection omits role, so fallback to storedRole or 'user'
+    const userRole = normalizedApiRole || normalizeRole(storedRole) || 'user';
 
     const isAnchor = isAnchorRole(userRole);
     const isAdmin = isAdminRole(userRole);
+    const portal: 'user' | 'anchor' | 'admin' = isAnchor
+      ? 'anchor'
+      : isAdmin
+        ? 'admin'
+        : 'user';
+
+    typedUser.role = userRole;
+    typedUser.portal = portal;
+
+    // Keep React Query data synchronized with the normalized role and portal.
+    setUser(typedUser);
+
+    localStorage.setItem('user_role', userRole);
 
     const currentPath = window.location.pathname.toLowerCase();
 
