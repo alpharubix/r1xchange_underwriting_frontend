@@ -71,7 +71,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-                {/* Right Panel */}
+  {/* Right Panel */}
         <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-gray-50 via-white to-blue-50/30 p-6 relative">
           <Link to="/" className="absolute top-6 right-6 lg:right-8 flex items-center gap-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors z-50">
             <HomeIcon className="h-5 w-5" />

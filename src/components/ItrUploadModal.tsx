@@ -16,6 +16,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PieChart, X, CheckCircle2, Loader2 } from 'lucide-react';
+import DashboardPage from '@/pages/DashboardPage';
 
 type ITRState =
   | 'INITIALIZING'
@@ -60,7 +61,6 @@ export default function ItrUploadModal({
   const [itrState, setItrState] = useState<ITRState>('INITIALIZING');
   const [itrEmail, setItrEmail] = useState('');
   const [itrReferenceId, setItrReferenceId] = useState<string | null>(null);
-
   const navigate = useNavigate();
 
   const handleCloseItrModal = () => {
@@ -68,7 +68,15 @@ export default function ItrUploadModal({
     setItrEmail('');
   };
 
-  const { data: itrPrecheckData } = useQuery({
+
+  const isItrBlocked = (status?:string)=>{
+    return [
+      'PROCESSING',
+      'PENDING',
+      'AWAITING_CREDENTIAL_SUBMISSION'
+    ].includes(status??'')
+  }
+  const { data: itrPrecheckData ,dataUpdatedAt:precheckUpdatedAt} = useQuery({
     queryKey: ['itr-data-precheck', custId],
     queryFn: async () => {
       const config = custId ? { params: { cust_id: custId } } : {};
@@ -81,6 +89,7 @@ export default function ItrUploadModal({
     refetchOnMount: 'always',
   });
 
+
   useEffect(() => {
     const payload = itrPrecheckData?.data;
 
@@ -89,7 +98,16 @@ export default function ItrUploadModal({
       return;
     }
 
-    const { itr_reference_id, itr_link_response_code } = payload;
+    
+    const { itr_reference_id,itr_link_status ,itr_link_response_code } = payload;
+    if (isItrBlocked(itr_link_status)){
+      toast.message('Required report is already in request | Please retry after 24 hours')
+      handleCloseItrModal()
+      navigate('/home/dashboard')
+      return
+      
+      
+    }
 
     setItrReferenceId(itr_reference_id ?? null);
 
@@ -98,8 +116,11 @@ export default function ItrUploadModal({
       return;
     }
 
+    
+    
+
     setItrState(mapResponseCodeToState(itr_link_response_code));
-  }, [itrPrecheckData]);
+  }, [itrPrecheckData,precheckUpdatedAt, isOpen, navigate]);
 
   const { data: itrPollingData } = useQuery({
     queryKey: ['itr-polling', itrReferenceId, custId],
