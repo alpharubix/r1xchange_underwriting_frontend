@@ -29,7 +29,20 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+const normalizeRole = (role: unknown): string =>
+  typeof role === 'string' ? role.trim().toLowerCase() : '';
+
+const isAnchorRole = (role: string): boolean =>
+  ['anchor', 'superanchor', 'super_anchor', 'super-anchor'].includes(role);
+
+const isAdminRole = (role: string): boolean =>
+  ['admin', 'super_admin', 'superadmin'].includes(role);
+
+export function AuthProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
@@ -45,93 +58,175 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const clearAuth = useCallback(() => {
     queryClient.clear();
     queryClient.setQueryData(['user', 'me'], null);
+
+    localStorage.removeItem('user_role');
+    localStorage.removeItem('redirect_path');
     localStorage.removeItem('gst_reference_id');
     localStorage.removeItem('gstin_list');
     localStorage.removeItem('5pointcredit_tickets');
   }, [queryClient]);
 
-  // Listen for 401 events dispatched by the axios interceptor
+  // Handle unauthorized API responses.
   useEffect(() => {
-    const handle = () => {
-      clearAuth();
+    const handleUnauthorized = () => {
       const path = window.location.pathname.toLowerCase();
-      if (path === '/' || path === '/pricing' || path.startsWith('/products/') || path === '/anchors') {
+
+      clearAuth();
+
+      // Public pages do not need a login redirect.
+      if (
+        path === '/' ||
+        path === '/pricing' ||
+        path.startsWith('/products/') ||
+        path === '/anchors'
+      ) {
         return;
       }
-      if (path.includes('/anchors')) {
-        navigate('/anchors/login');
-      } else if (path.includes('/admins')) {
-        navigate('/admins/login');
+
+      if (path.startsWith('/anchors/')) {
+        navigate('/anchors/login', { replace: true });
+      } else if (path.startsWith('/admins/')) {
+        navigate('/admins/login', { replace: true });
       } else {
-        navigate('/login');
+        navigate('/login', { replace: true });
       }
     };
-    window.addEventListener('auth:unauthorized', handle);
-    return () => window.removeEventListener('auth:unauthorized', handle);
+
+    window.addEventListener('auth:unauthorized', handleUnauthorized);
+
+    return () => {
+      window.removeEventListener('auth:unauthorized', handleUnauthorized);
+    };
   }, [clearAuth, navigate]);
 
+  // Clear authentication-related query state on errors.
   useEffect(() => {
     if (isError) {
       clearAuth();
     }
   }, [isError, clearAuth]);
 
+  // Handle authenticated users and portal-specific login redirects.
   useEffect(() => {
-    if (user) {
-      const typedUser = user as AuthUser;
-      console.log('User from me API:', typedUser);
-      setUser(typedUser);
+    if (!user || isLoading) {
+      return;
+    }
 
-      const apiRole = typedUser.role || (typedUser as any).data?.role;
-      const storedRole = localStorage.getItem('user_role');
-      const finalRole = apiRole || storedRole || 'anchor';
-      (typedUser as any).role = finalRole;
-      if (finalRole && !storedRole) {
-        localStorage.setItem('user_role', String(finalRole));
+    const typedUser = user as AuthUser;
+
+    console.log('User from me API:', typedUser);
+
+    // The backend response is the source of truth for the role.
+    const apiRole =
+      typedUser.role ??
+      (typedUser.data as { role?: string } | undefined)?.role;
+
+    const userRole = normalizeRole(apiRole);
+
+    // Do not infer a role from localStorage when the backend omits it.
+    if (!userRole) {
+      console.error(
+        'The /user/me response does not contain a valid role.'
+      );
+      return;
+    }
+
+    typedUser.role = userRole;
+
+    // Keep React Query data synchronized with the normalized role.
+    setUser(typedUser);
+
+    localStorage.setItem('user_role', userRole);
+
+    const isAnchor = isAnchorRole(userRole);
+    const isAdmin = isAdminRole(userRole);
+
+    const currentPath = window.location.pathname.toLowerCase();
+
+    const isAnchorPortal = currentPath.startsWith('/anchors/');
+    const isAdminPortal = currentPath.startsWith('/admins/');
+
+    const isLoginOrAuthPage =
+      currentPath === '/login' ||
+      currentPath === '/signup' ||
+      currentPath === '/forgot-password' ||
+      currentPath === '/admins/login' ||
+      currentPath === '/anchors/login';
+
+    if (!isLoginOrAuthPage) {
+      return;
+    }
+
+    // Determine the correct portal for this authenticated user.
+    const defaultDestination = isAdmin
+      ? '/admins/user'
+      : isAnchor
+        ? '/anchors/dashboard'
+        : '/home/dashboard';
+
+    // Never let a stale redirect path override portal selection.
+    let redirectTo = defaultDestination;
+
+    if (isAnchorPortal && !isAnchor && !isAdmin) {
+      redirectTo = '/home/dashboard';
+    } else if (isAdminPortal && !isAdmin) {
+      redirectTo = isAnchor
+        ? '/anchors/dashboard'
+        : '/home/dashboard';
+    } else if (!isAnchorPortal && !isAdminPortal && isAnchor) {
+      redirectTo = '/anchors/dashboard';
+    } else if (!isAnchorPortal && !isAdminPortal && isAdmin) {
+      redirectTo = '/admins/user';
+    } else if (
+      isAnchorPortal &&
+      isAnchor
+    ) {
+      const originalPath = localStorage.getItem('redirect_path');
+
+      if (originalPath?.startsWith('/anchors/')) {
+        redirectTo = originalPath;
       }
+    } else if (
+      isAdminPortal &&
+      isAdmin
+    ) {
+      const originalPath = localStorage.getItem('redirect_path');
 
-      const userRole = String((typedUser as any).role).toLowerCase();
-      const isAdmin =
-        userRole === 'admin' ||
-        userRole === 'super_admin' ||
-        userRole === 'superadmin';
+      if (originalPath?.startsWith('/admins/')) {
+        redirectTo = originalPath;
+      }
+    } else if (
+      !isAnchorPortal &&
+      !isAdminPortal &&
+      !isAnchor &&
+      !isAdmin
+    ) {
+      const originalPath = localStorage.getItem('redirect_path');
 
-      const currentPath = window.location.pathname.toLowerCase();
-      const isLoginOrAuthPage =
-        currentPath === '/login' ||
-        currentPath === '/signup' ||
-        currentPath === '/forgot-password' ||
-        currentPath === '/admins/login' ||
-        currentPath === '/anchors/login';
-
-      if (isLoginOrAuthPage) {
-        // Redirect after successful login
-        const originalPath = localStorage.getItem('redirect_path');
-        const userRole = String((typedUser as any).role).toLowerCase();
-        const isAnchor =
-          userRole === 'anchor' ||
-          userRole === 'superanchor' ||
-          userRole === 'super_anchor' ||
-          userRole === 'super-anchor';
-
-        const redirectTo =
-          originalPath ||
-          (isAdmin
-            ? '/admins/user'
-            : isAnchor
-              ? '/anchors/dashboard'
-              : '/home/dashboard');
-
-        if (!isAdmin) {
-          toast.success(
-            `Welcome, ${typedUser.customer_name || (typedUser as any).anchor_name || (typedUser as any).login_id || 'User'}!`
-          );
-        }
-        localStorage.removeItem('redirect_path');
-        navigate(redirectTo, { replace: true });
+      if (
+        originalPath &&
+        !originalPath.startsWith('/anchors/') &&
+        !originalPath.startsWith('/admins/')
+      ) {
+        redirectTo = originalPath;
       }
     }
-  }, [user, setUser, navigate]);
+
+    if (!isAdmin) {
+      toast.success(
+        `Welcome, ${
+          typedUser.customer_name ||
+          typedUser.anchor_name ||
+          typedUser.login_id ||
+          'User'
+        }!`
+      );
+    }
+
+    localStorage.removeItem('redirect_path');
+
+    navigate(redirectTo, { replace: true });
+  }, [user, isLoading, setUser, navigate]);
 
   return (
     <AuthContext.Provider
@@ -150,8 +245,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 export function useAuthContext() {
   const ctx = useContext(AuthContext);
-  if (!ctx)
-    throw new Error('useAuthContext must be used within <AuthProvider>');
+
+  if (!ctx) {
+    throw new Error(
+      'useAuthContext must be used within <AuthProvider>'
+    );
+  }
+
   return ctx;
 }
-

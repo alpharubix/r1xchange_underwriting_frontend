@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { toast } from 'sonner';
 import { ENV } from '@/conf';
-
+import { config } from 'zod';
+import { getClientPortal } from '@/api/clientPortal';
 declare module 'axios' {
   interface AxiosRequestConfig {
     successMessage?: string;
@@ -22,6 +23,13 @@ const apiClient = axios.create({
   },
   withCredentials: true,
 });
+
+
+apiClient.interceptors.request.use((config)=>{
+  config.headers["X-Client-Portal"] = getClientPortal();
+  //returns anchor or user
+  return config;
+})
 
 console.log('Base URL:', ENV.VITE_BACKEND_BASE_URL);
 
@@ -83,7 +91,7 @@ export const extractErrorMessage = (error: any): string | null => {
 apiClient.interceptors.response.use(
   (response) => {
     const successMessage = response.config.successMessage;
-    // console.log(successMessage)
+   
     if (successMessage) {
       toast.success(successMessage);
     }

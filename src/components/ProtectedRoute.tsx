@@ -1,9 +1,13 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
 
-export default function ProtectedRoute() {
-  const { isLoading, isAuthenticated } = useAuthContext();
+interface ProtectedRouteProps{
+  requiredPortal :'user' | 'anchor';
+}
 
+export default function ProtectedRoute({requiredPortal}:ProtectedRouteProps) {
+  const { isLoading, isAuthenticated ,user} = useAuthContext();
+  const location = useLocation();
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-background">
@@ -15,7 +19,17 @@ export default function ProtectedRoute() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" replace />;
+    
+    const loginPath = requiredPortal === 'anchor' ? '/anchors/login' : '/login';
+    return <Navigate to={loginPath} replace />;
+  }
+    
+  if (user?.portal !== requiredPortal) {
+    return <Navigate
+      to={requiredPortal === 'anchor' ? '/anchors/login' : '/login'}
+      replace
+      state={{ from: location }}
+    />;
   }
 
   return <Outlet />;
