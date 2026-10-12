@@ -16,8 +16,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PieChart, X, CheckCircle2, Loader2 } from 'lucide-react';
-import DashboardPage from '@/pages/DashboardPage';
-
 type ITRState =
   | 'INITIALIZING'
   | 'EMAIL_INPUT'
