@@ -165,7 +165,7 @@ export function useAnchorLogin() {
       setUser(loginUser);
       queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
-
+      console.log("Roles after anchor login:", { extractedRole, rawRole, role });
       sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
       void loadProfileFromMe(queryClient, role, 'anchor')
