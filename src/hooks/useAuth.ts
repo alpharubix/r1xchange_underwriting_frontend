@@ -32,6 +32,7 @@ async function loadProfileFromMe(
     const userProfile = await queryClient.fetchQuery<UserProfile>({
       queryKey: ['user', 'me'],
       queryFn: getMe,
+      retry: false,
       staleTime: 1000 * 60 * 5,
     });
     const profileRole =
