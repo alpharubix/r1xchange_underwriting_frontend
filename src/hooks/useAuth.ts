@@ -24,22 +24,19 @@ import axios from 'axios';
 
 async function loadProfileFromMe(
   queryClient: ReturnType<typeof useQueryClient>,
-  roleFallback: string,
+  authenticatedRole: string,
   portal: 'user' | 'anchor' | 'admin'
 ) {
-  queryClient.removeQueries({ queryKey: ['user', 'me'] });
   try {
     const userProfile = await queryClient.fetchQuery<UserProfile>({
       queryKey: ['user', 'me'],
       queryFn: getMe,
       retry: false,
-      staleTime: 1000 * 60 * 5,
+      staleTime: 0,
     });
-    const profileRole =
-      typeof userProfile.role === 'string' ? userProfile.role : roleFallback;
-    const profile = { ...userProfile, role: profileRole, portal };
+    const profile = { ...userProfile, role: authenticatedRole, portal };
     queryClient.setQueryData(['user', 'me'], profile);
-    localStorage.setItem('user_role', profileRole);
+    localStorage.setItem('user_role', authenticatedRole);
     return profile;
   } catch (error) {
     toast.error(`Could not load your profile: ${getApiError(error)}`);
@@ -91,24 +88,23 @@ export function useLogin() {
       const effectiveRole = extractedRole || 'user';
       localStorage.setItem('user_role', effectiveRole);
 
-      const finalUser = await loadProfileFromMe(
-        queryClient,
-        effectiveRole,
-        'user'
-      );
-      setUser(finalUser);
+      const loginUser = { role: effectiveRole, portal: 'user' as const };
+      setUser(loginUser);
+      queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
-      const role = finalUser.role || effectiveRole;
 
       if (
         window.location.pathname.toLowerCase().includes('/anchors') ||
-        role.toLowerCase() === 'anchor'
+        effectiveRole.toLowerCase() === 'anchor'
       ) {
         navigate('/anchors/dashboard');
       } else {
         sessionStorage.removeItem('home_intro_shown');
         navigate('/home/dashboard');
       }
+      void loadProfileFromMe(queryClient, effectiveRole, 'user')
+        .then(setUser)
+        .catch(() => undefined);
     },
   });
 }
@@ -132,14 +128,15 @@ export function useAdminLogin() {
         data?.data?.user?.role ||
         'admin';
       localStorage.setItem('user_role', rawRole);
-      const fullUser = await loadProfileFromMe(
-        queryClient,
-        extractedRole || rawRole,
-        'admin'
-      );
-      setUser(fullUser);
+      const role = extractedRole || rawRole;
+      const loginUser = { role, portal: 'admin' as const };
+      setUser(loginUser);
+      queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
       navigate('/admins/user');
+      void loadProfileFromMe(queryClient, role, 'admin')
+        .then(setUser)
+        .catch(() => undefined);
     },
   });
 }
@@ -163,16 +160,17 @@ export function useAnchorLogin() {
         data?.data?.user?.role ||
         'anchor';
       localStorage.setItem('user_role', rawRole);
-      const fullUser = await loadProfileFromMe(
-        queryClient,
-        extractedRole || rawRole,
-        'anchor'
-      );
-      setUser(fullUser);
+      const role = extractedRole || rawRole;
+      const loginUser = { role, portal: 'anchor' as const };
+      setUser(loginUser);
+      queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
 
       sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
+      void loadProfileFromMe(queryClient, role, 'anchor')
+        .then(setUser)
+        .catch(() => undefined);
     },
   });
 }

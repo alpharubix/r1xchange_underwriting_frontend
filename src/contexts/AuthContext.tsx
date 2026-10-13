@@ -110,15 +110,8 @@ export function AuthProvider({
 
     console.log('User from me API:', typedUser);
 
-    // The backend response is the source of truth for the role.
-    const apiRole =
-      typedUser.role ??
-      (typedUser.data as { role?: string } | undefined)?.role;
-
     const storedRole = localStorage.getItem('user_role');
-    const normalizedApiRole = normalizeRole(apiRole);
-    // For regular users, backend MongoDB projection omits role, so fallback to storedRole or 'user'
-    const userRole = normalizedApiRole || normalizeRole(storedRole) || 'user';
+    const userRole = normalizeRole(storedRole) || 'user';
 
     const isAnchor = isAnchorRole(userRole);
     const isAdmin = isAdminRole(userRole);
