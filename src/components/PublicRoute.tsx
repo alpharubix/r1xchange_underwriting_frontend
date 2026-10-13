@@ -1,8 +1,9 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
 
 export default function PublicRoute() {
   const { isAuthenticated, isLoading, user } = useAuthContext();
+  const location = useLocation();
 
   if (isLoading) {
     return (
@@ -26,6 +27,15 @@ export default function PublicRoute() {
       userRole === 'admin' ||
       userRole === 'super_admin' ||
       userRole === 'superadmin';
+
+    const isUserAuthPage =
+      ['/login', '/signup', '/forgot-password'].includes(
+        location.pathname.toLowerCase()
+      );
+
+    if (isUserAuthPage && isAnchor) {
+      return <Outlet />;
+    }
 
     if (isAdmin) {
       return <Navigate to="/admins/user" replace />;

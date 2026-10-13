@@ -103,7 +103,16 @@ apiClient.interceptors.response.use(
 
     if (error.config?.url === '/user/me') {
       if (error.response?.status === 401 || error.response?.status === 403) {
-        window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+        const pathname = window.location.pathname.toLowerCase();
+        const isLoginPage = [
+          '/login',
+          '/anchors/login',
+          '/admins/login',
+        ].includes(pathname);
+
+        if (!isLoginPage) {
+          window.dispatchEvent(new CustomEvent('auth:unauthorized'));
+        }
         return Promise.reject(error);
       }
     }

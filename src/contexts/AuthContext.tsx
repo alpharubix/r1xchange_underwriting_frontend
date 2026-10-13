@@ -4,7 +4,7 @@ import React, {
   useCallback,
   useEffect,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMe } from '@/hooks/useUser';
 import { toast } from 'sonner';
@@ -45,6 +45,7 @@ export function AuthProvider({
   children: React.ReactNode;
 }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const queryClient = useQueryClient();
 
   const { data: user, isLoading, isError } = useMe();
@@ -100,12 +101,47 @@ export function AuthProvider({
     };
   }, [clearAuth, navigate]);
 
-  // Clear authentication-related query state on errors.
+  // A login page can receive a portal-specific 401/403 for a session from
+  // another portal. Keep that failure local to the login page.
   useEffect(() => {
     if (isError) {
+      const currentPath = location.pathname.toLowerCase();
+      const isLoginPage = [
+        '/login',
+        '/anchors/login',
+        '/admins/login',
+      ].includes(currentPath);
+
+      if (isLoginPage) {
+        return;
+      }
+
       clearAuth();
     }
-  }, [isError, clearAuth]);
+  }, [isError, clearAuth, location.pathname]);
+
+  useEffect(() => {
+    const currentPath = location.pathname.toLowerCase();
+    const storedRole = normalizeRole(localStorage.getItem('user_role'));
+    const isAnchor = isAnchorRole(storedRole);
+    const isAdmin = isAdminRole(storedRole);
+
+    if (currentPath === '/anchors/login' && isAnchor) {
+      navigate('/anchors/dashboard', { replace: true });
+    } else if (
+      currentPath === '/admins/login' &&
+      isAdmin
+    ) {
+      navigate('/admins/user', { replace: true });
+    } else if (
+      currentPath === '/login' &&
+      storedRole &&
+      !isAnchor &&
+      !isAdmin
+    ) {
+      navigate('/home/dashboard', { replace: true });
+    }
+  }, [location.pathname, navigate]);
 
   // Handle authenticated users and portal-specific login redirects.
   useEffect(() => {
@@ -156,6 +192,18 @@ export function AuthProvider({
       currentPath === '/anchors/login';
 
     if (!isLoginOrAuthPage) {
+      return;
+    }
+
+    const isUserAuthPage =
+      currentPath === '/login' ||
+      currentPath === '/signup' ||
+      currentPath === '/forgot-password';
+
+    if (
+      (isUserAuthPage && isAnchor) ||
+      (currentPath === '/anchors/login' && !isAnchor && !isAdmin)
+    ) {
       return;
     }
 

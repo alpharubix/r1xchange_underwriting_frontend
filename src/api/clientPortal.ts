@@ -33,20 +33,12 @@ export type ClientPortal = "user" | "ANCHOR";
 
 export function getClientPortal(): ClientPortal {
   const pathname = window.location.pathname.toLowerCase();
-  const storedRole = localStorage.getItem("user_role")?.toLowerCase();
-
-  const isAnchorRole =
-    storedRole === "anchor" ||
-    storedRole === "super_anchor" ||
-    storedRole === "superanchor" ||
-    storedRole === "super-anchor";
-
   const isAnchorPath =
     pathname === "/anchors" ||
     pathname.startsWith("/anchors/") ||
     pathname.startsWith("/anchors");
 
-  if (isAnchorPath || isAnchorRole) {
+  if (isAnchorPath) {
     return "ANCHOR";
   }
 

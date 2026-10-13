@@ -18,9 +18,33 @@ import {
   type ValidateOtpPayload,
   type ResetPasswordPayload,
 } from '@/api/auth';
+import { getMe, type UserProfile } from '@/api/user';
 import { useAuthContext } from '@/contexts/AuthContext';
-import { getMe } from '@/api/user';
 import axios from 'axios';
+
+async function loadProfileFromMe(
+  queryClient: ReturnType<typeof useQueryClient>,
+  roleFallback: string,
+  portal: 'user' | 'anchor' | 'admin'
+) {
+  queryClient.removeQueries({ queryKey: ['user', 'me'] });
+  try {
+    const userProfile = await queryClient.fetchQuery<UserProfile>({
+      queryKey: ['user', 'me'],
+      queryFn: getMe,
+      staleTime: 1000 * 60 * 5,
+    });
+    const profileRole =
+      typeof userProfile.role === 'string' ? userProfile.role : roleFallback;
+    const profile = { ...userProfile, role: profileRole, portal };
+    queryClient.setQueryData(['user', 'me'], profile);
+    localStorage.setItem('user_role', profileRole);
+    return profile;
+  } catch (error) {
+    toast.error(`Could not load your profile: ${getApiError(error)}`);
+    throw error;
+  }
+}
 
 // Helper to extract role from message string
 function extractRoleFromMessage(message?: string): string | null {
@@ -61,29 +85,19 @@ export function useLogin() {
     mutationFn: (data: LoginPayload) => loginUser(data),
     onSuccess: async (data) => {
       const msg = data?.message || data?.data?.message || 'Login successful';
-      toast.success(msg);
 
       const extractedRole = extractRoleFromMessage(msg);
       const effectiveRole = extractedRole || 'user';
       localStorage.setItem('user_role', effectiveRole);
 
-      let role = effectiveRole;
-      try {
-        const userProfile = await getMe();
-        const profileRole = typeof userProfile.role === 'string' ? userProfile.role : role;
-        const finalProfile = { ...userProfile, role: profileRole, portal: 'user' as const };
-        localStorage.setItem('user_role', finalProfile.role);
-        setUser(finalProfile);
-        queryClient.setQueryData(['user', 'me'], finalProfile);
-        role = finalProfile.role;
-      } catch (err) {
-        const user = data?.user || data?.data?.user || data?.data || {};
-        const finalUser = { ...user, role, portal: 'user' as const };
-        localStorage.setItem('user_role', role);
-        setUser(finalUser);
-        queryClient.setQueryData(['user', 'me'], finalUser);
-        role = finalUser.role || role;
-      }
+      const finalUser = await loadProfileFromMe(
+        queryClient,
+        effectiveRole,
+        'user'
+      );
+      setUser(finalUser);
+      toast.success(msg);
+      const role = finalUser.role || effectiveRole;
 
       if (
         window.location.pathname.toLowerCase().includes('/anchors') ||
@@ -107,7 +121,6 @@ export function useAdminLogin() {
     mutationFn: (data: AdminLoginPayload) => loginAdmin(data),
     onSuccess: async (data) => {
       const msg = data?.message || data?.data?.message || 'Login successful';
-      toast.success(msg);
 
       const extractedRole = extractRoleFromMessage(msg);
       const rawRole =
@@ -118,21 +131,13 @@ export function useAdminLogin() {
         data?.data?.user?.role ||
         'admin';
       localStorage.setItem('user_role', rawRole);
-      try {
-        const userProfile = await getMe();
-        const role = extractedRole || userProfile.role || rawRole;
-        const fullUser = { ...userProfile, role, portal: 'admin' as const };
-        setUser(fullUser);
-        queryClient.setQueryData(['user', 'me'], fullUser);
-        localStorage.setItem('user_role', role);
-      } catch (err) {
-        const user = data?.user || data?.data?.user || data?.data || {};
-        const role = extractedRole || user.role || rawRole;
-        const fullUser = { ...user, role, portal: 'admin' as const };
-        setUser(fullUser);
-        queryClient.setQueryData(['user', 'me'], fullUser);
-        localStorage.setItem('user_role', role);
-      }
+      const fullUser = await loadProfileFromMe(
+        queryClient,
+        extractedRole || rawRole,
+        'admin'
+      );
+      setUser(fullUser);
+      toast.success(msg);
       navigate('/admins/user');
     },
   });
@@ -147,7 +152,6 @@ export function useAnchorLogin() {
     mutationFn: (data: AnchorLoginPayload) => loginAnchor(data),
     onSuccess: async (data) => {
       const msg = data?.message || data?.data?.message || 'Login successful';
-      toast.success(msg);
 
       const extractedRole = extractRoleFromMessage(msg);
       const rawRole =
@@ -158,21 +162,13 @@ export function useAnchorLogin() {
         data?.data?.user?.role ||
         'anchor';
       localStorage.setItem('user_role', rawRole);
-      try {
-        const userProfile = await getMe();
-        const role = extractedRole || userProfile.role || rawRole;
-        const fullUser = { ...userProfile, role, portal: 'anchor' as const };
-        setUser(fullUser);
-        queryClient.setQueryData(['user', 'me'], fullUser);
-        localStorage.setItem('user_role', role);
-      } catch (err) {
-        const user = data?.user || data?.data?.user || data?.data || {};
-        const role = extractedRole || user.role || rawRole;
-        const fullUser = { ...user, role, portal: 'anchor' as const };
-        setUser(fullUser);
-        queryClient.setQueryData(['user', 'me'], fullUser);
-        localStorage.setItem('user_role', role);
-      }
+      const fullUser = await loadProfileFromMe(
+        queryClient,
+        extractedRole || rawRole,
+        'anchor'
+      );
+      setUser(fullUser);
+      toast.success(msg);
 
       sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
