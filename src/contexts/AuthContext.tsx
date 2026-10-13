@@ -53,11 +53,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   // Listen for 401 events dispatched by the axios interceptor
   useEffect(() => {
     const handle = () => {
-      clearAuth();
       const path = window.location.pathname.toLowerCase();
       if (path === '/' || path === '/pricing' || path.startsWith('/products/') || path === '/anchors') {
         return;
       }
+      if (path.startsWith('/bank/')) {
+        return;
+      }
+      clearAuth();
       if (path.includes('/anchors')) {
         navigate('/anchors/login');
       } else if (path.includes('/admins')) {
@@ -72,6 +75,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (isError) {
+      if (window.location.pathname.toLowerCase().startsWith('/bank/')) {
+        return;
+      }
       clearAuth();
     }
   }, [isError, clearAuth]);
@@ -154,4 +160,3 @@ export function useAuthContext() {
     throw new Error('useAuthContext must be used within <AuthProvider>');
   return ctx;
 }
-

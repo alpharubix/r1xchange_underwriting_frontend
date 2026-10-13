@@ -8,6 +8,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import PublicRoute from '@/components/PublicRoute';
 import ExistingReports from './pages/cibil/ExistingReports';
 import ViewReport from './pages/cibil/ViewReport';
+import './features/loan-application/loan-application.css';
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const MarketingHomePage = lazy(() =>
@@ -67,9 +68,6 @@ const ITRProfitAndLossStatementPage = lazy(
 );
 const ITRRatioAnalysisPage = lazy(() => import('@/pages/itr/RatioAnalysis'));
 
-
-
-
 const HelpCenterPage = lazy(() => import('@/pages/HelpCenter'));
 const CibilCustDataFetching = lazy(
   () => import('@/pages/cibil/CibilCustDataFetching')
@@ -89,6 +87,31 @@ const IndividualEodAnalysis = lazy(
 );
 const IndividualLoanTransactions = lazy(
   () => import('@/pages/bsa/individual/LoanTransactions')
+);
+const BankLoanLayout = lazy(() =>
+  import('@/features/loan-application/components/BankLoanLayout').then(
+    (module) => ({ default: module.BankLoanLayout })
+  )
+);
+const LoanWelcomePage = lazy(() =>
+  import('@/features/loan-application/pages/WelcomePage').then((module) => ({
+    default: module.WelcomePage,
+  }))
+);
+const LoanProductSelectionPage = lazy(() =>
+  import('@/features/loan-application/pages/ProductSelectionPage').then(
+    (module) => ({ default: module.ProductSelectionPage })
+  )
+);
+const LoanSecurityTypePage = lazy(() =>
+  import('@/features/loan-application/pages/SecurityTypePage').then(
+    (module) => ({ default: module.SecurityTypePage })
+  )
+);
+const LoanDetailsPage = lazy(() =>
+  import('@/features/loan-application/pages/LoanDetailsPage').then(
+    (module) => ({ default: module.LoanDetailsPage })
+  )
 );
 
 function App() {
@@ -110,6 +133,23 @@ function App() {
                   <Route path="/" element={<MarketingHomePage />} />
                   <Route path="/products/:slug" element={<MarketingProductPage />} />
                   <Route path="/pricing" element={<MarketingPricingPage />} />
+
+                  {/* Bank-specific loan application journey */}
+                  <Route path="/bank/:bankCode" element={<BankLoanLayout />}>
+                    <Route index element={<LoanWelcomePage />} />
+                    <Route
+                      path="apply/products"
+                      element={<LoanProductSelectionPage />}
+                    />
+                    <Route
+                      path="apply/security-type"
+                      element={<LoanSecurityTypePage />}
+                    />
+                    <Route
+                      path="apply/details"
+                      element={<LoanDetailsPage />}
+                    />
+                  </Route>
 
                   {/* Public account routes */}
                   <Route element={<PublicRoute />}>
@@ -283,5 +323,4 @@ function App() {
 }
 
 export default App;
-
 
