@@ -36,7 +36,7 @@ async function loadProfileFromMe(
     });
     const profile = { ...userProfile, role: authenticatedRole, portal };
     queryClient.setQueryData(['user', 'me'], profile);
-    localStorage.setItem('user_role', authenticatedRole);
+    sessionStorage.setItem('user_role', authenticatedRole);
     return profile;
   } catch (error) {
     toast.error(`Could not load your profile: ${getApiError(error)}`);
@@ -86,7 +86,7 @@ export function useLogin() {
 
       const extractedRole = extractRoleFromMessage(msg);
       const effectiveRole = extractedRole || 'user';
-      localStorage.setItem('user_role', effectiveRole);
+      sessionStorage.setItem('user_role', effectiveRole);
 
       const loginUser = { role: effectiveRole, portal: 'user' as const };
       setUser(loginUser);
@@ -127,7 +127,7 @@ export function useAdminLogin() {
         data?.user?.role ||
         data?.data?.user?.role ||
         'admin';
-      localStorage.setItem('user_role', rawRole);
+      sessionStorage.setItem('user_role', rawRole);
       const role = extractedRole || rawRole;
       const loginUser = { role, portal: 'admin' as const };
       setUser(loginUser);
@@ -159,7 +159,7 @@ export function useAnchorLogin() {
         data?.user?.role ||
         data?.data?.user?.role ||
         'anchor';
-      localStorage.setItem('user_role', rawRole);
+      sessionStorage.setItem('user_role', rawRole);
       const role = extractedRole || rawRole;
       const loginUser = { role, portal: 'anchor' as const };
       setUser(loginUser);
@@ -184,7 +184,7 @@ export function useLogout() {
     onSettled: () => {
       // Always clear local user cache regardless of API success/failure.
       // The server clears the HttpOnly cookie on its side.
-      localStorage.removeItem('user_role');
+      sessionStorage.removeItem('user_role');
       clearAuth();
       if (window.location.pathname.toLowerCase().includes('/anchors')) {
         navigate('/anchors/login');

@@ -63,9 +63,9 @@ export default function AnchorCustomerPage() {
   const user = authUser as any;
   const logoutMutation = useLogout();
 
-  // Role detection: checks user.role and local storage
+  // Role detection: checks user.role and this tab's session storage
   const userRole = String(
-    user?.role || localStorage.getItem('user_role') || 'anchor'
+    user?.role || sessionStorage.getItem('user_role') || 'anchor'
   ).toLowerCase();
   const isSuperAnchor =
     userRole === 'superanchor' ||

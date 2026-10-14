@@ -60,7 +60,7 @@ export function AuthProvider({
     queryClient.clear();
     queryClient.setQueryData(['user', 'me'], null);
 
-    localStorage.removeItem('user_role');
+    sessionStorage.removeItem('user_role');
     localStorage.removeItem('redirect_path');
     localStorage.removeItem('gst_reference_id');
     localStorage.removeItem('gstin_list');
@@ -110,7 +110,7 @@ export function AuthProvider({
 
     console.log('User from me API:', typedUser);
 
-    const storedRole = localStorage.getItem('user_role');
+    const storedRole = sessionStorage.getItem('user_role');
     const userRole = normalizeRole(storedRole) || 'user';
 
     const isAnchor = isAnchorRole(userRole);
@@ -127,7 +127,7 @@ export function AuthProvider({
     // Keep React Query data synchronized with the normalized role and portal.
     setUser(typedUser);
 
-    localStorage.setItem('user_role', userRole);
+    sessionStorage.setItem('user_role', userRole);
 
     const currentPath = window.location.pathname.toLowerCase();
 

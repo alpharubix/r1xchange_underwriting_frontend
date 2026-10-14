@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getMe, type UserProfile } from '@/api/user';
 
 export function useMe() {
-  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
+  const storedRole = sessionStorage.getItem('user_role')?.toLowerCase();
   const hasStoredSession = Boolean(storedRole);
 
   return useQuery<UserProfile>({
