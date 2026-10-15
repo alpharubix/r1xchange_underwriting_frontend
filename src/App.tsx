@@ -90,6 +90,21 @@ const IndividualEodAnalysis = lazy(
 const IndividualLoanTransactions = lazy(
   () => import('@/pages/bsa/individual/LoanTransactions')
 );
+const BankApplicationLayout = lazy(
+  () =>
+    import('@/features/loan-application/pages/BankApplicationLayout').then(
+      (module) => ({ default: module.BankApplicationLayout })
+    )
+);
+const BankWelcomePage = lazy(
+  () => import('@/features/loan-application/pages/WelcomePage')
+);
+const ProductSelectionPage = lazy(
+  () => import('@/features/loan-application/pages/ProductSelectionPage')
+);
+const ParameterSelectionPage = lazy(
+  () => import('@/features/loan-application/pages/ParameterSelectionPage')
+);
 
 function App() {
   return (
@@ -128,6 +143,26 @@ function App() {
                   <Route path="/anchors/login" element={<AnchorLoginPage />} />
               <Route path="/contact" element={<ContactSalesPage />} />
                   <Route path="/Anchors/login" element={<AnchorLoginPage />} />
+
+                  {/* Bank-specific application workspace */}
+                  <Route
+                    path="/bank/:bankCode"
+                    element={<BankApplicationLayout />}
+                  >
+                    <Route
+                      index
+                      element={<Navigate to="apply" replace />}
+                    />
+                    <Route path="apply" element={<BankWelcomePage />} />
+                    <Route
+                      path="apply/products"
+                      element={<ProductSelectionPage />}
+                    />
+                    <Route
+                      path="apply/details"
+                      element={<ParameterSelectionPage />}
+                    />
+                  </Route>
                   
                   {/* Admin Login Page */}
                   <Route path="/admins/login" element={<AdminLoginPage />} />
@@ -261,7 +296,9 @@ function App() {
                       <Route path="/help-center" element={<HelpCenterPage />} />
                     </Route>
                   </Route>
+                  <Route>
 
+                  </Route>
                   <Route path="*" element={<NotF />} />
                 </Routes>
               </Suspense>

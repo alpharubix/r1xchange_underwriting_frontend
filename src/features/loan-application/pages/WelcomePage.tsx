@@ -2,11 +2,7 @@
 import { useState, type FormEvent } from 'react';
 import {
   ArrowRight,
-  BadgeCheck,
   ChevronRight,
-  FileCheck2,
-  LockKeyhole,
-  Sparkles,
   Plus,
   Settings2,
   Pencil,
@@ -15,7 +11,8 @@ import {
   Power,
 } from 'lucide-react';
 import { Link, useOutletContext } from 'react-router-dom';
-import type { BankConfig } from '../types';
+import type { BankConfig } from './BankApplicationLayout';
+import './WelcomePage.css';
 
 type CreditStatus = 'Draft' | 'Active' | 'Inactive';
 type SecurityType = 'Secured' | 'Unsecured';
@@ -51,14 +48,13 @@ const INITIAL_FORM: CreditForm = {
   minAmount: '50000',
   maxAmount: '500000',
   interestRate: '12',
-  tenure: '36',
+  tenure: '36'
 };
 
 const PRODUCT_TYPES = [
+  'Gold Loan',
   'Business Loan',
   'Supply Chain Finance',
-  'Gold Loan',
-  'Silver Loan',
   'Personal Loan',
 ];
 
@@ -101,11 +97,6 @@ export function WelcomePage() {
   const closeModal = () => {
     setModal(null);
     resetForm();
-  };
-
-  const openCreateModal = () => {
-    resetForm();
-    setModal('create');
   };
 
   const openManageModal = () => {
@@ -669,104 +660,26 @@ export function WelcomePage() {
         }
       `}</style>
 
-      <div className="loan-breadcrumb">
-        <span>{bank.bankName}</span>
-        <ChevronRight size={15} aria-hidden="true" />
-        <span>Loan application</span>
-      </div>
+      <main className="loan-application-page">
+        <div className="loan-breadcrumb">
+          <span>{bank.bankName}</span>
+          <ChevronRight size={15} aria-hidden="true" />
+          <span>Credit models</span>
+        </div>
 
-      <section className="loan-hero">
-        <div className="loan-hero-copy">
-          <p className="loan-eyebrow">
-            <Sparkles size={15} aria-hidden="true" />
-            A clearer way to borrow
-          </p>
-
+        <header className="bank-model-welcome">
+          <p className="loan-eyebrow">Bank administration</p>
           <h1>Welcome to {bank.bankName}</h1>
+          <p>{bank.welcomeMessage}</p>
+        </header>
 
-          <p className="loan-hero-subtitle">
-            Find the right loan for your needs with a simple and
-            transparent application process.
-          </p>
-
-          <p className="loan-bank-message">{bank.welcomeMessage}</p>
-
-          <Link
-            className="loan-button loan-button-primary loan-apply-button"
-            to={`/bank/${bank.bankCode}/apply/products`}
-          >
-            Apply for Loan
-            <ArrowRight size={18} aria-hidden="true" />
-          </Link>
-
-          <p className="loan-no-obligation">
-            Explore your options. No commitment at this stage.
-          </p>
-        </div>
-
-        <div
-          className="loan-hero-visual"
-          aria-label="Illustration of a loan application"
-        >
-          <div className="loan-visual-orbit loan-orbit-one" />
-          <div className="loan-visual-orbit loan-orbit-two" />
-
-          <div className="loan-visual-card">
-            <div className="loan-visual-card-header">
-              <span className="loan-visual-logo">
-                <FileCheck2 size={20} aria-hidden="true" />
-              </span>
-
-              <span>
-                <strong>Loan application</strong>
-                <small>Designed around you</small>
-              </span>
-
-              <BadgeCheck
-                className="loan-visual-check"
-                size={21}
-                aria-hidden="true"
-              />
-            </div>
-
-            <div className="loan-visual-row">
-              <span>Choose a product</span>
-              <span className="loan-visual-line" />
-            </div>
-
-            <div className="loan-visual-row">
-              <span>Review your options</span>
-              <span className="loan-visual-line short" />
-            </div>
-
-            <div className="loan-visual-bottom">
-              <span>
-                <LockKeyhole size={14} aria-hidden="true" />
-                Secure by design
-              </span>
-              <span className="loan-visual-status">Getting started</span>
-            </div>
-          </div>
-
-          <div
-            className="loan-visual-accent loan-accent-one"
-            aria-hidden="true"
-          />
-          <div
-            className="loan-visual-accent loan-accent-two"
-            aria-hidden="true"
-          />
-        </div>
-      </section>
-
-      {/* Bank credit management */}
-      <section className="credit-management">
+        <section className="credit-management">
         <div className="credit-management-heading">
           <div>
-            <p className="loan-eyebrow">Bank administration</p>
-            <h2>Credit Management</h2>
+            <p className="loan-eyebrow">Credit model workspace</p>
+            <h2>Create or manage credit models</h2>
             <p>
-              Create and manage the credit products offered by{' '}
+              Configure eligibility parameters or manage the existing models for{' '}
               {bank.bankName}.
             </p>
           </div>
@@ -783,21 +696,20 @@ export function WelcomePage() {
               <Plus size={25} aria-hidden="true" />
             </div>
 
-            <h3>Create Credit</h3>
+            <h3>Create Credit Model</h3>
 
             <p>
-              Configure a new loan product, define its limits, set
-              interest rates, and manage its availability.
+              Choose a loan product, set its security type, then configure its
+              eligibility parameters.
             </p>
 
-            <button
-              type="button"
+            <Link
               className="loan-button loan-button-primary"
-              onClick={openCreateModal}
+              to={`/bank/${bank.bankCode}/apply/products`}
             >
-              Create New Credit
+              Create Credit Model
               <ArrowRight size={17} aria-hidden="true" />
-            </button>
+            </Link>
           </article>
 
           <article className="credit-action-card manage-credit-card">
@@ -805,10 +717,10 @@ export function WelcomePage() {
               <Settings2 size={25} aria-hidden="true" />
             </div>
 
-            <h3>Manage Credit</h3>
+            <h3>Manage Existing Model</h3>
 
             <p>
-              View existing products, update their configuration, and
+              View existing models, update their configuration, and
               control whether they are active.
             </p>
 
@@ -817,54 +729,13 @@ export function WelcomePage() {
               className="loan-button loan-button-secondary"
               onClick={openManageModal}
             >
-              Manage Products
+              Manage Existing Model
               <ChevronRight size={17} aria-hidden="true" />
             </button>
 
             <span className="credit-card-meta">
               {activeCount} active · {draftCount} drafts
             </span>
-          </article>
-        </div>
-      </section>
-
-      {/* Existing benefits section */}
-      <section className="loan-benefits" aria-labelledby="benefits-heading">
-        <div className="loan-section-heading">
-          <p className="loan-eyebrow">Built for clarity</p>
-          <h2 id="benefits-heading">
-            A straightforward way to get started
-          </h2>
-          <p>Know what to expect at each step of your application.</p>
-        </div>
-
-        <div className="loan-benefit-grid">
-          <article className="loan-benefit">
-            <span className="loan-benefit-icon">
-              <ArrowRight size={21} aria-hidden="true" />
-            </span>
-            <h3>Simple application process</h3>
-            <p>Move through a clear set of steps at your own pace.</p>
-          </article>
-
-          <article className="loan-benefit">
-            <span className="loan-benefit-icon">
-              <BadgeCheck size={21} aria-hidden="true" />
-            </span>
-            <h3>Transparent assessment</h3>
-            <p>
-              Understand the information needed to assess your eligibility.
-            </p>
-          </article>
-
-          <article className="loan-benefit">
-            <span className="loan-benefit-icon">
-              <LockKeyhole size={21} aria-hidden="true" />
-            </span>
-            <h3>Information handled securely</h3>
-            <p>
-              Your application details are treated with care and protection.
-            </p>
           </article>
         </div>
       </section>
@@ -1079,14 +950,13 @@ export function WelcomePage() {
                       Create your first credit product to manage it here.
                     </p>
 
-                    <button
-                      type="button"
+                    <Link
                       className="loan-button loan-button-primary"
-                      onClick={openCreateModal}
+                      to={`/bank/${bank.bankCode}/apply/products`}
                     >
                       <Plus size={17} aria-hidden="true" />
-                      Create Credit
-                    </button>
+                      Create Credit Model
+                    </Link>
                   </div>
                 ) : (
                   <div className="credit-product-list">
@@ -1170,6 +1040,7 @@ export function WelcomePage() {
           </section>
         </div>
       )}
+      </main>
     </>
   );
 }
