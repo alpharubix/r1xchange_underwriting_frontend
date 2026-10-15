@@ -14,7 +14,7 @@ import {
   X,
   Power,
 } from 'lucide-react';
-import { Link, useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext,useNavigate } from 'react-router-dom';
 import type { BankConfig } from '../types';
 
 type CreditStatus = 'Draft' | 'Active' | 'Inactive';
@@ -75,6 +75,7 @@ export function WelcomePage() {
   const [statusFilter, setStatusFilter] = useState('All');
   const [formError, setFormError] = useState('');
 
+  const navigate = useNavigate();
   const bankCredits = credits.filter(
     (credit) => credit.bankCode === bank.bankCode,
   );
@@ -682,7 +683,7 @@ export function WelcomePage() {
             A clearer way to borrow
           </p>
 
-          <h1>Welcome to {bank.bankName}</h1>
+          <h1>Welcome : {bank.bankName}</h1>
 
           <p className="loan-hero-subtitle">
             Find the right loan for your needs with a simple and
@@ -793,7 +794,7 @@ export function WelcomePage() {
             <button
               type="button"
               className="loan-button loan-button-primary"
-              onClick={openCreateModal}
+              onClick={()=>navigate('apply/products')}
             >
               Create New Credit
               <ArrowRight size={17} aria-hidden="true" />
