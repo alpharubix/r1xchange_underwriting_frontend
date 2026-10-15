@@ -24,7 +24,7 @@ export default function ProtectedRoute({requiredPortal}:ProtectedRouteProps) {
     return <Navigate to={loginPath} replace />;
   }
     
-  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
+  const storedRole = sessionStorage.getItem('user_role')?.toLowerCase();
   const userRole = (user as any)?.role?.toLowerCase() || storedRole || 'user';
   const isAnchor =
     userRole === 'anchor' ||

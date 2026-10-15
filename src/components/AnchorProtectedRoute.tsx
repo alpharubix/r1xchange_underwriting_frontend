@@ -14,7 +14,7 @@ export default function AnchorProtectedRoute() {
     );
   }
 
-  const storedRole = localStorage.getItem('user_role')?.toLowerCase();
+  const storedRole = sessionStorage.getItem('user_role')?.toLowerCase();
   const userRole = (user as any)?.role?.toLowerCase();
   const isAnchor =
     userRole === 'anchor' ||

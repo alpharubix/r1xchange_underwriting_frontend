@@ -60,8 +60,8 @@ export function AuthProvider({
     queryClient.clear();
     queryClient.setQueryData(['user', 'me'], null);
 
-    localStorage.removeItem('user_role');
-    localStorage.removeItem('redirect_path');
+    sessionStorage.removeItem('user_role');
+    sessionStorage.removeItem('redirect_path');
     localStorage.removeItem('gst_reference_id');
     localStorage.removeItem('gstin_list');
     localStorage.removeItem('5pointcredit_tickets');
@@ -110,7 +110,7 @@ export function AuthProvider({
 
     console.log('User from me API:', typedUser);
 
-    const storedRole = localStorage.getItem('user_role');
+    const storedRole = sessionStorage.getItem('user_role');
     const userRole = normalizeRole(storedRole) || 'user';
 
     const isAnchor = isAnchorRole(userRole);
@@ -127,7 +127,7 @@ export function AuthProvider({
     // Keep React Query data synchronized with the normalized role and portal.
     setUser(typedUser);
 
-    localStorage.setItem('user_role', userRole);
+    sessionStorage.setItem('user_role', userRole);
 
     const currentPath = window.location.pathname.toLowerCase();
 
@@ -181,7 +181,7 @@ export function AuthProvider({
       isAnchorPortal &&
       isAnchor
     ) {
-      const originalPath = localStorage.getItem('redirect_path');
+      const originalPath = sessionStorage.getItem('redirect_path');
 
       if (originalPath?.startsWith('/anchors/')) {
         redirectTo = originalPath;
@@ -190,7 +190,7 @@ export function AuthProvider({
       isAdminPortal &&
       isAdmin
     ) {
-      const originalPath = localStorage.getItem('redirect_path');
+      const originalPath = sessionStorage.getItem('redirect_path');
 
       if (originalPath?.startsWith('/admins/')) {
         redirectTo = originalPath;
@@ -201,7 +201,7 @@ export function AuthProvider({
       !isAnchor &&
       !isAdmin
     ) {
-      const originalPath = localStorage.getItem('redirect_path');
+      const originalPath = sessionStorage.getItem('redirect_path');
 
       if (
         originalPath &&
@@ -223,7 +223,7 @@ export function AuthProvider({
       );
     }
 
-    localStorage.removeItem('redirect_path');
+    sessionStorage.removeItem('redirect_path');
 
     navigate(redirectTo, { replace: true });
   }, [user, isLoading, setUser, navigate]);
