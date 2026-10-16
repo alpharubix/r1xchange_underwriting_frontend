@@ -43,7 +43,7 @@ export default function AnchorLoginPage() {
       },
       {
         onError: (err) => {
-          if (err.message.toLocaleLowerCase() == 'Unauthorized Access') {
+          if (err.message == 'Unauthorized Access') {
             toast.error('Invalid ID or password. Please try again.');
           }
           toast.error(getApiError(err));

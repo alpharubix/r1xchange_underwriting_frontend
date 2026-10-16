@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 
 interface AuthUser {
   _id?: string;
+  cust_id?: string;
   email_id?: string;
   customer_name?: string;
   anchor_name?: string;
@@ -111,7 +112,10 @@ export function AuthProvider({
     console.log('User from me API:', typedUser);
 
     const storedRole = sessionStorage.getItem('user_role');
-    const userRole = normalizeRole(storedRole) || 'user';
+    const profileRole =
+      typeof typedUser.role === 'string' ? typedUser.role : storedRole;
+    const userRole =
+      normalizeRole(profileRole) || normalizeRole(storedRole) || 'user';
 
     const isAnchor = isAnchorRole(userRole);
     const isAdmin = isAdminRole(userRole);
@@ -121,11 +125,14 @@ export function AuthProvider({
         ? 'admin'
         : 'user';
 
-    typedUser.role = userRole;
-    typedUser.portal = portal;
+    const normalizedUser =
+      typedUser.role === userRole && typedUser.portal === portal
+        ? typedUser
+        : { ...typedUser, role: userRole, portal };
 
-    // Keep React Query data synchronized with the normalized role and portal.
-    setUser(typedUser);
+    if (normalizedUser !== typedUser) {
+      setUser(normalizedUser);
+    }
 
     sessionStorage.setItem('user_role', userRole);
 
@@ -215,9 +222,9 @@ export function AuthProvider({
     if (!isAdmin) {
       toast.success(
         `Welcome, ${
-          typedUser.customer_name ||
-          typedUser.anchor_name ||
-          typedUser.login_id ||
+          normalizedUser.customer_name ||
+          normalizedUser.anchor_name ||
+          normalizedUser.login_id ||
           'User'
         }!`
       );

@@ -34,9 +34,13 @@ async function loadProfileFromMe(
       retry: false,
       staleTime: 0,
     });
-    const profile = { ...userProfile, role: authenticatedRole, portal };
+    const profileRole =
+      typeof userProfile.role === 'string' && userProfile.role.trim()
+        ? userProfile.role
+        : authenticatedRole;
+    const profile = { ...userProfile, role: profileRole, portal };
     queryClient.setQueryData(['user', 'me'], profile);
-    sessionStorage.setItem('user_role', authenticatedRole);
+    sessionStorage.setItem('user_role', profileRole);
     return profile;
   } catch (error) {
     toast.error(`Could not load your profile: ${getApiError(error)}`);
@@ -83,7 +87,6 @@ export function useLogin() {
     mutationFn: (data: LoginPayload) => loginUser(data),
     onSuccess: async (data) => {
       const msg = data?.message || data?.data?.message || 'Login successful';
-
       const extractedRole = extractRoleFromMessage(msg);
       const effectiveRole = extractedRole || 'user';
       sessionStorage.setItem('user_role', effectiveRole);

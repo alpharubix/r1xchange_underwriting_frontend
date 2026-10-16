@@ -2,7 +2,9 @@ import apiClient from '@/lib/axios';
 
 export interface UserProfile {
   _id?: string;
+  cust_id?: string;
   user_id?: string;
+  role?: string;
   customer_name?: string;
   company_name?: string;
   email_id?: string;
@@ -250,5 +252,4 @@ export const giveServiceConsent = async (
 };
 
 export const giveConsent = giveServiceConsent;
-
 

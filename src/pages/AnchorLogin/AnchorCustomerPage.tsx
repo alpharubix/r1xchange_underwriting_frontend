@@ -67,26 +67,27 @@ export default function AnchorCustomerPage() {
   const userRole = String(
     user?.role || sessionStorage.getItem('user_role') || 'anchor'
   ).toLowerCase();
-  const isSuperAnchor =
-    userRole === 'superanchor' ||
-    userRole === 'super_anchor' ||
-    userRole === 'super-anchor';
+
+  const isSuperAnchor = String(
+    user?.role || sessionStorage.getItem('user_role') || 'anchor'
+  )
+    .trim()
+    .toLowerCase()
+    .replace(/[\s_-]/g, '') === 'superanchor';
+
   const brand = getAnchorBrand(user);
 
-  const [showIntro, setShowIntro] = useState(() => {
-    return isSuperAnchor && !sessionStorage.getItem('anchor_intro_shown');
-  });
-
-  useEffect(() => {
-    if (!isSuperAnchor) {
-      setShowIntro(false);
-    }
-  }, [isSuperAnchor]);
+  const [introDismissed, setIntroDismissed] = useState(
+    () => Boolean(sessionStorage.getItem('anchor_intro_shown'))
+  );
+  const showIntro = isSuperAnchor && !introDismissed;
 
   const handleIntroComplete = () => {
     sessionStorage.setItem('anchor_intro_shown', 'true');
-    setShowIntro(false);
+    setIntroDismissed(true);
   };
+
+ 
 
   //filter data state
   const [filterUserId, setFilterUserId] = useState('');
@@ -132,6 +133,7 @@ export default function AnchorCustomerPage() {
     'list' | 'details'
   >('list');
 
+  
   // Initial customer list matching the mockup image
   const [customers, setCustomers] = useState<Customer[]>([]);
 
@@ -196,6 +198,7 @@ export default function AnchorCustomerPage() {
     }
   }, [fetchedAnchors, isSuperAnchor]);
 
+  
   const queryParam = isSuperAnchor
     ? (selectedAnchorFilter ?? undefined)
     : undefined;
@@ -204,9 +207,12 @@ export default function AnchorCustomerPage() {
   const { data: fetchedUsers, isLoading: isUsersLoading } = useQuery({
     queryKey: ['anchor', 'users-list', queryParam],
     queryFn: () => getAnchorUsers(queryParam),
-    enabled: !isSuperAnchor || !!selectedAnchorFilter,
+    enabled: isSuperAnchor && !!selectedAnchorFilter,
   });
-
+  useEffect(() => {
+  console.log('isSuperAnchor:', isSuperAnchor);
+  console.log('selectedAnchorFilter:', selectedAnchorFilter);
+}, [isSuperAnchor, selectedAnchorFilter]);
   const getFlagValue = (userObj: any, baseKey: string) => {
     if (!userObj) return null;
     const keys = Object.keys(userObj);
@@ -261,13 +267,30 @@ export default function AnchorCustomerPage() {
     return null;
   };
 
+
+   useEffect(() => {
+  console.log({
+    isSuperAnchor,
+    selectedAnchorFilter,
+    queryParam,
+    usersQueryEnabled: isSuperAnchor && !!selectedAnchorFilter,
+  });
+}, [isSuperAnchor, selectedAnchorFilter, queryParam]);
+
+
   useEffect(() => {
     const rawList = Array.isArray(fetchedUsers)
       ? fetchedUsers
-      : (fetchedUsers?.data ?? fetchedUsers?.users ?? fetchedUsers?.customers ?? []);
-    if (rawList && rawList.length > 0) {
+      : [
+          fetchedUsers?.users,
+          fetchedUsers?.customers,
+          fetchedUsers?.data,
+          fetchedUsers?.data?.users,
+          fetchedUsers?.data?.customers,
+        ].find(Array.isArray) ?? [];
+    if (rawList.length > 0) {
       const mapped = rawList.map((user: any) => ({
-        id: user._id || user.user_id || user.userId || user.id || user.account_id || user.accountId || user.accountid || "",
+        id: user.cust_id || user.customer_id || user.customerId || user._id || user.user_id || user.userId || user.id || user.account_id || user.accountId || user.accountid || "",
         name: user.customer_name || user.customerName || user.customername || user.name || user.username || user.userName || "",
         phone: user.phone_no || user.phoneNo || user.phone || user.phoneNumber || "",
         company_name: user.company_name || user.companyName || user.companyname || "",
