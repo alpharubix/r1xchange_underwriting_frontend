@@ -55,7 +55,7 @@ const DashboardPage = lazy(() => import('@/pages/DashboardPage'));
 const CashFlow = lazy(() => import('@/pages/bsa/cashFlow/CashFlow'));
 const OverviewMonthlyWise = lazy(
   () => import('@/pages/bsa/OverviewMonthlyWise')
-);
+);bank
 const NotF = lazy(() => import('@/pages/404'));
 const GstAnalysisPage = lazy(() => import('@/pages/gst/GstAnalysisPage'));
 const GstHistoryPage = lazy(() => import('@/pages/gst/GstHistoryPage'));

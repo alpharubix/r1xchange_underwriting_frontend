@@ -21,10 +21,15 @@ import {
 } from 'lucide-react';
 import { getPricingDetails } from '@/lib/paymentUtils';
 
-import bsaAccessFromDashboard from "@/assets/bsaAccessFromDashboard.png"
-import bsaUploadScreenshot from '@/assets/UploadBankStatementPdf.png';
-import crispLogoBlack from '@/assets/crispLogoRedesignFirstVersion.png'
+import crispLogoBlack from '@/assets/crispLogoRedesignFirstVersion.png';
 import './marketing.css';
+import { DashboardScreenPreview } from './dashboard-sample-ui/DashboardScreenPreview';
+import { BsaScreenPreview } from './bsa-sample-ui/BsaScreenPreview';
+import { GstScreenPreview } from './gst-sample-ui/GstScreenPreview';
+import { ItrScreenPreview } from './itr-sample-ui/ItrScreenPreview';
+import { CibilScreenPreview } from './cibil-sample-ui/CibilScreenPreview';
+import { KycScreenPreview } from './kyc-sample-ui/KycScreenPreview';
+import { MoneyScreenPreview } from './money-sample-ui/MoneyScreenPreview';
 
 
 type Product = {
@@ -220,10 +225,10 @@ const workflows: Workflow[] = [
     name: 'Bank Statement Analysis',
     purpose: 'Upload a bank statement, provide the account details, and review the generated account-level analysis.',
     steps: [
-      { title: 'Open Bank Statement Analysis', description: 'From the dashboard, choose Bank Statement Analysis to open the upload form.', screen: 'Dashboard -> Bank Statement Analysis', image: bsaAccessFromDashboard },
-      { title: 'Upload the bank statement', description: 'Select one or more statement files. The platform accepts the uploaded files for processing.', screen: 'Upload Bank Statement', image: bsaUploadScreenshot, imageAlt: 'CRISP Upload Bank Statement page' },
-      { title: 'Select the company type', description: 'Choose Individual, Company, Sole Proprietorship, Trust, or Partnership so the statement is analyzed in the right business context.', screen: 'Upload Bank Statement -> Company Type', image: "", imageAlt: 'Open Company Type dropdown on the CRISP BSA upload page' },
-      { title: 'Select the account type', description: 'Choose Current, Savings, Over Draft (OD), or Cash Credit (CC) for the account being analyzed.', screen: 'Upload Bank Statement -> Account Type', image: bsaUploadScreenshot, imageAlt: 'Account Type field on the CRISP BSA upload page' },
+      { title: 'Open Bank Statement Analysis', description: 'From the dashboard, choose Bank Statement Analysis to open the upload form.', screen: 'Dashboard -> Bank Statement Analysis' },
+      { title: 'Upload the bank statement', description: 'Select one or more statement files. The platform accepts the uploaded files for processing.', screen: 'Upload Bank Statement' },
+      { title: 'Select the company type', description: 'Choose Individual, Company, Sole Proprietorship, Trust, or Partnership so the statement is analyzed in the right business context.', screen: 'Upload Bank Statement -> Company Type' },
+      { title: 'Select the account type', description: 'Choose Current, Savings, Over Draft (OD), or Cash Credit (CC) for the account being analyzed.', screen: 'Upload Bank Statement -> Account Type' },
       { title: 'Complete the account details and submit', description: 'Enter the account number, select the bank, and provide the file password when required. Submit the form to start processing.', screen: 'Upload Bank Statement -> Account Number, Bank, File Password' },
       { title: 'Open the generated reports', description: 'After processing, choose the customer account and open the available reports: Overview, EOD Analysis, Loan Transactions, Summary of Debit and Credit, Cash Flow, or Monthly Overview.', screen: 'BSA Reports -> Bank Accounts -> Available Reports' },
     ],
@@ -586,78 +591,9 @@ function ProductCard({ product }: { product: Product }) {
   return <Link className="product-card reveal" to={`/products/${product.slug}`}><span className={`product-icon product-icon-${product.slug}`}><Icon size={21} strokeWidth={1.8} /></span><span className="card-kicker">{product.acronym}</span><h3>{product.name}</h3><p className="product-full-name">{product.fullName}</p><p className="product-description">{product.description}</p><span className="hidden-service-link ">Explore {product.acronym}<ArrowRight size={15} /></span><span className="card-corner"><ArrowUpRight size={16} /></span></Link>;
 }
 
-function GstScreenPreview({ stepIndex }: { stepIndex: number }) {
-  const progressLabels = ['GSTIN', 'Business & Date', 'Authentication', 'Analysis'];
-  const renderContent = () => {
-    if (stepIndex === 0) {
-      return <><label>GSTIN</label><div className="gst-preview-input">Enter 15-character GSTIN</div><button>Continue <ArrowRight size={11} /></button></>;
-    }
-    if (stepIndex === 1) {
-      return <><div className="gst-preview-fields"><span><label>GSTIN</label><b>29ABCDE1234F1Z5</b></span><span><label>Business Name</label><b>Demo Industries</b></span></div><div className="gst-preview-fields"><span><label>From Month</label><b>Jan 2026</b></span><span><label>To Month</label><b>Aug 2026</b></span></div><button>Submit details <ArrowRight size={11} /></button></>;
-    }
-    if (stepIndex === 2) {
-      return <><div className="gst-preview-status"><span className="health-dot" /><strong>Authentication required</strong></div><label>OTP</label><div className="gst-preview-input gst-preview-otp">_ _ _ _ _ _</div><button>Verify OTP <ArrowRight size={11} /></button></>;
-    }
-    if (stepIndex === 3) {
-      return <><div className="gst-preview-status gst-preview-processing"><span className="gst-preview-spinner" /><strong>Analysis in progress</strong></div><div className="gst-preview-progress"><span /></div><small>Checking GST data and preparing your report</small></>;
-    }
-    if (stepIndex === 4) {
-      return <><div className="gst-preview-history-head"><strong>GST Analysis History</strong><button>New Analysis</button></div><div className="gst-preview-table"><span>GSTIN</span><span>Period</span><span>Status</span><b>29ABCDE1234F1Z5</b><b>Jan - Aug 2026</b><em>COMPLETED</em><b>27PQRSX5678K2Z6</b><b>Jan - Dec  2026</b><em>PROCESSING</em></div></>;
-    }
-    return <><div className="gst-preview-report-head"><strong>GSTR Report</strong><button><ArrowUpRight size={10} /> Export Report</button></div><div className="gst-preview-tabs"><b>GSTR Overview</b><span>Top Suppliers & Customers</span><span>Monthly Summary</span></div><div className="gst-preview-report-lines"><span /><span /><span /><span /><span /></div></>;
-  };
-
-  return <div className="gst-screen-preview"><div className="gst-preview-top"><span><FileChartColumnIncreasing size={14} /> GST Analysis</span><small>CRISP</small></div><div className="gst-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className="gst-preview-content">{renderContent()}</div></div>;
-}
-
-function CibilScreenPreview({ stepIndex }: { stepIndex: number }) {
-  const progressLabels = ['Identity', 'OTP', 'Status', 'Report'];
-  const [activeReportTab, setActiveReportTab] = useState<'overview' | 'account' | 'payments' | 'analysis'>('overview');
-  const reportTabs = [{ key: 'overview', label: 'Overview' }, { key: 'account', label: 'Account Summary' }, { key: 'payments', label: 'Payments History' }, { key: 'analysis', label: 'Analysis' }] as const;
-  const paymentYears = [
-    { year: '2026', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '-', '-', '-', '-', '-', '-'] },
-    { year: ' 2026', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
-    { year: '2024', cells: ['000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
-    { year: '2023', cells: ['000/XXX', '000/XXX', 'XXX/XXX', 'XXX/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
-    { year: '2022', cells: ['-', '-', '-', '-', '-', '-', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX', '000/XXX'] },
-  ];
-  const analysisRows = ['Agriculture Loan', 'Auto Loan', 'Business Loan', 'Consumer Loan', 'Credit Card', 'Education Loan', 'Gold Loan', 'Housing Loan', 'Loan against Securities', 'Other', 'Overdraft & Cash Credit', 'Personal Loan', 'Property Loan', 'total'];
-  const renderActiveReportPanel = () => {
-    if (activeReportTab === 'overview') return null;
-    if (activeReportTab === 'account') return <div className="cibil-tab-panel"><div className="cibil-tab-switch"><b>Active Accounts</b><span>Closed Accounts</span></div><div className="cibil-tab-summary"><span><small>TOTAL CREDIT LIMIT</small><strong>₹8,050</strong></span><span><small>CURRENT BALANCE</small><strong>₹7,839</strong></span><span><small>OVERDUE BALANCE</small><strong className="cibil-negative">₹12</strong></span></div><small className="cibil-tab-kicker">OTHER (1)</small><div className="cibil-account-row"><span className="cibil-account-icon"><Landmark size={14} /></span><span><strong>Slice Small Finance Bank Limited</strong><small>Acct: XXXX6135 · Opened: 30-11-2021</small></span><b>₹7,839 <em>₹12 overdue</em></b><ChevronDown size={13} /></div></div>;
-    if (activeReportTab === 'payments') return <div className="cibil-tab-panel cibil-payments-panel"><div className="cibil-timeline-switch"><b>Active Timeline</b><span>Closed Timeline</span></div><div className="cibil-payment-account"><div><span className="cibil-account-icon"><Landmark size={14} /></span><strong>Personal Loan<small>Acct No: XXX X6135</small></strong></div><span>Limit: <b>₹8,050</b> <i /> Reported Date: <b>15-06-2026</b></span></div><div className="cibil-payment-grid"><div className="cibil-payment-months"><span>YEAR</span>{['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEPT', 'OCT', 'NOV', 'DEC'].map((month) => <span key={month}>{month}</span>)}</div>{paymentYears.map((row) => <div className="cibil-payment-year" key={row.year}><strong>▦ {row.year}</strong>{row.cells.map((cell, index) => <span className={cell === '-' ? 'empty' : cell.includes('XXX') && row.year === '2023' && (index === 2 || index === 3) ? 'muted' : ''} key={`${row.year}-${index}`}>{cell}</span>)}</div>)}</div><div className="cibil-payment-legend"><strong>CIBIL LEGEND & ABBREVIATIONS</strong><span><i className="legend-on-time" />000 <small>Payments are being timely made with zero days past due.</small></span><span><i className="legend-not-reported" />XXX <small>Payment information has not been reported to CIBIL.</small></span><span><i className="legend-standard" />STD <small>Payments are being made within 90 days of due date.</small></span></div></div>;
-    return <div className="cibil-tab-panel cibil-analysis-panel"><div className="cibil-analysis-title"><ChartNoAxesCombined size={14} /><strong>CREDIT FACILITY &amp; DELAYS ANALYSIS</strong></div><div className="cibil-analysis-table"><div className="cibil-analysis-head"><span>LOAN TYPE</span><span>TOTAL FACILITIES</span><span>FACILITIES IN LAST 12M</span><span>DELAYED PAYMENT PERCENTAGE<br /><small>OVERALL TRACK &nbsp;&nbsp;&nbsp; LAST 12M</small></span><span>DEFAULT CHANGE LAST 12M</span></div>{analysisRows.map((row) => <div className={`cibil-analysis-row ${row === 'Personal Loan' ? 'highlight' : ''}`} key={row}><strong>{row}</strong><span>{row === 'Personal Loan' ? '1' : '-'}</span><span>-</span><span>{row === 'Personal Loan' ? '' : '-'}</span><span>-</span></div>)}</div></div>;
-  };
-  const renderContent = () => {
-    if (stepIndex === 0) {
-      return <><div className="cibil-preview-report-link">View Previous Reports</div><div className="cibil-preview-identity-heading"><strong>Identity Details</strong><span>Enter the customer details required to initiate the CIBIL consent OTP.</span></div><div className="cibil-preview-fields cibil-preview-three"><span><label>First Name</label><b>Rahul</b></span><span><label>Middle Name</label><b>Optional</b></span><span><label>Last Name</label><b>Sharma</b></span></div><div className="cibil-preview-fields cibil-preview-three"><span><label>Date of Birth</label><b>mm/dd/yyyy</b></span><span><label>Gender</label><b>Male</b></span><span><label>Mobile Number</label><b>9876543210</b></span></div><div className="cibil-preview-fields cibil-preview-one"><span><label>Address</label><b>123 Example Street</b></span></div><div className="cibil-preview-fields cibil-preview-one"><span><label>State</label><b>-- Select State --</b></span></div><div className="cibil-preview-fields cibil-preview-one"><span><label>Pincode</label><b>400001</b></span></div><div className="cibil-preview-divider" /><div className="cibil-preview-fields cibil-preview-id"><span><label>ID Type</label><b>--SELECT ID TYPE--</b></span><span><label>ID Number</label><b>ABCDE1234F</b></span></div><button className="cibil-preview-continue">Continue to OTP</button></>;
-    }
-    if (stepIndex === 1) {
-      return <><div className="cibil-preview-status"><span className="health-dot" /><strong>OTP sent to the registered mobile number</strong></div><label>Enter OTP</label><div className="cibil-preview-otp">_ _ _ _ _ _</div><button>Verify OTP <ArrowRight size={11} /></button></>;
-    }
-    if (stepIndex === 2) {
-      return <><div className="cibil-preview-status cibil-preview-processing"><span className="gst-preview-spinner" /><strong>Fetching CIBIL report</strong></div><div className="cibil-preview-progress"><span /></div><small>Checking report status. This may take a moment.</small><button className="cibil-preview-secondary">View Previous Reports <ArrowUpRight size={10} /></button></>;
-    }
-    return <><div className="cibil-preview-report-header"><div><small>CIBIL REPORT</small><strong>Report Sections</strong><span>Reference ID: <b>9fe98b63-ba1a-4ce1-9a4e-58cf0a3921f6</b></span></div><div className="cibil-preview-report-actions"><button><ArrowUpRight size={10} /> Export</button><button>Back</button><button className="cibil-preview-new">Start New CIBIL Flow</button></div></div><div className="cibil-preview-tabs">{reportTabs.map((tab) => <button type="button" className={activeReportTab === tab.key ? 'active' : ''} onClick={() => setActiveReportTab(tab.key)} key={tab.key}>{tab.label}</button>)}</div>{renderActiveReportPanel()}{activeReportTab === 'overview' && <><div className="cibil-report-overview"><div className="cibil-score-card"><small>BUREAU SCORE</small><strong>729</strong><em>EQUIFAX SCORE</em><b>GOOD</b><span>Healthy credit history. Very good loan approvals.</span></div><div className="cibil-profile-card"><strong>PERSONAL & IDENTIFICATION PROFILE</strong><div className="cibil-profile-grid"><span><small>FULL NAME</small><b>Mr. Crisp</b></span><span><small>DATE OF BIRTH (AGE)</small><b>13-05-2000 (26 Yrs) | Male</b></span><span><small>PAN NUMBER</small><b>AABBB1234D</b></span><span><small>EMAIL ADDRESS</small><b>crisp@gmail.com</b></span><span><small>OCCUPATION</small><b>Business Owner</b></span><span><small>ANNUAL INCOME</small><b>₹0</b></span></div></div></div><div className="cibil-metric-grid"><div><small>TOTAL ACCOUNTS</small><strong>1</strong><span>Accounts</span></div><div><small>ACTIVE ACCOUNTS</small><strong>1</strong><span className="cibil-positive">Active</span></div><div><small>OVERDUE ACCOUNTS</small><strong>0</strong><span className="cibil-negative">OVERDUE</span></div><div><small>TOTAL OVERDUE AMOUNT</small><strong>₹0</strong></div></div><div className="cibil-bottom-metrics"><div className="cibil-debt-card"><small>OUTSTANDING DEBT</small><strong>₹7,839</strong><span>TOTAL OUTSTANDING BALANCE</span></div><div><small>CREDIT LIMIT</small><strong>₹8,050</strong><span>MAXIMUM AMOUNT SANCTIONED</span></div><div className="cibil-date-card"><span><small>OLDEST OPEN DATE</small><b>30-11-2021</b></span><span><small>RECENT OPEN DATE</small><b>30-11-2021</b></span><em>Accounts as Guarantor <b>0</b></em></div></div></>}</>;
-  };
-
-  return <div className="cibil-screen-preview"><div className="cibil-preview-top"><span><Fingerprint size={14} /> CIBIL Score</span><small>CRISP</small></div><div className="cibil-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className={`cibil-preview-content ${stepIndex === 0 ? 'cibil-preview-identity' : ''}`}>{renderContent()}</div></div>;
-}
-
-function KycScreenPreview({ stepIndex }: { stepIndex: number }) {
-  const progressLabels = ['Aadhaar', 'OTP', 'DigiLocker', 'Documents'];
-  const renderContent = () => {
-    if (stepIndex === 0) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>Identity Verification</strong><small>Verify your Aadhaar details to continue</small></span></div><label>Aadhaar Number</label><div className="kyc-preview-input">Enter 12-digit Aadhaar number</div><button>Send OTP <ArrowRight size={11} /></button></>;
-    if (stepIndex === 1) return <><div className="kyc-preview-status"><span className="health-dot" /><strong>OTP sent to your registered mobile</strong></div><label>Enter Aadhaar OTP</label><div className="kyc-preview-input kyc-preview-otp">_ _ _ _ _ _</div><button>Verify Aadhaar <ArrowRight size={11} /></button></>;
-    if (stepIndex === 2) return <><div className="kyc-preview-heading"><ShieldCheck size={16} /><span><strong>DigiLocker consent</strong><small>Approve consent to retrieve your documents</small></span></div><div className="kyc-preview-consent"><span className="kyc-preview-lock">✓</span><span><strong>Secure DigiLocker session</strong><small>Waiting for consent approval</small></span><ArrowUpRight size={13} /></div><button>Open DigiLocker <ArrowUpRight size={11} /></button></>;
-    if (stepIndex === 3) return <><div className="kyc-preview-status kyc-preview-processing"><span className="gst-preview-spinner" /><strong>Checking DigiLocker session</strong></div><div className="kyc-preview-progress"><span /></div><small>Fetching verified documents</small></>;
-    return <><div className="kyc-preview-heading"><FileSearch size={16} /><span><strong>Available Documents</strong><small>Documents returned after verification</small></span></div><div className="kyc-preview-documents"><span><FileSearch size={13} /><b>Aadhaar Card</b><em>Verified</em></span><span><FileSearch size={13} /><b>PAN Card</b><em>Available</em></span></div></>;
-  };
-
-  return <div className="kyc-screen-preview"><div className="kyc-preview-top"><span><ShieldCheck size={14} /> KYC Verification</span><small>CRISP</small></div><div className="kyc-preview-progress-steps">{progressLabels.map((label, index) => <span className={index <= stepIndex ? 'active' : ''} key={label}><i>{index < stepIndex ? '✓' : index + 1}</i>{label}</span>)}</div><div className="kyc-preview-content">{renderContent()}</div></div>;
-}
-
 function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Workflow[] }) {
+  const showDashboard = workflowsToShow.length === workflows.length || workflowsToShow.some((w) => w.slug === 'bsa');
+
   return (
     <section className="workflow-section section-pad" id="how-it-works">
       <div className="workflow-heading reveal">
@@ -667,6 +603,26 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
         </div>
         <p>Follow the actual user journey for every service, from the first form to the finished report or request.</p>
       </div>
+
+      {showDashboard && (
+        <div className="workflow-dashboard-overview reveal mb-10">
+          <div className="workflow-dashboard-intro mb-5">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-[#002366] text-xs font-bold border border-blue-200/80 mb-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#002366] animate-pulse" />
+              CENTRAL PLATFORM DASHBOARD · STARTING POINT
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">
+              CRISP User Dashboard
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1 max-w-2xl leading-relaxed">
+              Before navigating to individual service flows, borrowers and underwriters land on the unified dashboard. From here, users view account health, select assessment modules, configure statement quantities, check wallet balance, and initiate instant analysis.
+            </p>
+          </div>
+
+          <DashboardScreenPreview />
+        </div>
+      )}
+
       <div className="workflow-list">
         {workflowsToShow.map((workflow) => (
           <article className={`workflow-block workflow-block-${workflow.slug} reveal`} key={workflow.slug}>
@@ -686,15 +642,12 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
                     <span className="workflow-step-screen">{step.screen}</span>
                     <h4>{step.title}</h4>
                     <p>{step.description}</p>
-                    {step.image && (
-                      <figure className="workflow-screenshot">
-                        <img src={step.image} alt={step.imageAlt || `${workflow.name} platform screen`} />
-                        <figcaption>Exact platform screenshot</figcaption>
-                      </figure>
-                    )}
+                    {workflow.slug === 'bsa' && <BsaScreenPreview stepIndex={index} />}
                     {workflow.slug === 'gst' && <GstScreenPreview stepIndex={index} />}
+                    {workflow.slug === 'itr' && <ItrScreenPreview stepIndex={index} />}
                     {workflow.slug === 'cibil' && <CibilScreenPreview stepIndex={index} />}
                     {workflow.slug === 'kyc' && <KycScreenPreview stepIndex={index} />}
+                    {workflow.slug === 'money' && <MoneyScreenPreview stepIndex={index} />}
                   </div>
                 </div>
               ))}
@@ -702,7 +655,7 @@ function WorkflowGallery({ workflowsToShow = workflows }: { workflowsToShow?: Wo
           </article>
         ))}
       </div>
-      <p className="workflow-note">The BSA upload screenshot shown above is the exact image currently stored in this project. Other platform screens are identified by their live page or component name because no corresponding screenshot asset is stored in the repository.</p>
+      <p className="workflow-note">All workflow steps above render live, interactive platform components reflecting the actual screens, forms, and report views available inside CRISP.</p>
     </section>
   );
 }
