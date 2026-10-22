@@ -64,14 +64,12 @@ export default function BsaUploadModal({
 
   const uploadMutation = useMutation({
     mutationFn: async (uploadData: FormData) => {
-      const config = custId ? { params: { cust_id: custId } } : {};
-      const response = await apiClient.post('/bsa/upload', uploadData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const url = custId ? `/bsa/upload/${encodeURIComponent(custId)}` : '/bsa/upload';
+      const response = await apiClient.post(url, uploadData, {
         skipErrorToast: true,
-        ...config,
       });
       return response.data;
-    },
+    },  
     onSuccess: (data: any) => {
       toast.success(
         data?.message ||

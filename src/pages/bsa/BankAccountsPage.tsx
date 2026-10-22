@@ -157,7 +157,8 @@ export default function BankAccountsPage({
            */
           const isIndividual =
             account.entityType?.toLowerCase() === 'individual';
-
+          
+          
           setShowModules((prev) => ({
             ...prev,
             [account.accountNumber!]: isIndividual,
@@ -296,6 +297,7 @@ export default function BankAccountsPage({
 
                   const reportsVisible = showReports[accountNumber];
 
+                  
                   return (
                     <div
                       key={getAccountKey(account, index)}
