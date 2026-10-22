@@ -65,7 +65,11 @@ export default function BsaUploadModal({
   const uploadMutation = useMutation({
     mutationFn: async (uploadData: FormData) => {
       const url = custId ? `/bsa/upload/${encodeURIComponent(custId)}` : '/bsa/upload';
+      console.log(url)
       const response = await apiClient.post(url, uploadData, {
+        headers:{
+          'Content-Type':'multipart/form-data'
+        },
         skipErrorToast: true,
       });
       return response.data;
