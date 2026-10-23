@@ -42,11 +42,23 @@ export default function AnchorLoginPage() {
         password: values.password,
       },
       {
-        onError: (err) => {
-          if (err.message == 'Unauthorized Access') {
-            toast.error('Invalid ID or password. Please try again.');
-          }
-          toast.error(getApiError(err));
+        onError: (err: any) => {
+          const apiMessage =
+            err.response?.data?.message ||
+            err.response?.data?.error ||
+            err.response?.data?.detail;
+
+          const isInvalid =
+            err.response?.status === 401 ||
+            err.message === 'Unauthorized Access' ||
+            apiMessage?.toLowerCase()?.includes('unauthorized') ||
+            apiMessage?.toLowerCase()?.includes('invalid');
+
+          const message = isInvalid
+            ? 'Invalid ID or password. Please try again.'
+            : (apiMessage || getApiError(err));
+
+          toast.error(message, { id: 'anchor-login-error' });
         },
       }
     );
@@ -202,7 +214,7 @@ export default function AnchorLoginPage() {
                       id="id"
                       type="text"
                       placeholder="ID"
-                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner focus:shadow-inner border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base  placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
+                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner border-gray-200 focus:border-[#002366] focus:ring-[#002366] rounded-xl text-base placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
                       autoComplete="off"
                       {...register('id')}
                     />
@@ -222,7 +234,7 @@ export default function AnchorLoginPage() {
                       id="password"
                       type={showPassword ? 'text' : 'password'}
                       placeholder="Password"
-                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner focus:shadow-inner  focus:ring-[#002366] text-base  placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
+                      className="h-11 pl-11 pr-4 font-semibold tracking-[0.6px] shadow-inner focus:ring-[#002366] text-base placeholder:text-gray-400 transition-all duration-200 focus:shadow-[inset_0_0_12px_rgba(59,130,246,0.25)]"
                       autoComplete="new-password"
                       {...register('password')}
                     />

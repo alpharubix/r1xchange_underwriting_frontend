@@ -130,11 +130,11 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
 
       if (res.data?.is_balance_available) {
         toast.success(
-          `${service} Balance Available: Rs.${res.data.available_balance}`
+          `${service} Balance Available: ₹${res.data.available_balance}`
         );
       } else {
         toast.error(
-          `Insufficient ${service} Balance: Rs.${res.data?.available_balance || 0}`
+          `Insufficient ${service} Balance: ₹${res.data?.available_balance || 0}`
         );
       }
     } catch (err: any) {
@@ -229,14 +229,14 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center">
+      <div className="flex min-h-[400px] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
       </div>
     );
   }
 
   return (
-    <div className="space-y-8 animate-fade-in pb-8">
+    <div className="space-y-8 pb-8">
       {/* Header */}
       <div>
         <h2 className="text-2xl font-bold tracking-tight text-gray-900 flex items-center gap-3">
@@ -287,7 +287,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                   {isWalletLoading ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    `Rs.${walletBalances[mod.id] ?? 0}`
+                    `₹${walletBalances[mod.id] ?? 0}`
                   )}
                 </span>
               </button>
@@ -385,7 +385,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
 
                     <div className="flex items-baseline gap-1 mb-3">
                       <span className="text-2xl font-bold text-gray-900">
-                        Rs.{(payment.amount / 100).toLocaleString('en-IN')}
+                        ₹ {(payment.amount / 100).toLocaleString('en-IN')}
                       </span>
                     </div>
                     <Button

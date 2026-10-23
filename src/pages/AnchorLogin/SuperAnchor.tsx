@@ -93,7 +93,7 @@ export default function SuperAnchor({
       phone_no: newAnchorForm.phone,
       email_id: newAnchorForm.email_id,
       password: newAnchorForm.password,
-      site_code: 'AcX01',
+      site_code: 'ACX01',
     });
   };
 

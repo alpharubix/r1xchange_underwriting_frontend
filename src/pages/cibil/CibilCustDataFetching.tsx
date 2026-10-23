@@ -21,6 +21,7 @@ export default function CibilCustDataFetching() {
               Authenticate customer consent and process CIBIL report data
             </p>
             {custId && (
+
               <p className="text-[#7754f8] mt-1 font-medium text-sm">
                 Target Customer ID: {custId}
               </p>

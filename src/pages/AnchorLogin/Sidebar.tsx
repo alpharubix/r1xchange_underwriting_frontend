@@ -79,14 +79,14 @@ export default function Sidebar({
               </div>
             )}
           </div>
-          {!sidebarCollapsed && (
+          {/* {!sidebarCollapsed && (
             <div className="mt-3.5 flex justify-center w-full">
               <span className="inline-flex items-center justify-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold bg-[#eff6ff] text-[#002366] w-full">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#002366]" />
                 {isSuperAnchor ? 'Anchor View' : 'User View'}
               </span>
             </div>
-          )}
+          )} */}
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export default function Sidebar({
         {!isSuperAnchor && (
           <button
             onClick={() => setActiveTab('customer')}
-            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === 'customer' ? 'bg-[#002366] text-white shadow-md shadow-[#002366]/25' : 'bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80'} ${sidebarCollapsed ? 'justify-center px-0' : ''}`}
+            className={`flex items-center w-full gap-3 px-5 py-3.5 rounded-2xl font-semibold text-sm transition-all cursor-pointer ${activeTab === 'customer' || activeTab === 'reports' ? 'bg-[#002366] text-white shadow-md shadow-[#002366]/25' : 'bg-white text-gray-600 hover:text-gray-900 shadow-sm border border-gray-100/60 hover:bg-gray-50/80'} ${sidebarCollapsed ? 'justify-center px-0' : ''}`}
             title="Customer"
           >
             <Users className="h-5 w-5 shrink-0" />

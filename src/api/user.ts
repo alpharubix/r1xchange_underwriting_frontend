@@ -140,7 +140,9 @@ export const getAssociatedAnchorsList = async (): Promise<any[]> => {
 export const getAnchorUsers = async (anchorId?: string, params?: Record<string, any>): Promise<any> => {
   const queryParams: Record<string, any> = { ...params };
   if (anchorId) {
+    queryParams.id = anchorId;
     queryParams._id = anchorId;
+    queryParams.anchor_id = anchorId;
   }
   const response = await apiClient.get("/anchor/users", { params: queryParams });
   console.log("getAnchorUsers response raw:", response.data);

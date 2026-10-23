@@ -149,7 +149,7 @@ export default function ServiceReport({
   const [isGstModalOpen, setIsGstModalOpen] = useState(false);
   const [isCibilModalOpen, setIsCibilModalOpen] = useState(false);
 
-      const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
+  const [viewingGstReport, setViewingGstReport] = useState<any | null>(null);
   const [viewingItrReport, setViewingItrReport] = useState<any | null>(null);
   const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(
     null
@@ -172,7 +172,7 @@ export default function ServiceReport({
     moduleName: '',
     serviceId: '',
     amount: 0,
-    onSuccess: () => {},
+    onSuccess: () => { },
   });
 
   const [payerSelectionConfig, setPayerSelectionConfig] = useState<{
@@ -186,7 +186,7 @@ export default function ServiceReport({
     moduleName: '',
     serviceId: '',
     amount: 0,
-    onSuccess: () => {},
+    onSuccess: () => { },
   });
 
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
@@ -252,8 +252,8 @@ export default function ServiceReport({
     } catch (error: any) {
       toast.error(
         error.response?.data?.message ||
-          error.response?.data?.detail ||
-          'Failed to create pending payment'
+        error.response?.data?.detail ||
+        'Failed to create pending payment'
       );
     }
   };
@@ -271,7 +271,7 @@ export default function ServiceReport({
     };
   }, [selectedCustomer]);
 
-  
+
   const { data: gstReports = [], isLoading: isGstLoading } = useQuery({
     queryKey: ['reports', 'gst', selectedCustomer.id],
     queryFn: async () => {
@@ -306,10 +306,10 @@ export default function ServiceReport({
           '',
         generatedOn: formatDateTime(
           item.created_at ||
-            item.generatedOn ||
-            item.generated_on ||
-            item.created_on ||
-            ''
+          item.generatedOn ||
+          item.generated_on ||
+          item.created_on ||
+          ''
         ),
         status: item.status || item.report_status || 'Active',
         completed:
@@ -337,10 +337,10 @@ export default function ServiceReport({
         itrToDate: item.itr_to_date || item.itrToDate || item.to_date || '',
         generatedOn: formatDateTime(
           item.created_at ||
-            item.generatedOn ||
-            item.generated_on ||
-            item.created_on ||
-            ''
+          item.generatedOn ||
+          item.generated_on ||
+          item.created_on ||
+          ''
         ),
         status: item.status || item.report_status || 'Active',
       }));
@@ -367,10 +367,10 @@ export default function ServiceReport({
           item.cibil_to_date || item.cibilToDate || item.to_date || '',
         generatedOn: formatDateTime(
           item.created_at ||
-            item.generatedOn ||
-            item.generated_on ||
-            item.created_on ||
-            ''
+          item.generatedOn ||
+          item.generated_on ||
+          item.created_on ||
+          ''
         ),
         status: item.status || item.report_status || 'Active',
       }));
@@ -408,8 +408,8 @@ export default function ServiceReport({
         <div className="h-14 w-14 rounded-full bg-white/10 text-white flex items-center justify-center font-bold text-xl shrink-0 tracking-wider">
           {getCustomerInitials(
             selectedCustomer.name ||
-              selectedCustomer.customer_name ||
-              selectedCustomer.company_name
+            selectedCustomer.customer_name ||
+            selectedCustomer.company_name
           )}
         </div>
         <div>
@@ -442,7 +442,7 @@ export default function ServiceReport({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2.5">
+      <div className="flex items-center gap-2.5 overflow-x-auto pb-1 w-full [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
         {(
           [
             'bsa',
@@ -478,6 +478,7 @@ export default function ServiceReport({
                   'access_money',
                   'save_money',
                   'rectify_money',
+                  'wallet',
                 ];
                 const newIndex = tabsList.indexOf(tab);
                 const oldIndex = tabsList.indexOf(reportsSubTab);
@@ -490,7 +491,7 @@ export default function ServiceReport({
                 setViewingRectifyMoneyReport(null);
                 localStorage.removeItem('selected_itr_report_id');
               }}
-              className={`-ml-1 inline-flex items-center gap-2 px-4 py-2 rounded-3xl text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive ? 'bg-[#002366] text-white shadow-sm shadow-[#002366]/25' : 'bg-[#f0f4f9] text-slate-600 hover:bg-[#e4ebf5] hover:text-slate-900'}`}
+              className={`shrink-0 whitespace-nowrap inline-flex items-center gap-2 px-4 py-2 rounded-3xl text-sm font-semibold transition-all duration-200 cursor-pointer ${isActive ? 'bg-[#002366] text-white shadow-sm shadow-[#002366]/25' : 'bg-[#f0f4f9] text-slate-600 hover:bg-[#e4ebf5] hover:text-slate-900'}`}
             >
               <span
                 className={`h-2 w-2 rounded-full shrink-0 transition-colors ${isActive ? 'bg-emerald-400' : 'bg-slate-400'}`}
@@ -513,62 +514,62 @@ export default function ServiceReport({
             transition={{ duration: 0.25, ease: 'easeInOut' }}
           >
             {reportsSubTab === 'bsa' && (
-                  <div className="animate-in fade-in duration-200">
-                    {!bsaView ? (
-                      <>
-                        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                          <div>
-                            <h3 className="text-lg font-bold text-slate-900">
-                              BSA Reports
-                            </h3>
-                            <p className="text-xs text-slate-500 mt-0.5">
-                              Bank Statement Analysis Reports
-                            </p>
-                          </div>
-                          <Button
-                            onClick={() =>
-                              handleCreateReport('BSA', 'BSA', 565, () =>
-                                setIsBsaModalOpen(true)
-                              )
-                            }
-                            disabled={isCheckingWallet}
-                            className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                          >
-                            {isCheckingWallet ? (
-                              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                            ) : null}
-                            + Create New BSA Report
-                          </Button>
-                        </div>
-                        <BankAccountsPage custId={selectedCustomer.id} hideHeader={true} isAnchor={true} />
-                      </>
-                    ) : (
-                      <div className="space-y-4">
-                        <Button
-                          variant="outline"
-                          onClick={() => {
-                            searchParams.delete('bsaView');
-                            searchParams.delete('accountNumber');
-                            setSearchParams(searchParams);
-                          }}
-                          className="flex items-center gap-2 border-[#002366] text-[#002366] hover:bg-[#002366]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
-                        >
-                          <ArrowLeft className="h-4 w-4" /> Back to Bank Accounts
-                        </Button>
-
-                        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-6">
-                          {bsaView === 'individual_overview' && <IndividualOverview accountNumber={accountNumber || undefined} />}
-                          {bsaView === 'individual_eod' && <IndividualEodAnalysis accountNumber={accountNumber || undefined} />}
-                          {bsaView === 'individual_loan' && <IndividualLoanTransactions accountNumber={accountNumber || undefined} />}
-                          {bsaView === 'summary' && <SummeryOfDebitAndCredit accountNumber={accountNumber || undefined} />}
-                          {bsaView === 'cashflow' && <CashFlow accountNumber={accountNumber || undefined} />}
-                          {bsaView === 'overview' && <OverviewMonthlyWise accountNumber={accountNumber || undefined} />}
-                        </div>
+              <div className="animate-in fade-in duration-200">
+                {!bsaView ? (
+                  <>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                      <div>
+                        <h3 className="text-lg font-bold text-slate-900">
+                          BSA Reports
+                        </h3>
+                        <p className="text-xs text-slate-500 mt-0.5">
+                          Bank Statement Analysis Reports
+                        </p>
                       </div>
-                    )}
+                      <Button
+                        onClick={() =>
+                          handleCreateReport('BSA', 'BSA', 565, () =>
+                            setIsBsaModalOpen(true)
+                          )
+                        }
+                        disabled={isCheckingWallet}
+                        className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
+                      >
+                        {isCheckingWallet ? (
+                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        ) : null}
+                        + Create New BSA Report
+                      </Button>
+                    </div>
+                    <BankAccountsPage custId={selectedCustomer.id} hideHeader={true} isAnchor={true} />
+                  </>
+                ) : (
+                  <div className="space-y-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        searchParams.delete('bsaView');
+                        searchParams.delete('accountNumber');
+                        setSearchParams(searchParams);
+                      }}
+                      className="flex items-center gap-2 border-[#002366] text-[#002366] hover:bg-[#002366]/5 font-bold rounded-xl h-9 text-xs cursor-pointer"
+                    >
+                      <ArrowLeft className="h-4 w-4" /> Back to Bank Accounts
+                    </Button>
+
+                    <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden p-6">
+                      {bsaView === 'individual_overview' && <IndividualOverview accountNumber={accountNumber || undefined} />}
+                      {bsaView === 'individual_eod' && <IndividualEodAnalysis accountNumber={accountNumber || undefined} />}
+                      {bsaView === 'individual_loan' && <IndividualLoanTransactions accountNumber={accountNumber || undefined} />}
+                      {bsaView === 'summary' && <SummeryOfDebitAndCredit accountNumber={accountNumber || undefined} />}
+                      {bsaView === 'cashflow' && <CashFlow accountNumber={accountNumber || undefined} />}
+                      {bsaView === 'overview' && <OverviewMonthlyWise accountNumber={accountNumber || undefined} />}
+                    </div>
                   </div>
                 )}
-              {reportsSubTab === 'gst' &&
+              </div>
+            )}
+            {reportsSubTab === 'gst' &&
               (viewingGstReport ? (
                 <GstReportPage
                   gstReferenceId={viewingGstReport.reportId}
@@ -1032,7 +1033,7 @@ export default function ServiceReport({
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
                                   <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                                     <span>Loading reports...</span>
                                   </div>
                                 </td>
@@ -1141,7 +1142,7 @@ export default function ServiceReport({
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
                                   <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
                                     <span>Loading reports...</span>
                                   </div>
                                 </td>
