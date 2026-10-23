@@ -129,7 +129,7 @@ export default function SaveMoneyReportView({
       <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
         {isLoading ? (
           <div className="py-24 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="h-8 w-8 text-[#FF6B4A] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
             <p className="text-slate-500 font-medium">
               Fetching accounts data...
             </p>

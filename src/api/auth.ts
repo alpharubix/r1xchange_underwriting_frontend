@@ -60,6 +60,7 @@ export const loginUser = async (data: LoginPayload) => {
 export const loginAnchor = async (data: AnchorLoginPayload) => {
   const response = await apiClient.post('/auth/anchor/login', data, {
     errorMessage: 'Invalid login_id or password. Please try again.',
+    skipErrorToast: true,
   });
   return response.data;
 };

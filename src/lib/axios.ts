@@ -24,7 +24,7 @@ const apiClient = axios.create({
 });
 
 
-apiClient.interceptors.request.use((config)=>{
+apiClient.interceptors.request.use((config) => {
   config.headers["X-Client-Portal"] = getClientPortal();
   //returns anchor or user
   return config;
@@ -90,7 +90,7 @@ export const extractErrorMessage = (error: any): string | null => {
 apiClient.interceptors.response.use(
   (response) => {
     const successMessage = response.config.successMessage;
-   
+
     if (successMessage) {
       toast.success(successMessage);
     }
@@ -129,12 +129,15 @@ apiClient.interceptors.response.use(
       const serverMessage = extractErrorMessage(error);
       console.log('Extracted server error message:', serverMessage);
 
-      const errorMessage = serverMessage || error.config?.errorMessage;
+      let errorMessage = serverMessage || error.config?.errorMessage;
       if (
         errorMessage &&
-        !errorMessage.toLowerCase().includes('unauthorized access')
+        errorMessage.toLowerCase().includes('unauthorized access')
       ) {
-        toast.error(errorMessage);
+        errorMessage = error.config?.errorMessage;
+      }
+      if (errorMessage) {
+        toast.error(errorMessage, { id: errorMessage });
       }
     }
 

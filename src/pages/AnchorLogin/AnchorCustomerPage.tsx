@@ -11,6 +11,8 @@ import {
   Check,
   Users,
   EyeOff,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useLogout } from '@/hooks/useAuth';
@@ -115,14 +117,32 @@ export default function AnchorCustomerPage() {
     );
   };
 
-  const customerIdParam = searchParams.get('customerId');
+  const customerIdParam =
+    searchParams.get('customerId') ||
+    sessionStorage.getItem('active_customer_id');
 
   // Redirect if they land on reports without a customer selected
   useEffect(() => {
-    if (activeTab === 'reports' && !customerIdParam) {
+    const effectiveCustId =
+      searchParams.get('customerId') ||
+      sessionStorage.getItem('active_customer_id');
+    if (activeTab === 'reports' && !effectiveCustId) {
       setActiveTab('customer');
+    } else if (
+      activeTab === 'reports' &&
+      !searchParams.get('customerId') &&
+      effectiveCustId
+    ) {
+      setSearchParams(
+        (prev) => {
+          prev.set('tab', 'reports');
+          prev.set('customerId', effectiveCustId);
+          return prev;
+        },
+        { replace: true }
+      );
     }
-  }, [activeTab, customerIdParam]);
+  }, [activeTab, searchParams]);
 
   // We define selectedCustomer in a useMemo below, after customers is defined
   const [selectedAnchorFilter, setSelectedAnchorFilter] = useState<
@@ -137,24 +157,11 @@ export default function AnchorCustomerPage() {
   // Initial customer list matching the mockup image
   const [customers, setCustomers] = useState<Customer[]>([]);
 
-  const selectedCustomer = useMemo(() => {
-    if (!customerIdParam) return null;
-    return customers.find((c) => String(c.id) === customerIdParam) || null;
-  }, [customerIdParam, customers]);
-
-  const setSelectedCustomer = (customer: Customer | null) => {
-    setSearchParams(
-      (prev) => {
-        if (customer) {
-          prev.set('customerId', String(customer.id));
-        } else {
-          prev.delete('customerId');
-        }
-        return prev;
-      },
-      { replace: false }
-    );
-  };
+  // Reset customer list and pagination immediately when switching organization
+  useEffect(() => {
+    setCustomers([]);
+    setCurrentPage(1);
+  }, [selectedAnchorFilter]);
 
   // Fetch anchors list if super anchor
   const { data: fetchedAnchors } = useQuery({
@@ -199,15 +206,15 @@ export default function AnchorCustomerPage() {
   }, [fetchedAnchors, isSuperAnchor]);
 
   
-  const queryParam = isSuperAnchor
-    ? (selectedAnchorFilter ?? undefined)
-    : undefined;
+  const effectiveAnchorId = isSuperAnchor
+    ? (selectedAnchorFilter || undefined)
+    : (user?._id || user?.id || user?.user_id || user?.anchor_id || user?.anchor_code || sessionStorage.getItem('anchor_id') || undefined);
 
   // Fetch users under anchor
   const { data: fetchedUsers, isLoading: isUsersLoading } = useQuery({
-    queryKey: ['anchor', 'users-list', queryParam],
-    queryFn: () => getAnchorUsers(queryParam),
-    enabled: isSuperAnchor && !!selectedAnchorFilter,
+    queryKey: ['anchor', 'users-list', effectiveAnchorId],
+    queryFn: () => getAnchorUsers(effectiveAnchorId),
+    enabled: Boolean(effectiveAnchorId),
   });
   useEffect(() => {
   console.log('isSuperAnchor:', isSuperAnchor);
@@ -268,14 +275,14 @@ export default function AnchorCustomerPage() {
   };
 
 
-   useEffect(() => {
-  console.log({
-    isSuperAnchor,
-    selectedAnchorFilter,
-    queryParam,
-    usersQueryEnabled: isSuperAnchor && !!selectedAnchorFilter,
-  });
-}, [isSuperAnchor, selectedAnchorFilter, queryParam]);
+  useEffect(() => {
+    console.log({
+      isSuperAnchor,
+      selectedAnchorFilter,
+      effectiveAnchorId,
+      usersQueryEnabled: Boolean(effectiveAnchorId),
+    });
+  }, [isSuperAnchor, selectedAnchorFilter, effectiveAnchorId]);
 
 
   useEffect(() => {
@@ -297,6 +304,7 @@ export default function AnchorCustomerPage() {
         gst_no: user.gst_no || user.gstNo || user.gst_number || user.gstNumber || user.gstnumber || user.gst || "",
         status: user.status || user.Status || "Active",
         anchor_id: user.anchor_id || user.anchorId || user.anchorid || "",
+        anchor_code: user.anchor_code || user.anchorCode || user.site_code || "",
         created_by: user.created_by || user.createdBy || user.createdBy || "",
         updated_by: user.updated_by || user.updatedBy || user.updatedBy || "",
         bsa: getFlagValue(user, "bsa"),
@@ -305,8 +313,47 @@ export default function AnchorCustomerPage() {
         cibil: getFlagValue(user, "cibil"),
       }));
       setCustomers(mapped);
+    }else{
+      setCustomers([]);
     }
   }, [fetchedUsers]);
+
+  const selectedCustomer = useMemo(() => {
+    if (!customerIdParam) return null;
+    const found = customers.find((c) => String(c.id) === customerIdParam);
+    if (found) return found;
+
+    try {
+      const cached = sessionStorage.getItem(`customer_${customerIdParam}`);
+      if (cached) return JSON.parse(cached);
+    } catch {}
+
+    if (!isUsersLoading && customerIdParam) {
+      return {
+        id: customerIdParam,
+        name: `Customer (${customerIdParam})`,
+        phone: '',
+        gst_no: '',
+        status: 'Active',
+      } as Customer;
+    }
+
+    return null;
+  }, [customerIdParam, customers, isUsersLoading]);
+
+  const setSelectedCustomer = (customer: Customer | null) => {
+    setSearchParams(
+      (prev) => {
+        if (customer) {
+          prev.set('customerId', String(customer.id));
+        } else {
+          prev.delete('customerId');
+        }
+        return prev;
+      },
+      { replace: false }
+    );
+  };
 
   // UI state variables
   const [isNewCustomerModalOpen, setIsNewCustomerModalOpen] = useState(false);
@@ -439,7 +486,13 @@ export default function AnchorCustomerPage() {
         !isSuperAnchor ||
         !effectiveAnchorFilter ||
         c.anchor_id === effectiveAnchorFilter ||
-        c.anchor_code === effectiveAnchorFilter;
+        c.anchor_code === effectiveAnchorFilter ||
+        (selectedAnchor && (
+          c.anchor_id === selectedAnchor._id ||
+          c.anchor_id === selectedAnchor.anchor_code ||
+          c.anchor_code === selectedAnchor._id ||
+          c.anchor_code === selectedAnchor.anchor_code
+        ));
 
       return (
         matchesUserId &&
@@ -567,7 +620,7 @@ export default function AnchorCustomerPage() {
         {/* Top Header Block */}
         <header className="mx-6 mt-6 mb-2 bg-white rounded-3xl h-16 shrink-0 flex items-center justify-between px-6 z-10 shadow-sm border border-gray-100/80 transition-all">
           <div className="flex items-center gap-3">
-            <div className="h-9 w-9 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-sm shrink-0">
+            {/* <div className="h-9 w-9 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-sm shrink-0">
               <svg
                 viewBox="15 15 70 60"
                 className="h-full w-full"
@@ -582,7 +635,7 @@ export default function AnchorCustomerPage() {
             <span className="font-['Space_Grotesk'] text-2xl font-black text-[#002366] tracking-tight flex items-center">
               CRISP
             </span>
-            <div className="h-6 w-[1px] bg-gray-200 mx-1"></div>
+            <div className="h-6 w-[1px] bg-gray-200 mx-1"></div> */}
             <span className="text-xs font-semibold text-[#002366] bg-[#eff6ff] px-3.5 py-1.5 rounded-full flex items-center gap-2">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#4cd15b] opacity-75"></span>
@@ -1048,6 +1101,9 @@ export default function AnchorCustomerPage() {
                                 key={cust.id}
                                 className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                                 onClick={() => {
+                                  try {
+                                    sessionStorage.setItem(`customer_${cust.id}`, JSON.stringify(cust));
+                                  } catch {}
                                   setSearchParams((prev) => {
                                     prev.set('customerId', String(cust.id));
                                     prev.set('tab', 'reports');
@@ -1128,6 +1184,9 @@ export default function AnchorCustomerPage() {
                                   <Tooltip content="View Customer Reports">
                                     <button
                                       onClick={() => {
+                                        try {
+                                          sessionStorage.setItem(`customer_${cust.id}`, JSON.stringify(cust));
+                                        } catch {}
                                         setSearchParams((prev) => {
                                           prev.set(
                                             'customerId',
@@ -1207,7 +1266,14 @@ export default function AnchorCustomerPage() {
           {/* ─── REPORTS TAB ─── */}
           {activeTab === 'reports' && (
             <div className="space-y-6 animate-in fade-in duration-200">
-              {selectedCustomer && (
+              {isUsersLoading && !selectedCustomer ? (
+                <div className="flex flex-col items-center justify-center p-16 space-y-4 bg-white border border-gray-100 rounded-3xl min-h-[400px] shadow-sm">
+                  <Loader2 className="h-10 w-10 animate-spin text-[#002366]" />
+                  <p className="text-sm font-semibold text-slate-600">
+                    Loading customer report...
+                  </p>
+                </div>
+              ) : selectedCustomer ? (
                 <ServiceReport
                   selectedCustomer={selectedCustomer}
                   onBack={() => {
@@ -1215,6 +1281,31 @@ export default function AnchorCustomerPage() {
                     setActiveTab('customer');
                   }}
                 />
+              ) : (
+                <div className="flex flex-col items-center justify-center p-16 text-center space-y-4 bg-white border border-gray-100 rounded-3xl min-h-[400px] shadow-sm">
+                  <div className="h-16 w-16 rounded-full bg-amber-50 flex items-center justify-center text-amber-600 shadow-inner">
+                    <AlertCircle className="h-8 w-8 text-amber-600" />
+                  </div>
+                  <div className="max-w-md space-y-1.5">
+                    <h3 className="text-lg font-bold text-slate-900">
+                      Customer Not Found
+                    </h3>
+                    <p className="text-sm text-slate-500 font-medium">
+                      {customerIdParam
+                        ? `Could not find any customer matching ID "${customerIdParam}".`
+                        : 'No customer selected. Please select a customer from the directory to view reports.'}
+                    </p>
+                  </div>
+                  <Button
+                    onClick={() => {
+                      setSelectedCustomer(null);
+                      setActiveTab('customer');
+                    }}
+                    className="bg-[#002366] hover:bg-[#001744] text-white rounded-xl px-6 font-semibold shadow-md shadow-[#002366]/20 cursor-pointer"
+                  >
+                    Back to Customers
+                  </Button>
+                </div>
               )}
             </div>
           )}

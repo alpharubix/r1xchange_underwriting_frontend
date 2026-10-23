@@ -157,11 +157,30 @@ export function useAnchorLogin() {
         'anchor';
       sessionStorage.setItem('user_role', rawRole);
       const role = extractedRole || rawRole;
-      const loginUser = { role, portal: 'anchor' as const };
+
+      const userData = data?.user || data?.data?.user || data?.data || data;
+      const anchorId =
+        userData?._id ||
+        userData?.id ||
+        userData?.anchor_id ||
+        userData?.anchor_code ||
+        data?.anchor_id ||
+        data?.anchor_code;
+      if (anchorId) {
+        sessionStorage.setItem('anchor_id', String(anchorId));
+      }
+
+      const loginUser = {
+        ...userData,
+        _id: anchorId,
+        id: anchorId,
+        role,
+        portal: 'anchor' as const,
+      };
       setUser(loginUser);
       queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
-      console.log("Roles after anchor login:", { extractedRole, rawRole, role });
+      console.log("Roles after anchor login:", { extractedRole, rawRole, role, anchorId });
       sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
       void loadProfileFromMe(queryClient, role, 'anchor')

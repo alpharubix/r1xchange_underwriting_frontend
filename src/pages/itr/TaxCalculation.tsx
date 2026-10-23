@@ -26,7 +26,7 @@ export default function TaxCalculation() {
     return (
       <div className="mx-auto mt-8 flex max-w-4xl flex-col items-center justify-center rounded-2xl border-2 border-red-200 bg-red-100 px-10 py-12 shadow-xl animate-pulse">
         <p className="text-lg font-large text-red-800">
-          No Data to load Ratio Analysis.
+          No Data to load Tax Calculation.
         </p>
       </div>
     );
