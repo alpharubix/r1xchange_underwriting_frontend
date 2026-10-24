@@ -137,27 +137,35 @@ function App() {
                   <Route element={<AdminProtectedRoute />}>
                     <Route
                       path="/admins"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/Admins"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/admins/dashboard"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/admins/dashboard/:tab"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/Admins/dashboard"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/Admins/dashboard/:tab"
-                      element={<Navigate to="/admins/user" replace />}
+                      element={<Navigate to="/admins/anchors" replace />}
+                    />
+                    <Route
+                      path="/admins/user"
+                      element={<Navigate to="/admins/anchors" replace />}
+                    />
+                    <Route
+                      path="/Admins/user"
+                      element={<Navigate to="/admins/anchors" replace />}
                     />
                     <Route
                       path="/admins/:tab"

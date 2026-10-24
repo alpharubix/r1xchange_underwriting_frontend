@@ -129,7 +129,7 @@ export function useAdminLogin() {
       setUser(loginUser);
       queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
-      navigate('/admins/user');
+      navigate('/admins/anchors');
       void loadProfileFromMe(queryClient, role, 'admin')
         .then(setUser)
         .catch(() => undefined);

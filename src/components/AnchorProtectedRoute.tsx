@@ -19,12 +19,8 @@ export default function AnchorProtectedRoute() {
   const isAnchor =
     userRole === 'anchor' ||
     userRole === 'super_anchor' ||
-    userRole === 'superanchor' ||
-    userRole === 'super-anchor' ||
     storedRole === 'anchor' ||
-    storedRole === 'super_anchor' ||
-    storedRole === 'superanchor' ||
-    storedRole === 'super-anchor';
+    storedRole === 'super_anchor';
 
   if (!isAuthenticated || !isAnchor) {
     return <Navigate to="/anchors/login" replace />;
