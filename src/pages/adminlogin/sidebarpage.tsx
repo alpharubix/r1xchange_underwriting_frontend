@@ -10,6 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
   Activity,
+  CreditCard,
 } from 'lucide-react';
 
 export default function AdminSidebar() {
@@ -26,16 +27,17 @@ export default function AdminSidebar() {
       t === 'admin' ||
       t === 'anchor' ||
       t === 'anchors' ||
-      t === 'logs'
+      t === 'logs' ||
+      t === 'payments'
     ) {
       return t === 'anchors'
         ? 'anchor'
-        : (t as 'user' | 'admin' | 'anchor' | 'logs');
+        : (t as 'user' | 'admin' | 'anchor' | 'logs' | 'payments');
     }
     return 'user';
   }, [tab]);
 
-  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs') => {
+  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs' | 'payments') => {
     const isCapital = window.location.pathname.startsWith('/Admins');
     const tabSegment = targetTab === 'anchor' ? 'anchors' : targetTab;
     const targetUrl = `${isCapital ? '/Admins' : '/admins'}/${tabSegment}`;
@@ -69,17 +71,17 @@ export default function AdminSidebar() {
           className={`flex items-center gap-3 overflow-hidden ${sidebarCollapsed ? 'justify-center w-full' : ''}`}
         >
           <div className="h-10 w-10 rounded-xl bg-[#002366] text-white flex items-center justify-center p-1.5 shadow-md shadow-[#002366]/25 shrink-0">
-              <svg
-                viewBox="15 15 60 60"
-                className="h-full w-full"
-                aria-label="CRISP logo mark"
-              >
-                <g fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="6">
-                  <path d="M66 27a24 24 0 1 0 0 36" />
-                </g>
-                <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
-              </svg>
-              </div>
+            <svg
+              viewBox="15 15 60 60"
+              className="h-full w-full"
+              aria-label="CRISP logo mark"
+            >
+              <g fill="none" stroke="#ffffff" strokeLinecap="round" strokeWidth="6">
+                <path d="M66 27a24 24 0 1 0 0 36" />
+              </g>
+              <circle cx="66" cy="45" r="3.5" fill="#9fc3f1" />
+            </svg>
+          </div>
           {!sidebarCollapsed && (
             <div className="flex flex-col">
               <span className="font-extrabold text-sm tracking-widest text-white uppercase">
@@ -141,6 +143,22 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'anchor' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Anchors</span>}
+        </button>
+
+        <button
+          onClick={() => handleTabChange('payments')}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'payments' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'payments' ? '#000080' : '' }}
+        >
+          <div
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'payments' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'payments' ? '#000080' : '' }}
+          />
+          <CreditCard
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'payments' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'payments' ? '#000080' : '' }}
+          />
+          {!sidebarCollapsed && <span className="text-sm">Payments</span>}
         </button>
 
         <button

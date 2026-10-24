@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
@@ -33,6 +33,13 @@ export default function AdminLoginPage() {
     mode: 'onTouched',
   });
 
+  useEffect(() => {
+    document.body.classList.add('admin-panel');
+    return () => {
+      document.body.classList.remove('admin-panel');
+    };
+  }, []);
+
   const onSubmit = (values: AdminLoginFormValues) => {
     loginMutation.mutate({
       login_id: values.id,
@@ -41,7 +48,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen w-full bg-[#f4f5f9] text-[#1a1a1a]">
+    <div className="admin-panel flex min-h-screen w-full bg-[#f4f5f9] text-[#1a1a1a] font-montserrat">
       {/* Left Branding Panel (Mockup Redesign) */}
       <div className="relative hidden w-1/2 bg-gradient-to-br from-[#7754f8] to-[#5130d2] p-8 text-white md:flex overflow-hidden">
         {/* Transparent glassmorphic inner card matching the screenshot layout */}
@@ -111,7 +118,7 @@ export default function AdminLoginPage() {
                   className="h-24 md:h-28 w-auto object-contain drop-shadow-lg"
                 />
                 <div className="h-8 w-[2px] bg-white/30 rounded-full" />
-                <h2 className="text-3xl font-bold tracking-tight text-white leading-tight font-['Space_Grotesk']">
+                <h2 className="text-3xl font-bold tracking-tight text-white leading-tight font-montserrat">
                   CRISP
                 </h2>
               </div>

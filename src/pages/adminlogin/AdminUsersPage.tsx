@@ -16,6 +16,7 @@ import AdminSidebar from "./sidebarpage";
 import AdminAdminsPage from "./AdminAdminsPage";
 import AdminAnchorsPage from "./AdminAnchorsPage";
 import AdminLogsPage from "./AdminLogsPage";
+import PaymentDashboard from "./payments/PaymentDashboard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,18 +115,19 @@ export default function AdminDashboardPage() {
       t === 'admin' ||
       t === 'anchor' ||
       t === 'anchors' ||
-      t === 'logs'
+      t === 'logs' ||
+      t === 'payments'
     ) {
       return t === 'anchors'
         ? 'anchor'
-        : (t as 'user' | 'admin' | 'anchor' | 'logs');
+        : (t as 'user' | 'admin' | 'anchor' | 'logs' | 'payments');
     }
     return 'user';
   }, [tab]);
 
   // console.log("RENDER - tab param:", tab, "activeTab derived:", activeTab);
 
-  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs') => {
+  const handleTabChange = (targetTab: 'user' | 'admin' | 'anchor' | 'logs' | 'payments') => {
     const isCapital = window.location.pathname.startsWith('/Admins');
     const tabSegment = targetTab === 'anchor' ? 'anchors' : targetTab;
     const targetUrl = `${isCapital ? '/Admins' : '/admins'}/${tabSegment}`;
@@ -142,12 +144,20 @@ export default function AdminDashboardPage() {
         t !== 'admin' &&
         t !== 'anchor' &&
         t !== 'anchors' &&
-        t !== 'logs')
+        t !== 'logs' &&
+        t !== 'payments')
     ) {
       // console.log("Redirecting undefined/invalid tab to user");
       handleTabChange('user');
     }
   }, [tab]);
+
+  useEffect(() => {
+    document.body.classList.add('admin-panel');
+    return () => {
+      document.body.classList.remove('admin-panel');
+    };
+  }, []);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -344,7 +354,7 @@ export default function AdminDashboardPage() {
   console.log('activeTab', activeTab);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
+    <div className="admin-panel flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-montserrat">
       <AdminSidebar />
 
       {activeTab === 'admin' ? (
@@ -353,6 +363,8 @@ export default function AdminDashboardPage() {
         <AdminAnchorsPage />
       ) : activeTab === 'logs' ? (
         <AdminLogsPage />
+      ) : activeTab === 'payments' ? (
+        <PaymentDashboard />
       ) : (
         <>
           {/* ─── MAIN CONTENT AREA ─── */}
