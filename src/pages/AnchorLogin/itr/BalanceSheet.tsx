@@ -1,7 +1,7 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getItrBalanceSheet } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
-import { renderYearlyTable } from '@/components/itr/ItrTableHelper';
+import BalanceSheetTable from '@/components/itr/BalanceSheetTable';
 import { Loader2 } from 'lucide-react';
 
 interface BalanceSheetProps {
@@ -45,14 +45,7 @@ export default function BalanceSheet({
   return (
     <div className="p-6 space-y-6">
       <CustomerProfile profile={customer_profile} />
-
-      {balance_sheet['Equity & Liabilities'] &&
-        renderYearlyTable(
-          'Equity & Liabilities',
-          balance_sheet['Equity & Liabilities']
-        )}
-      {balance_sheet['Assets'] &&
-        renderYearlyTable('Assets', balance_sheet['Assets'])}
+      <BalanceSheetTable balanceSheet={balance_sheet} />
     </div>
   );
 }

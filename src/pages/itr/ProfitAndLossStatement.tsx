@@ -1,7 +1,7 @@
 ﻿import { useQuery } from '@tanstack/react-query';
 import { getItrProfitAndLoss } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
-import { renderYearlyTable } from '@/components/itr/ItrTableHelper';
+import ProfitandLossStatementTable from '@/components/itr/ProfitandLossStatementTable';
 import { Loader2 } from 'lucide-react';
 
 interface ProfitAndLossStatementProps {
@@ -46,11 +46,12 @@ export default function ProfitAndLossStatement({
     <div className="p-6 space-y-6">
       <CustomerProfile profile={customer_profile} />
 
-      {profit_and_loss_statement['Profit and Loss Statement'] &&
-        renderYearlyTable(
-          'Profit and Loss Statement',
-          profit_and_loss_statement['Profit and Loss Statement']
-        )}
+            {profit_and_loss_statement['Profit and Loss Statement'] && (
+        <ProfitandLossStatementTable
+          dataArray={profit_and_loss_statement['Profit and Loss Statement']}
+        />
+      )}
+
     </div>
   );
 }

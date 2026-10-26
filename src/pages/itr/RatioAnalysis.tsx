@@ -1,8 +1,7 @@
-﻿import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getItrRatioAnalysis } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
-import { renderYearlyTable } from '@/components/itr/ItrTableHelper';
+import RatioAnalysisTable from '@/components/itr/RatioAnalysis';
 import { Loader2 } from 'lucide-react';
 
 interface RatioAnalysisProps {
@@ -44,29 +43,19 @@ export default function RatioAnalysis({
   const { customer_profile, ratio_analysis } = data.data;
 
   // The order of sections based on the typical presentation or JSON structure
-  const sections = [
-    'Liquidity Analysis',
-    'Asset Management',
-    'Leverage Ratios',
-    'Coverage Ratios',
-    'Profitability Ratios',
-    'Growth in Cashflow Margin',
-  ];
+  // const sections = [
+  //   'Liquidity Analysis',
+  //   'Asset Management',
+  //   'Leverage Ratios',
+  //   'Coverage Ratios',
+  //   'Profitability Ratios',
+  //   'Growth in Cashflow Margin',
+  // ];
 
   return (
     <div className="p-6 space-y-6">
-      <CustomerProfile profile={customer_profile} />
-
-      {sections.map((section) => {
-        if (ratio_analysis[section]) {
-          return (
-            <React.Fragment key={section}>
-              {renderYearlyTable(section, ratio_analysis[section])}
-            </React.Fragment>
-          );
-        }
-        return null;
-      })}
-    </div>
+  <CustomerProfile profile={customer_profile} />
+  <RatioAnalysisTable ratioAnalysis={ratio_analysis} />
+</div>
   );
 }
