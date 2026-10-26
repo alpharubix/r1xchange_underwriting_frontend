@@ -188,7 +188,7 @@ export default function RatioAnalysisTable({
               return (
                 <React.Fragment key={section.sectionTitle}>
                   {/* Dark Gray Section Header Bar */}
-                  <tr className="bg-[#0f126b] text-white">
+                  <tr className="bg-[#002366] text-white">
                     <td
                       colSpan={years.length + 1}
                       className="border border-slate-400/30 px-4 py-2 text-center font-bold tracking-wide text-xs sm:text-sm"
