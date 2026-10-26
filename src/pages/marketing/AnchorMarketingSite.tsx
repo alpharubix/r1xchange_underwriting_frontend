@@ -553,7 +553,7 @@ function ReportsMontage() {
 
 function AnchorHeroMontage() {
   return (
-    <div className="relative -mt-[55px] npxw-full max-w-[1200px] overflow-hidden rounded-[2rem]  p-8 shadow-2xl reveal is-visible bg-gradient-to-br from-blue-50 via-sky-50 to-blue-100 shadow-[inset_0_0_50px_rgba(59,130,246,0.22)] animate-breathe" style={{ minHeight: '600px' }}>
+    <div className="relative -mt-[55px] w-full max-w-[1200px] overflow-hidden rounded-[2rem] p-8 shadow-[0_25px_50px_-12px_rgba(0,0,0,0.25),inset_0_0_50px_rgba(59,130,246,0.22)] reveal is-visible bg-gradient-to-br from-blue-50 via-sky-50 to-blue-100 animate-breathe" style={{ minHeight: '600px' }}>
       
       {/* Search Filters Row */}
       <div className="flex gap-4 mb-8">
@@ -1434,7 +1434,7 @@ export default function AnchorMarketingSite() {
                               <th className="py-1.5 px-2 font-medium">Overall/Total</th>
                               <th className="py-1.5 px-2 font-medium">Jan 2026</th>
                               <th className="py-1.5 px-2 font-medium">Feb 2026</th>
-                              <th className="py-1.5 px-2 font-medium text-slate-400 font-normal">...</th>
+                              <th className="py-1.5 px-2 font-medium text-slate-400">...</th>
                             </tr>
                           </thead>
                           <tbody className="text-slate-700">
