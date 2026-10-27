@@ -609,6 +609,7 @@ const parseDateSafely = (dateStr: string) => {
 export default function OverviewMonthlyWise({
   custId,
   reportId,
+  accountNumber,
   fromDate: propFromDate,
   toDate: propToDate,
 }: OverviewMonthlyWiseProps = {}) {
@@ -620,7 +621,7 @@ export default function OverviewMonthlyWise({
   const [appliedFromDate, setAppliedFromDate] = useState(cleanPropFromDate);
   const [appliedToDate, setAppliedToDate] = useState(cleanPropToDate);
 
-  const { data: dateRangeData } = useDateRange({ custId });
+  const { data: dateRangeData } = useDateRange({ custId, accountNumber });
 
   useEffect(() => {
     if (propFromDate && propToDate) {
@@ -710,21 +711,24 @@ export default function OverviewMonthlyWise({
       appliedToDate,
       custId,
       reportId,
+      accountNumber,
     ],
     queryFn: async () => {
-      const cleanFromDate = appliedFromDate.split('T')[0];
-      const cleanToDate = appliedToDate.split('T')[0];
-      let url = `/bsa/month-wise-overview?`;
-      if (custId) {
-        url += `cust_id=${encodeURIComponent(custId)}&`;
-      }
-      url += `from_date=${cleanFromDate}&to_date=${cleanToDate}`;
-      const response = await apiClient.get(url, {
-        errorMessage: 'Failed to load overview monthlywise. Please try again.',
-      });
+      const response = await apiClient.post(
+        '/bsa/month-wise-overview',
+        {
+          from_date: appliedFromDate.split('T')[0],
+          to_date: appliedToDate.split('T')[0],
+          account_number: accountNumber,
+        },
+        {
+          errorMessage:
+            'Failed to load overview monthlywise. Please try again.',
+        }
+      );
       return response.data?.data as OverviewData;
     },
-    enabled: !!appliedFromDate && !!appliedToDate,
+    enabled: !!accountNumber && !!appliedFromDate && !!appliedToDate,
   });
 
   const generateMonthsRange = (startStr: string, endStr: string) => {

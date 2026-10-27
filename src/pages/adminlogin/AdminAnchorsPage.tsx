@@ -203,8 +203,92 @@ export default function AdminAnchorsPage() {
     }
   }, [paginationData.items]);
 
-  // Fetch all users to associate with anchors and users
-  const { data: fetchedUsersRaw, isLoading: isUsersLoading } = useQuery({
+  // Pre-fetch all anchors for reliable direct URL lookup across pagination
+  const { data: allAnchorsRaw } = useQuery({
+    queryKey: ['admin', 'all-anchors-lookup'],
+    queryFn: () => getAnchorsList({ limit: 200 }),
+    staleTime: 60000,
+  });
+
+  const allKnownAnchors = useMemo(() => {
+    const rawItems = extractPaginatedData<any>(allAnchorsRaw, 1, 200).items;
+    const list = rawItems.length > 0 ? rawItems : paginationData.items || [];
+    return list.map((anchor: any) => ({
+      _id: anchor._id || anchor.id || '',
+      anchor_name: anchor.anchor_name || anchor.anchorName || anchor['anchor name'] || '',
+      anchor_code: anchor.anchor_code || anchor.anchorCode || anchor['anchor code'] || '',
+      loginid: anchor.login_id || anchor.loginid || '',
+      is_active:
+        typeof anchor.is_active === 'boolean'
+          ? anchor.is_active
+          : anchor.is_active === 'true' || anchor.is_active === 1 || anchor.is_active === '1',
+      role: anchor.role || 'ANCHOR',
+      createat: anchor.created_at || anchor.createat || '',
+      updatedat: anchor.updated_at || anchor.updatedat || '',
+      createby: anchor.created_by || anchor.createby || '',
+      updateby: anchor.updated_by || anchor.updateby || '',
+    }));
+  }, [allAnchorsRaw, paginationData.items]);
+
+  // Derive Current Selected Anchor
+  const currentSelectedAnchor = useMemo(() => {
+    if (!anchorIdParam) return null;
+    const cleanId = anchorIdParam.trim().toLowerCase();
+    const found =
+      allKnownAnchors.find(
+        (a) =>
+          (a._id && a._id.toLowerCase() === cleanId) ||
+          (a.anchor_code && a.anchor_code.toLowerCase() === cleanId) ||
+          (a.loginid && a.loginid.toLowerCase() === cleanId)
+      ) ||
+      anchorsList.find(
+        (a) =>
+          (a._id && a._id.toLowerCase() === cleanId) ||
+          (a.anchor_code && a.anchor_code.toLowerCase() === cleanId) ||
+          (a.loginid && a.loginid.toLowerCase() === cleanId)
+      );
+
+    if (found) return found;
+
+    return {
+      _id: '',
+      anchor_name: anchorIdParam,
+      anchor_code: anchorIdParam,
+      loginid: '',
+      is_active: true,
+      role: 'ANCHOR',
+      createat: '',
+      updatedat: '',
+      createby: 'SYSTEM',
+      updateby: 'SYSTEM',
+    } as AnchorRecord;
+  }, [anchorIdParam, allKnownAnchors, anchorsList]);
+
+  // Effective anchor query identifier
+  const effectiveAnchorQueryId = useMemo(() => {
+    if (!anchorIdParam && !currentSelectedAnchor) return '';
+    return (
+      currentSelectedAnchor?.anchor_code ||
+      currentSelectedAnchor?._id ||
+      anchorIdParam ||
+      ''
+    );
+  }, [anchorIdParam, currentSelectedAnchor]);
+
+  // Fetch users specifically under this anchor (following Anchor Portal architecture)
+  const { data: fetchedAnchorUsersRaw, isLoading: isUsersLoading } = useQuery({
+    queryKey: ['admin', 'anchor-users', effectiveAnchorQueryId],
+    queryFn: () =>
+      getUsersList({
+        anchor_id: effectiveAnchorQueryId,
+        limit: 1000,
+      }),
+    enabled: Boolean(effectiveAnchorQueryId),
+    staleTime: 30000,
+  });
+
+  // Pre-fetch all users for sub-customer hierarchy lookups
+  const { data: fetchedUsersRaw } = useQuery({
     queryKey: ['admin', 'all-users-association'],
     queryFn: () => getUsersList({ limit: 1000 }),
     staleTime: 60000,
@@ -239,21 +323,42 @@ export default function AdminAnchorsPage() {
     }));
   }, [fetchedUsersRaw]);
 
-  // Derive Current Selected Anchor
-  const currentSelectedAnchor = useMemo(() => {
-    if (!anchorIdParam) return null;
-    return (
-      anchorsList.find(
-        (a) =>
-          (a._id && a._id === anchorIdParam) ||
-          a.anchor_code === anchorIdParam ||
-          a.loginid === anchorIdParam
-      ) || null
-    );
-  }, [anchorIdParam, anchorsList]);
-
   // Derive Users associated with the Selected Anchor
   const associatedUsers = useMemo(() => {
+    if (!effectiveAnchorQueryId) return [];
+
+    const rawItems = extractPaginatedData<any>(fetchedAnchorUsersRaw, 1, 1000).items;
+    
+    // If backend returned specific anchor users, map them directly
+    if (rawItems.length > 0) {
+      return rawItems.map((u: any, index: number): CustomerDetailRecord => ({
+        accountid: findAccountId(u, index),
+        customername: u.customername || u.customer_name || u.customerName || u.name || '',
+        companyname: u.companyname || u.company_name || u.companyName || '',
+        emailid: u.emailid || u.email_id || u.emailId || u.email || '',
+        emailverified: Boolean(u.emailverified ?? u.email_verified ?? u.emailVerified),
+        phone: u.phone || u.phone_no || u.phoneNo || u.phoneNumber || '',
+        phoneverified: Boolean(u.phoneverified ?? u.phone_verified ?? u.phoneVerified),
+        gstnumber: u.gstnumber || u.gst_number || u.gstNumber || u.gst || '',
+        status: String(u.status || '').toLowerCase() === 'active' || u.status === true ? 'Active' : 'Inactive',
+        role: u.role || 'USER',
+        createat: u.createat || u.created_at || u.createAt || u.createdAt || '',
+        updatedat: u.updatedat || u.updated_at || u.updatedAt || '',
+        lastloginat: findLastLoginValue(u),
+        secondarygstlist: Array.isArray(u.secondary_gst_list)
+          ? u.secondary_gst_list.join(', ')
+          : u.secondarygstlist || u.secondary_gst_list || '',
+        anchor_id: u.anchor_id ? String(u.anchor_id) : '',
+        anchor_code: u.anchor_code || u.site_code || '',
+        bsa: getFlagValue(u, 'bsa'),
+        gst: getFlagValue(u, 'gst'),
+        itr: getFlagValue(u, 'itr'),
+        cibil: getFlagValue(u, 'cibil'),
+        raw: u,
+      }));
+    }
+
+    // Fallback: match from allUsersList if fetchedAnchorUsersRaw is still syncing
     if (!currentSelectedAnchor) return [];
     const aId = (currentSelectedAnchor._id || '').toLowerCase();
     const aCode = (currentSelectedAnchor.anchor_code || '').toLowerCase();
@@ -268,7 +373,7 @@ export default function AdminAnchorsPage() {
         (aLogin && uAnchor === aLogin)
       );
     });
-  }, [currentSelectedAnchor, allUsersList]);
+  }, [effectiveAnchorQueryId, fetchedAnchorUsersRaw, currentSelectedAnchor, allUsersList]);
 
   // Derive Current Selected User under the selected anchor
   const currentSelectedUser = useMemo(() => {
@@ -316,9 +421,16 @@ export default function AdminAnchorsPage() {
           c.accountid === customerIdParam ||
           (c.raw && String(c.raw._id) === customerIdParam) ||
           c.customername.toLowerCase() === customerIdParam.toLowerCase()
-      ) || null
+      ) ||
+      associatedUsers.find(
+        (u) =>
+          u.accountid === customerIdParam ||
+          (u.raw && String(u.raw._id) === customerIdParam) ||
+          u.customername.toLowerCase() === customerIdParam.toLowerCase()
+      ) ||
+      null
     );
-  }, [customerIdParam, associatedCustomers]);
+  }, [customerIdParam, associatedCustomers, associatedUsers]);
 
   // Navigation Handlers
   const handleSelectAnchor = (anchor: AnchorRecord) => {
@@ -352,6 +464,21 @@ export default function AdminAnchorsPage() {
       },
       { replace: false }
     );
+  };
+
+  const handleViewUserReports = (user: CustomerDetailRecord) => {
+    try {
+      sessionStorage.setItem(`customer_${user.accountid}`, JSON.stringify(user));
+    } catch {}
+    setSearchParams(
+      (prev) => {
+        prev.set('userId', user.accountid);
+        prev.set('customerId', user.accountid);
+        return prev;
+      },
+      { replace: false }
+    );
+    toast.info(`Viewing reports for ${user.customername || user.accountid}`);
   };
 
   const handleBackToAnchors = () => {
@@ -1126,96 +1253,186 @@ export default function AdminAnchorsPage() {
             </div>
 
             {/* Users Table */}
-            <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
-              <table className="w-full text-left border-collapse text-xs">
+            <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">
+              <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-slate-50/75 border-b border-slate-200 text-slate-500 font-bold uppercase tracking-wider">
-                    <th className="p-3.5">Account ID</th>
-                    <th className="p-3.5">User Name</th>
-                    <th className="p-3.5">Company Name</th>
-                    <th className="p-3.5">Contact</th>
-                    <th className="p-3.5">GST Number</th>
-                    <th className="p-3.5">Status</th>
-                    <th className="p-3.5">Created At</th>
-                    <th className="p-3.5 text-center">Action</th>
+                  <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider bg-white">
+                    <th className="py-3.5 px-4 font-bold text-gray-400">ACCOUNT ID</th>
+                    <th className="py-3.5 px-4 font-bold text-gray-400">USER NAME</th>
+                    <th className="py-3.5 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
+                    <th className="py-3.5 px-4 font-bold text-gray-400">COMPANY NAME</th>
+                    <th className="py-3.5 px-4 font-bold text-gray-400">GST NO</th>
+                    <th className="py-3.5 px-4 font-bold text-gray-400">STATUS</th>
+                    <th className="py-3.5 px-4 font-bold text-center text-gray-400">BSA</th>
+                    <th className="py-3.5 px-4 font-bold text-center text-gray-400">GST</th>
+                    <th className="py-3.5 px-4 font-bold text-center text-gray-400">ITR</th>
+                    <th className="py-3.5 px-4 font-bold text-center text-gray-400">CIBIL</th>
+                    <th className="py-3.5 px-4 font-bold text-center text-gray-400">ACTION</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
+                <tbody className="divide-y divide-gray-100 text-sm">
                   {isUsersLoading ? (
                     <tr>
-                      <td colSpan={8} className="py-16 text-center text-slate-400">
-                        <Activity className="h-7 w-7 animate-spin text-[#000080] mx-auto mb-2" />
-                        <span className="text-xs font-bold text-slate-600">Loading associated users...</span>
+                      <td colSpan={11} className="py-16 text-center text-gray-400">
+                        <div className="flex flex-col items-center justify-center gap-3">
+                          <Activity className="h-7 w-7 animate-spin text-[#000080]" />
+                          <span className="text-xs font-bold text-slate-600">Loading associated users...</span>
+                        </div>
                       </td>
                     </tr>
                   ) : filteredAssociatedUsers.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="py-16 text-center text-slate-400">
-                        <Users className="h-8 w-8 mx-auto mb-2 text-slate-300" />
-                        <p className="text-sm font-bold text-slate-600">No users associated with this anchor</p>
-                        <p className="text-xs text-slate-400 mt-0.5">
-                          Users created under anchor code {currentSelectedAnchor.anchor_code} will appear here.
-                        </p>
+                      <td colSpan={11} className="py-16 text-center text-gray-400">
+                        <div className="flex flex-col items-center justify-center gap-2">
+                          <Users className="h-8 w-8 text-slate-300" />
+                          <p className="text-sm font-bold text-slate-600">No users associated with this anchor</p>
+                          <p className="text-xs text-slate-400">
+                            Users created under anchor code {currentSelectedAnchor.anchor_code || anchorIdParam} will appear here.
+                          </p>
+                        </div>
                       </td>
                     </tr>
                   ) : (
                     filteredAssociatedUsers.map((user, idx) => (
                       <tr
                         key={user.accountid || idx}
-                        className="hover:bg-blue-50/40 transition-colors cursor-pointer group"
+                        className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                         onClick={() => handleSelectUser(user)}
                       >
-                        <td className="p-3.5 font-bold font-mono text-slate-900">
+                        {/* ACCOUNT ID */}
+                        <td className="py-4 px-4 font-mono text-xs text-gray-600">
                           {user.accountid}
                         </td>
-                        <td className="p-3.5">
-                          <div className="font-bold text-slate-900 group-hover:text-[#000080] transition-colors">
-                            {user.customername || 'N/A'}
-                          </div>
+
+                        {/* USER NAME */}
+                        <td className="py-4 px-4 font-bold text-gray-900">
+                          {user.customername || 'N/A'}
                         </td>
-                        <td className="p-3.5 text-slate-700">{user.companyname || '-'}</td>
-                        <td className="p-3.5 space-y-0.5">
-                          <div className="text-slate-800 flex items-center gap-1">
-                            <Mail className="h-3 w-3 text-slate-400 shrink-0" />
-                            <span className="truncate max-w-[140px]">{user.emailid || '-'}</span>
-                          </div>
-                          <div className="text-slate-500 flex items-center gap-1">
-                            <Phone className="h-3 w-3 text-slate-400 shrink-0" />
-                            <span>{user.phone || '-'}</span>
-                          </div>
+
+                        {/* MOBILE NUMBER */}
+                        <td className="py-4 px-4 text-gray-700">
+                          {user.phone || '-'}
                         </td>
-                        <td className="p-3.5 font-mono font-bold text-slate-800">
+
+                        {/* COMPANY NAME */}
+                        <td className="py-4 px-4 text-gray-700">
+                          {user.companyname || '-'}
+                        </td>
+
+                        {/* GST NO */}
+                        <td className="py-4 px-4 text-gray-700 font-mono">
                           {user.gstnumber || '-'}
                         </td>
-                        <td className="p-3.5">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
-                              user.status === 'Active'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : 'bg-slate-100 text-slate-600 border border-slate-200'
-                            }`}
-                          >
+
+                        {/* STATUS */}
+                        <td className="py-4 px-4">
+                          {user.status && String(user.status).toLowerCase() === 'active' ? (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#EAF9F0] text-[#2E9B5C]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#2E9B5C]" />
+                              Active
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#FDEEEE] text-[#E5484D]">
+                              <span className="h-1.5 w-1.5 rounded-full bg-[#E5484D]" />
+                              Inactive
+                            </span>
+                          )}
+                        </td>
+
+                        {/* BSA */}
+                        <td className="py-4 px-4 text-center">
+                          {user.bsa ? (
                             <span
-                              className={`h-1.5 w-1.5 rounded-full ${
-                                user.status === 'Active' ? 'bg-emerald-500' : 'bg-slate-400'
-                              }`}
-                            />
-                            {user.status}
-                          </span>
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#EAF9F0] text-[#2E9B5C]"
+                              title="Completed"
+                            >
+                              <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]"
+                              title="Pending / Incomplete"
+                            >
+                              <X className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          )}
                         </td>
-                        <td className="p-3.5 text-slate-500 whitespace-nowrap">
-                          {user.createat || '-'}
+
+                        {/* GST */}
+                        <td className="py-4 px-4 text-center">
+                          {user.gst ? (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#EAF9F0] text-[#2E9B5C]"
+                              title="Completed"
+                            >
+                              <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]"
+                              title="Pending / Incomplete"
+                            >
+                              <X className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          )}
                         </td>
-                        <td className="p-3.5 text-center" onClick={(e) => e.stopPropagation()}>
-                          <Button
-                            size="sm"
-                            variant="ghost"
-                            onClick={() => handleSelectUser(user)}
-                            className="h-8 px-3 rounded-lg text-xs font-bold text-[#000080] hover:bg-[#000080]/10 flex items-center gap-1.5 mx-auto"
-                          >
-                            <span>Select User</span>
-                            <ArrowRight className="h-3.5 w-3.5" />
-                          </Button>
+
+                        {/* ITR */}
+                        <td className="py-4 px-4 text-center">
+                          {user.itr ? (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#EAF9F0] text-[#2E9B5C]"
+                              title="Completed"
+                            >
+                              <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]"
+                              title="Pending / Incomplete"
+                            >
+                              <X className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          )}
+                        </td>
+
+                        {/* CIBIL */}
+                        <td className="py-4 px-4 text-center">
+                          {user.cibil ? (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#EAF9F0] text-[#2E9B5C]"
+                              title="Completed"
+                            >
+                              <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          ) : (
+                            <span
+                              className="inline-flex items-center justify-center h-6 w-6 rounded-full bg-[#FDEEEE] text-[#E5484D]"
+                              title="Pending / Incomplete"
+                            >
+                              <X className="h-3.5 w-3.5 stroke-[2.5]" />
+                            </span>
+                          )}
+                        </td>
+
+                        {/* ACTION */}
+                        <td className="py-4 px-4 text-center" onClick={(e) => e.stopPropagation()}>
+                          <div className="flex items-center justify-center gap-1.5">
+                            <button
+                              onClick={() => handleViewUserReports(user)}
+                              className="p-1.5 rounded-lg bg-[#000080]/10 text-[#000080] hover:bg-[#000080] hover:text-white transition-all shadow-sm cursor-pointer"
+                              title="View Underwriting Reports"
+                            >
+                              <Eye className="h-4 w-4" />
+                            </button>
+                            <button
+                              onClick={() => handleSelectUser(user)}
+                              className="p-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-[#000080] hover:text-white transition-all shadow-sm cursor-pointer"
+                              title="Select User Customers"
+                            >
+                              <ChevronRight className="h-4 w-4" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))

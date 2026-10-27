@@ -84,6 +84,7 @@ const parseDateSafely = (dateStr: string) => {
 export default function SummeryOfDebitAndCredit({
   custId,
   reportId,
+  accountNumber,
   fromDate: propFromDate,
   toDate: propToDate,
 }: SummeryOfDebitAndCreditProps = {}) {
@@ -96,7 +97,7 @@ export default function SummeryOfDebitAndCredit({
   const [appliedFromDate, setAppliedFromDate] = useState(cleanPropFromDate);
   const [appliedToDate, setAppliedToDate] = useState(cleanPropToDate);
 
-  const { data: dateRangeData } = useDateRange({ custId });
+  const { data: dateRangeData } = useDateRange({ custId, accountNumber });
 
   useEffect(() => {
     if (propFromDate && propToDate) {
@@ -186,22 +187,24 @@ export default function SummeryOfDebitAndCredit({
       appliedToDate,
       custId,
       reportId,
+      accountNumber,
     ],
     queryFn: async () => {
-      const cleanFromDate = appliedFromDate.split('T')[0];
-      const cleanToDate = appliedToDate.split('T')[0];
-      let url = `/bsa/summary-of-debit-and-credit_monthwise?`;
-      if (custId) {
-        url += `cust_id=${encodeURIComponent(custId)}&`;
-      }
-      url += `from_date=${cleanFromDate}&to_date=${cleanToDate}`;
-      const response = await apiClient.get(url, {
-        errorMessage:
-          'Failed to load summary of debit and credit. Please try again.',
-      });
+      const response = await apiClient.post(
+        '/bsa/summary-of-debit-and-credit_monthwise',
+        {
+          from_date: appliedFromDate.split('T')[0],
+          to_date: appliedToDate.split('T')[0],
+          account_number: accountNumber,
+        },
+        {
+          errorMessage:
+            'Failed to load summary of debit and credit. Please try again.',
+        }
+      );
       return response.data?.data as SummaryData;
     },
-    enabled: !!appliedFromDate && !!appliedToDate,
+    enabled: !!accountNumber && !!appliedFromDate && !!appliedToDate,
   });
 
   const generateMonthsRange = (startStr: string, endStr: string) => {

@@ -71,6 +71,7 @@ const parseDateSafely = (dateStr: string) => {
 export default function CashFlow({
   custId,
   reportId,
+  accountNumber,
   fromDate: propFromDate,
   toDate: propToDate,
 }: CashFlowProps = {}) {
@@ -82,7 +83,7 @@ export default function CashFlow({
   const [appliedFromDate, setAppliedFromDate] = useState(cleanPropFromDate);
   const [appliedToDate, setAppliedToDate] = useState(cleanPropToDate);
 
-  const { data: dateRangeData } = useDateRange({ custId });
+  const { data: dateRangeData } = useDateRange({ custId, accountNumber });
 
   useEffect(() => {
     if (propFromDate && propToDate) {
@@ -166,21 +167,29 @@ export default function CashFlow({
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['cashflow', appliedFromDate, appliedToDate, custId, reportId],
+    queryKey: [
+      'cashflow',
+      appliedFromDate,
+      appliedToDate,
+      custId,
+      reportId,
+      accountNumber,
+    ],
     queryFn: async () => {
-      const cleanFromDate = appliedFromDate.split('T')[0];
-      const cleanToDate = appliedToDate.split('T')[0];
-      let url = `/bsa/cashflow?`;
-      if (custId) {
-        url += `cust_id=${encodeURIComponent(custId)}&`;
-      }
-      url += `from_month=${cleanFromDate}&to_month=${cleanToDate}`;
-      const response = await apiClient.get(url, {
-        errorMessage: 'Failed to load cashflow. Please try again.',
-      });
+      const response = await apiClient.post(
+        '/bsa/cashflow',
+        {
+          from_date: appliedFromDate.split('T')[0],
+          to_date: appliedToDate.split('T')[0],
+          account_number: accountNumber,
+        },
+        {
+          errorMessage: 'Failed to load cashflow. Please try again.',
+        }
+      );
       return response.data?.data as CashFlowData;
     },
-    enabled: !!appliedFromDate && !!appliedToDate,
+    enabled: !!accountNumber && !!appliedFromDate && !!appliedToDate,
   });
 
   const generateMonthsRange = (startStr: string, endStr: string) => {
