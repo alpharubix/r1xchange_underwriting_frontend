@@ -272,19 +272,25 @@ export default function PaymentDashboard() {
   return (
     <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8fafc] text-slate-800 antialiased font-montserrat">
       {/* ─── TOP HEADER ─── */}
-      <header className="flex items-center justify-between bg-white px-8 py-4.5 border-b border-slate-200 shrink-0">
-        <div>
-          <div className="flex items-center gap-2.5">
-            <h1 className="text-lg font-bold text-slate-900 tracking-tight">
-              Payment Transactions & Audit Ledger
-            </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200 tracking-wide uppercase">
-              Audit Trail
-            </span>
+      <header className="flex items-center justify-between bg-slate-100/90 border-b border-slate-200 px-8 py-4 shrink-0 shadow-xs">
+        <div className="flex items-center gap-3.5">
+          <div className="h-10 w-10 rounded-lg bg-white border border-slate-200/90 shadow-xs flex items-center justify-center text-[#002366] shrink-0">
+            <CreditCard className="w-5 h-5 text-[#002366]" />
           </div>
-          <p className="text-xs text-slate-500 font-normal mt-0.5">
-            Track wallet balance debits, verify transaction references, and audit upstream provider fulfillment.
-          </p>
+          <div>
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-lg font-bold text-slate-900 tracking-tight">
+                Payment Transactions & Audit Ledger
+              </h1>
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[10px] font-semibold bg-white text-slate-700 border border-slate-200/90 shadow-xs tracking-wider uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                Audit Trail
+              </span>
+            </div>
+            <p className="text-xs text-slate-500 font-medium mt-0.5">
+              Track wallet balance debits, verify transaction references, and audit upstream provider fulfillment.
+            </p>
+          </div>
         </div>
 
         <div className="flex items-center gap-2.5">
@@ -292,7 +298,7 @@ export default function PaymentDashboard() {
             onClick={() => refetch()}
             disabled={isFetching}
             variant="outline"
-            className="border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-medium h-8.5 px-3 rounded-md text-xs shadow-xs transition-colors"
+            className="border-slate-300 bg-white hover:bg-slate-50 text-slate-700 font-semibold h-8.5 px-3.5 rounded-lg text-xs shadow-xs transition-all cursor-pointer"
           >
             <RotateCw className={`w-3.5 h-3.5 mr-1.5 text-slate-500 ${isFetching ? 'animate-spin' : ''}`} />
             Refresh
