@@ -9,7 +9,10 @@ import {
   ChevronLeft,
   ChevronRight,
   Activity,
+  CreditCard,
 } from 'lucide-react';
+
+type AdminTab = 'anchors' | 'customers' | 'logs' | 'payments';
 
 export default function AdminSidebar() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -21,12 +24,13 @@ export default function AdminSidebar() {
   const activeTab = useMemo(() => {
     const t = tab?.toLowerCase();
     if (t === 'anchor' || t === 'anchors') return 'anchors';
-    if (t === 'customer' || t === 'customers' || t === 'user') return 'customers';
+    if (t === 'customer' || t === 'customers') return 'customers';
     if (t === 'logs' || t === 'log') return 'logs';
+    if (t === 'payments' || t === 'payment') return 'payments';
     return 'anchors';
   }, [tab]);
 
-  const handleTabChange = (targetTab: 'anchors' | 'customers' | 'logs') => {
+  const handleTabChange = (targetTab: AdminTab) => {
     const isCapital = window.location.pathname.startsWith('/Admins');
     const targetUrl = `${isCapital ? '/Admins' : '/admins'}/${targetTab}`;
     navigate(targetUrl);
@@ -117,6 +121,22 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'customers' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Customers</span>}
+        </button>
+
+        <button
+          onClick={() => handleTabChange('payments')}
+          className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'payments' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
+          style={{ color: activeTab === 'payments' ? '#000080' : '' }}
+        >
+          <div
+            className={`absolute left-0 top-[30%] bottom-[30%] w-1 rounded-full transition-all duration-150 ${activeTab === 'payments' ? 'h-2/5' : 'h-0 bg-transparent'}`}
+            style={{ backgroundColor: activeTab === 'payments' ? '#000080' : '' }}
+          />
+          <CreditCard
+            className={`h-5 w-5 shrink-0 transition-colors ${activeTab === 'payments' ? '' : 'text-blue-200 group-hover:text-white'}`}
+            style={{ color: activeTab === 'payments' ? '#000080' : '' }}
+          />
+          {!sidebarCollapsed && <span className="text-sm">Payments</span>}
         </button>
 
         <button

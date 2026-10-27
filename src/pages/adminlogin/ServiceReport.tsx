@@ -14,8 +14,6 @@ import { Eye, FileSpreadsheet, Loader2, ArrowLeft } from 'lucide-react';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
-
-import { getWalletBalance } from '@/api/payment';
 import { toast } from 'sonner';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from '@/components/cart/PaymentModal';
@@ -176,48 +174,6 @@ export default function ServiceReport({
     amount: 0,
     onSuccess: () => { },
   });
-
-  const [isCheckingWallet, setIsCheckingWallet] = useState(false);
-  const handleCreateReport = async (
-    moduleName: string,
-    serviceId: string,
-    amount: number,
-    onSuccess: () => void
-  ) => {
-    try {
-      setIsCheckingWallet(true);
-      const res = await getWalletBalance(serviceId, selectedCustomer.id);
-
-      if (res.data.is_balance_available) {
-        onSuccess();
-      } else {
-        toast.error(
-          `Insufficient wallet balance for ${moduleName}. Please select a payer to proceed.`
-        );
-        setPayerSelectionConfig({
-          isOpen: true,
-          moduleName,
-          serviceId,
-          amount,
-          onSuccess,
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error(
-        'Failed to check wallet balance. Proceeding to payer selection.'
-      );
-      setPayerSelectionConfig({
-        isOpen: true,
-        moduleName,
-        serviceId,
-        amount,
-        onSuccess,
-      });
-    } finally {
-      setIsCheckingWallet(false);
-    }
-  };
 
   const handleCustomerPay = async () => {
     const config = payerSelectionConfig;
@@ -504,20 +460,7 @@ export default function ServiceReport({
                           Bank Statement Analysis Reports
                         </p>
                       </div>
-                      <Button
-                        onClick={() =>
-                          handleCreateReport('BSA', 'BSA', 565, () =>
-                            setIsBsaModalOpen(true)
-                          )
-                        }
-                        disabled={isCheckingWallet}
-                        className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                      >
-                        {isCheckingWallet ? (
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        ) : null}
-                        + Create New BSA Report
-                      </Button>
+                      
                     </div>
                     <BankAccountsPage custId={selectedCustomer.id} hideHeader={true} isAnchor={true} />
                   </>
@@ -564,20 +507,7 @@ export default function ServiceReport({
                         Goods and Services Tax Reports & Filings
                       </p>
                     </div>
-                    <Button
-                      onClick={() =>
-                        handleCreateReport('GST', 'GST', 561, () =>
-                          setIsGstModalOpen(true)
-                        )
-                      }
-                      disabled={isCheckingWallet}
-                      className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                    >
-                      {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : null}
-                      + Create New GST Report
-                    </Button>
+                    
                   </div>
                   <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
                     <CardContent className="p-6">
@@ -727,20 +657,7 @@ export default function ServiceReport({
                         Income Tax Return Statements
                       </p>
                     </div>
-                    <Button
-                      onClick={() =>
-                        handleCreateReport('ITR', 'ITR', 525, () =>
-                          setIsItrModalOpen(true)
-                        )
-                      }
-                      disabled={isCheckingWallet}
-                      className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                    >
-                      {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : null}
-                      + Create New ITR Report
-                    </Button>
+                    
                   </div>
 
                   <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">
@@ -858,20 +775,7 @@ export default function ServiceReport({
                         Credit Bureau Score & Report Details
                       </p>
                     </div>
-                    <Button
-                      onClick={() =>
-                        handleCreateReport('CIBIL', 'CIBIL', 643, () =>
-                          setIsCibilModalOpen(true)
-                        )
-                      }
-                      disabled={isCheckingWallet}
-                      className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
-                    >
-                      {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                      ) : null}
-                      + Create New CIBIL Report
-                    </Button>
+                  
                   </div>
 
                   <Card className="border border-slate-100 bg-white shadow-sm rounded-2xl overflow-hidden">

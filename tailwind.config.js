@@ -7,6 +7,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        montserrat: ['"Montserrat"', 'system-ui', 'sans-serif'],
+      },
       colors: {
         navy: {
           DEFAULT: "#000080",
