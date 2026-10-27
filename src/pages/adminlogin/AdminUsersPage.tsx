@@ -36,7 +36,7 @@ export default function AdminDashboardPage() {
   }, [tab, navigate]);
 
   return (
-    <div className="flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
+    <div className="admin-portal flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
       <AdminSidebar />
 
       {activeTab === 'customers' ? (

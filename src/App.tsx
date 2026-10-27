@@ -130,8 +130,22 @@ function App() {
                   <Route path="/Anchors/login" element={<AnchorLoginPage />} />
                   
                   {/* Admin Login Page */}
-                  <Route path="/admins/login" element={<AdminLoginPage />} />
-                  <Route path="/Admins/login" element={<AdminLoginPage />} />
+                  <Route
+                    path="/admins/login"
+                    element={
+                      <div className="admin-portal">
+                        <AdminLoginPage />
+                      </div>
+                    }
+                  />
+                  <Route
+                    path="/Admins/login"
+                    element={
+                      <div className="admin-portal">
+                        <AdminLoginPage />
+                      </div>
+                    }
+                  />
 
                   {/* Admin Dashboard */}
                   <Route element={<AdminProtectedRoute />}>
