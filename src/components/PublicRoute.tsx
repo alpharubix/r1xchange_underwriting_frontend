@@ -38,7 +38,7 @@ export default function PublicRoute() {
     }
 
     if (isAdmin) {
-      return <Navigate to="/admins/user" replace />;
+      return <Navigate to="/admins/anchors" replace />;
     }
     if (isAnchor) {
       return <Navigate to="/anchors/dashboard" replace />;

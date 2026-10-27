@@ -166,7 +166,7 @@ export function AuthProvider({
 
     // Determine the correct portal for this authenticated user.
     const defaultDestination = isAdmin
-      ? '/admins/user'
+      ? '/admins/anchors'
       : isAnchor
         ? '/anchors/dashboard'
         : '/home/dashboard';
@@ -183,7 +183,7 @@ export function AuthProvider({
     } else if (!isAnchorPortal && !isAdminPortal && isAnchor) {
       redirectTo = '/anchors/dashboard';
     } else if (!isAnchorPortal && !isAdminPortal && isAdmin) {
-      redirectTo = '/admins/user';
+      redirectTo = '/admins/anchors';
     } else if (
       isAnchorPortal &&
       isAnchor

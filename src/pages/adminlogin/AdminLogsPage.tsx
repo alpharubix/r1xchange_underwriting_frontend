@@ -20,7 +20,7 @@ import {
   AlertTriangle,
   FileText,
   Clock,
-  Layers,
+  Layers, 
   Code,
 } from 'lucide-react';
 import { getLogsList } from '@/api/logs';

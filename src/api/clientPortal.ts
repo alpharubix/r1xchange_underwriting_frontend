@@ -29,7 +29,7 @@
 // }
 
 
-export type ClientPortal = "user" | "ANCHOR";
+export type ClientPortal = "user" | "ANCHOR" | "ADMIN";
 
 export function getClientPortal(): ClientPortal {
   const pathname = window.location.pathname.toLowerCase();
@@ -38,6 +38,11 @@ export function getClientPortal(): ClientPortal {
     pathname.startsWith("/anchors/") ||
     pathname.startsWith("/anchors");
 
+  const isAdminPath = pathname === "/admins" || pathname.startsWith("/admins/") || pathname.startsWith("/admins")
+
+  if (isAdminPath){
+    return "ADMIN";
+  }
   if (isAnchorPath) {
     return "ANCHOR";
   }
