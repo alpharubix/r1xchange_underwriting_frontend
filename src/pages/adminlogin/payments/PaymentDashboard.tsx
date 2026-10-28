@@ -19,10 +19,17 @@ import {
   AlertCircle,
   Layers,
   ShieldCheck,
+  User,
+  UserCheck,
+  Building2,
+  Mail,
+  Phone,
+  RefreshCw,
 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   getAdminPayments,
+  getAdminUserProfileInformation,
   type AdminPaymentRecord,
   type AdminPaymentsFilterParams,
 } from '@/api/adminPayments';
@@ -51,23 +58,26 @@ const formatCurrency = (amount?: number): string => {
 
 const formatDate = (isoStr?: string): string => {
   if (!isoStr) return '-';
+
   try {
     const d = new Date(isoStr);
     if (isNaN(d.getTime())) return isoStr;
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = d.toLocaleString('en-US', { month: 'short' });
-    const year = d.getFullYear();
-    let hours = d.getHours();
-    const minutes = String(d.getMinutes()).padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    const strHours = String(hours).padStart(2, '0');
-    return `${day} ${month} ${year}, ${strHours}:${minutes} ${ampm}`;
+
+    const formatted = d.toLocaleString('en-IN', {
+      timeZone: 'Asia/Kolkata',
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: true,
+    });
+
+    return formatted.replace('am', 'AM').replace('pm', 'PM');
   } catch {
     return isoStr;
   }
 };
-
 const getServiceColor = (service?: string) => {
   const s = service?.toUpperCase();
   switch (s) {
@@ -160,6 +170,12 @@ export default function PaymentDashboard() {
   const [inspectedRecord, setInspectedRecord] = useState<AdminPaymentRecord | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
+  // User Complete Profile Audit State
+  const [inspectingUserId, setInspectingUserId] = useState<string | null>(null);
+  const [userProfileData, setUserProfileData] = useState<Record<string, any> | null>(null);
+  const [isFetchingUserProfile, setIsFetchingUserProfile] = useState<boolean>(false);
+  const [userProfileError, setUserProfileError] = useState<string | null>(null);
+
   // Build Query Params adhering strictly to VALID_FILTERS in backend
   const queryParams = useMemo<AdminPaymentsFilterParams>(() => {
     return {
@@ -229,6 +245,42 @@ export default function PaymentDashboard() {
     setCopiedKey(keyName);
     toast.success('Copied to clipboard');
     setTimeout(() => setCopiedKey(null), 2000);
+  };
+
+  const handleViewUserProfile = async (userId?: string) => {
+    if (!userId) {
+      toast.error('No User ID associated with this payment transaction');
+      return;
+    }
+
+    setInspectingUserId(userId);
+    setIsFetchingUserProfile(true);
+    setUserProfileError(null);
+    setUserProfileData(null);
+
+    try {
+      const res = await getAdminUserProfileInformation(userId);
+      const data = res?.data ?? res;
+      setUserProfileData(data);
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        'Failed to fetch user profile information';
+      setUserProfileError(errMsg);
+      toast.error(errMsg);
+    } finally {
+      setIsFetchingUserProfile(false);
+    }
+  };
+
+  const handleCloseUserProfile = (returnToAudit: boolean = true) => {
+    setInspectingUserId(null);
+    setUserProfileData(null);
+    setUserProfileError(null);
+    if (!returnToAudit) {
+      setInspectedRecord(null);
+    }
   };
 
   const handleResetFilters = () => {
@@ -917,7 +969,7 @@ export default function PaymentDashboard() {
 
       {/* ─── DETAIL INSPECTOR MODAL ─── */}
       <AnimatePresence>
-        {inspectedRecord && (
+        {inspectedRecord && !inspectingUserId && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
@@ -1025,6 +1077,16 @@ export default function PaymentDashboard() {
                         </button>
                       )}
                     </div>
+                    {inspectedRecord.user_id && (
+                      <button
+                        type="button"
+                        onClick={() => handleViewUserProfile(inspectedRecord.user_id)}
+                        className="text-[11px] font-semibold text-[#002366] hover:text-[#001845] hover:underline flex items-center gap-1 mt-1 cursor-pointer pt-1"
+                      >
+                        <User className="w-3 h-3" />
+                        View User's Complete information &rarr;
+                      </button>
+                    )}
                   </div>
 
                   <div className="space-y-1 bg-white p-3 rounded-lg border border-slate-200">
@@ -1105,13 +1167,405 @@ export default function PaymentDashboard() {
               </div>
 
               {/* Modal Footer */}
-              <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => handleViewUserProfile(inspectedRecord.user_id)}
+                  disabled={!inspectedRecord.user_id || isFetchingUserProfile}
+                  className="border-[#002366]/40 text-[#002366] hover:bg-[#002366]/10 font-semibold px-3.5 h-8 text-xs flex items-center gap-1.5 shadow-2xs"
+                >
+                  {isFetchingUserProfile ? (
+                    <RotateCw className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <User className="w-3.5 h-3.5" />
+                  )}
+                  View User's Complete information
+                </Button>
+
                 <Button
                   onClick={() => setInspectedRecord(null)}
                   className="bg-[#002366] hover:bg-[#001845] text-white rounded-md font-medium px-4 h-8 text-xs shadow-xs"
                 >
                   Close Audit View
                 </Button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── USER COMPLETE PROFILE INFORMATION MODAL ─── */}
+      <AnimatePresence>
+        {inspectingUserId && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xs">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.97, y: 10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.97, y: 10 }}
+              transition={{ duration: 0.18 }}
+              className="bg-white rounded-xl shadow-2xl border border-slate-200 w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] font-montserrat"
+            >
+              {/* Modal Header */}
+              <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between  ">
+                <div className="flex items-center gap-3 ">
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleCloseUserProfile(true)}
+                    className="h-8 px-2 text-slate-600 hover:text-slate-900 hover:bg-slate-200/80 -ml-2 text-xs flex items-center gap-1"
+                    title="Back to Transaction Audit Record"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                    Back
+                  </Button>
+                  <div className="h-9 w-9 rounded-lg bg-[#002366]/10 text-[#002366] flex items-center justify-center shrink-0">
+                    <UserCheck className="w-5 h-5 text-[#002366]" />
+                  </div>
+                  <div>
+                    <h3 className="text-sm font-bold text-slate-900 tracking-tight flex items-center gap-2">
+                      User Profile Information
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200/80">
+                        Admin Audit
+                      </span>
+                    </h3>
+                    <p className="text-[11px] text-slate-500 font-normal">
+                      User ID: <span className="font-mono text-slate-800 font-medium">{inspectingUserId}</span>
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => handleCloseUserProfile(false)}
+                  className="h-7 w-7 rounded-md hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
+                  title="Close All Views"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="p-6 overflow-y-auto space-y-5 text-xs flex-1">
+                {isFetchingUserProfile ? (
+                  <div className="py-16 flex flex-col items-center justify-center text-center">
+                    <RotateCw className="w-8 h-8 text-[#002366] animate-spin mb-3" />
+                    <h4 className="text-sm font-semibold text-slate-800">
+                      Querying User Profile
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-1 max-w-xs font-mono">
+                      GET /v1/admin/audit/user-profile-information?user_id={inspectingUserId}
+                    </p>
+                  </div>
+                ) : userProfileError ? (
+                  <div className="py-12 flex flex-col items-center justify-center text-center max-w-md mx-auto">
+                    <div className="h-10 w-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mb-3">
+                      <AlertCircle className="w-5 h-5" />
+                    </div>
+                    <h4 className="text-sm font-semibold text-slate-800">
+                      Unable to Fetch User Profile
+                    </h4>
+                    <p className="text-xs text-slate-500 mt-1">
+                      {userProfileError}
+                    </p>
+                    <div className="flex items-center gap-2 mt-4">
+                      <Button
+                        onClick={() => handleViewUserProfile(inspectingUserId)}
+                        className="bg-[#002366] hover:bg-[#001845] text-white rounded-md text-xs font-medium h-8 px-4"
+                      >
+                        <RefreshCw className="w-3.5 h-3.5 mr-1.5" /> Retry Query
+                      </Button>
+                      <Button
+                        onClick={handleCloseUserProfile}
+                        variant="outline"
+                        className="border-slate-300 text-slate-700 rounded-md text-xs font-medium h-8 px-3.5"
+                      >
+                        Dismiss
+                      </Button>
+                    </div>
+                  </div>
+                ) : userProfileData ? (
+                  <>
+                    {/* Header Summary Banner */}
+                    <div className="bg-slate-50 border border-slate-200/90 rounded-lg p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-[#002366] text-white flex items-center justify-center font-bold text-sm tracking-wider uppercase">
+                          {((userProfileData.customer_name || userProfileData.company_name || 'U') as string).slice(0, 2)}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-slate-900">
+                              {userProfileData.customer_name || userProfileData.company_name || 'Unnamed Customer'}
+                            </span>
+                            {userProfileData.status && (
+                              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80 uppercase">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                {userProfileData.status}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-slate-500 font-normal mt-0.5">
+                            {userProfileData.company_name && userProfileData.customer_name
+                              ? userProfileData.company_name
+                              : userProfileData.email_id || userProfileData.email || 'Registered User'}
+                          </p>
+                        </div>
+                      </div>
+
+                      {userProfileData.account_id !== undefined && (
+                        <div className="bg-white px-3 py-1.5 rounded-md border border-slate-200 text-right">
+                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
+                            Account ID
+                          </span>
+                          <span className="font-mono text-xs font-bold text-slate-800">
+                            #{userProfileData.account_id}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Primary Key-Value Attributes Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {/* Customer Name */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                          <User className="w-3 h-3 text-slate-400" />
+                          Customer Name
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800">
+                            {userProfileData.customer_name || 'N/A'}
+                          </span>
+                          {userProfileData.customer_name && (
+                            <button
+                              onClick={() => handleCopy(userProfileData.customer_name, 'cust-name')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer ml-1"
+                              title="Copy Customer Name"
+                            >
+                              {copiedKey === 'cust-name' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Company Name */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                          <Building2 className="w-3 h-3 text-slate-400" />
+                          Company Name
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800">
+                            {userProfileData.company_name || 'N/A'}
+                          </span>
+                          {userProfileData.company_name && (
+                            <button
+                              onClick={() => handleCopy(userProfileData.company_name, 'comp-name')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer ml-1"
+                              title="Copy Company Name"
+                            >
+                              {copiedKey === 'comp-name' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Email ID */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                          <Mail className="w-3 h-3 text-slate-400" />
+                          Email Address
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800 font-mono truncate mr-2" title={userProfileData.email_id || userProfileData.email}>
+                            {userProfileData.email_id || userProfileData.email || 'N/A'}
+                          </span>
+                          {(userProfileData.email_id || userProfileData.email) && (
+                            <button
+                              onClick={() => handleCopy(userProfileData.email_id || userProfileData.email, 'email')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer shrink-0"
+                              title="Copy Email"
+                            >
+                              {copiedKey === 'email' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Phone */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px] flex items-center gap-1.5">
+                          <Phone className="w-3 h-3 text-slate-400" />
+                          Phone Number
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800 font-mono">
+                            {userProfileData.phone || userProfileData.phone_number || userProfileData.mobile || 'N/A'}
+                          </span>
+                          {(userProfileData.phone || userProfileData.phone_number || userProfileData.mobile) && (
+                            <button
+                              onClick={() => handleCopy(String(userProfileData.phone || userProfileData.phone_number || userProfileData.mobile), 'phone')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer"
+                              title="Copy Phone Number"
+                            >
+                              {copiedKey === 'phone' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* GST Number */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+                          GST Number
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800 font-mono uppercase">
+                            {userProfileData.gst_number || userProfileData.gstin || 'N/A'}
+                          </span>
+                          {(userProfileData.gst_number || userProfileData.gstin) && (
+                            <button
+                              onClick={() => handleCopy(userProfileData.gst_number || userProfileData.gstin, 'gst')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer"
+                              title="Copy GST Number"
+                            >
+                              {copiedKey === 'gst' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* PAN Number */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+                          PAN Number
+                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-medium text-slate-800 font-mono uppercase">
+                            {userProfileData.pan_number || userProfileData.pan || 'N/A'}
+                          </span>
+                          {(userProfileData.pan_number || userProfileData.pan) && (
+                            <button
+                              onClick={() => handleCopy(userProfileData.pan_number || userProfileData.pan, 'pan')}
+                              className="text-slate-400 hover:text-slate-700 p-0.5 cursor-pointer"
+                              title="Copy PAN Number"
+                            >
+                              {copiedKey === 'pan' ? (
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                              ) : (
+                                <Copy className="w-3.5 h-3.5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Anchor Association */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+                          Anchor Code / ID
+                        </span>
+                        <span className="text-xs font-mono text-slate-800 block truncate" title={userProfileData.anchor_code || userProfileData.site_code || userProfileData.anchor_id}>
+                          {userProfileData.anchor_code || userProfileData.site_code || userProfileData.anchor_id || 'N/A'}
+                        </span>
+                      </div>
+
+                      {/* Role / Profile Type */}
+                      <div className="bg-white p-3 rounded-lg border border-slate-200 space-y-1">
+                        <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
+                          Role / Profile Type
+                        </span>
+                        <span className="text-xs font-medium text-slate-800 block">
+                          {userProfileData.role || userProfileData.user_type || 'USER'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Raw JSON View */}
+                    <div className="space-y-1.5 pt-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                          Complete Profile JSON (/v1/admin/audit/user-profile-information)
+                        </span>
+                        <Button
+                          onClick={() => handleCopy(JSON.stringify(userProfileData, null, 2), 'raw-profile-json')}
+                          variant="ghost"
+                          size="sm"
+                          className="text-[11px] text-slate-600 h-6 px-2 font-medium"
+                        >
+                          {copiedKey === 'raw-profile-json' ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 mr-1 text-emerald-600" /> Copied
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 mr-1" /> Copy JSON
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                      <pre className="p-3.5 rounded-lg bg-[#0f172a] text-slate-200 font-mono text-[11px] overflow-x-auto max-h-56 leading-relaxed border border-slate-800">
+                        {JSON.stringify(userProfileData, null, 2)}
+                      </pre>
+                    </div>
+                  </>
+                ) : (
+                  <div className="py-12 text-center text-slate-500">
+                    No profile details available.
+                  </div>
+                )}
+              </div>
+
+              {/* Modal Footer */}
+              <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex flex-wrap items-center justify-between gap-2.5">
+                <Button
+                  onClick={() => handleCloseUserProfile(true)}
+                  variant="outline"
+                  size="sm"
+                  className="border-slate-300 text-slate-700 hover:bg-slate-100 h-8 px-3 text-xs flex items-center gap-1.5"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                  Back to Transaction Audit
+                </Button>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    onClick={() => handleViewUserProfile(inspectingUserId)}
+                    disabled={isFetchingUserProfile}
+                    variant="outline"
+                    size="sm"
+                    className="border-slate-300 text-slate-700 h-8 px-3 text-xs"
+                  >
+                    <RotateCw className={`w-3.5 h-3.5 mr-1.5 ${isFetchingUserProfile ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </Button>
+
+                  <Button
+                    onClick={() => handleCloseUserProfile(false)}
+                    className="bg-[#002366] hover:bg-[#001845] text-white rounded-md font-medium px-4 h-8 text-xs shadow-xs"
+                  >
+                    Close
+                  </Button>
+                </div>
               </div>
             </motion.div>
           </div>

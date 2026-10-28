@@ -91,3 +91,11 @@ export async function getAdminPayments(
   return response.data;
 }
 
+export async function getAdminUserProfileInformation(userId: string): Promise<Record<string, any>> {
+  const response = await apiClient.get('/admin/audit/user-profile-information', {
+    params: { user_id: userId },
+  });
+  return response.data;
+}
+
+
