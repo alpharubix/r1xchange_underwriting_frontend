@@ -187,7 +187,7 @@
   --muted: #65768b;
   color: var(--ink);
   background: #fff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Montserrat', system-ui, sans-serif;
   font-size: var(--font-md);
   letter-spacing: 0;
   overflow: clip;
@@ -196,7 +196,7 @@
 .marketing-site *, .marketing-site *::before, .marketing-site *::after { box-sizing: border-box; }
 .marketing-site a { color: inherit; text-decoration: none; }
 .marketing-site button { color: inherit; font: inherit; }
-.marketing-site h1, .marketing-site h2, .marketing-site h3, .marketing-site strong { font-family: 'Manrope', sans-serif; letter-spacing: 0; }
+.marketing-site h1, .marketing-site h2, .marketing-site h3, .marketing-site strong { font-family: 'Montserrat', system-ui, sans-serif; letter-spacing: 0; }
 .marketing-site p { margin-top: 0; }
 
 .site-header {

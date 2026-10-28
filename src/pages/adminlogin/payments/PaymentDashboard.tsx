@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo} from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -189,6 +189,7 @@ export default function PaymentDashboard() {
     filterAmount,
   ]);
 
+;
   // Fetch payments
   const { data, isLoading, isFetching, error, refetch } = useQuery({
     queryKey: ['admin', 'payments', queryParams],
@@ -197,6 +198,8 @@ export default function PaymentDashboard() {
     staleTime: 10000,
   });
 
+
+  
   const payments = useMemo(() => data?.data || [], [data?.data]);
   const pagination = data?.pagination || {
     page: currentPage,

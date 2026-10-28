@@ -8,7 +8,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        montserrat: ['"Montserrat"', 'system-ui', 'sans-serif'],
+        sans: ['"Montserrat"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
+        montserrat: ['"Montserrat"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
       },
       colors: {
         navy: {
