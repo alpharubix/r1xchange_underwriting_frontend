@@ -15,7 +15,6 @@ import {
   Mail,
   Activity,
   ArrowLeft,
-  ArrowRight,
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -1040,7 +1039,7 @@ export default function AdminAnchorsPage() {
                         >
                           <button
                             onClick={() => handleSelectCustomer(cust)}
-                            className="p-1.5 rounded-lg bg-[#002366]/10 text-[#002366] hover:bg-[#002366] hover:text-white transition-all shadow-sm mx-auto flex items-center justify-center cursor-pointer"
+                            className="p-1.5 rounded-lg bg-[#000080]/10 text-[#000080] hover:bg-[#000080] hover:text-white transition-all shadow-sm cursor-pointer"  
                             title="Customer Details"
                           >
                             <Eye className="h-4 w-4" />
@@ -1425,13 +1424,9 @@ export default function AdminAnchorsPage() {
                             >
                               <Eye className="h-4 w-4" />
                             </button>
-                            <button
-                              onClick={() => handleSelectUser(user)}
-                              className="p-1.5 rounded-lg bg-slate-100 text-slate-600 hover:bg-[#000080] hover:text-white transition-all shadow-sm cursor-pointer"
-                              title="Select User Customers"
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </button>
+                           
+                             
+                            
                           </div>
                         </td>
                       </tr>
@@ -1651,8 +1646,8 @@ export default function AdminAnchorsPage() {
                           onClick={() => handleSelectAnchor(item)}
                           className="h-8 px-3 rounded-lg text-xs font-bold text-[#000080] hover:bg-[#000080]/10 flex items-center gap-1.5 mx-auto"
                         >
-                          <span>Select Anchor</span>
-                          <ArrowRight className="h-3.5 w-3.5" />
+                          
+                          <Eye className='h-6 w-5 '/>
                         </Button>
                       </td>
                     </tr>
