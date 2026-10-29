@@ -39,6 +39,8 @@ const findAccountId = (user: any, index: number): string => {
   );
 };
 
+const TEST_ACCOUNT_ID = '69e539ec4a74da6067477c22';
+
 
 
 const getFlagValue = (userObj: any, baseKey: string): boolean => {
@@ -758,6 +760,11 @@ export default function AdminCustomersPage() {
                         <span className="block truncate whitespace-nowrap" title={item.accountid}>
                           {item.accountid}
                         </span>
+                        {item.accountid.toLowerCase() === TEST_ACCOUNT_ID && (
+                          <span className="mt-1 inline-flex rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 font-sans text-[10px] font-semibold leading-tight text-amber-800">
+                            Test account
+                          </span>
+                        )}
                       </td>
 
                       {/* CUSTOMER NAME */}
