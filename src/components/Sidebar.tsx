@@ -19,7 +19,7 @@ import { useLogout } from '@/hooks/useAuth';
 import { downloadItrReport } from '@/api/itr';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
 
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface SidebarContextValue {
   collapsed: boolean;

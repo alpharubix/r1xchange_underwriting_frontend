@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import { ENV } from '@/conf';
 import { getClientPortal } from '@/api/clientPortal';
 declare module 'axios' {

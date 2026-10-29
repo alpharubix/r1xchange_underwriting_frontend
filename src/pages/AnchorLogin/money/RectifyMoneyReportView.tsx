@@ -13,7 +13,7 @@ import {
   submitRectifyMoneySelections,
 } from '@/api/money';
 import { format } from 'date-fns';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface RectifyMoneyReportViewProps {
   custId: string;

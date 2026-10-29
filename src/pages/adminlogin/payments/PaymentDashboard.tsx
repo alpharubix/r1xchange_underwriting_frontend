@@ -1,9 +1,9 @@
 import { useState, useMemo} from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { motion, AnimatePresence } from 'framer-motion';
+import axios from 'axios';
 import {
   CreditCard,
-  Search,
   Filter,
   RotateCw,
   X,
@@ -20,11 +20,13 @@ import {
   Layers,
   ShieldCheck,
 } from 'lucide-react';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import {
   getAdminPayments,
+  getAdminServiceRequests,
   type AdminPaymentRecord,
   type AdminPaymentsFilterParams,
+  type ServiceRequestRecord,
 } from '@/api/adminPayments';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -40,13 +42,13 @@ import {
 // ─── HELPER FORMATTERS ────────────────────────────────────────────────────────
 
 const formatCurrency = (amount?: number): string => {
-  if (amount === undefined || amount === null || isNaN(amount)) return '₹0.00';
+  if (amount === undefined || amount === null || isNaN(amount)) return '₹ 0.00';
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(amount);
+  }).format(amount/100);
 };
 
 const formatDate = (isoStr?: string): string => {
@@ -99,6 +101,60 @@ const getServiceColor = (service?: string) => {
   }
 };
 
+const getServiceBreakupItems = (
+  serviceBreakup: AdminPaymentRecord['service_breakup'],
+): Array<{ service: string; quantity: string }> => {
+  if (!serviceBreakup) return [];
+  return serviceBreakup
+    .filter((item) => item.service)
+    .map(({ service, qty }) => ({
+      service,
+      quantity: String(qty),
+    }));
+};
+
+const ServiceBreakupList = ({
+  serviceBreakup,
+}: {
+  serviceBreakup: AdminPaymentRecord['service_breakup'];
+}) => {
+  const items = getServiceBreakupItems(serviceBreakup);
+
+  if (items.length === 0) {
+    return (
+      <span className="inline-flex rounded border border-slate-200 bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600">
+        UNKNOWN
+      </span>
+    );
+  }
+
+  const serviceOrder = ['BSA', 'GST', 'ITR', 'CIBIL'];
+  const orderedItems = [...items].sort((a, b) => {
+    const aIndex = serviceOrder.indexOf(a.service.toUpperCase());
+    const bIndex = serviceOrder.indexOf(b.service.toUpperCase());
+    return (aIndex === -1 ? serviceOrder.length : aIndex) -
+      (bIndex === -1 ? serviceOrder.length : bIndex);
+  });
+
+  return (
+    <div className="grid grid-cols-2 gap-x-2 gap-y-1">
+      {orderedItems.map(({ service, quantity }, index) => {
+        const colors = getServiceColor(service);
+        return (
+          <span
+            key={`${service}-${index}`}
+            className={`whitespace-nowrap odd:border-r odd:border-slate-300 odd:pr-2 even:pl-2 text-[11px] font-semibold ${
+              colors.badge.split(' ').find((className) => className.startsWith('text-'))
+            }`}
+          >
+            {service.toUpperCase()}{quantity ? ` - ${quantity}` : ''}
+          </span>
+        );
+      })}
+    </div>
+  );
+};
+
 const getStatusBadge = (statusVal?: string, _type: 'wallet' | 'service' | 'upstream' = 'wallet') => {
   const s = statusVal?.toUpperCase() || 'UNKNOWN';
 
@@ -111,7 +167,14 @@ const getStatusBadge = (statusVal?: string, _type: 'wallet' | 'service' | 'upstr
     );
   }
 
-  if (s === 'PENDING' || s === 'PROCESSING' || s === 'RESERVED' || s === 'CREATED' || s === 'ACCEPTED') {
+  if (
+    s === 'PENDING' ||
+    s === 'PROCESSING' ||
+    s === 'RESERVED' ||
+    s === 'CREATED' ||
+    s === 'ACCEPTED' ||
+    s === 'AUTHORIZED'
+  ) {
     return (
       <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80">
         <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse shrink-0" />
@@ -145,19 +208,21 @@ export default function PaymentDashboard() {
   const [pageSize, setPageSize] = useState<number>(10);
 
   // Filters State
-  const [filterReferenceId, setFilterReferenceId] = useState('');
+  const [filterRazorpayPaymentId, setFilterRazorpayPaymentId] = useState('');
+  const [filterRazorpayOrderId, setFilterRazorpayOrderId] = useState('');
   const [filterUserId, setFilterUserId] = useState('');
-  const [filterRequestedBy, setFilterRequestedBy] = useState('');
-  const [filterRequestedByRole, setFilterRequestedByRole] = useState('all');
-  const [filterService, setFilterService] = useState('all');
+  const [filterServiceName, setFilterServiceName] = useState('all');
+  const [filterServiceQuantity, setFilterServiceQuantity] = useState('');
+  const [filterCurrency, setFilterCurrency] = useState('');
   const [filterWalletStatus, setFilterWalletStatus] = useState('all');
-  const [filterServiceStatus, setFilterServiceStatus] = useState('all');
-  const [filterUpstreamStatus, setFilterUpstreamStatus] = useState('all');
+  const [filterPaymentStatus, setFilterPaymentStatus] = useState('all');
   const [filterAmount, setFilterAmount] = useState('');
+  const [filterCreatedAt, setFilterCreatedAt] = useState('');
+  const [filterUpdatedAt, setFilterUpdatedAt] = useState('');
 
   // UI States
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
-  const [inspectedRecord, setInspectedRecord] = useState<AdminPaymentRecord | null>(null);
+  const [inspectedRecords, setInspectedRecords] = useState<ServiceRequestRecord[]>([]);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
 
   // Build Query Params adhering strictly to VALID_FILTERS in backend
@@ -165,48 +230,96 @@ export default function PaymentDashboard() {
     return {
       page: currentPage,
       limit: pageSize,
-      reference_id: filterReferenceId.trim() || undefined,
+      razorpay_payment_id: filterRazorpayPaymentId.trim() || undefined,
+      razorpay_order_id: filterRazorpayOrderId.trim() || undefined,
       user_id: filterUserId.trim() || undefined,
-      requested_by: filterRequestedBy.trim() || undefined,
-      requested_by_role: filterRequestedByRole !== 'all' ? filterRequestedByRole : undefined,
-      service: filterService !== 'all' ? filterService : undefined,
+      currency: filterCurrency.trim() || undefined,
       wallet_status: filterWalletStatus !== 'all' ? filterWalletStatus : undefined,
-      service_status: filterServiceStatus !== 'all' ? filterServiceStatus : undefined,
-      upstream_status: filterUpstreamStatus !== 'all' ? filterUpstreamStatus : undefined,
+      payment_status: filterPaymentStatus !== 'all' ? filterPaymentStatus : undefined,
       amount: filterAmount.trim() ? filterAmount.trim() : undefined,
+      created_at: filterCreatedAt || undefined,
+      updated_at: filterUpdatedAt || undefined,
     };
   }, [
     currentPage,
     pageSize,
-    filterReferenceId,
+    filterRazorpayPaymentId,
+    filterRazorpayOrderId,
     filterUserId,
-    filterRequestedBy,
-    filterRequestedByRole,
-    filterService,
+    filterCurrency,
     filterWalletStatus,
-    filterServiceStatus,
-    filterUpstreamStatus,
+    filterPaymentStatus,
     filterAmount,
+    filterCreatedAt,
+    filterUpdatedAt,
   ]);
 
 ;
   // Fetch payments
+  const isServiceFilterActive =
+    filterServiceName !== 'all' || filterServiceQuantity.trim() !== '';
   const { data, isLoading, isFetching, error, refetch } = useQuery({
-    queryKey: ['admin', 'payments', queryParams],
-    queryFn: () => getAdminPayments(queryParams),
+    queryKey: [
+      'admin',
+      'payments',
+      isServiceFilterActive ? { ...queryParams, page: 1, limit: 100 } : queryParams,
+      filterServiceName,
+      filterServiceQuantity,
+    ],
+    queryFn: async () => {
+      if (!isServiceFilterActive) return getAdminPayments(queryParams);
+
+      const firstPage = await getAdminPayments({ ...queryParams, page: 1, limit: 100 });
+      const allRecords = [...firstPage.data];
+
+      for (let page = 2; page <= firstPage.pagination.total_pages; page++) {
+        const response = await getAdminPayments({ ...queryParams, page, limit: 100 });
+        allRecords.push(...response.data);
+      }
+
+      return { ...firstPage, data: allRecords };
+    },
     placeholderData: (previousData) => previousData,
     staleTime: 10000,
   });
 
 
-  
-  const payments = useMemo(() => data?.data || [], [data?.data]);
-  const pagination = data?.pagination || {
+  const filteredPayments = useMemo(() => {
+    const records = data?.data || [];
+    if (!isServiceFilterActive) return records;
+
+    return records.filter((record) => {
+      const breakup = record.service_breakup || [];
+      const matchingService = breakup.some((item) => {
+        const matchesService =
+          filterServiceName === 'all' ||
+          item.service.toUpperCase() === filterServiceName;
+        const matchesQuantity =
+          filterServiceQuantity.trim() === '' ||
+          String(item.qty) === filterServiceQuantity.trim();
+        return matchesService && matchesQuantity;
+      });
+
+      return matchingService;
+    });
+  }, [data?.data, filterServiceName, filterServiceQuantity, isServiceFilterActive]);
+
+  const pagination = isServiceFilterActive
+    ? {
+        page: currentPage,
+        limit: pageSize,
+        total_records: filteredPayments.length,
+        total_pages: Math.max(1, Math.ceil(filteredPayments.length / pageSize)),
+      }
+    : data?.pagination || {
     page: currentPage,
     limit: pageSize,
-    total_records: payments.length,
-    total_pages: Math.max(1, Math.ceil(payments.length / pageSize)),
+    total_records: filteredPayments.length,
+    total_pages: Math.max(1, Math.ceil(filteredPayments.length / pageSize)),
   };
+  const payments = isServiceFilterActive
+    ? filteredPayments.slice((currentPage - 1) * pageSize, currentPage * pageSize)
+    : filteredPayments;
 
   // Compute metrics from current dataset
   const metrics = useMemo(() => {
@@ -234,43 +347,119 @@ export default function PaymentDashboard() {
     setTimeout(() => setCopiedKey(null), 2000);
   };
 
+
+  const handleInspect = async (userId?: string) => {
+    if (!userId) {
+      toast.error("User ID is missing");
+      return;
+    }
+    try {
+      const requests = await getAdminServiceRequests(userId);
+      if (requests.length === 0) {
+        toast.info("No service requests for this user");
+        return;
+      }
+
+      setInspectedRecords(requests);
+    } catch (error) {
+      const message = axios.isAxiosError<{ message?: string; detail?: string }>(error)
+        ? error.response?.data?.message || error.response?.data?.detail
+        : error instanceof Error
+          ? error.message
+          : undefined;
+      toast.error(message || 'Failed to fetch service requests!');
+    }
+  };
   const handleResetFilters = () => {
-    setFilterReferenceId('');
+    setFilterRazorpayPaymentId('');
+    setFilterRazorpayOrderId('');
     setFilterUserId('');
-    setFilterRequestedBy('');
-    setFilterRequestedByRole('all');
-    setFilterService('all');
+    setFilterServiceName('all');
+    setFilterServiceQuantity('');
+    setFilterCurrency('');
     setFilterWalletStatus('all');
-    setFilterServiceStatus('all');
-    setFilterUpstreamStatus('all');
+    setFilterPaymentStatus('all');
     setFilterAmount('');
+    setFilterCreatedAt('');
+    setFilterUpdatedAt('');
     setCurrentPage(1);
     toast.info('Filters reset to default');
   };
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (filterReferenceId) count++;
+    if (filterRazorpayPaymentId) count++;
+    if (filterRazorpayOrderId) count++;
     if (filterUserId) count++;
-    if (filterRequestedBy) count++;
-    if (filterRequestedByRole !== 'all') count++;
-    if (filterService !== 'all') count++;
+    if (filterServiceName !== 'all') count++;
+    if (filterServiceQuantity.trim()) count++;
+    if (filterCurrency) count++;
     if (filterWalletStatus !== 'all') count++;
-    if (filterServiceStatus !== 'all') count++;
-    if (filterUpstreamStatus !== 'all') count++;
+    if (filterPaymentStatus !== 'all') count++;
     if (filterAmount) count++;
+    if (filterCreatedAt) count++;
+    if (filterUpdatedAt) count++;
     return count;
   }, [
-    filterReferenceId,
+    filterRazorpayPaymentId,
+    filterRazorpayOrderId,
     filterUserId,
-    filterRequestedBy,
-    filterRequestedByRole,
-    filterService,
+    filterServiceName,
+    filterServiceQuantity,
+    filterCurrency,
     filterWalletStatus,
-    filterServiceStatus,
-    filterUpstreamStatus,
+    filterPaymentStatus,
     filterAmount,
+    filterCreatedAt,
+    filterUpdatedAt,
   ]);
+
+  const textFilterFields = [
+    {
+      label: 'Razorpay Payment ID',
+      placeholder: 'Filter by payment ID',
+      value: filterRazorpayPaymentId,
+      onChange: setFilterRazorpayPaymentId,
+    },
+    {
+      label: 'Razorpay Order ID',
+      placeholder: 'Filter by order ID',
+      value: filterRazorpayOrderId,
+      onChange: setFilterRazorpayOrderId,
+    },
+    {
+      label: 'User / Customer ID',
+      placeholder: 'Filter by user ID',
+      value: filterUserId,
+      onChange: setFilterUserId,
+    },
+    {
+      label: 'Amount',
+      placeholder: 'Filter by amount',
+      value: filterAmount,
+      onChange: setFilterAmount,
+    },
+    {
+      label: 'Currency',
+      placeholder: 'e.g. INR',
+      value: filterCurrency,
+      onChange: setFilterCurrency,
+    },
+    {
+      label: 'Created At',
+      placeholder: '',
+      type: 'date',
+      value: filterCreatedAt,
+      onChange: setFilterCreatedAt,
+    },
+    {
+      label: 'Updated At',
+      placeholder: '',
+      type: 'date',
+      value: filterUpdatedAt,
+      onChange: setFilterUpdatedAt,
+    },
+  ];
 
   return (
     <main className="flex-1 flex flex-col h-full overflow-hidden bg-[#f8fafc] text-slate-800 antialiased font-montserrat">
@@ -344,7 +533,7 @@ export default function PaymentDashboard() {
               </span>
             </div>
             <div className="mt-2.5">
-              <span className="text-2xl font-bold text-slate-900 tracking-tight font-mono">
+              <span className="text-3xl font-bold text-slate-900 ">
                 {formatCurrency(metrics.totalAmt)}
               </span>
             </div>
@@ -357,7 +546,7 @@ export default function PaymentDashboard() {
           <div className="bg-white rounded-lg border border-slate-200/90 p-4 shadow-xs">
             <div className="flex items-center justify-between">
               <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                Settled (Page)
+                Settled (In the current Page)
               </span>
               <span className="p-1 rounded bg-emerald-50 text-emerald-600 border border-emerald-100">
                 <CheckCircle2 className="w-3.5 h-3.5" />
@@ -447,50 +636,14 @@ export default function PaymentDashboard() {
                 exit={{ opacity: 0, height: 0 }}
                 className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3.5 pt-1"
               >
-                {/* Reference ID */}
                 <div className="space-y-1">
                   <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Reference ID
-                  </Label>
-                  <div className="relative">
-                    <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
-                    <Input
-                      placeholder="e.g. cca29c96-1384-4a74..."
-                      value={filterReferenceId}
-                      onChange={(e) => {
-                        setFilterReferenceId(e.target.value);
-                        setCurrentPage(1);
-                      }}
-                      className="pl-8.5 h-9 rounded-md border-slate-300 text-xs font-normal focus:border-[#002366] focus:ring-1 focus:ring-[#002366]"
-                    />
-                  </div>
-                </div>
-
-                {/* User ID */}
-                <div className="space-y-1">
-                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    User / Customer ID
-                  </Label>
-                  <Input
-                    placeholder="Filter by User ID"
-                    value={filterUserId}
-                    onChange={(e) => {
-                      setFilterUserId(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                    className="h-9 rounded-md border-slate-300 text-xs font-normal focus:border-[#002366] focus:ring-1 focus:ring-[#002366]"
-                  />
-                </div>
-
-                {/* Service Dropdown */}
-                <div className="space-y-1">
-                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Service
+                    Service Name
                   </Label>
                   <Select
-                    value={filterService}
-                    onValueChange={(val) => {
-                      setFilterService(val);
+                    value={filterServiceName}
+                    onValueChange={(value) => {
+                      setFilterServiceName(value);
                       setCurrentPage(1);
                     }}
                   >
@@ -499,23 +652,58 @@ export default function PaymentDashboard() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Services</SelectItem>
-                      <SelectItem value="BSA">BSA (Bank Statement)</SelectItem>
-                      <SelectItem value="GST">GST Analysis</SelectItem>
-                      <SelectItem value="ITR">ITR Analysis</SelectItem>
-                      <SelectItem value="CIBIL">CIBIL Report</SelectItem>
+                      <SelectItem value="BSA">BSA</SelectItem>
+                      <SelectItem value="GST">GST</SelectItem>
+                      <SelectItem value="ITR">ITR</SelectItem>
+                      <SelectItem value="CIBIL">CIBIL</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Wallet Status */}
+                <div className="space-y-1">
+                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
+                    Service Quantity
+                  </Label>
+                  <Input
+                    type="number"
+                    min="0"
+                    step="1"
+                    placeholder="Filter by quantity"
+                    value={filterServiceQuantity}
+                    onChange={(event) => {
+                      setFilterServiceQuantity(event.target.value);
+                      setCurrentPage(1);
+                    }}
+                    className="h-9 rounded-md border-slate-300 text-xs font-normal focus:border-[#002366] focus:ring-1 focus:ring-[#002366]"
+                  />
+                </div>
+
+                {textFilterFields.map(({ label, placeholder, type = 'text', value, onChange }) => (
+                  <div className="space-y-1" key={label}>
+                    <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
+                      {label}
+                    </Label>
+                    <Input
+                      type={type}
+                      placeholder={placeholder}
+                      value={value}
+                      onChange={(event) => {
+                        onChange(event.target.value);
+                        setCurrentPage(1);
+                      }}
+                      className="h-9 rounded-md border-slate-300 text-xs font-normal focus:border-[#002366] focus:ring-1 focus:ring-[#002366]"
+                    />
+                  </div>
+                ))}
+
                 <div className="space-y-1">
                   <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
                     Wallet Status
                   </Label>
                   <Select
                     value={filterWalletStatus}
-                    onValueChange={(val) => {
-                      setFilterWalletStatus(val);
+                    onValueChange={(value) => {
+                      setFilterWalletStatus(value);
                       setCurrentPage(1);
                     }}
                   >
@@ -524,107 +712,42 @@ export default function PaymentDashboard() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Wallet Statuses</SelectItem>
-                      <SelectItem value="SUCCESS">SUCCESS</SelectItem>
-                      <SelectItem value="CONSUMED">CONSUMED</SelectItem>
-                      <SelectItem value="RESERVED">RESERVED</SelectItem>
                       <SelectItem value="PENDING">PENDING</SelectItem>
+                      <SelectItem value="SUCCESS">SUCCESS</SelectItem>
                       <SelectItem value="FAILED">FAILED</SelectItem>
+                      <SelectItem value="RESERVED">RESERVED</SelectItem>
+                      <SelectItem value="FINALIZING">FINALIZING</SelectItem>
+                      <SelectItem value="CONSUMED">CONSUMED</SelectItem>
                       <SelectItem value="RELEASED">RELEASED</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Service Status */}
                 <div className="space-y-1">
                   <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Service Status
+                    Payment Status
                   </Label>
                   <Select
-                    value={filterServiceStatus}
-                    onValueChange={(val) => {
-                      setFilterServiceStatus(val);
+                    value={filterPaymentStatus}
+                    onValueChange={(value) => {
+                      setFilterPaymentStatus(value);
                       setCurrentPage(1);
                     }}
                   >
                     <SelectTrigger className="h-9 rounded-md border-slate-300 text-xs font-medium bg-white text-slate-800">
-                      <SelectValue placeholder="All Service Statuses" />
+                      <SelectValue placeholder="All Payment Statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Service Statuses</SelectItem>
-                      <SelectItem value="SUCCESS">SUCCESS</SelectItem>
-                      <SelectItem value="PROCESSING">PROCESSING</SelectItem>
-                      <SelectItem value="CREATED">CREATED</SelectItem>
-                      <SelectItem value="FAILED">FAILED</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Upstream Status */}
-                <div className="space-y-1">
-                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Upstream Status
-                  </Label>
-                  <Select
-                    value={filterUpstreamStatus}
-                    onValueChange={(val) => {
-                      setFilterUpstreamStatus(val);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <SelectTrigger className="h-9 rounded-md border-slate-300 text-xs font-medium bg-white text-slate-800">
-                      <SelectValue placeholder="All Upstream Statuses" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Upstream Statuses</SelectItem>
-                      <SelectItem value="SUCCESS">SUCCESS</SelectItem>
-                      <SelectItem value="ACCEPTED">ACCEPTED</SelectItem>
+                      <SelectItem value="all">All Payment Statuses</SelectItem>
                       <SelectItem value="PENDING">PENDING</SelectItem>
+                      <SelectItem value="AUTHORIZED">AUTHORIZED</SelectItem>
+                      <SelectItem value="CAPTURED">CAPTURED</SelectItem>
                       <SelectItem value="FAILED">FAILED</SelectItem>
+                      <SelectItem value="REFUNDED">REFUNDED</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
-                {/* Requester Role */}
-                <div className="space-y-1">
-                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Requester Role
-                  </Label>
-                  <Select
-                    value={filterRequestedByRole}
-                    onValueChange={(val) => {
-                      setFilterRequestedByRole(val);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    <SelectTrigger className="h-9 rounded-md border-slate-300 text-xs font-medium bg-white text-slate-800">
-                      <SelectValue placeholder="All Roles" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Roles</SelectItem>
-                      <SelectItem value="USER">USER</SelectItem>
-                      <SelectItem value="ANCHOR">ANCHOR</SelectItem>
-                      <SelectItem value="SUPER_ANCHOR">SUPER_ANCHOR</SelectItem>
-                      <SelectItem value="ADMIN">ADMIN</SelectItem>
-                      <SelectItem value="SUPER_ADMIN">SUPER_ADMIN</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                {/* Requested By (Actor ID) */}
-                <div className="space-y-1">
-                  <Label className="text-[11px] font-semibold text-slate-600 uppercase tracking-wider">
-                    Requested By ID
-                  </Label>
-                  <Input
-                    placeholder="Filter by Requester ID"
-                    value={filterRequestedBy}
-                    onChange={(e) => {
-                      setFilterRequestedBy(e.target.value);
-                      setCurrentPage(1);
-                    }}
-                    className="h-9 rounded-md border-slate-300 text-xs font-normal focus:border-[#002366] focus:ring-1 focus:ring-[#002366]"
-                  />
-                </div>
               </motion.div>
             )}
           </AnimatePresence>
@@ -667,18 +790,17 @@ export default function PaymentDashboard() {
 
           {/* Table view */}
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full min-w-[1180px] text-left border-collapse">
               <thead>
-                <tr className="border-b border-slate-200 bg-slate-50 text-[11px] font-semibold uppercase tracking-wider text-slate-600">
-                  <th className="py-3 px-5">Reference ID</th>
-                  <th className="py-3 px-5">User / Customer ID</th>
-                  <th className="py-3 px-5">Service</th>
-                  <th className="py-3 px-5">Amount</th>
-                  <th className="py-3 px-5">Wallet Status</th>
-                  <th className="py-3 px-5">Service Status</th>
-                  <th className="py-3 px-5">Requester Role</th>
-                  <th className="py-3 px-5">Timestamp</th>
-                  <th className="py-3 px-5 text-right">Action</th>
+                <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-600">
+                  <th className="py-4 px-5">User / Customer ID</th>
+                  <th className="py-4 px-5">Service Breakup</th>
+                  <th className="py-4 px-5">Amount</th>
+                  <th className="py-4 px-5">Wallet Status</th>
+                  <th className="py-4 px-5">Payment Status</th>
+                  <th className="py-4 px-5">Requester Role</th>
+                  <th className="py-4 px-5">Timestamp</th>
+                  <th className="py-4 px-5 text-right">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs">
@@ -686,10 +808,9 @@ export default function PaymentDashboard() {
                   // Loading skeletons
                   Array.from({ length: 5 }).map((_, i) => (
                     <tr key={i} className="animate-pulse">
-                      <td className="py-3 px-5"><div className="h-3.5 w-28 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-3.5 w-24 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-5 w-16 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-3.5 w-16 bg-slate-200 rounded" /></td>
+                      <td className="py-5 px-5"><div className="h-3.5 w-28 bg-slate-200 rounded" /></td>
+                      <td className="py-5 px-5"><div className="h-8 w-32 bg-slate-200 rounded" /></td>
+                      <td className="py-5 px-5"><div className="h-3.5 w-16 bg-slate-200 rounded" /></td>
                       <td className="py-3 px-5"><div className="h-5 w-20 bg-slate-200 rounded" /></td>
                       <td className="py-3 px-5"><div className="h-5 w-20 bg-slate-200 rounded" /></td>
                       <td className="py-3 px-5"><div className="h-3.5 w-16 bg-slate-200 rounded" /></td>
@@ -699,7 +820,7 @@ export default function PaymentDashboard() {
                   ))
                 ) : error ? (
                   <tr>
-                    <td colSpan={9} className="py-12 text-center">
+                    <td colSpan={8} className="py-12 text-center">
                       <div className="max-w-md mx-auto flex flex-col items-center">
                         <div className="h-10 w-10 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center mb-2.5">
                           <AlertCircle className="w-5 h-5" />
@@ -719,7 +840,7 @@ export default function PaymentDashboard() {
                   </tr>
                 ) : payments.length === 0 ? (
                   <tr>
-                    <td colSpan={9} className="py-14 text-center">
+                    <td colSpan={8} className="py-14 text-center">
                       <div className="max-w-md mx-auto flex flex-col items-center">
                         <div className="h-12 w-12 rounded-lg bg-slate-100 text-slate-400 flex items-center justify-center mb-3">
                           <Layers className="w-6 h-6" />
@@ -744,45 +865,23 @@ export default function PaymentDashboard() {
                   </tr>
                 ) : (
                   payments.map((row) => {
-                    const sColors = getServiceColor(row.service);
                     return (
                       <tr
                         key={row._id}
-                        className="hover:bg-slate-50/70 transition-colors border-b border-slate-100 group"
+                        className="border-b border-slate-100 transition-colors hover:bg-slate-50/70 group"
                       >
-                        {/* Reference ID */}
-                        <td className="py-3 px-5">
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono text-xs font-medium text-[#002366] tracking-tight">
-                              {row.reference_id || row._id.slice(0, 10) + '...'}
-                            </span>
-                            {row.reference_id && (
-                              <button
-                                onClick={() => handleCopy(row.reference_id!, `ref-${row._id}`)}
-                                className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-700 transition-opacity p-0.5 rounded cursor-pointer"
-                                title="Copy Reference ID"
-                              >
-                                {copiedKey === `ref-${row._id}` ? (
-                                  <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                ) : (
-                                  <Copy className="w-3.5 h-3.5" />
-                                )}
-                              </button>
-                            )}
-                          </div>
-                        </td>
-
                         {/* User / Customer ID */}
-                        <td className="py-3 px-5">
-                          <div className="flex items-center gap-1.5 text-slate-700 text-xs">
-                            <span className="font-mono truncate max-w-[120px]" title={row.user_id}>
+                        <td className="min-w-[260px] py-5 px-5">
+                          <div className="flex items-start gap-1.5 text-xs text-slate-700">
+                            <span className="min-w-0 break-all font-mono" title={row.user_id}>
                               {row.user_id || 'N/A'}
                             </span>
                             {row.user_id && (
                               <button
                                 onClick={() => handleCopy(row.user_id!, `user-${row._id}`)}
-                                className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-700 transition-opacity p-0.5 rounded cursor-pointer"
+                                className="shrink-0 rounded p-0.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700 cursor-pointer"
                                 title="Copy User ID"
+                                aria-label="Copy User ID"
                               >
                                 {copiedKey === `user-${row._id}` ? (
                                   <Check className="w-3 h-3 text-emerald-600" />
@@ -795,34 +894,29 @@ export default function PaymentDashboard() {
                         </td>
 
                         {/* Service */}
-                        <td className="py-3 px-5">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-[11px] font-semibold border ${sColors.badge}`}
-                          >
-                            <span className={`w-1.5 h-1.5 rounded-full ${sColors.dot}`} />
-                            {row.service || 'UNKNOWN'}
-                          </span>
+                        <td className="min-w-[200px] py-5 px-5">
+                          <ServiceBreakupList serviceBreakup={row.service_breakup} />
                         </td>
 
                         {/* Amount */}
-                        <td className="py-3 px-5">
-                          <span className="font-semibold text-slate-900 text-xs font-mono">
+                        <td className="py-5 px-5">
+                          <span className="font-semibold text-slate-900 text-s">
                             {formatCurrency(row.amount)}
                           </span>
                         </td>
 
                         {/* Wallet Status */}
-                        <td className="py-3 px-5">
+                        <td className="py-5 px-5">
                           {getStatusBadge(row.wallet_status, 'wallet')}
                         </td>
 
-                        {/* Service Status */}
-                        <td className="py-3 px-5">
-                          {getStatusBadge(row.service_status, 'service')}
+                        {/* Payment Status */}
+                        <td className="py-5 px-5">
+                          {getStatusBadge(row.payment_status, 'service')}
                         </td>
 
                         {/* Requester Role */}
-                        <td className="py-3 px-5">
+                        <td className="py-5 px-5">
                           <div className="flex flex-col">
                             <span className="text-xs font-medium text-slate-700">
                               {row.requested_by_role || 'USER'}
@@ -836,20 +930,20 @@ export default function PaymentDashboard() {
                         </td>
 
                         {/* Timestamp */}
-                        <td className="py-3 px-5 whitespace-nowrap text-xs text-slate-500 font-normal">
+                        <td className="py-5 px-5 whitespace-nowrap text-xs text-slate-500 font-normal">
                           {formatDate(row.created_at)}
                         </td>
 
                         {/* Actions */}
-                        <td className="py-3 px-5 text-right whitespace-nowrap">
+                        <td className="py-5 px-5 text-right whitespace-nowrap">
                           <Button
-                            onClick={() => setInspectedRecord(row)}
+                            onClick={() => handleInspect(row.user_id)}
                             variant="outline"
                             size="sm"
-                            className="border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700 rounded-md text-xs font-medium h-7 px-2.5 shadow-none transition-colors"
+                            className="h-9 rounded-lg border-slate-200 px-4 text-xs font-medium text-slate-700 shadow-none transition-colors hover:border-slate-300 hover:bg-slate-50"
                           >
                             <Eye className="w-3 h-3 mr-1 text-slate-500" />
-                            View Audit
+                            Inspect
                           </Button>
                         </td>
                       </tr>
@@ -920,7 +1014,7 @@ export default function PaymentDashboard() {
 
       {/* ─── DETAIL INSPECTOR MODAL ─── */}
       <AnimatePresence>
-        {inspectedRecord && (
+        {inspectedRecords.length > 0 && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
             <motion.div
               initial={{ opacity: 0, scale: 0.98, y: 8 }}
@@ -937,15 +1031,16 @@ export default function PaymentDashboard() {
                   </div>
                   <div>
                     <h3 className="text-sm font-bold text-slate-900 tracking-tight">
-                      Transaction Audit Record
+                      Transaction Audit Records
                     </h3>
                     <p className="text-[11px] text-slate-500 font-normal">
-                      MongoDB ID: <span className="font-mono text-slate-700">{inspectedRecord._id}</span>
+                      {inspectedRecords.length} service request
+                      {inspectedRecords.length === 1 ? '' : 's'}
                     </p>
                   </div>
                 </div>
                 <button
-                  onClick={() => setInspectedRecord(null)}
+                  onClick={() => setInspectedRecords([])}
                   className="h-7 w-7 rounded-md hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
@@ -954,6 +1049,70 @@ export default function PaymentDashboard() {
 
               {/* Modal Body */}
               <div className="p-6 overflow-y-auto space-y-5 text-xs">
+                {inspectedRecords.map((inspectedRecord, index) => (
+                  <details
+                    key={inspectedRecord._id}
+                    className="group rounded-lg border border-slate-200 bg-white"
+                  >
+                    <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-3 p-4 hover:bg-slate-50 [&::-webkit-details-marker]:hidden">
+                      <div className="flex min-w-0 flex-1 items-center gap-3">
+                        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">
+                          {index + 1}
+                        </span>
+                        <div className="min-w-0">
+                          <span className="block text-xs font-semibold text-slate-800">
+                            Service Request {index + 1}
+                          </span>
+                          <span className="block truncate font-mono text-[10px] text-slate-500">
+                            {inspectedRecord.reference_id || inspectedRecord._id}
+                          </span>
+                        </div>
+                      </div>
+                      <span
+                        className={`inline-flex items-center rounded border px-2 py-1 text-[11px] font-semibold ${
+                          getServiceColor(inspectedRecord.service).badge
+                        }`}
+                      >
+                        {inspectedRecord.service || 'N/A'}
+                      </span>
+                      <div className="flex min-w-0 items-center gap-1 text-[10px] text-slate-600">
+                        <span className="max-w-28 truncate font-mono" title={inspectedRecord.user_id}>
+                          {inspectedRecord.user_id || 'N/A'}
+                        </span>
+                        {inspectedRecord.user_id && (
+                          <button
+                            type="button"
+                            onClick={(event) => {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              handleCopy(
+                                inspectedRecord.user_id,
+                                `modal-user-${inspectedRecord._id}`
+                              );
+                            }}
+                            className="shrink-0 rounded p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                            title="Copy User ID"
+                            aria-label="Copy User ID"
+                          >
+                            {copiedKey === `modal-user-${inspectedRecord._id}` ? (
+                              <Check className="h-3.5 w-3.5 text-emerald-600" />
+                            ) : (
+                              <Copy className="h-3.5 w-3.5" />
+                            )}
+                          </button>
+                        )}
+                      </div>
+                      <span className="text-xs font-semibold text-slate-800">
+                        {formatCurrency(inspectedRecord.amount * 100)}
+                      </span>
+                      <span className="text-[11px] text-slate-500 group-open:hidden">
+                        View details
+                      </span>
+                      <span className="hidden text-[11px] text-slate-500 group-open:inline">
+                        Hide details
+                      </span>
+                    </summary>
+                    <div className="space-y-5 border-t border-slate-200 p-4">
                 {/* Highlights bar */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-slate-50 p-3.5 rounded-lg border border-slate-200">
                   <div>
@@ -961,14 +1120,18 @@ export default function PaymentDashboard() {
                       Amount
                     </span>
                     <span className="text-base font-bold text-slate-900 font-mono mt-0.5 block">
-                      {formatCurrency(inspectedRecord.amount)}
+                      {formatCurrency(inspectedRecord.amount * 100)}
                     </span>
                   </div>
                   <div>
                     <span className="block text-[10px] font-semibold uppercase tracking-wider text-slate-500">
                       Service
                     </span>
-                    <span className="text-xs font-semibold text-blue-700 mt-1 block">
+                    <span
+                      className={`mt-1 inline-flex items-center gap-1.5 rounded border px-2 py-1 text-[11px] font-semibold ${
+                        getServiceColor(inspectedRecord.service).badge
+                      }`}
+                    >
                       {inspectedRecord.service || 'N/A'}
                     </span>
                   </div>
@@ -1002,10 +1165,16 @@ export default function PaymentDashboard() {
                       </span>
                       {inspectedRecord.reference_id && (
                         <button
-                          onClick={() => handleCopy(inspectedRecord.reference_id!, 'modal-ref')}
+                          onClick={() => handleCopy(inspectedRecord.reference_id, `modal-ref-${inspectedRecord._id}`)}
                           className="text-slate-400 hover:text-slate-700 p-1 cursor-pointer shrink-0 ml-2"
+                          title="Copy Reference ID"
+                          aria-label="Copy Reference ID"
                         >
-                          <Copy className="w-3.5 h-3.5" />
+                          {copiedKey === `modal-ref-${inspectedRecord._id}` ? (
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
                         </button>
                       )}
                     </div>
@@ -1021,10 +1190,17 @@ export default function PaymentDashboard() {
                       </span>
                       {inspectedRecord.user_id && (
                         <button
-                          onClick={() => handleCopy(inspectedRecord.user_id!, 'modal-user')}
+                          type="button"
+                          onClick={() => handleCopy(inspectedRecord.user_id!, `modal-user-${inspectedRecord._id}`)}
                           className="text-slate-400 hover:text-slate-700 p-1 cursor-pointer shrink-0 ml-2"
+                          title="Copy User ID"
+                          aria-label="Copy User ID"
                         >
-                          <Copy className="w-3.5 h-3.5" />
+                          {copiedKey === `modal-user-${inspectedRecord._id}` ? (
+                            <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          ) : (
+                            <Copy className="w-3.5 h-3.5" />
+                          )}
                         </button>
                       )}
                     </div>
@@ -1034,7 +1210,7 @@ export default function PaymentDashboard() {
                     <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
                       Requested By (Actor ID)
                     </span>
-                    <span className="font-mono text-xs text-slate-800 block">
+                    <span className="font-mono text-xs text-slate-800 block break-all">
                       {inspectedRecord.requested_by || 'N/A'}
                     </span>
                   </div>
@@ -1078,39 +1254,16 @@ export default function PaymentDashboard() {
                   )}
                 </div>
 
-                {/* Raw JSON View */}
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
-                      Raw Audit Payload
-                    </span>
-                    <Button
-                      onClick={() => handleCopy(JSON.stringify(inspectedRecord, null, 2), 'raw-json')}
-                      variant="ghost"
-                      size="sm"
-                      className="text-[11px] text-slate-600 h-6 px-2 font-medium"
-                    >
-                      {copiedKey === 'raw-json' ? (
-                        <>
-                          <Check className="w-3 h-3 mr-1 text-emerald-600" /> Copied
-                        </>
-                      ) : (
-                        <>
-                          <Copy className="w-3 h-3 mr-1" /> Copy JSON
-                        </>
-                      )}
-                    </Button>
-                  </div>
-                  <pre className="p-3.5 rounded-lg bg-[#0f172a] text-slate-200 font-mono text-[11px] overflow-x-auto max-h-52 leading-relaxed border border-slate-800">
-                    {JSON.stringify(inspectedRecord, null, 2)}
-                  </pre>
-                </div>
+                
+                    </div>
+                  </details>
+                ))}
               </div>
 
               {/* Modal Footer */}
               <div className="px-6 py-3 bg-slate-50 border-t border-slate-200 flex justify-end">
                 <Button
-                  onClick={() => setInspectedRecord(null)}
+                  onClick={() => setInspectedRecords([])}
                   className="bg-[#002366] hover:bg-[#001845] text-white rounded-md font-medium px-4 h-8 text-xs shadow-xs"
                 >
                   Close Audit View

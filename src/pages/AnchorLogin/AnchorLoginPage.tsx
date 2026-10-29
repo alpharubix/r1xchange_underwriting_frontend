@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { z } from 'zod';
 import { useAnchorLogin, getApiError } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 
 const loginSchema = z.object({

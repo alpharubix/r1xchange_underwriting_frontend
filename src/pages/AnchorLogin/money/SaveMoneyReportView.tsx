@@ -3,7 +3,7 @@ import { Loader2, ArrowLeft, Check, IndianRupee, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getSaveMoneyReports, submitSaveMoneySelections } from '@/api/money';
 import { format } from 'date-fns';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface SaveMoneyReportViewProps {
   custId: string;

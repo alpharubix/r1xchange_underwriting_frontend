@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { downloadItrReport } from '@/api/itr';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import {
   FileText,
   Download,

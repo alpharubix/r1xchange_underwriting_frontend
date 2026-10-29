@@ -5,7 +5,7 @@ import GstOverviewTab from '@/components/gst-reports/GstOverviewTab';
 import TopSuppliersCustomersTab from '@/components/gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from '@/components/gst-reports/MonthlySummaryTab';
 import { downloadGstReport } from '@/api/gst';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface GstReportPageProps {
   gstReferenceId?: string;

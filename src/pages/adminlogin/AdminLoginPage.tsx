@@ -2,15 +2,15 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, User, ArrowRight, Loader2, Building2, Users, CreditCard, Activity } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { z } from 'zod';
 import { useAdminLogin } from '@/hooks/useAuth';
-import { toast } from 'sonner';
-import adminCommandCenter from '@/assets/admin_command_center.jpg';
+import { toast } from '@/lib/toast';
+import characterLaptop from '@/assets/character_laptop.jpg';
 import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 
 const adminLoginSchema = z.object({
@@ -91,101 +91,41 @@ export default function AdminLoginPage() {
             </svg>
           </div>
 
-          {/* Top Admin Status Header */}
-          <div className="relative z-10 flex items-center justify-between">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] font-semibold text-white/90 shadow-xs">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              Admin Command Center
-            </div>
-            <div className="flex items-center gap-1.5 text-[10px] font-medium text-white/70 bg-white/5 border border-white/10 px-2.5 py-0.5 rounded-md backdrop-blur-xs">
-              <Activity className="w-3 h-3 text-cyan-300" />
-              <span>Real-Time Monitoring</span>
+          {/* Hanging Dome Lamp */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-none select-none z-0">
+            <div className="w-[1.5px] h-12 lg:h-16 bg-white/40" />
+            <div className="w-20 h-10 lg:w-24 lg:h-12 rounded-t-full bg-gradient-to-b from-[#18181b] to-[#27272a] relative overflow-hidden shadow-lg">
+              <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-t from-white/10 to-transparent" />
             </div>
           </div>
 
-          {/* Centered Admin Monitoring Visual with Anchors, Customers & Payments */}
-          <div className="relative z-10 flex flex-col items-center justify-center my-auto py-2">
-            <div className="relative group">
-              {/* Soft ambient glow */}
-              <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/20 via-purple-500/25 to-blue-500/20 rounded-[30px] blur-xl opacity-75" />
-
-              {/* Central Admin Monitoring Image */}
+          {/* Centered 3D Character Illustration */}
+          <div className="relative z-10 flex-1 flex flex-col items-center justify-center my-auto pt-6">
+            <div className="relative">
               <img
-                src={adminCommandCenter}
-                alt="CRISP Admin Monitoring Portal - Anchors, Customers, Payments"
-                className="relative w-48 h-48 lg:w-56 lg:h-56 xl:w-60 xl:h-60 object-cover rounded-[24px] shadow-2xl border border-white/25"
+                src={characterLaptop}
+                alt="3D Character typing on laptop"
+                className="w-52 h-52 lg:w-60 lg:h-60 xl:w-64 xl:h-64 object-cover rounded-[28px] lg:rounded-[32px] shadow-2xl border border-white/20"
               />
-
-              {/* Floating Badge: Anchors Oversight */}
-              <motion.div
-                initial={{ opacity: 0, x: -10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.4 }}
-                className="absolute -top-3 -left-3 bg-slate-900/85 backdrop-blur-md border border-white/20 px-2.5 py-1.5 rounded-xl shadow-lg flex items-center gap-2 text-white"
-              >
-                <div className="h-6 w-6 rounded-lg bg-indigo-500/30 border border-indigo-400/40 flex items-center justify-center text-indigo-300 shrink-0">
-                  <Building2 className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold block leading-none text-white tracking-tight">Anchors</span>
-                  <span className="text-[9px] text-indigo-200 font-medium leading-none">Partners</span>
-                </div>
-              </motion.div>
-
-              {/* Floating Badge: Customers Due Diligence */}
-              <motion.div
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.4 }}
-                className="absolute -top-3 -right-3 bg-slate-900/85 backdrop-blur-md border border-white/20 px-2.5 py-1.5 rounded-xl shadow-lg flex items-center gap-2 text-white"
-              >
-                <div className="h-6 w-6 rounded-lg bg-emerald-500/30 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shrink-0">
-                  <Users className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold block leading-none text-white tracking-tight">Customers</span>
-                  <span className="text-[9px] text-emerald-200 font-medium leading-none">Underwriting</span>
-                </div>
-              </motion.div>
-
-              {/* Floating Badge: Payments & Ledger */}
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.4 }}
-                className="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md border border-white/20 px-3 py-1.5 rounded-xl shadow-xl flex items-center gap-2 text-white whitespace-nowrap"
-              >
-                <div className="h-6 w-6 rounded-lg bg-amber-500/30 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0">
-                  <CreditCard className="w-3.5 h-3.5" />
-                </div>
-                <div>
-                  <span className="text-[10px] font-bold block leading-none text-white tracking-tight">Payments Ledger</span>
-                  <span className="text-[9px] text-amber-200 font-medium leading-none">Audit & Reconciled</span>
-                </div>
-              </motion.div>
             </div>
           </div>
 
-          {/* Text Branding & Sliders */}
+          {/* Text Branding */}
           <div className="relative z-10 space-y-2 mt-auto">
-            <div className="space-y-1.5 text-left">
-              <div className="flex items-center gap-3">
-                <img
-                  src={crispLogoWhiteWebView}
-                  alt="CRISP logo"
-                  className="h-12 lg:h-14 w-auto object-contain drop-shadow-lg"
-                />
-                <div className="h-6 w-[2px] bg-white/30 rounded-full" />
-                <h1 className="text-xl lg:text-2xl font-bold tracking-tight text-white leading-tight font-montserrat">
-                  CRISP Admin Portal
-                </h1>
-              </div>
-              <p className="text-white/80 text-xs lg:text-sm font-medium">
-                Welcome to R1X Underwriting Platform.
-              </p>
+            <div className="flex items-center gap-3.5">
+              <img
+                src={crispLogoWhiteWebView}
+                alt="CRISP Logo"
+                className="h-10 lg:h-12 w-auto object-contain drop-shadow-md"
+              />
+              <div className="h-7 w-[2px] bg-white/40 rounded-full" />
+              <h1 className="text-xl lg:text-2xl font-bold tracking-tight text-white leading-tight font-montserrat">
+                CRISP Admin Portal
+              </h1>
             </div>
-
-            {/* Slider Indicator Dots */}
+            <p className="text-white/85 text-xs lg:text-sm font-medium tracking-wide">
+              Welcome to R1X Underwriting Platform.
+            </p>
           </div>
         </div>
       </div>

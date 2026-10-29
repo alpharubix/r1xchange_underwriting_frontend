@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import CibilReportTabs from '@/components/cibil/CibilReportTabs';
 import { downloadCibilReport } from '@/api/cibil';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import { Download, Loader2 } from 'lucide-react';
 
 type ViewReportProps = {

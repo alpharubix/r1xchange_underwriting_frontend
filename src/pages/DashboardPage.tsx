@@ -26,7 +26,7 @@ import { getPricingDetails } from '@/lib/paymentUtils';
 import { getWalletBalance } from '@/api/payment';
 import type { ServiceBreakup } from '@/api/payment';
 
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import HomeIntro from '@/components/HomeIntro';
 
 export default function DashboardPage() {

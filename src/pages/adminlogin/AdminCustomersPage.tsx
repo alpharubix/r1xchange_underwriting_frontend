@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, type MouseEvent } from 'react';
 import {
   ChevronLeft,
   ChevronRight,
@@ -7,17 +7,20 @@ import {
   Eye,
   Users,
   Check,
+  Copy,
   X,
   Activity,
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { toast } from '@/lib/toast';
 import { getUsersList, extractPaginatedData } from '@/api/user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ServiceReport from './ServiceReport';
 import { type CustomerDetailRecord } from './AdminAnchorsPage';
+
 
 const findAccountId = (user: any, index: number): string => {
   if (!user) return `ACC-${100 + index}`;
@@ -35,6 +38,8 @@ const findAccountId = (user: any, index: number): string => {
     `ACC-${100 + index}`
   );
 };
+
+
 
 const getFlagValue = (userObj: any, baseKey: string): boolean => {
   if (!userObj) return false;
@@ -108,35 +113,49 @@ const findLastLoginValue = (user: any): string => {
 
 export default function AdminCustomersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const [copiedCustomerId, setCopiedCustomerId] = useState<string | null>(null);
   const customerIdParam = searchParams.get('customerId');
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(10);
-
-  const queryParams = useMemo(
-    () => ({
-      page: currentPage,
-      limit: pageSize,
-    }),
-    [currentPage, pageSize]
-  );
+  const [selectedServiceFilters, setSelectedServiceFilters] = useState<
+    Array<'bsa' | 'gst' | 'itr' | 'cibil'>
+  >([]);
+  const [includeNoReports, setIncludeNoReports] = useState(false);
 
   const { data: fetchedData, isLoading } = useQuery({
-    queryKey: ['admin', 'all-customers-list', currentPage, pageSize],
-    queryFn: () => getUsersList(queryParams),
-    placeholderData: (previousData) => previousData,
+    queryKey: ['admin', 'all-customers-list'],
+    queryFn: async () => {
+      const requestLimit = 1000;
+      const firstResponse = await getUsersList({ page: 1, limit: requestLimit });
+      const firstPage = extractPaginatedData<any>(firstResponse, 1, requestLimit);
+
+      if (!firstPage.is_server_paginated || firstPage.total_pages <= 1) {
+        return firstPage.items;
+      }
+
+      const allUsers = [...firstPage.items];
+      for (let firstPageToLoad = 2; firstPageToLoad <= firstPage.total_pages; firstPageToLoad += 5) {
+        const pageNumbers = Array.from(
+          { length: Math.min(5, firstPage.total_pages - firstPageToLoad + 1) },
+          (_, index) => firstPageToLoad + index
+        );
+        const pages = await Promise.all(
+          pageNumbers.map(async (page) => {
+            const response = await getUsersList({ page, limit: requestLimit });
+            return extractPaginatedData<any>(response, page, requestLimit).items;
+          })
+        );
+        allUsers.push(...pages.flat());
+      }
+
+      return allUsers;
+    },
   });
 
-  const paginationData = useMemo(() => {
-    return extractPaginatedData<any>(fetchedData, currentPage, pageSize);
-  }, [fetchedData, currentPage, pageSize]);
-
-  const [customersList, setCustomersList] = useState<CustomerDetailRecord[]>([]);
-
-  useEffect(() => {
-    if (paginationData.items) {
-      const mapped: CustomerDetailRecord[] = paginationData.items.map((user: any, index: number) => ({
+  const customersList = useMemo(() => {
+    return (fetchedData || []).map((user: any, index: number) => ({
         accountid: findAccountId(user, index),
         customername:
           user.customername ||
@@ -207,9 +226,7 @@ export default function AdminCustomersPage() {
         cibil: getFlagValue(user, 'cibil'),
         raw: user,
       }));
-      setCustomersList(mapped);
-    }
-  }, [paginationData.items]);
+  }, [fetchedData]);
 
   // Filter input states
   const [filterAccId, setFilterAccId] = useState('');
@@ -282,6 +299,15 @@ export default function AdminCustomersPage() {
       const matchAnchor = filterAnchorId
         ? (item.anchor_id || '').toLowerCase().includes(filterAnchorId.toLowerCase())
         : true;
+      const hasAnyReport = Boolean(item.bsa || item.gst || item.itr || item.cibil);
+      const matchesSelectedService = selectedServiceFilters.every(
+        (service) => item[service]
+      );
+      const matchReports = includeNoReports
+        ? !hasAnyReport
+        : selectedServiceFilters.length > 0
+          ? matchesSelectedService
+          : hasAnyReport;
 
       return (
         matchAccId &&
@@ -291,7 +317,8 @@ export default function AdminCustomersPage() {
         matchCompanyName &&
         matchGstNumber &&
         matchStatus &&
-        matchAnchor
+        matchAnchor &&
+        matchReports
       );
     });
   }, [
@@ -304,21 +331,54 @@ export default function AdminCustomersPage() {
     filterGstNumber,
     filterStatus,
     filterAnchorId,
+    selectedServiceFilters,
+    includeNoReports,
   ]);
 
-  const isServerPaginated = paginationData.is_server_paginated;
-  const totalPages = isServerPaginated
-    ? paginationData.total_pages
-    : Math.max(1, Math.ceil(filteredList.length / pageSize));
-  const totalRecords = isServerPaginated
-    ? paginationData.total_records
-    : filteredList.length;
+  const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
+  const totalRecords = filteredList.length;
 
   const paginatedList = useMemo(() => {
-    if (isServerPaginated) return filteredList;
     const startIndex = (currentPage - 1) * pageSize;
     return filteredList.slice(startIndex, startIndex + pageSize);
-  }, [filteredList, isServerPaginated, currentPage, pageSize]);
+  }, [filteredList, currentPage, pageSize]);
+
+  const toggleServiceFilter = (service: 'bsa' | 'gst' | 'itr' | 'cibil') => {
+    setIncludeNoReports(false);
+    const isSelected = selectedServiceFilters.includes(service);
+    const nextFilters = isSelected
+      ? selectedServiceFilters.filter((selected) => selected !== service)
+      : [...selectedServiceFilters, service];
+    setSelectedServiceFilters(nextFilters);
+    setCurrentPage(1);
+    toast.info(
+      nextFilters.length > 0
+        ? `Customers must have all selected reports: ${nextFilters.map((item) => item.toUpperCase()).join(', ')}.`
+        : 'Showing customers with at least one analyzed report.'
+    );
+  };
+
+  const notifyTextFilter = (label: string, value: string) => {
+    if (value.trim()) {
+      toast.info(`Customer records are now filtered by ${label}.`);
+    }
+  };
+
+  const handleCopyCustomerId = async (
+    event: MouseEvent<HTMLButtonElement>,
+    customerId: string
+  ) => {
+    event.stopPropagation();
+    try {
+      await navigator.clipboard.writeText(customerId);
+      setCopiedCustomerId(customerId);
+      toast.success('User ID copied to clipboard.');
+      window.setTimeout(() => setCopiedCustomerId(null), 2000);
+    } catch (error) {
+      toast.error('Unable to copy User ID to clipboard.');
+      console.error('Failed to copy customer User ID:', error);
+    }
+  };
 
   // If a customer is selected, show ServiceReport View
   if (selectedCustomer) {
@@ -356,7 +416,7 @@ export default function AdminCustomersPage() {
             onClick={handleBackToCustomers}
             className="hover:text-[#000080] transition-colors cursor-pointer"
           >
-            Independent Customers List
+             Customers List
           </button>
           <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
           <span className="text-slate-900 font-bold">
@@ -383,7 +443,7 @@ export default function AdminCustomersPage() {
             CRISP ADMIN PORTAL
           </h1>
           <p className="text-sm text-slate-500 font-semibold mt-0.5">
-            Independent Customers List — View and manage all underwriting customer profiles.
+             Customers List — View and manage all underwriting customer profiles.
           </p>
         </div>
         <div className="flex items-center gap-3">
@@ -402,7 +462,7 @@ export default function AdminCustomersPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h2 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               <Users className="h-5 w-5 text-[#000080]" />
-              Independent Customers List
+               Customers List
             </h2>
             <p className="text-xs text-slate-400 font-medium">
               Showing page {currentPage} of {totalPages}
@@ -414,13 +474,17 @@ export default function AdminCustomersPage() {
             {/* Account ID Filter */}
             <div className="space-y-1">
               <Label htmlFor="f-acc-id" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                Account ID
+                User ID
               </Label>
               <Input
                 id="f-acc-id"
-                placeholder="Account ID"
+                placeholder="User ID"
                 value={filterAccId}
-                onChange={(e) => setFilterAccId(e.target.value)}
+                onChange={(e) => {
+                  setFilterAccId(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('User ID', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -434,7 +498,11 @@ export default function AdminCustomersPage() {
                 id="f-cust-name"
                 placeholder="Name"
                 value={filterCustomerName}
-                onChange={(e) => setFilterCustomerName(e.target.value)}
+                onChange={(e) => {
+                  setFilterCustomerName(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('customer name', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -448,7 +516,11 @@ export default function AdminCustomersPage() {
                 id="f-email"
                 placeholder="Email ID"
                 value={filterEmailId}
-                onChange={(e) => setFilterEmailId(e.target.value)}
+                onChange={(e) => {
+                  setFilterEmailId(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('email', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -462,7 +534,11 @@ export default function AdminCustomersPage() {
                 id="f-phone"
                 placeholder="Phone No"
                 value={filterPhone}
-                onChange={(e) => setFilterPhone(e.target.value)}
+                onChange={(e) => {
+                  setFilterPhone(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('phone', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -476,7 +552,11 @@ export default function AdminCustomersPage() {
                 id="f-company"
                 placeholder="Company"
                 value={filterCompanyName}
-                onChange={(e) => setFilterCompanyName(e.target.value)}
+                onChange={(e) => {
+                  setFilterCompanyName(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('company name', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -490,7 +570,11 @@ export default function AdminCustomersPage() {
                 id="f-gst"
                 placeholder="GSTIN"
                 value={filterGstNumber}
-                onChange={(e) => setFilterGstNumber(e.target.value)}
+                onChange={(e) => {
+                  setFilterGstNumber(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('GST number', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -504,7 +588,11 @@ export default function AdminCustomersPage() {
                 id="f-anchor"
                 placeholder="Anchor ID"
                 value={filterAnchorId}
-                onChange={(e) => setFilterAnchorId(e.target.value)}
+                onChange={(e) => {
+                  setFilterAnchorId(e.target.value);
+                  setCurrentPage(1);
+                }}
+                onBlur={(e) => notifyTextFilter('Anchor ID', e.target.value)}
                 className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
               />
             </div>
@@ -517,7 +605,15 @@ export default function AdminCustomersPage() {
               <select
                 id="f-status"
                 value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
+                onChange={(e) => {
+                  setFilterStatus(e.target.value);
+                  setCurrentPage(1);
+                  toast.info(
+                    e.target.value === 'all'
+                      ? 'Showing customers with any account status.'
+                      : `Showing ${e.target.value.toLowerCase()} customers only.`
+                  );
+                }}
                 className="h-10 w-full px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:bg-white focus:border-[#000080]"
               >
                 <option value="all">All</option>
@@ -525,14 +621,80 @@ export default function AdminCustomersPage() {
                 <option value="Inactive">Inactive</option>
               </select>
             </div>
+
+            <fieldset className="space-y-2 sm:col-span-2 md:col-span-4 lg:col-span-8">
+              <legend className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                Report Filters
+              </legend>
+              <div className="flex flex-wrap gap-3">
+                {([
+                  ['bsa', 'BSA'],
+                  ['gst', 'GST'],
+                  ['itr', 'ITR'],
+                  ['cibil', 'CIBIL'],
+                ] as const).map(([service, label]) => (
+                  <label
+                    key={service}
+                    className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={selectedServiceFilters.includes(service)}
+                      onChange={() => toggleServiceFilter(service)}
+                      className="h-4 w-4 accent-[#000080]"
+                    />
+                    {label}
+                  </label>
+                ))}
+                <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">
+                  <input
+                    type="checkbox"
+                    checked={includeNoReports}
+                    onChange={(event) => {
+                      const checked = event.target.checked;
+                      setIncludeNoReports(checked);
+                      if (checked) {
+                        setSelectedServiceFilters([]);
+                        toast.info('Showing customers without any analyzed reports.');
+                      } else {
+                        toast.info('Showing customers with at least one analyzed report.');
+                      }
+                      setCurrentPage(1);
+                    }}
+                    className="h-4 w-4 accent-[#000080]"
+                  />
+                  No Reports
+                </label>
+              </div>
+              <p className="text-[11px] text-slate-400">
+                By default, customers with at least one analyzed report are shown. Select services to require all selected reports, or choose “No Reports” to show customers without analyzed reports.
+              </p>
+            </fieldset>
           </div>
 
           {/* ─── DATA TABLE ─── */}
           <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full min-w-[1250px] table-fixed text-left border-collapse">
+              <colgroup>
+                <col className="w-10" />
+                <col className="w-[190px]" />
+                <col className="w-[150px]" />
+                <col className="w-[120px]" />
+                <col className="w-[140px]" />
+                <col className="w-[150px]" />
+                <col className="w-[110px]" />
+                <col className="w-[70px]" />
+                <col className="w-[70px]" />
+                <col className="w-[70px]" />
+                <col className="w-[70px]" />
+                <col className="w-[70px]" />
+              </colgroup>
               <thead>
                 <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider bg-white">
-                  <th className="py-3.5 px-4 font-bold text-gray-400">ACCOUNT ID</th>
+                  <th className="py-3.5 px-2 font-bold text-gray-400">
+                    <span className="sr-only">Copy User ID</span>
+                  </th>
+                  <th className="py-3.5 px-3 font-bold text-gray-400">User ID</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">CUSTOMER NAME</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">COMPANY NAME</th>
@@ -548,7 +710,7 @@ export default function AdminCustomersPage() {
               <tbody className="divide-y divide-gray-100 text-sm">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={11} className="py-16 text-center text-gray-400">
+                    <td colSpan={12} className="py-16 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center gap-3">
                         <Activity className="h-7 w-7 animate-spin text-[#000080]" />
                         <span className="text-xs font-bold text-slate-600">Loading customers...</span>
@@ -557,7 +719,7 @@ export default function AdminCustomersPage() {
                   </tr>
                 ) : paginatedList.length === 0 ? (
                   <tr>
-                    <td colSpan={11} className="py-16 text-center text-gray-400">
+                    <td colSpan={12} className="py-16 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Users className="h-8 w-8 text-slate-300" />
                         <p className="text-sm font-bold text-slate-600">No customers found</p>
@@ -572,9 +734,30 @@ export default function AdminCustomersPage() {
                       className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                       onClick={() => handleSelectCustomer(item)}
                     >
+                      {/* COPY USER ID */}
+                      <td className="py-4 px-2 text-center" onClick={(event) => event.stopPropagation()}>
+                        {item.accountid && (
+                          <button
+                            type="button"
+                            onClick={(event) => handleCopyCustomerId(event, item.accountid)}
+                            className="inline-flex rounded p-1 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                            title="Copy User ID"
+                            aria-label={`Copy User ID ${item.accountid}`}
+                          >
+                            {copiedCustomerId === item.accountid ? (
+                              <Check className="h-3.5 w-3.5 text-emerald-600" />
+                            ) : (
+                              <Copy className="h-3.5 w-3.5" />
+                            )}
+                          </button>
+                        )}
+                      </td>
+
                       {/* ACCOUNT ID */}
-                      <td className="py-4 px-4 font-mono text-xs text-gray-600">
-                        {item.accountid}
+                      <td className="py-4 px-3 font-mono text-xs text-gray-600">
+                        <span className="block truncate whitespace-nowrap" title={item.accountid}>
+                          {item.accountid}
+                        </span>
                       </td>
 
                       {/* CUSTOMER NAME */}
@@ -594,7 +777,7 @@ export default function AdminCustomersPage() {
 
                       {/* GST NO */}
                       <td className="py-4 px-4 text-gray-700 font-mono">
-                        {item.gstnumber || '-'}
+                        {item.gstnumber || <p className='text-red-700 text-bold'>Not Found</p>}
                       </td>
 
                       {/* STATUS */}

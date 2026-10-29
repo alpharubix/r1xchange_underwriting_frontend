@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMe } from '@/hooks/useUser';
 import { updateProfile } from '@/api/user';
-import {toast as NewToast} from 'sonner' ;
+import {toast as NewToast} from '@/lib/toast' ;
 import {
   Pencil,
   X,

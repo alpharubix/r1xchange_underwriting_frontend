@@ -9,7 +9,7 @@ import {
 } from '@/api/gst';
 
 import { checkServiceConsent , giveServiceConsent} from '@/api/user';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import GstTermsModal from '@/pages/gst/GstTerm&Condition';
 
 interface Step2Props { 
