@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import { toast } from '@/lib/toast';
 import { getUsersList, extractPaginatedData } from '@/api/user';
 import { Button } from '@/components/ui/button';
@@ -339,6 +340,26 @@ export default function AdminCustomersPage() {
 
   const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
   const totalRecords = filteredList.length;
+  const activeCustomerFilterCount =
+    [
+      filterAccId,
+      filterCustomerName,
+      filterEmailId,
+      filterPhone,
+      filterCompanyName,
+      filterGstNumber,
+      filterAnchorId,
+    ].filter((value) => value.trim()).length +
+    Number(filterStatus !== 'all') +
+    selectedServiceFilters.length +
+    Number(includeNoReports);
+
+  const getTextFilterClass = (isActive: boolean) =>
+    `h-10 text-xs rounded-xl transition-all duration-200 ${
+      isActive
+        ? 'border-[#000080] bg-blue-50/70 text-[#000080] shadow-sm ring-2 ring-blue-100'
+        : 'bg-slate-50 border-slate-200 focus:bg-white'
+    }`;
 
   const paginatedList = useMemo(() => {
     const startIndex = (currentPage - 1) * pageSize;
@@ -452,7 +473,7 @@ export default function AdminCustomersPage() {
           <div className="flex items-center gap-2 bg-blue-50 border border-blue-200 px-4 py-2 rounded-xl">
             <Users className="h-4 w-4 text-[#000080]" />
             <span className="text-xs font-bold text-[#000080]">
-              Total Records: {totalRecords}
+              Total Customers : {totalRecords} 
             </span>
           </div>
         </div>
@@ -464,7 +485,19 @@ export default function AdminCustomersPage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <h2 className="text-lg font-black text-slate-900 tracking-tight flex items-center gap-2">
               <Users className="h-5 w-5 text-[#000080]" />
-               Customers List
+              Customers List
+              {activeCustomerFilterCount > 0 && (
+                <motion.span
+                  key={activeCustomerFilterCount}
+                  initial={{ opacity: 0, scale: 0.8, y: 4 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  transition={{ duration: 0.22, ease: 'easeInOut' }}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#000080]"
+                >
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
+                  {activeCustomerFilterCount} filter{activeCustomerFilterCount === 1 ? '' : 's'} applied
+                </motion.span>
+              )}
             </h2>
             <p className="text-xs text-slate-400 font-medium">
               Showing page {currentPage} of {totalPages}
@@ -487,7 +520,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('User ID', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterAccId.trim()))}
               />
             </div>
 
@@ -505,7 +538,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('customer name', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterCustomerName.trim()))}
               />
             </div>
 
@@ -523,7 +556,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('email', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterEmailId.trim()))}
               />
             </div>
 
@@ -541,7 +574,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('phone', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterPhone.trim()))}
               />
             </div>
 
@@ -559,7 +592,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('company name', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterCompanyName.trim()))}
               />
             </div>
 
@@ -577,7 +610,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('GST number', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterGstNumber.trim()))}
               />
             </div>
 
@@ -595,7 +628,7 @@ export default function AdminCustomersPage() {
                   setCurrentPage(1);
                 }}
                 onBlur={(e) => notifyTextFilter('Anchor ID', e.target.value)}
-                className="h-10 text-xs rounded-xl bg-slate-50 border-slate-200 focus:bg-white"
+                className={getTextFilterClass(Boolean(filterAnchorId.trim()))}
               />
             </div>
 
@@ -616,7 +649,11 @@ export default function AdminCustomersPage() {
                       : `Showing ${e.target.value.toLowerCase()} customers only.`
                   );
                 }}
-                className="h-10 w-full px-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 outline-none focus:bg-white focus:border-[#000080]"
+                className={`h-10 w-full px-2.5 rounded-xl border text-xs font-semibold outline-none transition-all duration-200 ${
+                  filterStatus !== 'all'
+                    ? 'border-[#000080] bg-blue-50/70 text-[#000080] shadow-sm ring-2 ring-blue-100'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 focus:bg-white focus:border-[#000080]'
+                }`}
               >
                 <option value="all">All</option>
                 <option value="Active">Active</option>
@@ -637,7 +674,11 @@ export default function AdminCustomersPage() {
                 ] as const).map(([service, label]) => (
                   <label
                     key={service}
-                    className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white"
+                    className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                      selectedServiceFilters.includes(service)
+                        ? 'border-[#000080] bg-blue-50 text-[#000080] shadow-sm ring-2 ring-blue-100'
+                        : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-white'
+                    }`}
                   >
                     <input
                       type="checkbox"
@@ -648,7 +689,13 @@ export default function AdminCustomersPage() {
                     {label}
                   </label>
                 ))}
-                <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-700 hover:bg-white">
+                <label
+                  className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                    includeNoReports
+                      ? 'border-[#000080] bg-blue-50 text-[#000080] shadow-sm ring-2 ring-blue-100'
+                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-white'
+                  }`}
+                >
                   <input
                     type="checkbox"
                     checked={includeNoReports}
@@ -731,8 +778,11 @@ export default function AdminCustomersPage() {
                   </tr>
                 ) : (
                   paginatedList.map((item, idx) => (
-                    <tr
+                    <motion.tr
                       key={item.accountid || idx}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.2, ease: 'easeInOut', delay: Math.min(idx * 0.025, 0.2) }}
                       className="hover:bg-gray-50/70 transition-colors cursor-pointer text-gray-800"
                       onClick={() => handleSelectCustomer(item)}
                     >
@@ -891,7 +941,7 @@ export default function AdminCustomersPage() {
                           <Eye className="h-4 w-4" />
                         </button>
                       </td>
-                    </tr>
+                    </motion.tr>
                   ))
                 )}
               </tbody>

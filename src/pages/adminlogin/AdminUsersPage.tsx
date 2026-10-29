@@ -1,5 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { AnimatePresence, motion, MotionConfig } from 'framer-motion';
 import AdminSidebar from './sidebarpage';
 import AdminAnchorsPage from './AdminAnchorsPage';
 import AdminCustomersPage from './AdminCustomersPage';
@@ -47,18 +48,31 @@ export default function AdminDashboardPage() {
   }, [tab, navigate]);
 
   return (
-    <div className="admin-portal flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
-      <AdminSidebar />
+    <MotionConfig reducedMotion="user">
+      <div className="admin-portal flex h-screen w-screen overflow-hidden bg-[#f4f6f9] text-slate-800 antialiased font-sans">
+        <AdminSidebar />
 
-      {activeTab === 'customers' ? (
-        <AdminCustomersPage />
-      ) : activeTab === 'logs' ? (
-        <AdminLogsPage />
-      ) : activeTab === 'payments' ? (
-        <PaymentDashboard />
-      ) : (
-        <AdminAnchorsPage />
-      )}
-    </div>
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeTab}
+            className="flex min-w-0 flex-1"
+            initial={{ opacity: 0, y: 12, scale: 0.995 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -8, scale: 0.995 }}
+            transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {activeTab === 'customers' ? (
+              <AdminCustomersPage />
+            ) : activeTab === 'logs' ? (
+              <AdminLogsPage />
+            ) : activeTab === 'payments' ? (
+              <PaymentDashboard />
+            ) : (
+              <AdminAnchorsPage />
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+    </MotionConfig>
   );
 }

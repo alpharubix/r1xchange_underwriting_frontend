@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useLogout } from '@/hooks/useAuth';
+import { motion } from 'framer-motion';
 import {
   Users,
   Anchor,
@@ -89,8 +90,11 @@ export default function AdminSidebar() {
 
       {/* Navigation items */}
       <nav className="flex-1 px-4 py-6 space-y-1.5">
-        <button
+        <motion.button
           onClick={() => handleTabChange('anchors')}
+          whileHover={{ y: -2, scale: 1.015 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 26 }}
           className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'anchors' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
           style={{ color: activeTab === 'anchors' ? '#000080' : '' }}
           title={sidebarCollapsed ? 'Anchor' : undefined}
@@ -104,10 +108,13 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'anchors' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Anchor</span>}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => handleTabChange('customers')}
+          whileHover={{ y: -2, scale: 1.015 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 26 }}
           className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'customers' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
           style={{ color: activeTab === 'customers' ? '#000080' : '' }}
           title={sidebarCollapsed ? 'Customers' : undefined}
@@ -121,10 +128,13 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'customers' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Customers</span>}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => handleTabChange('payments')}
+          whileHover={{ y: -2, scale: 1.015 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 26 }}
           className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'payments' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
           style={{ color: activeTab === 'payments' ? '#000080' : '' }}
         >
@@ -137,10 +147,13 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'payments' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">Payments</span>}
-        </button>
+        </motion.button>
 
-        <button
+        <motion.button
           onClick={() => handleTabChange('logs')}
+          whileHover={{ y: -2, scale: 1.015 }}
+          whileTap={{ scale: 0.97 }}
+          transition={{ type: 'spring', stiffness: 420, damping: 26 }}
           className={`group relative flex items-center w-full gap-3.5 px-4 py-3 rounded-xl font-bold transition-all duration-150 ${activeTab === 'logs' ? 'bg-white shadow-lg shadow-blue-950/20' : 'text-blue-100 hover:bg-white/10 hover:text-white border border-transparent'}`}
           style={{ color: activeTab === 'logs' ? '#000080' : '' }}
           title={sidebarCollapsed ? 'System Logs' : undefined}
@@ -154,7 +167,7 @@ export default function AdminSidebar() {
             style={{ color: activeTab === 'logs' ? '#000080' : '' }}
           />
           {!sidebarCollapsed && <span className="text-sm">System Logs</span>}
-        </button>
+        </motion.button>
       </nav>
 
       <div className="p-4 border-t border-white/10 bg-white/5 space-y-3.5">
