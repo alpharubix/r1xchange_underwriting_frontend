@@ -25,6 +25,35 @@ import { useQuery } from '@tanstack/react-query';
 import { getAnchorsList, getUsersList, extractPaginatedData } from '@/api/user';
 import ServiceReport from './ServiceReport';
 
+
+/**
+ * Formats backend timestamps in Indian Standard Time (IST, UTC/GMT+05:30).
+ * Timestamps without an explicit timezone are treated as UTC.
+ */
+const formatDateTimeIST = (value?: string | null): string => {
+  if (!value || !value.trim()) return '-';
+
+  const trimmedValue = value.trim();
+  const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(trimmedValue);
+  const normalizedValue = hasTimezone
+    ? trimmedValue
+    : `${trimmedValue.replace(' ', 'T')}Z`;
+  const date = new Date(normalizedValue);
+
+  if (Number.isNaN(date.getTime())) return value;
+
+  return `${new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true,
+  }).format(date)} IST`;
+};
+
 export interface CustomerDetailRecord {
   accountid: string;
   customername: string;
@@ -619,16 +648,7 @@ export default function AdminAnchorsPage() {
       return;
     }
 
-    const now = new Date();
-    const formatted = `${now.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    })} ${now.toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true,
-    })}`;
+    const now = new Date().toISOString();
 
     const newRecord: AnchorRecord = {
       _id: String(Date.now()),
@@ -637,8 +657,8 @@ export default function AdminAnchorsPage() {
       loginid: newFormData.loginid,
       is_active: newFormData.is_active,
       role: newFormData.role,
-      createat: formatted,
-      updatedat: formatted,
+      createat: now,
+      updatedat: now,
       createby: 'ADMIN',
       updateby: 'ADMIN',
     };
@@ -846,7 +866,9 @@ export default function AdminAnchorsPage() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Created At
                 </span>
-                <p className="text-slate-600">{currentSelectedUser.createat || 'N/A'}</p>
+                <p className="text-slate-600">
+                  {formatDateTimeIST(currentSelectedUser.createat)}
+                </p>
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -887,7 +909,7 @@ export default function AdminAnchorsPage() {
             <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider bg-white">
+                  <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider bg-white ">
                     <th className="py-3.5 px-4 font-bold text-gray-400">ACCOUNT ID</th>
                     <th className="py-3.5 px-4 font-bold text-gray-400">CUSTOMER NAME</th>
                     <th className="py-3.5 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
@@ -1159,7 +1181,9 @@ export default function AdminAnchorsPage() {
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
                   Created At
                 </span>
-                <p className="text-slate-600">{currentSelectedAnchor.createat || 'N/A'}</p>
+                <p className="text-slate-600">
+                  {formatDateTimeIST(currentSelectedAnchor.createat)}
+                </p>
               </div>
               <div className="space-y-1">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
@@ -1637,7 +1661,7 @@ export default function AdminAnchorsPage() {
                         </span>
                       </td>
                       <td className="p-3.5 text-slate-500 whitespace-nowrap">
-                        {item.createat || '-'}
+                        {formatDateTimeIST(item.createat)}
                       </td>
                       <td className="p-3.5 text-center" onClick={(e) => e.stopPropagation()}>
                         <Button

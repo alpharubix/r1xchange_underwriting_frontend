@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "@/lib/toast";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminsList, extractPaginatedData } from "@/api/user";
+import DateTimeDisplay from '../../components/DateTimeDisplay';
 
 interface RecordItem {
   loginid: string;
@@ -153,29 +154,14 @@ export default function AdminAdminsPage() {
       return;
     }
 
-    const formatDateTime = () => {
-      const now = new Date();
-      return (
-        now.toLocaleDateString('en-GB', {
-          day: '2-digit',
-          month: 'short',
-          year: 'numeric',
-        }) +
-        ' ' +
-        now.toLocaleTimeString('en-US', {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: true,
-        })
-      );
-    };
+    const createdAt = new Date().toISOString();
 
     const newRecord: RecordItem = {
       loginid: newFormData.loginid,
       adminstatus: newFormData.adminstatus,
       role: newFormData.role,
-      createat: formatDateTime(),
-      updatedat: formatDateTime(),
+      createat: createdAt,
+      updatedat: createdAt,
     };
 
     setAdminsList((prev) => [newRecord, ...prev]);
@@ -355,7 +341,7 @@ export default function AdminAdminsPage() {
                           {item.role}
                         </td>
                         <td className="py-4 px-6 text-slate-500 font-semibold">
-                          {item.createat}
+                          <DateTimeDisplay value={item.createat} />
                         </td>
                         <td className="py-4 px-6 text-slate-500 font-semibold">
                           {item.updatedat}
@@ -499,9 +485,10 @@ export default function AdminAdminsPage() {
                     <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-400">
                       Created At
                     </span>
-                    <span className="font-semibold text-slate-800">
-                      {inspectedRecord.createat}
-                    </span>
+                    <DateTimeDisplay
+                      value={inspectedRecord.createat}
+                      className="font-semibold text-slate-800"
+                    />
                   </div>
 
                   <div>

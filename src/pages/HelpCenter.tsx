@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/select';
 import { toast } from '@/lib/toast';
 import apiClient, { extractErrorMessage } from '@/lib/axios';
+import DateTimeDisplay from '../components/DateTimeDisplay';
 
 interface Ticket {
   id: string;
@@ -412,7 +413,7 @@ export default function HelpCenter() {
                               })()}
                             </td>
                             <td className="p-4 text-xs text-slate-500">
-                              {t.createdAt}
+                              <DateTimeDisplay value={t.createdAt} />
                             </td>
                             <td className="p-4">
                               <span

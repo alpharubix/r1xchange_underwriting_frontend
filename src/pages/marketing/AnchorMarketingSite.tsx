@@ -1041,7 +1041,7 @@ export default function AnchorMarketingSite() {
                           <td className="py-4 px-6 text-slate-500">12346</td>
                           <td className="py-4 px-6"><span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-bold"><div className="w-1 h-1 rounded-full bg-emerald-500"></div> Active</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">USERS</td>
-                          <td className="py-4 px-6 text-slate-500 text-[10px]">8/18/2026, 3:22:41 PM</td>
+                          <td className="py-4 px-6 text-slate-500 text-[10px]"><span className="block">18 Aug 2026</span><span className="mt-1 block text-[9px] text-slate-400">03:22:41 PM · GMT+5:30</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">6a830fd97ac...</td>
                           <td className="py-4 px-6 text-center text-slate-400"><Eye size={14} className="mx-auto cursor-pointer hover:text-slate-900"/></td>
                         </tr>
@@ -1051,7 +1051,7 @@ export default function AnchorMarketingSite() {
                           <td className="py-4 px-6 text-slate-500">c7319</td>
                           <td className="py-4 px-6"><span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-bold"><div className="w-1 h-1 rounded-full bg-emerald-500"></div> Active</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">USERS</td>
-                          <td className="py-4 px-6 text-slate-500 text-[10px]">8/21/2026, 4:26:48 PM</td>
+                          <td className="py-4 px-6 text-slate-500 text-[10px]"><span className="block">21 Aug 2026</span><span className="mt-1 block text-[9px] text-slate-400">04:26:48 PM · GMT+5:30</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">6a840d97aca...</td>
                           <td className="py-4 px-6 text-center text-slate-400"><Eye size={14} className="mx-auto cursor-pointer hover:text-slate-900"/></td>
                         </tr>
@@ -1061,7 +1061,7 @@ export default function AnchorMarketingSite() {
                           <td className="py-4 px-6 text-slate-500">09bfc</td>
                           <td className="py-4 px-6"><span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-bold"><div className="w-1 h-1 rounded-full bg-emerald-500"></div> Active</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">USERS</td>
-                          <td className="py-4 px-6 text-slate-500 text-[10px]">8/30/2026, 4:35:23 PM</td>
+                          <td className="py-4 px-6 text-slate-500 text-[10px]"><span className="block">30 Aug 2026</span><span className="mt-1 block text-[9px] text-slate-400">04:35:23 PM · GMT+5:30</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">6a8748fba87...</td>
                           <td className="py-4 px-6 text-center text-slate-400"><Eye size={14} className="mx-auto cursor-pointer hover:text-slate-900"/></td>
                         </tr>
@@ -1071,7 +1071,7 @@ export default function AnchorMarketingSite() {
                           <td className="py-4 px-6 text-slate-500">3879b</td>
                           <td className="py-4 px-6"><span className="inline-flex items-center gap-1 px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded-full text-[9px] font-bold"><div className="w-1 h-1 rounded-full bg-emerald-500"></div> Active</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">USERS</td>
-                          <td className="py-4 px-6 text-slate-500 text-[10px]">9/9/2026, 4:30:37 PM</td>
+                          <td className="py-4 px-6 text-slate-500 text-[10px]"><span className="block">09 Sep 2026</span><span className="mt-1 block text-[9px] text-slate-400">04:30:37 PM · GMT+5:30</span></td>
                           <td className="py-4 px-6 text-slate-500 text-[10px]">6a8748fba87...</td>
                           <td className="py-4 px-6 text-center text-slate-400"><Eye size={14} className="mx-auto cursor-pointer hover:text-slate-900"/></td>
                         </tr>

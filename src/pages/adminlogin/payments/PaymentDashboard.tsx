@@ -38,6 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import DateTimeDisplay from '../../../components/DateTimeDisplay';
 
 // ─── HELPER FORMATTERS ────────────────────────────────────────────────────────
 
@@ -931,7 +932,7 @@ export default function PaymentDashboard() {
 
                         {/* Timestamp */}
                         <td className="py-5 px-5 whitespace-nowrap text-xs text-slate-500 font-normal">
-                          {formatDate(row.created_at)}
+                          <DateTimeDisplay value={row.created_at} />
                         </td>
 
                         {/* Actions */}
@@ -1237,9 +1238,10 @@ export default function PaymentDashboard() {
                     <span className="font-semibold text-slate-500 uppercase tracking-wider text-[10px]">
                       Created Timestamp
                     </span>
-                    <span className="text-xs font-normal text-slate-700 block">
-                      {formatDate(inspectedRecord.created_at)}
-                    </span>
+                    <DateTimeDisplay
+                      value={inspectedRecord.created_at}
+                      className="text-xs font-normal text-slate-700"
+                    />
                   </div>
 
                   {inspectedRecord.updated_at && (

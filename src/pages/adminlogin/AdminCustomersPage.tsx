@@ -8,6 +8,7 @@ import {
   Users,
   Check,
   Copy,
+  Pin,
   X,
   Activity,
 } from 'lucide-react';
@@ -493,8 +494,10 @@ export default function AdminCustomersPage() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   transition={{ duration: 0.22, ease: 'easeInOut' }}
                   className="inline-flex items-center gap-1.5 rounded-full border border-blue-200 bg-blue-50 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide text-[#000080]"
+                  title="Customer filters are applied"
+                  aria-label="Customer filters are applied"
                 >
-                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
+                  <Pin className="h-3 w-3 fill-current" />
                   {activeCustomerFilterCount} filter{activeCustomerFilterCount === 1 ? '' : 's'} applied
                 </motion.span>
               )}
@@ -672,9 +675,12 @@ export default function AdminCustomersPage() {
                   ['itr', 'ITR'],
                   ['cibil', 'CIBIL'],
                 ] as const).map(([service, label]) => (
-                  <label
+                  <motion.label
                     key={service}
-                    className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                    whileHover={{ y: -2, scale: 1.025 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 420, damping: 22 }}
+                    className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors duration-200 ${
                       selectedServiceFilters.includes(service)
                         ? 'border-[#000080] bg-blue-50 text-[#000080] shadow-sm ring-2 ring-blue-100'
                         : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-white'
@@ -687,10 +693,13 @@ export default function AdminCustomersPage() {
                       className="h-4 w-4 accent-[#000080]"
                     />
                     {label}
-                  </label>
+                  </motion.label>
                 ))}
-                <label
-                  className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-all duration-200 hover:-translate-y-0.5 ${
+                <motion.label
+                  whileHover={{ y: -2, scale: 1.025 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={{ type: 'spring', stiffness: 420, damping: 22 }}
+                  className={`inline-flex cursor-pointer items-center gap-2 rounded-xl border px-3 py-2 text-xs font-semibold transition-colors duration-200 ${
                     includeNoReports
                       ? 'border-[#000080] bg-blue-50 text-[#000080] shadow-sm ring-2 ring-blue-100'
                       : 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-white'
@@ -713,7 +722,7 @@ export default function AdminCustomersPage() {
                     className="h-4 w-4 accent-[#000080]"
                   />
                   No Reports
-                </label>
+                </motion.label>
               </div>
               <p className="text-[11px] text-slate-400">
                 By default, customers with at least one analyzed report are shown. Select services to require all selected reports, or choose “No Reports” to show customers without analyzed reports.

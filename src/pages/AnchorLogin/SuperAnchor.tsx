@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '@/lib/axios';
 import { toast } from '@/lib/toast';
+import DateTimeDisplay from '../../components/DateTimeDisplay';
 
 interface SuperAnchorProps {
   anchorsList: Array<{
@@ -370,9 +371,7 @@ export default function SuperAnchor({
                           : anc.role}
                     </td>
                     <td className="py-4 px-4 text-[#3A3C46] text-xs">
-                      {anc.created_at
-                        ? new Date(anc.created_at).toLocaleString()
-                        : '-'}
+                      <DateTimeDisplay value={anc.created_at} />
                     </td>
                     <td className="py-4 px-4 text-[#3A3C46] text-xs">
                       {anc.updated_at

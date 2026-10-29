@@ -7,8 +7,6 @@ import {
   Users,
   Anchor,
   LogOut,
-  ChevronLeft,
-  ChevronRight,
   Activity,
   CreditCard,
 } from 'lucide-react';
@@ -16,7 +14,7 @@ import {
 type AdminTab = 'anchors' | 'customers' | 'logs' | 'payments';
 
 export default function AdminSidebar() {
-  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const { user } = useAuthContext();
   const logoutMutation = useLogout();
   const { tab } = useParams<{ tab?: string }>();
@@ -43,21 +41,16 @@ export default function AdminSidebar() {
 
   return (
     <aside
+      onMouseEnter={() => setSidebarCollapsed(false)}
+      onMouseLeave={() => setSidebarCollapsed(true)}
+      onFocusCapture={() => setSidebarCollapsed(false)}
+      onBlurCapture={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+          setSidebarCollapsed(true);
+        }
+      }}
       className={`relative flex flex-col h-full bg-[#000080] text-white transition-all duration-300 ease-in-out shadow-2xl shrink-0 ${sidebarCollapsed ? 'w-20' : 'w-64'}`}
     >
-      {/* Toggle Button */}
-      <button
-        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-        className="absolute -right-3 top-8 z-50 flex h-6 w-6 items-center justify-center rounded-full bg-white border-2 border-[#000080] text-[#000080] shadow-md hover:shadow-lg transition-all duration-200 hover:scale-110"
-        aria-label="Toggle sidebar"
-      >
-        {sidebarCollapsed ? (
-          <ChevronRight className="h-3 w-3" />
-        ) : (
-          <ChevronLeft className="h-3 w-3" />
-        )}
-      </button>
-
       {/* Sidebar Header */}
       <div className="flex items-center justify-between p-6 border-b border-white/10 bg-white/5">
         <div

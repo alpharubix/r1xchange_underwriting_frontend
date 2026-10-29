@@ -32,6 +32,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAssociatedAnchorsList, getAnchorUsers } from '@/api/user';
 import apiClient from '@/lib/axios';
 import { useSearchParams } from 'react-router-dom';
+import DateTimeDisplay from '../../components/DateTimeDisplay';
 import Sidebar from './Sidebar';
 import SuperAnchor from './SuperAnchor';
 import ServiceReport from './ServiceReport';
@@ -763,13 +764,10 @@ export default function AnchorCustomerPage() {
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
                             Created At
                           </span>
-                          <span className="text-sm text-slate-600 font-medium mt-1 block">
-                            {selectedAnchor?.created_at
-                              ? new Date(
-                                  selectedAnchor.created_at
-                                ).toLocaleString()
-                              : '-'}
-                          </span>
+                          <DateTimeDisplay
+                            value={selectedAnchor?.created_at}
+                            className="mt-1 text-sm font-medium text-slate-600"
+                          />
                         </div>
                         <div>
                           <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
