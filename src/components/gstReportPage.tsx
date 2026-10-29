@@ -7,7 +7,7 @@ import TopSuppliersCustomersTab from './gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from './gst-reports/MonthlySummaryTab';
 import { useQuery } from '@tanstack/react-query';
 import { getGstHistory, downloadGstReport } from '@/api/gst';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 export default function GstReportPage() {
   const location = useLocation();

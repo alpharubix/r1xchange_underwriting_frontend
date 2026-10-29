@@ -1,7 +1,7 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getGstin, updateGstin } from '@/api/gst';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface Step1Props {
   onNext: (gstin: string) => void;

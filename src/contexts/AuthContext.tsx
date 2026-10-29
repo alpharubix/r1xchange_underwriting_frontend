@@ -7,7 +7,7 @@ import React, {
 import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { useMe } from '@/hooks/useUser';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface AuthUser {
   _id?: string;

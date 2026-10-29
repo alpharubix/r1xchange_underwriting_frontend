@@ -14,7 +14,7 @@ import { Eye, FileSpreadsheet, Loader2, ArrowLeft } from 'lucide-react';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';

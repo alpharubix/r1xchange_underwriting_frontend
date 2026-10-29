@@ -1,7 +1,7 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { validateOtp, submitGst, generateOtp } from '@/api/gst';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 
 interface Step3Props {
   gstin: string;

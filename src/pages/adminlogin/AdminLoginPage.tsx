@@ -9,7 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { z } from 'zod';
 import { useAdminLogin } from '@/hooks/useAuth';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import characterLaptop from '@/assets/character_laptop.jpg';
 import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 

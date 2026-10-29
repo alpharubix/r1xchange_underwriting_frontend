@@ -19,7 +19,7 @@ import RectifyMoneyReportView from './money/RectifyMoneyReportView';
 import AccessMoneyReportView from './money/AccessMoneyReportView';
 
 import { getWalletBalance } from '@/api/payment';
-import { toast } from 'sonner';
+import { toast } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';
