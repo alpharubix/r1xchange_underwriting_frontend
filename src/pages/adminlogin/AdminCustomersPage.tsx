@@ -732,11 +732,12 @@ export default function AdminCustomersPage() {
 
           {/* ─── DATA TABLE ─── */}
           <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">
-            <table className="w-full min-w-[1250px] table-fixed text-left border-collapse">
+            <table className="w-full min-w-[1620px] table-fixed text-left border-collapse">
               <colgroup>
                 <col className="w-10" />
                 <col className="w-[190px]" />
                 <col className="w-[150px]" />
+                <col className="w-[340px]" />
                 <col className="w-[120px]" />
                 <col className="w-[140px]" />
                 <col className="w-[150px]" />
@@ -754,6 +755,7 @@ export default function AdminCustomersPage() {
                   </th>
                   <th className="py-3.5 px-3 font-bold text-gray-400">User ID</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">CUSTOMER NAME</th>
+                  <th className="py-3.5 px-4 font-bold text-gray-400">EMAIL ID</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">COMPANY NAME</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">GST NO</th>
@@ -768,7 +770,7 @@ export default function AdminCustomersPage() {
               <tbody className="divide-y divide-gray-100 text-sm">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={12} className="py-16 text-center text-gray-400">
+                    <td colSpan={13} className="py-16 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center gap-3">
                         <Activity className="h-7 w-7 animate-spin text-[#000080]" />
                         <span className="text-xs font-bold text-slate-600">Loading customers...</span>
@@ -777,7 +779,7 @@ export default function AdminCustomersPage() {
                   </tr>
                 ) : paginatedList.length === 0 ? (
                   <tr>
-                    <td colSpan={12} className="py-16 text-center text-gray-400">
+                    <td colSpan={13} className="py-16 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Users className="h-8 w-8 text-slate-300" />
                         <p className="text-sm font-bold text-slate-600">No customers found</p>
@@ -829,6 +831,13 @@ export default function AdminCustomersPage() {
                       {/* CUSTOMER NAME */}
                       <td className="py-4 px-4 font-bold text-gray-900">
                         {item.customername || 'N/A'}
+                      </td>
+
+                      {/* EMAIL ID */}
+                      <td className="overflow-visible py-4 px-4 text-gray-700">
+                        <span className="block whitespace-nowrap" title={item.emailid}>
+                          {item.emailid || '-'}
+                        </span>
                       </td>
 
                       {/* MOBILE NUMBER */}
