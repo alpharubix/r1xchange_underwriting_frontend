@@ -10,11 +10,14 @@ import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
 import GstUploadModal from '@/components/GstUploadModal';
 import CibilUploadModal from '@/components/CibilUploadModal';
-import { Eye, FileSpreadsheet, Loader2, ArrowLeft } from 'lucide-react';
+import { Eye, FileSpreadsheet, Loader2, ArrowLeft, Download } from 'lucide-react';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
 import { toast } from '@/lib/toast';
+import { downloadGstReport } from '@/api/gst';
+import { downloadItrReport } from '@/api/itr';
+import { downloadCibilReport } from '@/api/cibil';
 import { useQuery } from '@tanstack/react-query';
 import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';
@@ -145,6 +148,7 @@ export default function ServiceReport({
   const [viewingCibilReport, setViewingCibilReport] = useState<any | null>(
     null
   );
+  const [exportingReportKey, setExportingReportKey] = useState<string | null>(null);
  
 
   const [paymentModalConfig, setPaymentModalConfig] = useState<{
@@ -205,6 +209,37 @@ export default function ServiceReport({
         error.response?.data?.detail ||
         'Failed to create pending payment'
       );
+    }
+  };
+
+  const handleReportExport = async (
+    service: 'GST' | 'ITR' | 'CIBIL',
+    reportId: string,
+    reportKey: string
+  ) => {
+    if (!reportId) {
+      toast.error(`${service} report ID is missing.`);
+      return;
+    }
+
+    setExportingReportKey(reportKey);
+    try {
+      if (service === 'GST') {
+        await downloadGstReport(reportId);
+      } else if (service === 'ITR') {
+        await downloadItrReport(selectedCustomer.id, reportId);
+      } else {
+        await downloadCibilReport(reportId);
+      }
+      toast.success(`${service} report downloaded successfully.`);
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : `Failed to download ${service} report.`
+      );
+    } finally {
+      setExportingReportKey(null);
     }
   };
   useEffect(() => {
@@ -624,6 +659,29 @@ export default function ServiceReport({
                                         <Eye className="h-3.5 w-3.5" />
                                         View Report
                                       </button>
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleReportExport(
+                                            'GST',
+                                            report.reportId,
+                                            `gst-${report.id}`
+                                          )
+                                        }
+                                        disabled={
+                                          !report.reportId ||
+                                          exportingReportKey === `gst-${report.id}`
+                                        }
+                                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                        title="Export GST report"
+                                      >
+                                        {exportingReportKey === `gst-${report.id}` ? (
+                                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        ) : (
+                                          <Download className="h-3.5 w-3.5" />
+                                        )}
+                                        Export
+                                      </button>
                                     </div>
                                   </td>
                                 </tr>
@@ -745,6 +803,29 @@ export default function ServiceReport({
                                         <Eye className="h-3.5 w-3.5" />
                                         View Report
                                       </button>
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleReportExport(
+                                            'ITR',
+                                            report.reportId,
+                                            `itr-${report.id}`
+                                          )
+                                        }
+                                        disabled={
+                                          !report.reportId ||
+                                          exportingReportKey === `itr-${report.id}`
+                                        }
+                                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                        title="Export ITR report"
+                                      >
+                                        {exportingReportKey === `itr-${report.id}` ? (
+                                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        ) : (
+                                          <Download className="h-3.5 w-3.5" />
+                                        )}
+                                        Export
+                                      </button>
                                     </div>
                                   </td>
                                 </tr>
@@ -852,6 +933,29 @@ export default function ServiceReport({
                                       >
                                         <Eye className="h-3.5 w-3.5" />
                                         View Report
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() =>
+                                          handleReportExport(
+                                            'CIBIL',
+                                            report.reportId,
+                                            `cibil-${report.id}`
+                                          )
+                                        }
+                                        disabled={
+                                          !report.reportId ||
+                                          exportingReportKey === `cibil-${report.id}`
+                                        }
+                                        className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
+                                        title="Export CIBIL report"
+                                      >
+                                        {exportingReportKey === `cibil-${report.id}` ? (
+                                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                                        ) : (
+                                          <Download className="h-3.5 w-3.5" />
+                                        )}
+                                        Export
                                       </button>
                                     </div>
                                   </td>
