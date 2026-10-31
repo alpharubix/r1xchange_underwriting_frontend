@@ -375,17 +375,6 @@ export default function AdminCustomersPage() {
       : [...selectedServiceFilters, service];
     setSelectedServiceFilters(nextFilters);
     setCurrentPage(1);
-    toast.info(
-      nextFilters.length > 0
-        ? `Customers must have all selected reports: ${nextFilters.map((item) => item.toUpperCase()).join(', ')}.`
-        : 'Showing customers with at least one analyzed report.'
-    );
-  };
-
-  const notifyTextFilter = (label: string, value: string) => {
-    if (value.trim()) {
-      toast.info(`Customer records are now filtered by ${label}.`);
-    }
   };
 
   const handleCopyCustomerId = async (
@@ -522,7 +511,6 @@ export default function AdminCustomersPage() {
                   setFilterAccId(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('User ID', e.target.value)}
                 className={getTextFilterClass(Boolean(filterAccId.trim()))}
               />
             </div>
@@ -540,7 +528,6 @@ export default function AdminCustomersPage() {
                   setFilterCustomerName(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('customer name', e.target.value)}
                 className={getTextFilterClass(Boolean(filterCustomerName.trim()))}
               />
             </div>
@@ -558,7 +545,6 @@ export default function AdminCustomersPage() {
                   setFilterEmailId(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('email', e.target.value)}
                 className={getTextFilterClass(Boolean(filterEmailId.trim()))}
               />
             </div>
@@ -576,7 +562,6 @@ export default function AdminCustomersPage() {
                   setFilterPhone(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('phone', e.target.value)}
                 className={getTextFilterClass(Boolean(filterPhone.trim()))}
               />
             </div>
@@ -594,7 +579,6 @@ export default function AdminCustomersPage() {
                   setFilterCompanyName(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('company name', e.target.value)}
                 className={getTextFilterClass(Boolean(filterCompanyName.trim()))}
               />
             </div>
@@ -612,7 +596,6 @@ export default function AdminCustomersPage() {
                   setFilterGstNumber(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('GST number', e.target.value)}
                 className={getTextFilterClass(Boolean(filterGstNumber.trim()))}
               />
             </div>
@@ -630,7 +613,6 @@ export default function AdminCustomersPage() {
                   setFilterAnchorId(e.target.value);
                   setCurrentPage(1);
                 }}
-                onBlur={(e) => notifyTextFilter('Anchor ID', e.target.value)}
                 className={getTextFilterClass(Boolean(filterAnchorId.trim()))}
               />
             </div>
@@ -663,6 +645,41 @@ export default function AdminCustomersPage() {
                 <option value="Inactive">Inactive</option>
               </select>
             </div>
+
+          {/* Clear Filters */}
+          {(filterAccId ||
+            filterCustomerName ||
+            filterEmailId ||
+            filterPhone ||
+            filterCompanyName ||
+            filterGstNumber ||
+            filterAnchorId ||
+            filterStatus !== 'all' ||
+            selectedServiceFilters.length > 0 ||
+            includeNoReports) && (
+            <div className="col-span-full sm:col-span-2 md:col-span-4 lg:col-span-8 flex justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setFilterAccId('');
+                  setFilterCustomerName('');
+                  setFilterEmailId('');
+                  setFilterPhone('');
+                  setFilterCompanyName('');
+                  setFilterGstNumber('');
+                  setFilterAnchorId('');
+                  setFilterStatus('all');
+                  setSelectedServiceFilters([]);
+                  setIncludeNoReports(false);
+                  setCurrentPage(1);
+                }}
+                className="h-8 px-3 rounded-lg text-xs font-semibold text-rose-500 hover:text-rose-600 hover:bg-rose-50/50 cursor-pointer self-end"
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
 
             <fieldset className="space-y-2 sm:col-span-2 md:col-span-4 lg:col-span-8">
               <legend className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
@@ -729,6 +746,8 @@ export default function AdminCustomersPage() {
               </p>
             </fieldset>
           </div>
+
+         
 
           {/* ─── DATA TABLE ─── */}
           <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">

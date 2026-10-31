@@ -294,7 +294,7 @@ export async function getCibilWebhookStatus(
 
 /**
  * Download CIBIL Excel/PDF report (Overview, Account Summary, Payments History, Analysis) from /cibil/export-report
- * Sends { reference_id } in the request body.
+ * Sends { reference_id: string } in the POST request body.
  */
 export const downloadCibilReport = async (
   referenceId: string
@@ -303,34 +303,17 @@ export const downloadCibilReport = async (
     throw new Error('Reference ID is required to download CIBIL report');
   }
 
-  const params = { reference_id: referenceId };
-
   try {
-    let response;
-    try {
-      response = await apiClient.post(
-        '/cibil/export-report',
-        {
-          reference_id: referenceId,
-          cibil_reference_id: referenceId,
-        },
-        {
-          params,
-          responseType: 'blob',
-          skipErrorToast: true,
-        }
-      );
-    } catch (err: any) {
-      if (err.response?.status === 405) {
-        response = await apiClient.get('/cibil/export-report', {
-          params,
-          responseType: 'blob',
-          skipErrorToast: true,
-        });
-      } else {
-        throw err;
+    const response = await apiClient.post(
+      '/cibil/export-report',
+      {
+        reference_id: referenceId,
+      },
+      {
+        responseType: 'blob',
+        skipErrorToast: true,
       }
-    }
+    );
 
     let filename = `CIBIL_Report_${referenceId}.xlsx`;
     const rawDisposition =

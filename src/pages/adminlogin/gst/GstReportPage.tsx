@@ -1,11 +1,8 @@
-import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChevronLeft, FileText, Download, Loader2 } from 'lucide-react';
+import { ChevronLeft, FileText } from 'lucide-react';
 import GstOverviewTab from '@/components/gst-reports/GstOverviewTab';
 import TopSuppliersCustomersTab from '@/components/gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from '@/components/gst-reports/MonthlySummaryTab';
-import { downloadGstReport } from '@/api/gst';
-import { toast } from '@/lib/toast';
 
 interface GstReportPageProps {
   gstReferenceId?: string;
@@ -17,32 +14,6 @@ export default function GstReportPage({
   gstReferenceId,
   onBack,
 }: GstReportPageProps) {
-  const [isExporting, setIsExporting] = useState(false);
-
-  const handleExport = async () => {
-    if (!gstReferenceId) {
-      toast.error('GST reference ID is required for export');
-      return;
-    }
-
-    try {
-      setIsExporting(true);
-      toast.loading(
-        'Downloading GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)...',
-        { id: 'gst-export' }
-      );
-      await downloadGstReport(gstReferenceId);
-      toast.success('GSTR Report downloaded successfully!', {
-        id: 'gst-export',
-      });
-    } catch (error: any) {
-      toast.error(error?.message || 'Failed to download GSTR report', {
-        id: 'gst-export',
-      });
-    } finally {
-      setIsExporting(false);
-    }
-  };
 
   if (!gstReferenceId) {
     return (
@@ -79,21 +50,6 @@ export default function GstReportPage({
               </p>
             </div>
           </div>
-
-          <button
-            type="button"
-            onClick={handleExport}
-            disabled={isExporting}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#002366] px-3.5 py-2 text-xs font-semibold text-white transition-all duration-200 hover:bg-[#001a4d] hover:shadow-sm cursor-pointer disabled:opacity-50"
-            title="Download GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)"
-          >
-            {isExporting ? (
-              <Loader2 className="h-4 w-4 animate-spin text-white" />
-            ) : (
-              <Download className="h-4 w-4 text-emerald-400" />
-            )}
-            <span>Export </span>
-          </button>
         </div>
 
         <Tabs defaultValue="overview" className="w-full">

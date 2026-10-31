@@ -28,74 +28,26 @@ export const getItrRatioAnalysis = async (custId?: string | null) => {
 
 /**
  * Download ITR Excel/PDF report (Tax Calculation, Balance Sheet, Profit & Loss Statement, Ratio Analysis) from /itr/export-report
+ * Sends strictly `cust_id` as query parameter when called from admin/anchor portal.
  */
 export const downloadItrReport = async (
   custId?: string | null,
-  reportId?: string | null
+  _reportId?: string | null
 ): Promise<void> => {
   const finalCustId =
     custId || localStorage.getItem('selected_cust_id') || undefined;
-  const finalReportId =
-    reportId || localStorage.getItem('selected_itr_report_id') || undefined;
 
   const params: Record<string, string> = {};
-  if (finalCustId) params.cust_id = finalCustId;
-  if (finalReportId) {
-    params.report_id = finalReportId;
-    params.itr_reference_id = finalReportId;
+  if (finalCustId) {
+    params.cust_id = finalCustId;
   }
 
-  const payload = {
-    cust_id: finalCustId,
-    report_id: finalReportId,
-    itr_reference_id: finalReportId,
-  };
-
-  const candidateEndpoints = [
-    { method: 'post', url: '/itr/export-report' },
-    { method: 'get', url: '/itr/export-report' },
-    { method: 'post', url: '/itr/export_report' },
-    { method: 'get', url: '/itr/export_report' },
-    { method: 'post', url: '/itr/export' },
-    { method: 'get', url: '/itr/export' },
-    { method: 'post', url: '/itr/download-report' },
-    { method: 'get', url: '/itr/download-report' },
-  ];
-
   try {
-    let response: any = null;
-    let lastError: any = null;
-
-    for (const candidate of candidateEndpoints) {
-      try {
-        if (candidate.method === 'post') {
-          response = await apiClient.post(candidate.url, payload, {
-            params,
-            responseType: 'blob',
-            skipErrorToast: true,
-          });
-        } else {
-          response = await apiClient.get(candidate.url, {
-            params,
-            responseType: 'blob',
-            skipErrorToast: true,
-          });
-        }
-        if (response && response.status >= 200 && response.status < 300) {
-          break;
-        }
-      } catch (err: any) {
-        lastError = err;
-        if (err.response?.status === 404 || err.response?.status === 405) {
-          continue;
-        }
-        break;
-      }
-    }
-
-    if (!response) {
-      throw lastError || new Error('Failed to download ITR report');
-    }
+    const response = await apiClient.get('/itr/export-report', {
+      params,
+      responseType: 'blob',
+      skipErrorToast: true,
+    });
 
     let filename = `ITR_Report${finalCustId ? `_${finalCustId}` : ''}.xlsx`;
     const rawDisposition =

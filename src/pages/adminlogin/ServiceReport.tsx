@@ -222,6 +222,11 @@ export default function ServiceReport({
       return;
     }
 
+    if (exportingReportKey) {
+      // Prevent multiple concurrent downloads
+      return;
+    }
+
     setExportingReportKey(reportKey);
     try {
       if (service === 'GST') {
@@ -261,45 +266,49 @@ export default function ServiceReport({
     queryKey: ['reports', 'gst', selectedCustomer.id],
     queryFn: async () => {
       const data = await getUserGstReports(selectedCustomer.id);
-      return data.map((item: any) => ({
-        id: item._id || item.id || '',
-        accountNumber: item.account_number || item.accountNumber || '',
-        reportId:
+      return data.map((item: any, index: number) => {
+        const reportId =
           item.report_id ||
           item.reportId ||
           item.reference_id ||
           item.gst_reference_id ||
-          '',
-        gstn:
-          item.gstin ||
-          item.gst_number ||
-          item.gstn ||
-          item.gst_no ||
-          selectedCustomer.gst_no ||
-          '',
-        gstFromDate:
-          item.gst_from_date ||
-          item.gstFromDate ||
-          item.from_date ||
-          item.from_month ||
-          '',
-        gstToDate:
-          item.gst_to_date ||
-          item.gstToDate ||
-          item.to_date ||
-          item.to_month ||
-          '',
-        generatedOn: formatDateTime(
-          item.created_at ||
-          item.generatedOn ||
-          item.generated_on ||
-          item.created_on ||
-          ''
-        ),
-        status: item.status || item.report_status || 'Active',
-        completed:
-          item.completed !== undefined ? String(item.completed) : 'Yes',
-      }));
+          '';
+        const id = item._id || item.id || reportId || `gst-${index}`;
+        return {
+          id,
+          accountNumber: item.account_number || item.accountNumber || '',
+          reportId,
+          gstn:
+            item.gstin ||
+            item.gst_number ||
+            item.gstn ||
+            item.gst_no ||
+            selectedCustomer.gst_no ||
+            '',
+          gstFromDate:
+            item.gst_from_date ||
+            item.gstFromDate ||
+            item.from_date ||
+            item.from_month ||
+            '',
+          gstToDate:
+            item.gst_to_date ||
+            item.gstToDate ||
+            item.to_date ||
+            item.to_month ||
+            '',
+          generatedOn: formatDateTime(
+            item.created_at ||
+            item.generatedOn ||
+            item.generated_on ||
+            item.created_on ||
+            ''
+          ),
+          status: item.status || item.report_status || 'Active',
+          completed:
+            item.completed !== undefined ? String(item.completed) : 'Yes',
+        };
+      });
     },
     enabled: !!selectedCustomer?.id && reportsSubTab === 'gst',
   });
@@ -308,27 +317,31 @@ export default function ServiceReport({
     queryKey: ['reports', 'itr', selectedCustomer.id],
     queryFn: async () => {
       const data = await getUserItrReports(selectedCustomer.id);
-      return data.map((item: any) => ({
-        id: item._id || item.id || '',
-        accountNumber: item.account_number || item.accountNumber || '',
-        reportId:
+      return data.map((item: any, index: number) => {
+        const reportId =
           item.report_id ||
           item.reportId ||
           item.reference_id ||
           item.itr_reference_id ||
-          '',
-        itrFromDate:
-          item.itr_from_date || item.itrFromDate || item.from_date || '',
-        itrToDate: item.itr_to_date || item.itrToDate || item.to_date || '',
-        generatedOn: formatDateTime(
-          item.created_at ||
-          item.generatedOn ||
-          item.generated_on ||
-          item.created_on ||
-          ''
-        ),
-        status: item.status || item.report_status || 'Active',
-      }));
+          '';
+        const id = item._id || item.id || reportId || `itr-${index}`;
+        return {
+          id,
+          accountNumber: item.account_number || item.accountNumber || '',
+          reportId,
+          itrFromDate:
+            item.itr_from_date || item.itrFromDate || item.from_date || '',
+          itrToDate: item.itr_to_date || item.itrToDate || item.to_date || '',
+          generatedOn: formatDateTime(
+            item.created_at ||
+            item.generatedOn ||
+            item.generated_on ||
+            item.created_on ||
+            ''
+          ),
+          status: item.status || item.report_status || 'Active',
+        };
+      });
     },
     enabled: !!selectedCustomer?.id && reportsSubTab === 'itr',
   });
@@ -337,28 +350,32 @@ export default function ServiceReport({
     queryKey: ['reports', 'cibil', selectedCustomer.id],
     queryFn: async () => {
       const data = await getUserCibilReports(selectedCustomer.id);
-      return data.map((item: any) => ({
-        id: item._id || item.id || '',
-        accountNumber: item.account_number || item.accountNumber || '',
-        reportId:
+      return data.map((item: any, index: number) => {
+        const reportId =
           item.report_id ||
           item.reportId ||
           item.reference_id ||
           item.cibil_reference_id ||
-          '',
-        cibilFromDate:
-          item.cibil_from_date || item.cibilFromDate || item.from_date || '',
-        cibilToDate:
-          item.cibil_to_date || item.cibilToDate || item.to_date || '',
-        generatedOn: formatDateTime(
-          item.created_at ||
-          item.generatedOn ||
-          item.generated_on ||
-          item.created_on ||
-          ''
-        ),
-        status: item.status || item.report_status || 'Active',
-      }));
+          '';
+        const id = item._id || item.id || reportId || `cibil-${index}`;
+        return {
+          id,
+          accountNumber: item.account_number || item.accountNumber || '',
+          reportId,
+          cibilFromDate:
+            item.cibil_from_date || item.cibilFromDate || item.from_date || '',
+          cibilToDate:
+            item.cibil_to_date || item.cibilToDate || item.to_date || '',
+          generatedOn: formatDateTime(
+            item.created_at ||
+            item.generatedOn ||
+            item.generated_on ||
+            item.created_on ||
+            ''
+          ),
+          status: item.status || item.report_status || 'Active',
+        };
+      });
     },
     enabled:
       !!selectedCustomer?.id &&
@@ -604,7 +621,7 @@ export default function ServiceReport({
                             ) : (
                               gstReports.map((report) => (
                                 <tr
-                                  key={report.id}
+                                  key={report.reportId || report.id}
                                   className="hover:bg-slate-50/20 transition-colors"
                                 >
                                   <td className="py-4 px-4 text-slate-500">
@@ -665,17 +682,17 @@ export default function ServiceReport({
                                           handleReportExport(
                                             'GST',
                                             report.reportId,
-                                            `gst-${report.id}`
+                                            `gst-${report.reportId || report.id}`
                                           )
                                         }
                                         disabled={
                                           !report.reportId ||
-                                          exportingReportKey === `gst-${report.id}`
+                                          exportingReportKey === `gst-${report.reportId || report.id}`
                                         }
                                         className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
                                         title="Export GST report"
                                       >
-                                        {exportingReportKey === `gst-${report.id}` ? (
+                                        {exportingReportKey === `gst-${report.reportId || report.id}` ? (
                                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />
@@ -769,7 +786,7 @@ export default function ServiceReport({
                             ) : (
                               itrReports.map((report) => (
                                 <tr
-                                  key={report.id}
+                                  key={report.reportId || report.id}
                                   className="hover:bg-slate-50/20 transition-colors"
                                 >
                                   <td className="py-4 px-4 text-slate-500">
@@ -809,17 +826,17 @@ export default function ServiceReport({
                                           handleReportExport(
                                             'ITR',
                                             report.reportId,
-                                            `itr-${report.id}`
+                                            `itr-${report.reportId || report.id}`
                                           )
                                         }
                                         disabled={
                                           !report.reportId ||
-                                          exportingReportKey === `itr-${report.id}`
+                                          exportingReportKey === `itr-${report.reportId || report.id}`
                                         }
                                         className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
                                         title="Export ITR report"
                                       >
-                                        {exportingReportKey === `itr-${report.id}` ? (
+                                        {exportingReportKey === `itr-${report.reportId || report.id}` ? (
                                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />
@@ -907,7 +924,7 @@ export default function ServiceReport({
                             ) : (
                               cibilReports.map((report) => (
                                 <tr
-                                  key={report.id}
+                                  key={report.reportId || report.id}
                                   className="hover:bg-slate-50/20 transition-colors"
                                 >
                                   <td className="py-4 px-4 text-slate-500">
@@ -940,17 +957,17 @@ export default function ServiceReport({
                                           handleReportExport(
                                             'CIBIL',
                                             report.reportId,
-                                            `cibil-${report.id}`
+                                            `cibil-${report.reportId || report.id}`
                                           )
                                         }
                                         disabled={
                                           !report.reportId ||
-                                          exportingReportKey === `cibil-${report.id}`
+                                          exportingReportKey === `cibil-${report.reportId || report.id}`
                                         }
                                         className="inline-flex items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[#002366] shadow-sm transition-colors hover:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50"
                                         title="Export CIBIL report"
                                       >
-                                        {exportingReportKey === `cibil-${report.id}` ? (
+                                        {exportingReportKey === `cibil-${report.reportId || report.id}` ? (
                                           <Loader2 className="h-3.5 w-3.5 animate-spin" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />

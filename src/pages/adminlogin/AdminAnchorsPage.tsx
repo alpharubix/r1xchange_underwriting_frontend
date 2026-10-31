@@ -1584,6 +1584,30 @@ export default function AdminAnchorsPage() {
             </div>
           </div>
 
+          {/* Clear Filters */}
+          {(filteranchorname ||
+            filteranchorcode ||
+            filterloginid ||
+            filterisactive !== 'all' ||
+            filterrole) && (
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={() => {
+                  setFilteranchorname('');
+                  setFilteranchorcode('');
+                  setFilterloginid('');
+                  setFilterisactive('all');
+                  setFilterrole('');
+                }}
+                className="h-8 px-3 rounded-lg text-xs font-semibold text-rose-500 hover:text-rose-600 hover:bg-rose-50/50 cursor-pointer self-end"
+              >
+                Clear Filters
+              </Button>
+            </div>
+          )}
+
           {/* ─── DATA TABLE ─── */}
           <div className="overflow-x-auto border border-slate-200 rounded-2xl shadow-sm">
             <table className="w-full text-left border-collapse text-xs">
