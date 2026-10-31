@@ -13,7 +13,6 @@ import {
   Users,
   Phone,
   Mail,
-  Activity,
   ArrowLeft,
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
@@ -24,6 +23,7 @@ import { toast } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import { getAnchorsList, getUsersList, extractPaginatedData } from '@/api/user';
 import ServiceReport from './ServiceReport';
+import AdminLoader from '@/components/AdminLoader';
 
 
 /**
@@ -1297,10 +1297,7 @@ export default function AdminAnchorsPage() {
                   {isUsersLoading ? (
                     <tr>
                       <td colSpan={11} className="py-16 text-center text-gray-400">
-                        <div className="flex flex-col items-center justify-center gap-3">
-                          <Activity className="h-7 w-7 animate-spin text-[#000080]" />
-                          <span className="text-xs font-bold text-slate-600">Loading associated users...</span>
-                        </div>
+                        <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading associated users..." />
                       </td>
                     </tr>
                   ) : filteredAssociatedUsers.length === 0 ? (
@@ -1626,10 +1623,7 @@ export default function AdminAnchorsPage() {
                 {isAnchorsLoading ? (
                   <tr>
                     <td colSpan={7} className="py-16 text-center text-slate-400">
-                      <div className="flex flex-col items-center justify-center gap-3">
-                        <Activity className="h-7 w-7 animate-spin text-[#000080]" />
-                        <span className="text-xs font-bold text-slate-600">Loading anchors...</span>
-                      </div>
+                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading anchors..." />
                     </td>
                   </tr>
                 ) : paginatedAnchorsList.length === 0 ? (

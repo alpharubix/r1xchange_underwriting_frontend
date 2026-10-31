@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, User, ArrowRight, Loader2 } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, ArrowRight } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -213,7 +214,7 @@ export default function AdminLoginPage() {
                 >
                   {loginMutation.isPending ? (
                     <>
-                      <Loader2 className="h-5 w-5 animate-spin" />
+                      <AdminLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
                       Logging in...
                     </>
                   ) : (

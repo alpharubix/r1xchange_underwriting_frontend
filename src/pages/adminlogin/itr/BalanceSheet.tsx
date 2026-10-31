@@ -1,8 +1,8 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getItrBalanceSheet } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
 import { renderYearlyTable } from '@/components/itr/ItrTableHelper';
-import { Loader2 } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 
 interface BalanceSheetProps {
   custId?: string;
@@ -25,7 +25,7 @@ export default function BalanceSheet({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-10 w-10 animate-spin text-[#002366]" />
+        <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Balance Sheet..." />
       </div>
     );
   }

@@ -11,7 +11,8 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, RefreshCcw, Filter, X, CalendarIcon } from 'lucide-react';
+import {  RefreshCcw, Filter, X, CalendarIcon } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 import {
@@ -1040,8 +1041,7 @@ export default function OverviewMonthlyWise({
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-600">
-              <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
-              <p>Loading overview data...</p>
+              <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading overview data..." />
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-700">
@@ -1153,7 +1153,7 @@ export default function OverviewMonthlyWise({
             </div>
           ) : (
             <div className="p-8 text-center text-gray-600">
-              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-[#002366] mb-4" />
+              <AdminLoader className="mx-auto h-9 w-9 text-[#002366] mb-4" />
               <p className="text-gray-600">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

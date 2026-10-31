@@ -1,5 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
+import AdminLoader from '@/components/AdminLoader';
 
 export default function AdminProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
@@ -8,10 +9,8 @@ export default function AdminProtectedRoute() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 rounded-full border-4 border-[#7754f8]/20 border-t-[#7754f8] animate-spin" />
-        </div>
+      <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
+        <AdminLoader className="h-12 w-12 text-[#000080]" text="Verifying admin access..." />
       </div>
     );
   }

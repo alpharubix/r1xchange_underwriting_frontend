@@ -10,7 +10,6 @@ import {
   Copy,
   Pin,
   X,
-  Activity,
 } from 'lucide-react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -22,6 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ServiceReport from './ServiceReport';
 import { type CustomerDetailRecord } from './AdminAnchorsPage';
+import AdminLoader from '@/components/AdminLoader';
 
 
 const findAccountId = (user: any, index: number): string => {
@@ -790,10 +790,7 @@ export default function AdminCustomersPage() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={13} className="py-16 text-center text-gray-400">
-                      <div className="flex flex-col items-center justify-center gap-3">
-                        <Activity className="h-7 w-7 animate-spin text-[#000080]" />
-                        <span className="text-xs font-bold text-slate-600">Loading customers...</span>
-                      </div>
+                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading customers..." />
                     </td>
                   </tr>
                 ) : paginatedList.length === 0 ? (
