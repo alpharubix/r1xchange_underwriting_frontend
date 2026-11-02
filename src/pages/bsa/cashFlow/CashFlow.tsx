@@ -40,7 +40,7 @@ export default function CashFlow({
   const [appliedToDate, setAppliedToDate] = useState('');
 
   const location = useLocation();
-  
+
   const selectedAccountNumber =
     propAccountNumber ||
     (location.state as { accountNumber?: string } | null)?.accountNumber ||
@@ -344,7 +344,7 @@ export default function CashFlow({
               <div className="flex flex-wrap gap-2">
                 <Button
                   onClick={handleApply}
-                  className="bg-[#002366] text-black hover:bg-[#002366]/90 text-white gap-2"
+                  className="bg-[#002366] hover:bg-[#002366]/90 text-white gap-2"
                 >
                   <Filter className="w-4 h-4" /> Apply Filter
                 </Button>
@@ -474,15 +474,15 @@ export default function CashFlow({
                           row.valueClass,
                           row.summaryKey
                             ? getValueColorClass(
-                                data.summary[row.summaryKey] as number
-                              )
+                              data.summary[row.summaryKey] as number
+                            )
                             : ''
                         )}
                       >
                         {row.summaryKey
                           ? formatCurrency(
-                              data.summary[row.summaryKey] as number
-                            )
+                            data.summary[row.summaryKey] as number
+                          )
                           : ''}
                       </td>
                       {expectedMonths.map((month, monthIndex) => {
