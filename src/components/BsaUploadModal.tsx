@@ -24,6 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { UploadCloud, X, Loader2 } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 
 interface Bank {
   bankName: string;
@@ -359,7 +360,12 @@ export default function BsaUploadModal({
             >
               {uploadMutation.isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  {typeof window !== 'undefined' &&
+                  window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                    <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                  ) : (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
                   Uploading...
                 </>
               ) : (

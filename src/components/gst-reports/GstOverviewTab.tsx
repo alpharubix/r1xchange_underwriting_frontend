@@ -10,6 +10,7 @@ import {
 } from 'recharts';
 import React from 'react';
 import AdminLoader from '@/components/AdminLoader';
+import { Loader2 } from 'lucide-react';
 
 const COLORS = [
   '#0088FE',
@@ -32,10 +33,18 @@ export default function GstOverviewTab({
     enabled: !!gstReferenceId,
   });
 
+  const isAdminPortal =
+    typeof window !== 'undefined' &&
+    window.location.pathname.toLowerCase().startsWith('/admin');
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading GST overview..." />
+        {isAdminPortal ? (
+          <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading GST overview..." />
+        ) : (
+          <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+        )}
       </div>
     );
   }

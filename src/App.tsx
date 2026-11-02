@@ -8,6 +8,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import PublicRoute from '@/components/PublicRoute';
 import ExistingReports from './pages/cibil/ExistingReports';
 import ViewReport from './pages/cibil/ViewReport';
+import AdminLoader from './components/AdminLoader';
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const MarketingHomePage = lazy(() =>
@@ -100,9 +101,16 @@ function App() {
             <ErrorBoundary>
               <Suspense
                 fallback={
-                  <div className="flex h-screen items-center justify-center bg-[#002366]">
-                    <span className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin" />
-                  </div>
+                  typeof window !== 'undefined' &&
+                  window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                    <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
+                      <AdminLoader className="h-12 w-12 text-[#000080]" text="Loading Admin Portal..." />
+                    </div>
+                  ) : (
+                    <div className="flex h-screen items-center justify-center bg-[#002366]">
+                      <span className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin" />
+                    </div>
+                  )
                 }
               >
                 <Routes>

@@ -27,6 +27,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from '@/lib/toast';
+import AdminLoader from '@/components/AdminLoader';
 
 function formatDate(value?: string | null) {
   if (!value) return '-';
@@ -53,6 +54,10 @@ export default function BankAccountsPage({
   hideHeader,
   isAnchor,
 }: { custId?: string; hideHeader?: boolean; isAnchor?: boolean } = {}) {
+  const isAdminPortal =
+    (typeof window !== 'undefined' &&
+      window.location.pathname.toLowerCase().startsWith('/admin')) ||
+    Boolean(isAnchor);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   /*
@@ -246,9 +251,17 @@ export default function BankAccountsPage({
                 ========================= */}
             {isLoading ? (
               <div className="flex min-h-72 flex-col items-center justify-center gap-3 text-slate-500">
-                <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-
-                <p className="text-sm font-medium">Fetching bank accounts...</p>
+                {isAdminPortal ? (
+                  <AdminLoader
+                    className="h-9 w-9 text-[#002366]"
+                    text="Fetching bank accounts..."
+                  />
+                ) : (
+                  <>
+                    <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+                    <p className="text-sm font-medium">Fetching bank accounts...</p>
+                  </>
+                )}
               </div>
             ) : /* =========================
                ERROR
@@ -351,7 +364,11 @@ export default function BankAccountsPage({
                                           account.account_id ||
                                           account.accountId
                                         ) ? (
-                                        <Loader2 className="h-3 w-3 animate-spin" />
+                                        isAdminPortal ? (
+                                          <AdminLoader className="h-3 w-3 text-white" dotColor="#9fc3f1" />
+                                        ) : (
+                                          <Loader2 className="h-3 w-3 animate-spin" />
+                                        )
                                       ) : (
                                         <Download className="h-3 w-3 text-emerald-400" />
                                       )}
