@@ -37,7 +37,7 @@ export const AdminLoader: React.FC<AdminLoaderProps> = ({
         strokeLinecap="round"
       />
       {/* CRISP Inner Dot */}
-      <circle cx="15.875" cy="0" r="4.2" fill={dotColor} />
+      <circle cx="15.875" cy="0" r="7.5" fill={dotColor} /> 
     </svg>
   );
 
@@ -48,7 +48,7 @@ export const AdminLoader: React.FC<AdminLoaderProps> = ({
   return (
     <div className={`flex flex-col items-center justify-center gap-3 ${containerClassName}`}>
       {svgElement}
-      <span className="text-xs font-bold text-slate-600 tracking-tight">
+      <span className="text-xs font-bold text-slate-600 tracking-tight"> 
         {text}
       </span>
     </div>
