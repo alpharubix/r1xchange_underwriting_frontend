@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import React from 'react';
+import AdminLoader from '@/components/AdminLoader';
 
 const COLORS = [
   '#0088FE',
@@ -34,7 +35,7 @@ export default function GstOverviewTab({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
+        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading GST overview..." />
       </div>
     );
   }

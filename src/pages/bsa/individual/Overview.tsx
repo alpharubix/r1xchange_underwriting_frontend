@@ -22,6 +22,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { toast } from '@/lib/toast';
 import BankAccountDetails from '../BankAccountDetails';
 import { useLocation } from 'react-router-dom';
+import AdminLoader from '@/components/AdminLoader';
 // import BsaDownloadButton from '@/components/bsa/BsaDownloadButton';
 
 interface MonthlyBreakdown {
@@ -865,9 +866,8 @@ export default function IndividualOverview({
         </CardHeader>
         <CardContent className="p-0">
           {isLoading ? (
-            <div className="flex flex-col items-center justify-center p-12 text-gray-600">
-              <Loader2 className="h-8 w-8 animate-spin text-black mb-4" />
-              <p>Loading overview data...</p>
+            <div className="flex flex-col items-center justify-center p-12">
+              <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading overview data..." />
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-700">

@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DateTimeDisplay from '../../../components/DateTimeDisplay';
+import AdminLoader from '@/components/AdminLoader';
 
 // ─── HELPER FORMATTERS ────────────────────────────────────────────────────────
 
@@ -806,19 +807,11 @@ export default function PaymentDashboard() {
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs">
                 {isLoading ? (
-                  // Loading skeletons
-                  Array.from({ length: 5 }).map((_, i) => (
-                    <tr key={i} className="animate-pulse">
-                      <td className="py-5 px-5"><div className="h-3.5 w-28 bg-slate-200 rounded" /></td>
-                      <td className="py-5 px-5"><div className="h-8 w-32 bg-slate-200 rounded" /></td>
-                      <td className="py-5 px-5"><div className="h-3.5 w-16 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-5 w-20 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-5 w-20 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-3.5 w-16 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5"><div className="h-3.5 w-28 bg-slate-200 rounded" /></td>
-                      <td className="py-3 px-5 text-right"><div className="h-7 w-16 bg-slate-200 rounded ml-auto" /></td>
-                    </tr>
-                  ))
+                  <tr>
+                    <td colSpan={8} className="py-16 text-center text-slate-400">
+                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading payment records..." />
+                    </td>
+                  </tr>
                 ) : error ? (
                   <tr>
                     <td colSpan={8} className="py-12 text-center">

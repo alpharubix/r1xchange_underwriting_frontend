@@ -1,7 +1,8 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listCibilReports } from '@/api/cibil';
 import type { CibilReportListItem } from '@/api/cibil';
+import AdminLoader from '@/components/AdminLoader';
 
 function ExistingReports() {
   const navigate = useNavigate();
@@ -38,11 +39,8 @@ function ExistingReports() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
-        <div className="bg-white rounded-2xl shadow-lg px-6 py-5 flex items-center gap-3 border border-slate-200">
-          <div className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
-          <p className="text-sm font-medium text-slate-700">
-            Loading reports...
-          </p>
+        <div className="bg-white rounded-2xl shadow-lg px-8 py-6 flex items-center justify-center border border-slate-200">
+          <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading reports..." />
         </div>
       </div>
     );

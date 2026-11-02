@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGstTopSuppliersCustomers } from '@/api/gst';
+import AdminLoader from '@/components/AdminLoader';
 
 export default function TopSuppliersCustomersTab({
   gstReferenceId,
@@ -16,7 +17,7 @@ export default function TopSuppliersCustomersTab({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
+        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading top suppliers & customers..." />
       </div>
     );
   }

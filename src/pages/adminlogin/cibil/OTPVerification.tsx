@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
 import { toast } from '@/lib/toast';
+import AdminLoader from '@/components/AdminLoader';
 import { resendCibilOtp, validateCibilOtp } from '@/api/cibil';
 
 interface OTPVerificationProps {
@@ -114,7 +114,7 @@ export default function OTPVerification({
           className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {verifyMutation.isPending ? (
-            <Loader2 className="h-5 w-5 animate-spin mr-2" />
+            <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
           ) : null}
           {verifyMutation.isPending ? 'Verifying...' : 'Verify OTP'}
         </button>

@@ -316,7 +316,7 @@ export default function AdminAnchorsPage() {
   });
 
   // Pre-fetch all users for sub-customer hierarchy lookups
-  const { data: fetchedUsersRaw } = useQuery({
+  const { data: fetchedUsersRaw, isLoading: isAllUsersLoading } = useQuery({
     queryKey: ['admin', 'all-users-association'],
     queryFn: () => getUsersList({ limit: 1000 }),
     staleTime: 60000,
@@ -924,7 +924,13 @@ export default function AdminAnchorsPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100 text-sm">
-                  {associatedCustomers.length === 0 ? (
+                  {isUsersLoading || isAllUsersLoading ? (
+                    <tr>
+                      <td colSpan={11} className="py-16 text-center text-slate-400">
+                        <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading associated customers..." />
+                      </td>
+                    </tr>
+                  ) : associatedCustomers.length === 0 ? (
                     <tr>
                       <td colSpan={11} className="py-16 text-center text-slate-400">
                         <Users className="h-8 w-8 mx-auto mb-2 text-slate-300" />

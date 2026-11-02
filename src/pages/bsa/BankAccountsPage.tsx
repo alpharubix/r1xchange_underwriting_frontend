@@ -341,8 +341,8 @@ export default function BankAccountsPage({
                                       }
                                       className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-semibold bg-[#002366] text-white transition-all duration-200 hover:bg-[#001a4d] hover:shadow-xs cursor-pointer disabled:opacity-50"
                                       title={`Download All 3 Files (${modulesAvailable
-                                          ? 'Overview, EOD Analysis, Loan Transactions'
-                                          : 'Summary, Cashflow, Overview'
+                                        ? 'Overview, EOD Analysis, Loan Transactions'
+                                        : 'Summary, Cashflow, Overview'
                                         })`}
                                     >
                                       {downloadingReport ===

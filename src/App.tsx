@@ -124,11 +124,11 @@ function App() {
 
                   {/* Anchor Login Page */}
                   <Route path="/anchors" element={<AnchorMarketingSite />} />
-        <Route path="/anchors/products/:slug" element={<AnchorMarketingSite />} />
+                  <Route path="/anchors/products/:slug" element={<AnchorMarketingSite />} />
                   <Route path="/anchors/login" element={<AnchorLoginPage />} />
-              <Route path="/contact" element={<ContactSalesPage />} />
+                  <Route path="/contact" element={<ContactSalesPage />} />
                   <Route path="/Anchors/login" element={<AnchorLoginPage />} />
-                  
+
                   {/* Admin Login Page */}
                   <Route
                     path="/admins/login"
