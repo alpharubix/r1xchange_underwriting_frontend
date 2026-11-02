@@ -106,6 +106,11 @@ function App() {
                     <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
                       <AdminLoader className="h-12 w-12 text-[#000080]" text="Loading Admin Portal..." />
                     </div>
+                  ) : typeof window !== 'undefined' &&
+                  window.location.pathname.toLowerCase().startsWith('/anchor') ? (
+                    <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
+                      <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
+                    </div>
                   ) : (
                     <div className="flex h-screen items-center justify-center bg-[#002366]">
                       <span className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin" />

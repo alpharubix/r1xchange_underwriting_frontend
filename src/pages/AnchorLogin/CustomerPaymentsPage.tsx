@@ -10,9 +10,10 @@ import { getPricingDetails } from "@/lib/paymentUtils";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useAuthContext } from "@/contexts/AuthContext";
-import { CreditCard, Loader2, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound } from "lucide-react";
+import { CreditCard, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound } from "lucide-react";
 import { toast } from "@/lib/toast";
 import crispLogoWhiteWebView from "@/assets/crispLogoRedesign.png";
+import AdminLoader from "@/components/AdminLoader";
 
 export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
@@ -209,7 +210,7 @@ export default function CustomerPaymentsPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+        <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading payments data..." />
       </div>
     );
   }
@@ -228,7 +229,7 @@ export default function CustomerPaymentsPage() {
 
       {/* Module Wallet Checkers */}
       <div>
-        <h2 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wider text-sm">
+        <h2 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wider text-">
           Wallet Balances
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 ">
@@ -253,7 +254,7 @@ export default function CustomerPaymentsPage() {
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wider text-sm">
+        <h2 className="text-lg font-bold text-gray-800 mb-4 uppercase tracking-wider text-">
           Pending Orders
         </h2>
         {pendingPayments.length === 0 ? (
@@ -349,7 +350,7 @@ export default function CustomerPaymentsPage() {
                       >
                         {processingId === payment.id ? (
                           <>
-                            <Loader2 className="h-4 w-4 animate-spin" />
+                            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                             Cancel Payment
                           </>
                         ) : (

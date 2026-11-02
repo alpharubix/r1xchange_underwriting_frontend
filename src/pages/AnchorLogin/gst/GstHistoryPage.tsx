@@ -1,6 +1,7 @@
-﻿import { useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { getGstHistory } from '@/api/gst';
 import { useNavigate } from 'react-router-dom';
+import AdminLoader from '@/components/AdminLoader';
 
 export default function GstHistoryPage() {
   const navigate = useNavigate();
@@ -48,7 +49,7 @@ export default function GstHistoryPage() {
 
         {isLoading ? (
           <div className="flex justify-center items-center py-20">
-            <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
+            <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading GST history..." />
           </div>
         ) : isError ? (
           <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-12 text-center">

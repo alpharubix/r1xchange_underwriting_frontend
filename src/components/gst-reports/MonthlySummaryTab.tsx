@@ -14,14 +14,15 @@ export default function MonthlySummaryTab({
     enabled: !!gstReferenceId,
   });
 
-  const isAdminPortal =
+  const isAdminOrAnchorPortal =
     typeof window !== 'undefined' &&
-    window.location.pathname.toLowerCase().startsWith('/admin');
+    (window.location.pathname.toLowerCase().startsWith('/admin') ||
+     window.location.pathname.toLowerCase().startsWith('/anchor'));
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        {isAdminPortal ? (
+        {isAdminOrAnchorPortal ? (
           <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading monthly summary..." />
         ) : (
           <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
