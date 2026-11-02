@@ -16,6 +16,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import apiClient from '@/lib/axios';
 import { toast } from '@/lib/toast';
 import DateTimeDisplay from '../../components/DateTimeDisplay';
+import AdminLoader from '@/components/AdminLoader';
 
 interface SuperAnchorProps {
   anchorsList: Array<{
@@ -597,9 +598,13 @@ export default function SuperAnchor({
                   </Button>
                   <Button
                     type="submit"
+                    disabled={registerAnchorMutation.isPending}
                     className="bg-[#002366] hover:bg-[#001744] text-white font-semibold transition-all rounded-xl h-11 px-5 flex items-center gap-2 shadow-sm shadow-[#002366]/20 cursor-pointer"
                   >
-                    Create User
+                    {registerAnchorMutation.isPending && (
+                      <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                    )}
+                    {registerAnchorMutation.isPending ? 'Creating...' : 'Create User'}
                   </Button>
                 </div>
               </form>

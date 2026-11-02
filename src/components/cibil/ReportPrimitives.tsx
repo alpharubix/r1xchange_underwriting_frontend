@@ -159,13 +159,14 @@ export function LoadingState({
 }: {
   label?: string;
 }) {
-  const isAdminPortal =
+  const isAdminOrAnchorPortal =
     typeof window !== 'undefined' &&
-    window.location.pathname.toLowerCase().startsWith('/admin');
+    (window.location.pathname.toLowerCase().startsWith('/admin') ||
+     window.location.pathname.toLowerCase().startsWith('/anchor'));
 
   return (
     <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white">
-      {isAdminPortal ? (
+      {isAdminOrAnchorPortal ? (
         <AdminLoader className="h-8 w-8 text-[#002366]" text={label} />
       ) : (
         <>

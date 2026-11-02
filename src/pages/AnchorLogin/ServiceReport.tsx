@@ -10,7 +10,8 @@ import BsaUploadModal from '@/components/BsaUploadModal';
 import ItrUploadModal from '@/components/ItrUploadModal';
 import GstUploadModal from '@/components/GstUploadModal';
 import CibilUploadModal from '@/components/CibilUploadModal';
-import { Eye, FileSpreadsheet, Loader2, ArrowLeft } from 'lucide-react';
+import { Eye, FileSpreadsheet, ArrowLeft } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
@@ -536,7 +537,7 @@ export default function ServiceReport({
                         className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
                       >
                         {isCheckingWallet ? (
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                          <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                         ) : null}
                         + Create New BSA Report
                       </Button>
@@ -596,7 +597,7 @@ export default function ServiceReport({
                       className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
                     >
                       {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                       ) : null}
                       + Create New GST Report
                     </Button>
@@ -640,10 +641,7 @@ export default function ServiceReport({
                                   colSpan={8}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
+                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : gstReports.length === 0 ? (
@@ -759,7 +757,7 @@ export default function ServiceReport({
                       className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
                     >
                       {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                       ) : null}
                       + Create New ITR Report
                     </Button>
@@ -795,10 +793,7 @@ export default function ServiceReport({
                                   colSpan={5}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
+                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : itrReports.length === 0 ? (
@@ -890,7 +885,7 @@ export default function ServiceReport({
                       className="bg-[#002366] hover:bg-[#001744] text-white font-semibold rounded-xl shadow-sm shadow-[#002366]/20 cursor-pointer"
                     >
                       {isCheckingWallet ? (
-                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                       ) : null}
                       + Create New CIBIL Report
                     </Button>
@@ -923,10 +918,7 @@ export default function ServiceReport({
                                   colSpan={4}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
+                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : cibilReports.length === 0 ? (
@@ -1032,10 +1024,7 @@ export default function ServiceReport({
                                   colSpan={4}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
+                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : cibilReports.length === 0 ? (
@@ -1141,10 +1130,7 @@ export default function ServiceReport({
                                   colSpan={4}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <div className="flex flex-col items-center justify-center gap-2">
-                                    <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-                                    <span>Loading reports...</span>
-                                  </div>
+                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : cibilReports.length === 0 ? (

@@ -264,7 +264,8 @@ export default function IndividualEodAnalysis({
 }: { accountNumber?: string } = {}) {
   const isAdminPortal =
     typeof window !== 'undefined' &&
-    window.location.pathname.toLowerCase().startsWith('/admin');
+    (window.location.pathname.toLowerCase().startsWith('/admin') ||
+      window.location.pathname.toLowerCase().startsWith('/anchor'));
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
@@ -832,7 +833,11 @@ export default function IndividualEodAnalysis({
             </div>
           ) : (
             <div className="p-8 text-center text-gray-600">
-              <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-black mb-4" />
+              {isAdminPortal ? (
+                <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
+              ) : (
+                <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-black mb-4" />
+              )}
               <p className="text-gray-600">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

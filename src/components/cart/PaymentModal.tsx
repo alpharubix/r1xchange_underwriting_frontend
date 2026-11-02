@@ -47,6 +47,11 @@ export default function PaymentModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSendingToCustomer, setIsSendingToCustomer] = useState(false);
   const { user } = useAuthContext() as any;
+  const isCustomLoaderPortal =
+    (typeof window !== 'undefined' &&
+      (window.location.pathname.toLowerCase().startsWith('/admin') ||
+       window.location.pathname.toLowerCase().startsWith('/anchor'))) ||
+    Boolean(requestFromAnchor);
 
   useEffect(() => {
     if (!isOpen) {
@@ -567,8 +572,7 @@ export default function PaymentModal({
                       >
                         {isProcessing ? (
                           <>
-                            {typeof window !== 'undefined' &&
-                            window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                            {isCustomLoaderPortal ? (
                               <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                             ) : (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -594,8 +598,7 @@ export default function PaymentModal({
                       >
                         {isSendingToCustomer ? (
                           <>
-                            {typeof window !== 'undefined' &&
-                            window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                            {isCustomLoaderPortal ? (
                               <AdminLoader className="h-4 w-4 text-[#002366]" dotColor="#2563eb" />
                             ) : (
                               <Loader2 className="h-4 w-4 animate-spin" />
@@ -620,8 +623,7 @@ export default function PaymentModal({
                     >
                       {isProcessing ? (
                         <>
-                          {typeof window !== 'undefined' &&
-                          window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                          {isCustomLoaderPortal ? (
                             <AdminLoader className="mr-2 h-5 w-5 text-white" dotColor="#9fc3f1" />
                           ) : (
                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />

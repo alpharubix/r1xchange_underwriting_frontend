@@ -1,12 +1,12 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Loader2,
   ArrowLeft,
   IndianRupee,
   AlertCircle,
   Check,
   Save,
 } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 import { Button } from '@/components/ui/button';
 import {
   getRectifyMoneyReports,
@@ -138,11 +138,8 @@ export default function RectifyMoneyReportView({
 
       <div className="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
         {isLoading ? (
-          <div className="py-24 flex flex-col items-center justify-center gap-4">
-            <Loader2 className="h-8 w-8 text-[#002366] animate-spin" />
-            <p className="text-slate-500 font-medium">
-              Fetching accounts data...
-            </p>
+          <div className="py-24 flex flex-col items-center justify-center">
+            <AdminLoader className="h-8 w-8 text-[#002366]" text="Fetching accounts data..." />
           </div>
         ) : isError ? (
           <div className="py-24 flex flex-col items-center justify-center gap-2">
@@ -242,7 +239,7 @@ export default function RectifyMoneyReportView({
             className="bg-[#002366] hover:bg-[#001744] text-white h-10 px-8 rounded-xl shadow-sm text-sm font-bold"
           >
             {submitMutation.isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
+              <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
             ) : (
               <Save className="h-4 w-4 mr-2" />
             )}

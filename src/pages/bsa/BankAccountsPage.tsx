@@ -56,7 +56,8 @@ export default function BankAccountsPage({
 }: { custId?: string; hideHeader?: boolean; isAnchor?: boolean } = {}) {
   const isAdminPortal =
     (typeof window !== 'undefined' &&
-      window.location.pathname.toLowerCase().startsWith('/admin')) ||
+      (window.location.pathname.toLowerCase().startsWith('/admin') ||
+        window.location.pathname.toLowerCase().startsWith('/anchor'))) ||
     Boolean(isAnchor);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -224,7 +225,11 @@ export default function BankAccountsPage({
               className="w-full transition-all duration-200 hover:shadow-sm sm:w-auto"
             >
               {isFetching ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                isAdminPortal ? (
+                  <AdminLoader className="h-4 w-4 text-[#002366]" />
+                ) : (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                )
               ) : (
                 <RefreshCw className="h-4 w-4" />
               )}

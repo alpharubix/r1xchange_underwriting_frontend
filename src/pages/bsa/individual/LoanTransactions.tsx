@@ -30,7 +30,8 @@ export default function IndividualLoanTransactions({
 }: { accountNumber?: string } = {}) {
   const isAdminPortal =
     typeof window !== 'undefined' &&
-    window.location.pathname.toLowerCase().startsWith('/admin');
+    (window.location.pathname.toLowerCase().startsWith('/admin') ||
+      window.location.pathname.toLowerCase().startsWith('/anchor'));
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();

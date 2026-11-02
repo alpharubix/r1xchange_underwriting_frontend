@@ -226,14 +226,15 @@ export default function ItrUploadModal({
         </CardHeader>
         <CardContent className="space-y-4">
           {(() => {
-            const isAdminPortal =
+            const isSpecialPortal =
               typeof window !== 'undefined' &&
-              window.location.pathname.toLowerCase().startsWith('/admin');
+              (window.location.pathname.toLowerCase().startsWith('/admin') ||
+                window.location.pathname.toLowerCase().startsWith('/anchor'));
             return (
               <>
                 {itrState === 'INITIALIZING' && (
                   <div className="flex flex-col items-center justify-center py-8">
-                    {isAdminPortal ? (
+                    {isSpecialPortal ? (
                       <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
                     ) : (
                       <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
@@ -260,8 +261,7 @@ export default function ItrUploadModal({
                 disabled={generateItrLinkMutation.isPending || !itrEmail}
               >
                 {generateItrLinkMutation.isPending ? (
-                  typeof window !== 'undefined' &&
-                  window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                  isSpecialPortal ? (
                     <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                   ) : (
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -275,8 +275,7 @@ export default function ItrUploadModal({
           {itrState === 'AWAITING_CREDENTIAL_SUBMISSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                {typeof window !== 'undefined' &&
-                window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                {isSpecialPortal ? (
                   <AdminLoader className="h-8 w-8 text-[#002366]" />
                 ) : (
                   <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
@@ -294,8 +293,7 @@ export default function ItrUploadModal({
           {itrState === 'PROCESSING' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                {typeof window !== 'undefined' &&
-                window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                {isSpecialPortal ? (
                   <AdminLoader className="h-8 w-8 text-[#002366]" />
                 ) : (
                   <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
