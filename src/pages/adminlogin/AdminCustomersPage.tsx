@@ -128,76 +128,49 @@ export default function AdminCustomersPage() {
   >([]);
   const [includeNoReports, setIncludeNoReports] = useState(false);
 
-  const { data: fetchedData, isLoading } = useQuery({
-    queryKey: ['admin', 'all-customers-list'],
+  const { data: fetchedData, isLoading,isFetching } = useQuery({
+    queryKey: ['admin', 'customers-list',currentPage,pageSize],
     queryFn: async () => {
-      const requestLimit = 1000;
-      const firstResponse = await getUsersList({ page: 1, limit: requestLimit });
-      const firstPage = extractPaginatedData<any>(firstResponse, 1, requestLimit);
+      const response = await getUsersList({
+        page:currentPage,
+        limit:pageSize
+      })
 
-      if (!firstPage.is_server_paginated || firstPage.total_pages <= 1) {
-        return firstPage.items;
-      }
+      const result = extractPaginatedData<any>(
+        response,
+        currentPage,
+        pageSize
+      )
 
-      const allUsers = [...firstPage.items];
-      for (let firstPageToLoad = 2; firstPageToLoad <= firstPage.total_pages; firstPageToLoad += 5) {
-        const pageNumbers = Array.from(
-          { length: Math.min(5, firstPage.total_pages - firstPageToLoad + 1) },
-          (_, index) => firstPageToLoad + index
-        );
-        const pages = await Promise.all(
-          pageNumbers.map(async (page) => {
-            const response = await getUsersList({ page, limit: requestLimit });
-            return extractPaginatedData<any>(response, page, requestLimit).items;
-          })
-        );
-        allUsers.push(...pages.flat());
-      }
+      console.log("Fetched customers data : ",result)
 
-      return allUsers;
+      return result
     },
   });
 
   const customersList = useMemo(() => {
-    return (fetchedData || []).map((user: any, index: number) => ({
+    return (fetchedData?.items || []).map((user: any, index: number) => ({
         accountid: findAccountId(user, index),
         customername:
-          user.customername ||
           user.customer_name ||
-          user.customerName ||
-          user.name ||
-          user.username ||
           '',
         companyname:
-          user.companyname ||
           user.company_name ||
-          user.companyName ||
           '',
         emailid:
-          user.emailid ||
           user.email_id ||
-          user.emailId ||
-          user.email ||
           '',
         emailverified: Boolean(
-          user.emailverified ?? user.email_verified ?? user.emailVerified
+          user.email_verified ?? false
         ),
         phone:
           user.phone ||
-          user.phone_no ||
-          user.phoneNo ||
-          user.phoneNumber ||
           '',
         phoneverified: Boolean(
           user.phoneverified ?? user.phone_verified ?? user.phoneVerified
         ),
         gstnumber:
-          user.gstnumber ||
           user.gst_number ||
-          user.gstNumber ||
-          user.gst_no ||
-          user.gstNo ||
-          user.gst ||
           '',
         status:
           String(user.status || '').toLowerCase() === 'active' ||
@@ -339,8 +312,8 @@ export default function AdminCustomersPage() {
     includeNoReports,
   ]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredList.length / pageSize));
-  const totalRecords = filteredList.length;
+  const totalPages = Math.max(1, fetchedData?.total_pages??1);
+  const totalRecords = fetchedData?.total_records ??0;
   const activeCustomerFilterCount =
     [
       filterAccId,
@@ -362,10 +335,7 @@ export default function AdminCustomersPage() {
         : 'bg-slate-50 border-slate-200 focus:bg-white'
     }`;
 
-  const paginatedList = useMemo(() => {
-    const startIndex = (currentPage - 1) * pageSize;
-    return filteredList.slice(startIndex, startIndex + pageSize);
-  }, [filteredList, currentPage, pageSize]);
+  const paginatedList = filteredList
 
   const toggleServiceFilter = (service: 'bsa' | 'gst' | 'itr' | 'cibil') => {
     setIncludeNoReports(false);
