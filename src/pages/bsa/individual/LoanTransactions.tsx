@@ -2,7 +2,7 @@ import apiClient from '@/lib/axios';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { RefreshCcw } from 'lucide-react';
+import { Loader2, RefreshCcw } from 'lucide-react';
 import BankAccountDetails from '../BankAccountDetails';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import AdminLoader from '@/components/AdminLoader';
@@ -28,6 +28,9 @@ interface LoanTransactionData {
 export default function IndividualLoanTransactions({
   accountNumber: propAccountNumber,
 }: { accountNumber?: string } = {}) {
+  const isAdminPortal =
+    typeof window !== 'undefined' &&
+    window.location.pathname.toLowerCase().startsWith('/admin');
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -135,7 +138,11 @@ export default function IndividualLoanTransactions({
           <CardContent className="p-0">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-12">
-                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
+                {isAdminPortal ? (
+                  <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
+                ) : (
+                  <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+                )}
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">
@@ -202,7 +209,11 @@ export default function IndividualLoanTransactions({
           <CardContent className="p-0">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-12">
-                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading details data..." />
+                {isAdminPortal ? (
+                  <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading details data..." />
+                ) : (
+                  <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+                )}
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">

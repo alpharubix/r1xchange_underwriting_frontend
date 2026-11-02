@@ -414,6 +414,9 @@ const ROWS: RowConfig[] = [
 export default function IndividualOverview({
   accountNumber: propAccountNumber,
 }: { accountNumber?: string } = {}) {
+  const isAdminPortal =
+    typeof window !== 'undefined' &&
+    window.location.pathname.toLowerCase().startsWith('/admin');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [appliedFromDate, setAppliedFromDate] = useState('');
@@ -867,7 +870,11 @@ export default function IndividualOverview({
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12">
-              <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading overview data..." />
+              {isAdminPortal ? (
+                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading overview data..." />
+              ) : (
+                <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+              )}
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-700">

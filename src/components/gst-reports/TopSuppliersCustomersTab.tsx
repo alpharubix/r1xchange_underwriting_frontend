@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGstTopSuppliersCustomers } from '@/api/gst';
 import AdminLoader from '@/components/AdminLoader';
+import { Loader2 } from 'lucide-react';
 
 export default function TopSuppliersCustomersTab({
   gstReferenceId,
@@ -14,10 +15,18 @@ export default function TopSuppliersCustomersTab({
     enabled: !!gstReferenceId,
   });
 
+  const isAdminPortal =
+    typeof window !== 'undefined' &&
+    window.location.pathname.toLowerCase().startsWith('/admin');
+
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading top suppliers & customers..." />
+        {isAdminPortal ? (
+          <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading top suppliers & customers..." />
+        ) : (
+          <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+        )}
       </div>
     );
   }
