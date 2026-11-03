@@ -39,7 +39,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import DateTimeDisplay from '../../../components/DateTimeDisplay';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 // ─── HELPER FORMATTERS ────────────────────────────────────────────────────────
 
@@ -809,7 +809,7 @@ export default function PaymentDashboard() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={8} className="py-16 text-center text-slate-400">
-                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading payment records..." />
+                      <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading payment records..." />
                     </td>
                   </tr>
                 ) : error ? (

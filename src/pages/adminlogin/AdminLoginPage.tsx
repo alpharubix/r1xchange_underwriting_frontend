@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
 import { Eye, EyeOff, Lock, User, ArrowRight } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -214,7 +214,7 @@ export default function AdminLoginPage() {
                 >
                   {loginMutation.isPending ? (
                     <>
-                      <AdminLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
+                      <CrispLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
                       Logging in...
                     </>
                   ) : (

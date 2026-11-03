@@ -15,7 +15,7 @@ import { toast } from "@/lib/toast";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminsList, extractPaginatedData } from "@/api/user";
 import DateTimeDisplay from '../../components/DateTimeDisplay';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface RecordItem {
   loginid: string;
@@ -322,7 +322,7 @@ export default function AdminAdminsPage() {
                         colSpan={5}
                         className="py-16 text-center text-slate-400 font-bold"
                       >
-                        <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading admin records..." />
+                        <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading admin records..." />
                       </td>
                     </tr>
                   ) : paginatedList.length > 0 ? (

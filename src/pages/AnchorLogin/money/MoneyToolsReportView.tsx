@@ -3,7 +3,7 @@ import { IndianRupee, ShieldCheck, CheckCircle2, History } from 'lucide-react';
 import { format } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import { getMoneyToolsData } from '@/api/user';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 export default function MoneyToolsReportView({
   selectedCustomer,
@@ -34,7 +34,7 @@ export default function MoneyToolsReportView({
   if (isLoading) {
     return (
       <div className="flex flex-col items-center justify-center py-12 text-slate-500">
-        <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading Money Tools data..." />
+        <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading Money Tools data..." />
       </div>
     );
   }

@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {  RefreshCcw, Filter, X, CalendarIcon } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { toast } from '@/lib/toast';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
@@ -503,7 +503,7 @@ export default function SummaryOfDebitAndCredit({
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-              <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
+              <CrispLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-500">
@@ -782,7 +782,7 @@ export default function SummaryOfDebitAndCredit({
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">
-              <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
+              <CrispLoader className="h-8 w-8 text-[#002366] mb-4" />
               <p className="text-gray-500">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

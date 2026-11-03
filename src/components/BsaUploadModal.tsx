@@ -24,7 +24,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { UploadCloud, X,  } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 interface Bank {
@@ -361,7 +361,7 @@ export default function BsaUploadModal({
             >
               {uploadMutation.isPending ? (
                 <>
-                  <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                  <CrispLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                   Uploading...
                 </>
               ) : (

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGstMonthlySummary } from '@/api/gst';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 export default function MonthlySummaryTab({
@@ -17,7 +17,7 @@ export default function MonthlySummaryTab({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading monthly summary..." />
+        <CrispLoader className="h-10 w-10 text-[#002366]" text="Loading monthly summary..." />
       </div>
     );
   }

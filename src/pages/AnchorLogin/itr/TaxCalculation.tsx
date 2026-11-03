@@ -6,7 +6,7 @@ import {
   renderYearlyTable,
   renderDataTable,
 } from '@/components/itr/ItrTableHelper';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface TaxCalculationProps {
   custId?: string;
@@ -29,7 +29,7 @@ export default function TaxCalculation({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Tax Calculation..." />
+        <CrispLoader className="h-12 w-12 text-[#002366]" text="Loading Tax Calculation..." />
       </div>
     );
   }

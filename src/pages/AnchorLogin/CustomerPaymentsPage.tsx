@@ -13,7 +13,7 @@ import { useAuthContext } from "@/contexts/AuthContext";
 import { CreditCard, IndianRupee, ArrowRight, FileText, PieChart, ShieldCheck, Building2, UserRound } from "lucide-react";
 import { toast } from "@/lib/toast";
 import crispLogoWhiteWebView from "@/assets/crispLogoRedesign.png";
-import AdminLoader from "@/components/AdminLoader";
+import CrispLoader from "@/components/CrispLoader";
 
 export default function CustomerPaymentsPage() {
   const { user } = useAuthContext();
@@ -210,7 +210,7 @@ export default function CustomerPaymentsPage() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading payments data..." />
+        <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading payments data..." />
       </div>
     );
   }
@@ -350,7 +350,7 @@ export default function CustomerPaymentsPage() {
                       >
                         {processingId === payment.id ? (
                           <>
-                            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                            <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                             Cancel Payment
                           </>
                         ) : (

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getItrRatioAnalysis } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
 import RatioAnalysisTable from '@/components/itr/RatioAnalysis';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface RatioAnalysisProps {
   custId?: string;
@@ -25,7 +25,7 @@ export default function RatioAnalysis({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Ratio Analysis..." />
+        <CrispLoader className="h-12 w-12 text-[#002366]" text="Loading Ratio Analysis..." />
       </div>
     );
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export interface AdminLoaderProps extends React.SVGProps<SVGSVGElement> {
+export interface CrispLoaderProps extends React.SVGProps<SVGSVGElement> {
   className?: string;
   arcColor?: string;
   dotColor?: string;
@@ -12,7 +12,7 @@ export interface AdminLoaderProps extends React.SVGProps<SVGSVGElement> {
  * CRISP Branded Loading Spinner for Admin Portal.
  * Geometrically centered at (0, 0) for a perfectly balanced spin without wobble.
  */
-export const AdminLoader: React.FC<AdminLoaderProps> = ({
+export const CrispLoader: React.FC<CrispLoaderProps> = ({
   className = 'h-8 w-8 text-[#000080]',
   arcColor = 'currentColor',
   dotColor = '#2563eb',
@@ -55,4 +55,4 @@ export const AdminLoader: React.FC<AdminLoaderProps> = ({
   );
 };
 
-export default AdminLoader;
+export default CrispLoader;

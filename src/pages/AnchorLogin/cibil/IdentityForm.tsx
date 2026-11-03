@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { toast } from '@/lib/toast';
 
 import { generateCibilOtp} from '@/api/cibil';
@@ -519,7 +519,7 @@ export default function IdentityForm({ onNext }: IdentityFormProps) {
           className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2.5 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center cursor-pointer"
         >
           {identityMutation.isPending ? (
-            <AdminLoader className="h-5 w-5 text-white mr-2" dotColor="#9fc3f1" />
+            <CrispLoader className="h-5 w-5 text-white mr-2" dotColor="#9fc3f1" />
           ) : null}
           {identityMutation.isPending ? 'Submitting...' : 'Continue to OTP'}
         </button>

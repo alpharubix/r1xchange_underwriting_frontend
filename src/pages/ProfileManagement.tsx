@@ -14,7 +14,7 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface ProfileForm {
   
@@ -229,7 +229,7 @@ export default function ProfileManagement() {
   if (isLoading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <AdminLoader
+        <CrispLoader
           className="h-9 w-9 text-[#002366]"
           text="Loading profile details..."
         />
@@ -417,7 +417,7 @@ export default function ProfileManagement() {
                   className="flex items-center gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800 px-5 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
                   {isSaving ? (
-                    <AdminLoader className="h-3.5 w-3.5 text-white" dotColor="#9fc3f1" />
+                    <CrispLoader className="h-3.5 w-3.5 text-white" dotColor="#9fc3f1" />
                   ) : (
                     <Check className="w-3.5 h-3.5" />
                   )}

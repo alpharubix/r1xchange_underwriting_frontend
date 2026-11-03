@@ -28,7 +28,7 @@ import type { ServiceBreakup } from '@/api/payment';
 
 import { toast } from '@/lib/toast';
 import HomeIntro from '@/components/HomeIntro';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -260,7 +260,7 @@ export default function DashboardPage() {
       {isCheckingWallet && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
           <div className="rounded-2xl bg-white p-6 shadow-xl border border-gray-100 flex flex-col items-center">
-            <AdminLoader
+            <CrispLoader
               className="h-9 w-9 text-[#002366]"
               text="Checking wallet balance..."
             />

@@ -1,7 +1,7 @@
 import { cloneElement, useEffect, useRef, useState } from 'react';
 import type { ReactElement, ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { getWalletBalance } from '@/api/payment';
 import crispLogoBlackWebView from '@/assets/crispLogoBlack.svg';
 import { useNavigate } from 'react-router-dom';
@@ -68,7 +68,7 @@ export default function WalletProtectedComponent({
           Redirecting to payment page...
         </p>
 
-        <AdminLoader className="h-5 w-5 text-gray-500" />
+        <CrispLoader className="h-5 w-5 text-gray-500" />
       </div>
     );
   }
@@ -77,7 +77,7 @@ export default function WalletProtectedComponent({
     console.log('Loading wallet balance...');
     return (
       <div className="flex h-[300px] w-full items-center justify-center">
-        <AdminLoader className="h-8 w-8 text-[#002366]" />
+        <CrispLoader className="h-8 w-8 text-[#002366]" />
       </div>
     );
   }

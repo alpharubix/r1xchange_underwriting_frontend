@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 export default function ItrExportPage() {
   const [isExporting, setIsExporting] = useState(false);
@@ -91,7 +91,7 @@ export default function ItrExportPage() {
           >
             {isExporting ? (
               <>
-                <AdminLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
+                <CrispLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
                 Downloading Report...
               </>
             ) : (

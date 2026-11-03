@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { toast } from '@/lib/toast';
 import { requestLoan } from '@/api/money';
 
@@ -149,7 +149,7 @@ export default function AccessMoneyReportView({
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                <CrispLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
               ) : null}
               Submit Request
             </Button>

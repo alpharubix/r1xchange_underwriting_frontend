@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import {
   Card,
   CardContent,
@@ -411,7 +411,7 @@ export default function SignupPage() {
                 >
                   {registerMutation.isPending ? (
                     <>
-                      <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                      <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                       Creating account...
                     </>
                   ) : (

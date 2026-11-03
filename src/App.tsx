@@ -11,7 +11,7 @@ import AnchorProtectedRoute from './components/AnchorProtectedRoute';
 import AdminProtectedRoute from './components/AdminProtectedRoute';
 import ExistingReports from './pages/cibil/ExistingReports';
 import ViewReport from './pages/cibil/ViewReport';
-import AdminLoader from './components/AdminLoader';
+import CrispLoader from './components/CrispLoader';
 
 const LoginPage = lazy(() => import('@/pages/LoginPage'));
 const MarketingHomePage = lazy(() =>
@@ -100,16 +100,16 @@ function App() {
                   typeof window !== 'undefined' &&
                     window.location.pathname.toLowerCase().startsWith('/admin') ? (
                     <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
-                      <AdminLoader className="h-12 w-12 text-[#000080]" />
+                      <CrispLoader className="h-12 w-12 text-[#000080]" />
                     </div>
                   ) : typeof window !== 'undefined' &&
                     window.location.pathname.toLowerCase().startsWith('/anchor') ? (
                     <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
-                      <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
+                      <CrispLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
                     </div>
                   ) : (
                     <div className="flex h-screen w-full items-center justify-center bg-[#002366]">
-                      <AdminLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
+                      <CrispLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
                     </div>
                   )
                 }

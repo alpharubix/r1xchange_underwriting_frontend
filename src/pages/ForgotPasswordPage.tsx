@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { Label } from '@/components/ui/label';
 import {
   Card,
@@ -130,7 +130,7 @@ function EmailStep({ onSuccess }: { onSuccess: (email: string) => void }) {
       >
         {mutation.isPending ? (
           <>
-            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+            <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Sending OTP...
           </>
         ) : (
@@ -237,7 +237,7 @@ function OtpStep({
       >
         {mutation.isPending ? (
           <>
-            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+            <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Verifying...
           </>
         ) : (
@@ -395,7 +395,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
       >
         {mutation.isPending ? (
           <>
-            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+            <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Resetting password...
           </>
         ) : (

@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getItrTaxCalculation } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
 import TaxCalculationTable from '@/components/itr/TaxCalculation';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 export default function TaxCalculation() {
   const { data, isLoading, isError } = useQuery<any>({
@@ -13,7 +13,7 @@ export default function TaxCalculation() {
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Tax Calculation..." />
+        <CrispLoader className="h-12 w-12 text-[#002366]" text="Loading Tax Calculation..." />
       </div>
     );
   }

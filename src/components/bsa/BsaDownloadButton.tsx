@@ -4,7 +4,7 @@ import { FileSpreadsheet,  } from 'lucide-react';
 import { toast } from '@/lib/toast';
 import { downloadBsaReport } from '@/api/export';
 import { cn } from '@/lib/utils';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface BsaDownloadButtonProps {
   fromDate?: string;
@@ -84,7 +84,7 @@ export function BsaDownloadButton({
     >
       {isExporting ? (
         <>
-          <AdminLoader className="w-4 h-4 text-white mr-1" dotColor="#9fc3f1" />
+          <CrispLoader className="w-4 h-4 text-white mr-1" dotColor="#9fc3f1" />
           <span>Generating Excel...</span>
         </>
       ) : (

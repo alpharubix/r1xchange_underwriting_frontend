@@ -13,7 +13,7 @@ import {
   EyeOff,
   AlertCircle,
 } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { useAuthContext } from '@/contexts/AuthContext';
 import { useLogout } from '@/hooks/useAuth';
 import { toast } from '@/lib/toast';
@@ -1087,7 +1087,7 @@ export default function AnchorCustomerPage() {
                                 colSpan={11}
                                 className="py-12 text-center text-gray-400 font-bold"
                               >
-                                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading users list..." />
+                                <CrispLoader className="h-9 w-9 text-[#002366]" text="Loading users list..." />
                               </td>
                             </tr>
                           ) : paginatedCustomers.length > 0 ? (
@@ -1263,7 +1263,7 @@ export default function AnchorCustomerPage() {
             <div className="space-y-6 animate-in fade-in duration-200">
               {isUsersLoading && !selectedCustomer ? (
                 <div className="flex flex-col items-center justify-center p-16 bg-white border border-gray-100 rounded-3xl min-h-[400px] shadow-sm">
-                  <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading customer report..." />
+                  <CrispLoader className="h-10 w-10 text-[#002366]" text="Loading customer report..." />
                 </div>
               ) : selectedCustomer ? (
                 <ServiceReport
@@ -1551,7 +1551,7 @@ export default function AnchorCustomerPage() {
                   >
                     {registerMutation.isPending ? (
                       <span className="flex items-center gap-2">
-                        <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                        <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                         Registering...
                       </span>
                     ) : (
