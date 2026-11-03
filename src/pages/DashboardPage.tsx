@@ -28,6 +28,7 @@ import type { ServiceBreakup } from '@/api/payment';
 
 import { toast } from '@/lib/toast';
 import HomeIntro from '@/components/HomeIntro';
+import AdminLoader from '@/components/AdminLoader';
 
 export default function DashboardPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -256,6 +257,16 @@ export default function DashboardPage() {
   return (
     <>
       <HomeIntro />
+      {isCheckingWallet && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 backdrop-blur-[2px]">
+          <div className="rounded-2xl bg-white p-6 shadow-xl border border-gray-100 flex flex-col items-center">
+            <AdminLoader
+              className="h-9 w-9 text-[#002366]"
+              text="Checking wallet balance..."
+            />
+          </div>
+        </div>
+      )}
       <div className="relative flex min-h-screen flex-col p-7 pb-4 animate-fade-in">
         {/* Header */}
         <div className="mb-7 flex items-center justify-between">

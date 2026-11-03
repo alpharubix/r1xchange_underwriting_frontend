@@ -14,8 +14,10 @@ import {
   ShieldCheck,
 } from 'lucide-react';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import AdminLoader from '@/components/AdminLoader';
 
 interface ProfileForm {
+  
   customer_name: string;
   phone: string;
   company_name: string;
@@ -124,9 +126,10 @@ function EditField({
 
 export default function ProfileManagement() {
   const queryClient = useQueryClient();
-  const { data: userData } = useMe();
+  const { data: userData, isLoading } = useMe();
   const [editMode, setEditMode] = useState(false);
   const [toast, setToast] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   
   const defaultForm: ProfileForm = {
@@ -189,6 +192,7 @@ export default function ProfileManagement() {
     }
 
     try {
+      setIsSaving(true);
       const updatedUser = await updateProfile({
         customer_name: form.customer_name,
         company_name: form.company_name,
@@ -217,7 +221,20 @@ export default function ProfileManagement() {
     } catch (error) {
       console.error(error);
       alert('Profile update failed');
+    } finally {
+      setIsSaving(false);
     }
+  }
+
+  if (isLoading) {
+    return (
+      <div className="flex min-h-[60vh] items-center justify-center">
+        <AdminLoader
+          className="h-9 w-9 text-[#002366]"
+          text="Loading profile details..."
+        />
+      </div>
+    );
   }
 
   return (
@@ -396,11 +413,15 @@ export default function ProfileManagement() {
                 </button>
                 <button
                   onClick={handleSave}
-                  disabled={!hasChanges || !isGstValid}
+                  disabled={!hasChanges || !isGstValid || isSaving}
                   className="flex items-center gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800 px-5 py-2.5 rounded-xl text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  <Check className="w-3.5 h-3.5" />
-                  Update Profile
+                  {isSaving ? (
+                    <AdminLoader className="h-3.5 w-3.5 text-white" dotColor="#9fc3f1" />
+                  ) : (
+                    <Check className="w-3.5 h-3.5" />
+                  )}
+                  {isSaving ? 'Updating...' : 'Update Profile'}
                 </button>
               </div>
             )}

@@ -3,7 +3,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import CibilReportTabs from '@/components/cibil/CibilReportTabs';
 import { downloadCibilReport } from '@/api/cibil';
 import { toast } from '@/lib/toast';
-import { Download, Loader2 } from 'lucide-react';
+import { Download,  } from 'lucide-react';
+import AdminLoader from '@/components/AdminLoader';
 
 type ViewReportProps = {
   reference_id?: string;
@@ -108,7 +109,7 @@ export default function ViewReport({
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50 disabled:opacity-50 cursor-pointer"
             >
               {isExporting ? (
-                <Loader2 className="h-4 w-4 animate-spin text-[#002366]" />
+                <AdminLoader className="h-4 w-4 text-[#002366]" />
               ) : (
                 <Download className="h-4 w-4 text-[#002366]" />
               )}

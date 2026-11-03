@@ -3,7 +3,6 @@ import {
   Building2,
   CalendarDays,
   CreditCard,
-  Loader2,
   RefreshCw,
   FileText,
   BarChart3,
@@ -54,11 +53,6 @@ export default function BankAccountsPage({
   hideHeader,
   isAnchor,
 }: { custId?: string; hideHeader?: boolean; isAnchor?: boolean } = {}) {
-  const isAdminPortal =
-    (typeof window !== 'undefined' &&
-      (window.location.pathname.toLowerCase().startsWith('/admin') ||
-        window.location.pathname.toLowerCase().startsWith('/anchor'))) ||
-    Boolean(isAnchor);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   /*
@@ -225,11 +219,7 @@ export default function BankAccountsPage({
               className="w-full transition-all duration-200 hover:shadow-sm sm:w-auto"
             >
               {isFetching ? (
-                isAdminPortal ? (
-                  <AdminLoader className="h-4 w-4 text-[#002366]" />
-                ) : (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                )
+                <AdminLoader className="h-4 w-4 text-[#002366]" />
               ) : (
                 <RefreshCw className="h-4 w-4" />
               )}
@@ -256,17 +246,10 @@ export default function BankAccountsPage({
                 ========================= */}
             {isLoading ? (
               <div className="flex min-h-72 flex-col items-center justify-center gap-3 text-slate-500">
-                {isAdminPortal ? (
-                  <AdminLoader
-                    className="h-9 w-9 text-[#002366]"
-                    text="Fetching bank accounts..."
-                  />
-                ) : (
-                  <>
-                    <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-                    <p className="text-sm font-medium">Fetching bank accounts...</p>
-                  </>
-                )}
+                <AdminLoader
+                  className="h-9 w-9 text-[#002366]"
+                  text="Fetching bank accounts..."
+                />
               </div>
             ) : /* =========================
                ERROR
@@ -369,11 +352,7 @@ export default function BankAccountsPage({
                                           account.account_id ||
                                           account.accountId
                                         ) ? (
-                                        isAdminPortal ? (
-                                          <AdminLoader className="h-3 w-3 text-white" dotColor="#9fc3f1" />
-                                        ) : (
-                                          <Loader2 className="h-3 w-3 animate-spin" />
-                                        )
+                                        <AdminLoader className="h-3 w-3 text-white" dotColor="#9fc3f1" />
                                       ) : (
                                         <Download className="h-3 w-3 text-emerald-400" />
                                       )}

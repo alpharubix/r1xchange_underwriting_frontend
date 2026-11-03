@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { FileSpreadsheet, Loader2 } from 'lucide-react';
+import { FileSpreadsheet,  } from 'lucide-react';
 import { toast } from '@/lib/toast';
 import { downloadBsaReport } from '@/api/export';
 import { cn } from '@/lib/utils';
+import AdminLoader from '@/components/AdminLoader';
 
 interface BsaDownloadButtonProps {
   fromDate?: string;
@@ -83,7 +84,7 @@ export function BsaDownloadButton({
     >
       {isExporting ? (
         <>
-          <Loader2 className="w-4 h-4 animate-spin text-white" />
+          <AdminLoader className="w-4 h-4 text-white mr-1" dotColor="#9fc3f1" />
           <span>Generating Excel...</span>
         </>
       ) : (

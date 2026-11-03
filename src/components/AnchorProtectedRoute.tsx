@@ -8,7 +8,7 @@ export default function AnchorProtectedRoute() {
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
-        <AdminLoader className="h-12 w-12 text-[#002366]" text="Verifying anchor access..." />
+        <AdminLoader className="h-12 w-12 text-[#002366]"  />
       </div>
     );
   }
