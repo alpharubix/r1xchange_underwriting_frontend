@@ -1,7 +1,8 @@
-﻿import { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getGstRefStatus } from '@/api/gst';
 import { useNavigate } from 'react-router-dom';
+import AdminLoader from '@/components/AdminLoader';
 
 interface Step4Props {
   gstReferenceId: string;
@@ -160,11 +161,10 @@ export default function Step4Processing({
         </div>
       ) : (
         <div className="animate-in fade-in duration-300">
-          <div className="relative mx-auto w-24 h-24 mb-6">
-            <div className="absolute inset-0 rounded-full border-4 border-gray-100"></div>
-            <div className="absolute inset-0 rounded-full border-4 border-[#002366] border-t-transparent animate-spin"></div>
-            <div className="absolute inset-0 flex items-center justify-center text-[#002366] font-semibold text-sm">
-              {Math.min(90, Math.round((pollCount / 10) * 100))}%
+          <div className="flex flex-col items-center justify-center mb-6">
+            <AdminLoader className="h-16 w-16 text-[#002366] mb-3" />
+            <div className="text-xs font-semibold text-[#002366] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+              {Math.min(90, Math.round((pollCount / 10) * 100))}% Completed
             </div>
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">
