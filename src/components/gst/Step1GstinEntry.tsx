@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getGstin, updateGstin } from '@/api/gst';
 import { toast } from '@/lib/toast';
+import AdminLoader from '@/components/AdminLoader';
 
 interface Step1Props {
   onNext: (gstin: string) => void;
@@ -71,7 +72,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
   if (isLoadingGstin) {
     return (
       <div className="flex justify-center p-8">
-        <span className="h-8 w-8 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
+        <AdminLoader className="h-8 w-8 text-[#002366]" />
       </div>
     );
   }
@@ -118,7 +119,7 @@ export default function Step1GstinEntry({ onNext, custId }: Step1Props) {
           className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
         >
           {updateMutation.isPending ? (
-            <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+            <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
           ) : null}
           {updateMutation.isPending ? 'Saving...' : 'Continue'}
         </button>

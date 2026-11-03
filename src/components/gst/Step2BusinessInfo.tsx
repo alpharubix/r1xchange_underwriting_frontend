@@ -11,6 +11,7 @@ import {
 import { checkServiceConsent , giveServiceConsent} from '@/api/user';
 import { toast } from '@/lib/toast';
 import GstTermsModal from '@/pages/gst/GstTerm&Condition';
+import AdminLoader from '@/components/AdminLoader';
 
 interface Step2Props { 
   gstin: string;
@@ -400,7 +401,7 @@ export default function Step2BusinessInfo({
                         {itemGstin}
                       </span>
                       {isLoading && (
-                        <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
+                        <AdminLoader className="h-3.5 w-3.5 text-[#002366]" />
                       )}
                     </div>
                     {data && (
@@ -594,7 +595,7 @@ export default function Step2BusinessInfo({
                               className="bg-[#002366] hover:bg-[#001744] text-white font-semibold py-2.5 px-6 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                             >
                               {submitMutation.isPending ? (
-                                <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+                                <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                               ) : null}
                               {submitMutation.isPending
                                 ? 'Starting Analysis...'
@@ -608,7 +609,7 @@ export default function Step2BusinessInfo({
                     <div className="flex justify-center py-4">
                       {isLoading ? (
                         <div className="flex items-center gap-2 text-slate-500">
-                          <span className="h-5 w-5 rounded-full border-2 border-slate-300 border-t-[#002366] animate-spin" />
+                          <AdminLoader className="h-5 w-5 text-[#002366]" />
                           <span>Fetching business details...</span>
                         </div>
                       ) : (
@@ -679,7 +680,7 @@ export default function Step2BusinessInfo({
                   className="bg-[#002366] hover:bg-[#001744] text-white text-sm font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
                 >
                   {addNewGstinMutation.isPending ? (
-                    <span className="h-4 w-4 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+                    <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
                   ) : null}
                   {addNewGstinMutation.isPending ? 'Saving...' : 'Save GSTIN'}
                 </button>

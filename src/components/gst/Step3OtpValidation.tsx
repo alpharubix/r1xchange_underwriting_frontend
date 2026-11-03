@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { validateOtp, submitGst, generateOtp } from '@/api/gst';
 import { toast } from '@/lib/toast';
+import AdminLoader from '@/components/AdminLoader';
 
 interface Step3Props {
   gstin: string;
@@ -160,7 +161,7 @@ export default function Step3OtpValidation({
             className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {otpMutation.isPending ? (
-              <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+              <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
             ) : null}
             {otpMutation.isPending ? 'Generating OTP...' : 'Generate OTP'}
           </button>
@@ -197,7 +198,7 @@ export default function Step3OtpValidation({
             className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-2 px-4 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {validateMutation.isPending || submitMutation.isPending ? (
-              <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+              <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
             ) : null}
             {validateMutation.isPending
               ? 'Verifying OTP...'
@@ -246,7 +247,7 @@ export default function Step3OtpValidation({
             className="w-full bg-[#002366] hover:bg-[#001744] text-white font-medium py-3 px-4 rounded-xl shadow-md shadow-[#002366]/20 transition-colors disabled:opacity-70 flex justify-center items-center cursor-pointer"
           >
             {submitMutation.isPending ? (
-              <span className="h-5 w-5 rounded-full border-2 border-white/20 border-t-white animate-spin mr-2" />
+              <AdminLoader className="h-4 w-4 text-white mr-2" dotColor="#9fc3f1" />
             ) : null}
             {submitMutation.isPending ? 'Submitting...' : 'Start Analysis'}
           </button>
