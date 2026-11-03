@@ -6,6 +6,9 @@ import { AuthProvider } from '@/contexts/AuthContext';
 import { Toaster } from 'sonner';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import PublicRoute from '@/components/PublicRoute';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import AnchorProtectedRoute from './components/AnchorProtectedRoute';
+import AdminProtectedRoute from './components/AdminProtectedRoute';
 import ExistingReports from './pages/cibil/ExistingReports';
 import ViewReport from './pages/cibil/ViewReport';
 import AdminLoader from './components/AdminLoader';
@@ -32,19 +35,12 @@ const AnchorLoginPage = lazy(
   () => import('./pages/AnchorLogin/AnchorLoginPage')
 );
 const AdminLoginPage = lazy(() => import('./pages/adminlogin/AdminLoginPage'));
-const AdminProtectedRoute = lazy(
-  () => import('./components/AdminProtectedRoute')
-);
 const AdminDashboardPage = lazy(
   () => import('@/pages/adminlogin/AdminUsersPage')
 );
 const SignupPage = lazy(() => import('@/pages/SignupPage'));
 const ForgotPasswordPage = lazy(() => import('@/pages/ForgotPasswordPage'));
 const DashboardLayout = lazy(() => import('@/layouts/DashboardLayout'));
-const ProtectedRoute = lazy(() => import('@/components/ProtectedRoute'));
-const AnchorProtectedRoute = lazy(
-  () => import('./components/AnchorProtectedRoute')
-);
 const AnchorCustomerPage = lazy(
   () => import('./pages/AnchorLogin/AnchorCustomerPage')
 );
@@ -112,8 +108,8 @@ function App() {
                       <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
                     </div>
                   ) : (
-                    <div className="flex h-screen items-center justify-center bg-[#002366]">
-                      <span className="h-10 w-10 rounded-full border-4 border-white/20 border-t-white animate-spin" />
+                    <div className="flex h-screen w-full items-center justify-center bg-[#002366]">
+                      <AdminLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
                     </div>
                   )
                 }
