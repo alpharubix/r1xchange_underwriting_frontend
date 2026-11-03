@@ -18,6 +18,7 @@ import { loginSchema, type LoginFormValues } from '@/lib/zod-schemas';
 // import { useLogin, getApiError } from "@/hooks/useAuth";
 import crispLogoBlackWebView from '../assets/crispLogoRedesign.png';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
+import AdminLoader from '@/components/AdminLoader';
 import { useLogin } from '@/hooks/useAuth';
 
 export default function LoginPage() {
@@ -180,7 +181,7 @@ export default function LoginPage() {
                   >
                     {loginMutation.isPending ? (
                       <>
-                        <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                        <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                         Signing in...
                       </>
                     ) : (

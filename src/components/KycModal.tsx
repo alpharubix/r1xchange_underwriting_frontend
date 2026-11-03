@@ -11,7 +11,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
   X,
-  Loader2,
+  
   ShieldCheck,
   FileCheck2,
   AlertCircle,
@@ -32,6 +32,7 @@ import {
 
 import type { DigiLockerDocument } from '@/api/kyc';
 import { useMutation, useQuery } from '@tanstack/react-query';
+import AdminLoader from '@/components/AdminLoader';
 
 type KycState =
   | 'INITIALIZING'
@@ -319,7 +320,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
         <CardContent className="overflow-y-auto">
           {state === 'INITIALIZING' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
-              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+              <AdminLoader className="h-8 w-8 text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Checking verification status...
               </p>
@@ -393,7 +394,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'CHECK_DIGILOCKER_SESSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in">
-              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+              <AdminLoader className="h-8 w-8 text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Initializing DigiLocker session...
               </p>
@@ -402,7 +403,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'POLLING_SESSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in text-center">
-              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+              <AdminLoader className="h-8 w-8 text-[#002366]" />
               <div className="space-y-2">
                 <p className="font-medium text-gray-900">
                   Awaiting your consent
@@ -428,7 +429,7 @@ export function KycModal({ isOpen, onClose }: KycModalProps) {
 
           {state === 'FETCHING_DOCUMENTS' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4 animate-fade-in">
-              <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
+              <AdminLoader className="h-8 w-8 text-[#002366]" />
               <p className="text-sm text-gray-500">
                 Retrieving documents from DigiLocker...
               </p>

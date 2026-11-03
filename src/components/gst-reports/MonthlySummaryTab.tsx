@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGstMonthlySummary } from '@/api/gst';
 import AdminLoader from '@/components/AdminLoader';
-import { Loader2 } from 'lucide-react';
+
 
 export default function MonthlySummaryTab({
   gstReferenceId,
@@ -14,19 +14,10 @@ export default function MonthlySummaryTab({
     enabled: !!gstReferenceId,
   });
 
-  const isAdminOrAnchorPortal =
-    typeof window !== 'undefined' &&
-    (window.location.pathname.toLowerCase().startsWith('/admin') ||
-     window.location.pathname.toLowerCase().startsWith('/anchor'));
-
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        {isAdminOrAnchorPortal ? (
-          <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading monthly summary..." />
-        ) : (
-          <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-        )}
+        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading monthly summary..." />
       </div>
     );
   }

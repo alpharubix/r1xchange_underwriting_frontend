@@ -10,7 +10,7 @@ import {
   CardDescription,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Loader2, RefreshCcw, Filter, X, CalendarIcon } from 'lucide-react';
+import {  RefreshCcw, Filter, X, CalendarIcon } from 'lucide-react';
 import AdminLoader from '@/components/AdminLoader';
 import { toast } from '@/lib/toast';
 import { format } from 'date-fns';
@@ -42,10 +42,6 @@ interface SummaryData {
 export default function SummaryOfDebitAndCredit({
   accountNumber: propAccountNumber,
 }: { accountNumber?: string } = {}) {
-  const isSpecialPortal =
-    typeof window !== 'undefined' &&
-    (window.location.pathname.toLowerCase().startsWith('/admin') ||
-      window.location.pathname.toLowerCase().startsWith('/anchor'));
   const location = useLocation();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -507,14 +503,7 @@ export default function SummaryOfDebitAndCredit({
         <CardContent className="p-0">
           {isLoading ? (
             <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-              {isSpecialPortal ? (
-                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
-              ) : (
-                <>
-                  <Loader2 className="h-8 w-8 animate-spin text-black mb-4" />
-                  <p>Loading summary data...</p>
-                </>
-              )}
+              <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
             </div>
           ) : isError ? (
             <div className="p-8 text-center text-red-500">
@@ -793,11 +782,7 @@ export default function SummaryOfDebitAndCredit({
             </div>
           ) : (
             <div className="p-8 text-center text-gray-500">
-              {isSpecialPortal ? (
-                <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
-              ) : (
-                <Loader2 className="item-center m-auto h-8 w-8 animate-spin text-black mb-4" />
-              )}
+              <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
               <p className="text-gray-500">
                 No data available yet. Please upload a bank statement, or wait
                 while your uploaded statement is being processed.

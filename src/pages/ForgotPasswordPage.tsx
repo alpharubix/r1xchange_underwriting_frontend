@@ -1,4 +1,4 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import AdminLoader from '@/components/AdminLoader';
 import { Label } from '@/components/ui/label';
 import {
   Card,
@@ -129,7 +130,7 @@ function EmailStep({ onSuccess }: { onSuccess: (email: string) => void }) {
       >
         {mutation.isPending ? (
           <>
-            <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Sending OTP...
           </>
         ) : (
@@ -236,7 +237,7 @@ function OtpStep({
       >
         {mutation.isPending ? (
           <>
-            <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Verifying...
           </>
         ) : (
@@ -394,7 +395,7 @@ function ResetStep({ resetToken }: { resetToken: string }) {
       >
         {mutation.isPending ? (
           <>
-            <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             Resetting password...
           </>
         ) : (

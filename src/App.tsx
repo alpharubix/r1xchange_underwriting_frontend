@@ -102,12 +102,12 @@ function App() {
               <Suspense
                 fallback={
                   typeof window !== 'undefined' &&
-                  window.location.pathname.toLowerCase().startsWith('/admin') ? (
+                    window.location.pathname.toLowerCase().startsWith('/admin') ? (
                     <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
                       <AdminLoader className="h-12 w-12 text-[#000080]" />
                     </div>
                   ) : typeof window !== 'undefined' &&
-                  window.location.pathname.toLowerCase().startsWith('/anchor') ? (
+                    window.location.pathname.toLowerCase().startsWith('/anchor') ? (
                     <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
                       <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
                     </div>

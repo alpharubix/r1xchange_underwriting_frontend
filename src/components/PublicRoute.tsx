@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
+import AdminLoader from './AdminLoader';
 
 export default function PublicRoute() {
   const { isAuthenticated, isLoading, user } = useAuthContext();
@@ -7,13 +8,12 @@ export default function PublicRoute() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-4">
-          <span className="h-10 w-10 rounded-full border-4 border-[#002366]/20 border-t-[#002366] animate-spin" />
-        </div>
+      <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
+        <AdminLoader className="h-12 w-12 text-[#002366]" />
       </div>
     );
   }
+
 
   if (isAuthenticated) {
     const storedRole = sessionStorage.getItem('user_role')?.toLowerCase();

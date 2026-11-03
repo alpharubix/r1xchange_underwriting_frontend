@@ -4,7 +4,6 @@ import { toast } from '@/lib/toast';
 import {
   FileText,
   Download,
-  Loader2,
   Calculator,
   Building,
   TrendingUp,
@@ -13,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import AdminLoader from '@/components/AdminLoader';
 
 export default function ItrExportPage() {
   const [isExporting, setIsExporting] = useState(false);
@@ -91,7 +91,7 @@ export default function ItrExportPage() {
           >
             {isExporting ? (
               <>
-                <Loader2 className="h-5 w-5 animate-spin" />
+                <AdminLoader className="h-5 w-5 text-white" dotColor="#9fc3f1" />
                 Downloading Report...
               </>
             ) : (

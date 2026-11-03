@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { createPaymentOrder, validatePayment } from '@/api/payment';
 import type { ServiceBreakup } from '@/api/payment';
 import {
-  Loader2,
+
   X,
   Wallet,
   CheckCircle2,
@@ -47,11 +47,6 @@ export default function PaymentModal({
   const [isProcessing, setIsProcessing] = useState(false);
   const [isSendingToCustomer, setIsSendingToCustomer] = useState(false);
   const { user } = useAuthContext() as any;
-  const isCustomLoaderPortal =
-    (typeof window !== 'undefined' &&
-      (window.location.pathname.toLowerCase().startsWith('/admin') ||
-       window.location.pathname.toLowerCase().startsWith('/anchor'))) ||
-    Boolean(requestFromAnchor);
 
   useEffect(() => {
     if (!isOpen) {
@@ -572,11 +567,7 @@ export default function PaymentModal({
                       >
                         {isProcessing ? (
                           <>
-                            {isCustomLoaderPortal ? (
-                              <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
-                            ) : (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            )}
+                            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                             Processing...
                           </>
                         ) : (
@@ -598,11 +589,7 @@ export default function PaymentModal({
                       >
                         {isSendingToCustomer ? (
                           <>
-                            {isCustomLoaderPortal ? (
-                              <AdminLoader className="h-4 w-4 text-[#002366]" dotColor="#2563eb" />
-                            ) : (
-                              <Loader2 className="h-4 w-4 animate-spin" />
-                            )}
+                            <AdminLoader className="h-4 w-4 text-[#002366]" dotColor="#2563eb" />
                             Sending...
                           </>
                         ) : (
@@ -623,11 +610,7 @@ export default function PaymentModal({
                     >
                       {isProcessing ? (
                         <>
-                          {isCustomLoaderPortal ? (
-                            <AdminLoader className="mr-2 h-5 w-5 text-white" dotColor="#9fc3f1" />
-                          ) : (
-                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                          )}
+                          <AdminLoader className="mr-2 h-5 w-5 text-white" dotColor="#9fc3f1" />
                           Processing...
                         </>
                       ) : (

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listCibilReports } from '@/api/cibil';
 import type { CibilReportListItem } from '@/api/cibil';

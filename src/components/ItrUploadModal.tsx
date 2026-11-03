@@ -15,7 +15,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { PieChart, X, CheckCircle2, Loader2 } from 'lucide-react';
+import { PieChart, X, CheckCircle2,  } from 'lucide-react';
 import AdminLoader from '@/components/AdminLoader';
 type ITRState =
   | 'INITIALIZING'
@@ -225,23 +225,12 @@ export default function ItrUploadModal({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {(() => {
-            const isSpecialPortal =
-              typeof window !== 'undefined' &&
-              (window.location.pathname.toLowerCase().startsWith('/admin') ||
-                window.location.pathname.toLowerCase().startsWith('/anchor'));
-            return (
-              <>
-                {itrState === 'INITIALIZING' && (
-                  <div className="flex flex-col items-center justify-center py-8">
-                    {isSpecialPortal ? (
-                      <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
-                    ) : (
-                      <Loader2 className="h-8 w-8 animate-spin text-[#002366] mb-4" />
-                    )}
-                    <p className="text-gray-600">Checking ITR status...</p>
-                  </div>
-                )}
+          {itrState === 'INITIALIZING' && (
+            <div className="flex flex-col items-center justify-center py-8">
+              <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
+              <p className="text-gray-600">Checking ITR status...</p>
+            </div>
+          )}
 
           {itrState === 'EMAIL_INPUT' && (
             <div className="space-y-4">
@@ -261,11 +250,7 @@ export default function ItrUploadModal({
                 disabled={generateItrLinkMutation.isPending || !itrEmail}
               >
                 {generateItrLinkMutation.isPending ? (
-                  isSpecialPortal ? (
-                    <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
-                  ) : (
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  )
+                  <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                 ) : null}
                 Generate Link
               </Button>
@@ -275,11 +260,7 @@ export default function ItrUploadModal({
           {itrState === 'AWAITING_CREDENTIAL_SUBMISSION' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                {isSpecialPortal ? (
-                  <AdminLoader className="h-8 w-8 text-[#002366]" />
-                ) : (
-                  <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-                )}
+                <AdminLoader className="h-8 w-8 text-[#002366]" />
               </div>
               <p className="text-center font-medium text-slate-900">
                 Verification email sent successfully.
@@ -293,11 +274,7 @@ export default function ItrUploadModal({
           {itrState === 'PROCESSING' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
               <div className="p-4 bg-blue-50 rounded-full mb-2">
-                {isSpecialPortal ? (
-                  <AdminLoader className="h-8 w-8 text-[#002366]" />
-                ) : (
-                  <Loader2 className="h-8 w-8 animate-spin text-[#002366]" />
-                )}
+                <AdminLoader className="h-8 w-8 text-[#002366]" />
               </div>
               <p className="text-center font-medium text-slate-900">
                 Analyzing your ITR data...
@@ -307,9 +284,6 @@ export default function ItrUploadModal({
               </p>
             </div>
           )}
-              </>
-            );
-          })()}
 
           {itrState === 'SUCCESS' && (
             <div className="flex flex-col items-center justify-center py-8 space-y-4">
