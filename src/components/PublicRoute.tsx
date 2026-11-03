@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
-import AdminLoader from './AdminLoader';
+import CrispLoader from './CrispLoader';
 
 export default function PublicRoute() {
   const { isAuthenticated, isLoading, user } = useAuthContext();
@@ -9,7 +9,7 @@ export default function PublicRoute() {
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#002366]">
-        <AdminLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
+        <CrispLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
       </div>
     );
   }

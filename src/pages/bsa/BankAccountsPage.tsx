@@ -26,7 +26,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from '@/lib/toast';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 function formatDate(value?: string | null) {
   if (!value) return '-';
@@ -219,7 +219,7 @@ export default function BankAccountsPage({
               className="w-full transition-all duration-200 hover:shadow-sm sm:w-auto"
             >
               {isFetching ? (
-                <AdminLoader className="h-4 w-4 text-[#002366]" />
+                <CrispLoader className="h-4 w-4 text-[#002366]" />
               ) : (
                 <RefreshCw className="h-4 w-4" />
               )}
@@ -246,7 +246,7 @@ export default function BankAccountsPage({
                 ========================= */}
             {isLoading ? (
               <div className="flex min-h-72 flex-col items-center justify-center gap-3 text-slate-500">
-                <AdminLoader
+                <CrispLoader
                   className="h-9 w-9 text-[#002366]"
                   text="Fetching bank accounts..."
                 />
@@ -352,7 +352,7 @@ export default function BankAccountsPage({
                                           account.account_id ||
                                           account.accountId
                                         ) ? (
-                                        <AdminLoader className="h-3 w-3 text-white" dotColor="#9fc3f1" />
+                                        <CrispLoader className="h-3 w-3 text-white" dotColor="#9fc3f1" />
                                       ) : (
                                         <Download className="h-3 w-3 text-emerald-400" />
                                       )}

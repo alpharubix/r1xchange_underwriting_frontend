@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChevronLeft, FileText, ArrowRight, Download } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import GstOverviewTab from './gst-reports/GstOverviewTab';
 import TopSuppliersCustomersTab from './gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from './gst-reports/MonthlySummaryTab';
@@ -63,7 +63,7 @@ export default function GstReportPage() {
     if (isHistoryLoading) {
       return (
         <div className="flex h-screen items-center justify-center bg-gray-50">
-          <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading GST Report..." />
+          <CrispLoader className="h-10 w-10 text-[#002366]" text="Loading GST Report..." />
         </div>
       );
     }
@@ -125,7 +125,7 @@ export default function GstReportPage() {
             title="Download GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)"
           >
             {isExporting ? (
-              <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+              <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             ) : (
               <Download className="h-4 w-4 text-emerald-400" />
             )}

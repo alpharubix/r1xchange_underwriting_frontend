@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCibilWebhookStatus, listCibilReports } from '@/api/cibil';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import type {
   CibilReportListItem,
   CibilReportStatus,
@@ -271,7 +271,7 @@ export default function ReportStatus({
       ) : (
         <div className="animate-in fade-in duration-300">
           <div className="flex flex-col items-center justify-center mb-6">
-            <AdminLoader className="h-16 w-16 text-[#002366] mb-3" />
+            <CrispLoader className="h-16 w-16 text-[#002366] mb-3" />
             <div className="text-xs font-semibold text-[#002366] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
               {Math.min(90, Math.round((pollCount / MAX_POLLS) * 100))}% Completed
             </div>

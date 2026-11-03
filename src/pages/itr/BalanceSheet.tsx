@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { getItrBalanceSheet } from '@/api/itr';
 import CustomerProfile from '@/components/itr/CustomerProfile';
 import BalanceSheetTable from '@/components/itr/BalanceSheetTable';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 interface BalanceSheetProps {
@@ -26,7 +26,7 @@ export default function BalanceSheet({
   if (isLoading) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Balance Sheet..." />
+        <CrispLoader className="h-12 w-12 text-[#002366]" text="Loading Balance Sheet..." />
       </div>
     );
   }

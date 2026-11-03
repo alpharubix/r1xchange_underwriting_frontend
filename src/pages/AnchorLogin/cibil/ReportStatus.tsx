@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 
 import { getCibilWebhookStatus, listCibilReports } from '@/api/cibil';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import type {
   CibilReportListItem,
   CibilReportStatus,
@@ -257,7 +257,7 @@ export default function ReportStatus({
               disabled={isFetching}
               className="bg-[#002366] hover:bg-[#001744] text-white px-6 py-2 rounded-xl shadow-sm shadow-[#002366]/20 transition-colors cursor-pointer inline-flex items-center justify-center gap-1.5"
             >
-              {isFetching && <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />}
+              {isFetching && <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />}
               {isFetching ? 'Checking...' : 'Retry'}
             </button>
           </div>
@@ -265,7 +265,7 @@ export default function ReportStatus({
       ) : (
         <div className="animate-in fade-in duration-300">
           <div className="flex flex-col items-center justify-center mb-6">
-            <AdminLoader className="h-16 w-16 text-[#002366] mb-3" />
+            <CrispLoader className="h-16 w-16 text-[#002366] mb-3" />
             <div className="text-xs font-semibold text-[#002366] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
               {Math.min(90, Math.round((pollCount / MAX_POLLS) * 100))}% Completed
             </div>
@@ -289,7 +289,7 @@ export default function ReportStatus({
             disabled={isFetching}
             className="text-sm font-semibold text-[#002366] hover:underline disabled:text-gray-400 cursor-pointer inline-flex items-center gap-1.5"
           >
-            {isFetching && <AdminLoader className="h-3.5 w-3.5 text-[#002366]" />}
+            {isFetching && <CrispLoader className="h-3.5 w-3.5 text-[#002366]" />}
             {isFetching ? 'Checking...' : 'Check status now'}
           </button>
         </div>

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/lib/toast';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import { motion, AnimatePresence } from 'framer-motion';
 import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 import { useAuthContext } from '@/contexts/AuthContext';
@@ -567,7 +567,7 @@ export default function PaymentModal({
                       >
                         {isProcessing ? (
                           <>
-                            <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                            <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                             Processing...
                           </>
                         ) : (
@@ -589,7 +589,7 @@ export default function PaymentModal({
                       >
                         {isSendingToCustomer ? (
                           <>
-                            <AdminLoader className="h-4 w-4 text-[#002366]" dotColor="#2563eb" />
+                            <CrispLoader className="h-4 w-4 text-[#002366]" dotColor="#2563eb" />
                             Sending...
                           </>
                         ) : (
@@ -610,7 +610,7 @@ export default function PaymentModal({
                     >
                       {isProcessing ? (
                         <>
-                          <AdminLoader className="mr-2 h-5 w-5 text-white" dotColor="#9fc3f1" />
+                          <CrispLoader className="mr-2 h-5 w-5 text-white" dotColor="#9fc3f1" />
                           Processing...
                         </>
                       ) : (

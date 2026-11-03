@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 import { cn } from '@/lib/utils';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 type ReportRecord = Record<string, unknown>;
 
@@ -167,7 +167,7 @@ export function LoadingState({
   return (
     <div className="flex min-h-64 items-center justify-center rounded-xl border border-slate-200 bg-white">
       {isAdminOrAnchorPortal ? (
-        <AdminLoader className="h-8 w-8 text-[#002366]" text={label} />
+        <CrispLoader className="h-8 w-8 text-[#002366]" text={label} />
       ) : (
         <>
           <span className="mr-3 h-5 w-5 rounded-full border-2 border-slate-200 border-t-[#002366] animate-spin" />

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChevronLeft, FileText, Download } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import GstOverviewTab from '@/components/gst-reports/GstOverviewTab';
 import TopSuppliersCustomersTab from '@/components/gst-reports/TopSuppliersCustomersTab';
 import MonthlySummaryTab from '@/components/gst-reports/MonthlySummaryTab';
@@ -89,7 +89,7 @@ export default function GstReportPage({
             title="Download GSTR Report (Overview, Top Suppliers & Customers, Monthly Summary)"
           >
             {isExporting ? (
-              <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+              <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
             ) : (
               <Download className="h-4 w-4 text-emerald-400" />
             )}

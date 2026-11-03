@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { getGstTopSuppliersCustomers } from '@/api/gst';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 export default function TopSuppliersCustomersTab({
@@ -19,7 +19,7 @@ export default function TopSuppliersCustomersTab({
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-20">
-        <AdminLoader className="h-10 w-10 text-[#002366]" text="Loading top suppliers & customers..." />
+        <CrispLoader className="h-10 w-10 text-[#002366]" text="Loading top suppliers & customers..." />
       </div>
     );
   }

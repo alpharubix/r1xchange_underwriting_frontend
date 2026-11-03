@@ -11,7 +11,7 @@ import ItrUploadModal from '@/components/ItrUploadModal';
 import GstUploadModal from '@/components/GstUploadModal';
 import CibilUploadModal from '@/components/CibilUploadModal';
 import { Eye, FileSpreadsheet,  ArrowLeft, Download } from 'lucide-react';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import GstReportPage from './gst/GstReportPage';
 import ItrReportPage from './itr/ItrReportPage';
 import CibilReportView from './cibil/ViewReport';
@@ -601,7 +601,7 @@ export default function ServiceReport({
                                   colSpan={8}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
+                                  <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : gstReports.length === 0 ? (
@@ -691,7 +691,7 @@ export default function ServiceReport({
                                         title="Export GST report"
                                       >
                                         {exportingReportKey === `gst-${report.reportId || report.id}` ? (
-                                          <AdminLoader className="h-3.5 w-3.5 text-[#002366]" />
+                                          <CrispLoader className="h-3.5 w-3.5 text-[#002366]" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />
                                         )}
@@ -763,7 +763,7 @@ export default function ServiceReport({
                                   colSpan={5}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
+                                  <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : itrReports.length === 0 ? (
@@ -832,7 +832,7 @@ export default function ServiceReport({
                                         title="Export ITR report"
                                       >
                                         {exportingReportKey === `itr-${report.reportId || report.id}` ? (
-                                          <AdminLoader className="h-3.5 w-3.5 text-[#002366]" />
+                                          <CrispLoader className="h-3.5 w-3.5 text-[#002366]" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />
                                         )}
@@ -898,7 +898,7 @@ export default function ServiceReport({
                                   colSpan={4}
                                   className="py-12 text-center text-slate-400 font-semibold bg-slate-50/10"
                                 >
-                                  <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
+                                  <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading reports..." />
                                 </td>
                               </tr>
                             ) : cibilReports.length === 0 ? (
@@ -960,7 +960,7 @@ export default function ServiceReport({
                                         title="Export CIBIL report"
                                       >
                                         {exportingReportKey === `cibil-${report.reportId || report.id}` ? (
-                                          <AdminLoader className="h-3.5 w-3.5 text-[#002366]" />
+                                          <CrispLoader className="h-3.5 w-3.5 text-[#002366]" />
                                         ) : (
                                           <Download className="h-3.5 w-3.5" />
                                         )}

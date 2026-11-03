@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { listCibilReports } from '@/api/cibil';
 import type { CibilReportListItem } from '@/api/cibil';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 function ExistingReports() {
   const navigate = useNavigate();
@@ -40,7 +40,7 @@ function ExistingReports() {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center px-4">
         <div className="bg-white rounded-2xl shadow-lg px-8 py-6 flex items-center justify-center border border-slate-200">
-          <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading reports..." />
+          <CrispLoader className="h-9 w-9 text-[#002366]" text="Loading reports..." />
         </div>
       </div>
     );

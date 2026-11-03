@@ -35,7 +35,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { KycModal } from '@/components/KycModal';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface Bank {
   srNo: number;
@@ -607,7 +607,7 @@ export default function DashboardPage() {
                     >
                       {uploadMutation.isPending ? (
                         <>
-                          <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                          <CrispLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                           Uploading...
                         </>
                       ) : (
@@ -689,7 +689,7 @@ export default function DashboardPage() {
                     >
                       {confirmMutation.isPending ? (
                         <>
-                          <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                          <CrispLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                           Confirming...
                         </>
                       ) : (
@@ -730,7 +730,7 @@ export default function DashboardPage() {
             <CardContent className="space-y-4">
               {itrState === 'INITIALIZING' && (
                 <div className="flex flex-col items-center justify-center py-8">
-                  <AdminLoader className="h-8 w-8 text-[#002366] mb-4" />
+                  <CrispLoader className="h-8 w-8 text-[#002366] mb-4" />
                   <p className="text-gray-600">Checking ITR status...</p>
                 </div>
               )}
@@ -753,7 +753,7 @@ export default function DashboardPage() {
                     disabled={generateItrLinkMutation.isPending || !itrEmail}
                   >
                     {generateItrLinkMutation.isPending ? (
-                      <AdminLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
+                      <CrispLoader className="mr-2 h-4 w-4 text-white" dotColor="#9fc3f1" />
                     ) : null}
                     Generate Link
                   </Button>
@@ -763,7 +763,7 @@ export default function DashboardPage() {
               {itrState === 'AWAITING_CREDENTIAL_SUBMISSION' && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="p-4 bg-blue-50 rounded-full mb-2">
-                    <AdminLoader className="h-8 w-8 text-[#002366]" />
+                    <CrispLoader className="h-8 w-8 text-[#002366]" />
                   </div>
                   <p className="text-center font-medium text-[#002366]">
                     Verification email sent successfully.
@@ -778,7 +778,7 @@ export default function DashboardPage() {
               {itrState === 'PROCESSING' && (
                 <div className="flex flex-col items-center justify-center py-8 space-y-4">
                   <div className="p-4 bg-blue-50 rounded-full mb-2">
-                    <AdminLoader className="h-8 w-8 text-[#002366]" />
+                    <CrispLoader className="h-8 w-8 text-[#002366]" />
                   </div>
                   <p className="text-center font-medium text-[#002366]">
                     Analyzing your ITR data...

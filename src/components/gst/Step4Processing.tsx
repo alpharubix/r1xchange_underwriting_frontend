@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getGstRefStatus } from '@/api/gst';
 import { useNavigate } from 'react-router-dom';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface Step4Props {
   gstReferenceId: string;
@@ -162,7 +162,7 @@ export default function Step4Processing({
       ) : (
         <div className="animate-in fade-in duration-300">
           <div className="flex flex-col items-center justify-center mb-6">
-            <AdminLoader className="h-16 w-16 text-[#002366] mb-3" />
+            <CrispLoader className="h-16 w-16 text-[#002366] mb-3" />
             <div className="text-xs font-semibold text-[#002366] bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
               {Math.min(90, Math.round((pollCount / 10) * 100))}% Completed
             </div>

@@ -17,7 +17,7 @@ import {
   UserRound,
 } from 'lucide-react';
 import { toast } from '@/lib/toast';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import crispLogoWhiteWebView from '@/assets/crispLogoRedesign.png';
 import { useAuthContext } from '@/contexts/AuthContext';
 
@@ -230,7 +230,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <AdminLoader className="h-8 w-8 text-[#002366]" text="Loading wallet data..." />
+        <CrispLoader className="h-8 w-8 text-[#002366]" text="Loading wallet data..." />
       </div>
     );
   }
@@ -285,7 +285,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                 </span>
                 <span className="mt-1.5 text-lg font-bold text-[#002366]">
                   {isWalletLoading ? (
-                    <AdminLoader className="h-4 w-4 text-[#002366]" />
+                    <CrispLoader className="h-4 w-4 text-[#002366]" />
                   ) : (
                     `₹${walletBalances[mod.id] ?? 0}`
                   )}
@@ -403,7 +403,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                     >
                       {processingId === payment.id ? (
                         <>
-                          <AdminLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
+                          <CrispLoader className="h-4 w-4 text-white" dotColor="#9fc3f1" />
                           Cancel Payment
                         </>
                       ) : (

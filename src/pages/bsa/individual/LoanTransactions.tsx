@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { RefreshCcw } from 'lucide-react';
 import BankAccountDetails from '../BankAccountDetails';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 interface SummaryLoanTranx {
   month: string;
@@ -135,7 +135,7 @@ export default function IndividualLoanTransactions({
           <CardContent className="p-0">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-12">
-                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
+                <CrispLoader className="h-9 w-9 text-[#002366]" text="Loading summary data..." />
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">
@@ -202,7 +202,7 @@ export default function IndividualLoanTransactions({
           <CardContent className="p-0">
             {isLoading ? (
               <div className="flex flex-col items-center justify-center p-12">
-                <AdminLoader className="h-9 w-9 text-[#002366]" text="Loading details data..." />
+                <CrispLoader className="h-9 w-9 text-[#002366]" text="Loading details data..." />
               </div>
             ) : isError ? (
               <div className="p-8 text-center text-red-500">

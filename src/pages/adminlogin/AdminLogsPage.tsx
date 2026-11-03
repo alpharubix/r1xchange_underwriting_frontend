@@ -28,7 +28,7 @@ import type { LogItem, LogFilters, LogsResponse } from '@/api/logs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 import {
   Select,
   SelectTrigger,
@@ -699,7 +699,7 @@ export default function AdminLogsPage() {
                           colSpan={9}
                           className="py-16 text-center text-slate-400 font-bold"
                         >
-                          <AdminLoader className="h-8 w-8 text-[#000080]" text="Loading system logs..." />
+                          <CrispLoader className="h-8 w-8 text-[#000080]" text="Loading system logs..." />
                         </td>
                       </tr>
                     ) : logsList.length > 0 ? (

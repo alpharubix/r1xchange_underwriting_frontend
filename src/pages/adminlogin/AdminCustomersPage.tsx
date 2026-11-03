@@ -21,7 +21,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import ServiceReport from './ServiceReport';
 import { type CustomerDetailRecord } from './AdminAnchorsPage';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 const findAccountId = (user: any, index: number): string => {
@@ -790,7 +790,7 @@ export default function AdminCustomersPage() {
                 {isLoading ? (
                   <tr>
                     <td colSpan={13} className="py-16 text-center text-gray-400">
-                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading customers..." />
+                      <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading customers..." />
                     </td>
                   </tr>
                 ) : paginatedList.length === 0 ? (

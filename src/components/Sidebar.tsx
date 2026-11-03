@@ -17,7 +17,7 @@ import { useMe } from '@/hooks/useUser';
 import { useLogout } from '@/hooks/useAuth';
 import { downloadItrReport } from '@/api/itr';
 import crispLogoWhiteWebView from '../assets/crispLogoRedesign.png';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 import { toast } from '@/lib/toast';
 
@@ -306,7 +306,7 @@ export function AppSidebar() {
           id="logout-btn"
         >
           {logoutMutation.isPending ? (
-            <AdminLoader className="h-5 w-5 shrink-0 text-white" dotColor="#9fc3f1" />
+            <CrispLoader className="h-5 w-5 shrink-0 text-white" dotColor="#9fc3f1" />
           ) : (
             <LogOut className="h-5 w-5 shrink-0" />
           )}
@@ -319,7 +319,7 @@ export function AppSidebar() {
           <div className="flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2.5 backdrop-blur-sm">
             {userLoading ? (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20">
-                <AdminLoader className="h-4 w-4 text-white/60" dotColor="#9fc3f1" />
+                <CrispLoader className="h-4 w-4 text-white/60" dotColor="#9fc3f1" />
               </div>
             ) : (
               <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white text-black text-sm font-bold">

@@ -1,6 +1,6 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuthContext } from '@/contexts/AuthContext';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 export default function AnchorProtectedRoute() {
   const { isLoading, isAuthenticated, user } = useAuthContext();
@@ -8,7 +8,7 @@ export default function AnchorProtectedRoute() {
   if (isLoading) {
     return (
       <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
-        <AdminLoader className="h-12 w-12 text-[#002366]"  />
+        <CrispLoader className="h-12 w-12 text-[#002366]"  />
       </div>
     );
   }

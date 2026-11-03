@@ -23,7 +23,7 @@ import { toast } from '@/lib/toast';
 import { useQuery } from '@tanstack/react-query';
 import { getAnchorsList, getUsersList, extractPaginatedData } from '@/api/user';
 import ServiceReport from './ServiceReport';
-import AdminLoader from '@/components/AdminLoader';
+import CrispLoader from '@/components/CrispLoader';
 
 
 /**
@@ -927,7 +927,7 @@ export default function AdminAnchorsPage() {
                   {isUsersLoading || isAllUsersLoading ? (
                     <tr>
                       <td colSpan={11} className="py-16 text-center text-slate-400">
-                        <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading associated customers..." />
+                        <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading associated customers..." />
                       </td>
                     </tr>
                   ) : associatedCustomers.length === 0 ? (
@@ -1303,7 +1303,7 @@ export default function AdminAnchorsPage() {
                   {isUsersLoading ? (
                     <tr>
                       <td colSpan={11} className="py-16 text-center text-gray-400">
-                        <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading associated users..." />
+                        <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading associated users..." />
                       </td>
                     </tr>
                   ) : filteredAssociatedUsers.length === 0 ? (
@@ -1629,7 +1629,7 @@ export default function AdminAnchorsPage() {
                 {isAnchorsLoading ? (
                   <tr>
                     <td colSpan={7} className="py-16 text-center text-slate-400">
-                      <AdminLoader className="h-9 w-9 text-[#000080]" text="Loading anchors..." />
+                      <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading anchors..." />
                     </td>
                   </tr>
                 ) : paginatedAnchorsList.length === 0 ? (
