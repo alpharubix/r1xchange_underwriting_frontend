@@ -10,9 +10,16 @@ export default function ProtectedRoute({ requiredPortal }: ProtectedRouteProps) 
   const { isLoading, isAuthenticated, user } = useAuthContext();
   const location = useLocation();
   if (isLoading) {
+    if (requiredPortal === 'anchor') {
+      return (
+        <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
+          <AdminLoader className="h-12 w-12 text-[#002366]" text="Loading Anchor Portal..." />
+        </div>
+      );
+    }
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-[#f4f6f9]">
-        <AdminLoader className="h-12 w-12 text-[#002366]" />
+      <div className="flex h-screen w-full items-center justify-center bg-[#002366]">
+        <AdminLoader className="h-12 w-12 text-white" dotColor="#9fc3f1" />
       </div>
     );
   }
