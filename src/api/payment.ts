@@ -11,6 +11,9 @@ export interface WalletBalanceResponse {
   };
 }
 
+export const getWalletBalanceQueryKey = (service: string, userId?: string) =>
+  ['wallet-balance', service, userId ?? ''] as const;
+
 export async function getWalletBalance(
   service: string,
   userId?: string

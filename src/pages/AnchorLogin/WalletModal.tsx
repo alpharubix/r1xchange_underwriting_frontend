@@ -1,6 +1,11 @@
 import { useState, useRef } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getPendingPayments, validatePayment, getWalletBalance } from "@/api/payment";
+import { useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  getPendingPayments,
+  validatePayment,
+  getWalletBalance,
+  getWalletBalanceQueryKey,
+} from "@/api/payment";
 import type { PendingPayment } from "@/api/payment";
 import PaymentModal from "@/components/cart/PaymentModal";
 import { getPricingDetails } from "@/lib/paymentUtils";
@@ -80,23 +85,26 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
     }
   };
 
-  const {
-    data: walletBalances = {},
-    isLoading: isWalletLoading,
-    refetch: refetchWalletBalances,
-  } = useQuery({
-    queryKey: ['wallet-balances-customer', customerId],
-    queryFn: async () => {
-      const balances = await Promise.all(
-        modules.map(async (module) => {
-          const response = await getWalletBalance(module.id, customerId);
-          return [module.id, response.data.available_balance ?? 0] as const;
-        })
-      );
-      return Object.fromEntries(balances) as Record<string, number>;
-    },
-    enabled: Boolean(customerId),
+  const queryClient = useQueryClient();
+
+  const walletBalanceQueries = useQueries({
+    queries: modules.map((module) => ({
+      queryKey: getWalletBalanceQueryKey(module.id, customerId),
+      queryFn: () => getWalletBalance(module.id, customerId),
+      enabled: Boolean(customerId),
+      staleTime: 1000 * 60 * 5,
+    })),
   });
+
+  const walletBalances = Object.fromEntries(
+    modules.map((module, index) => [
+      module.id,
+      walletBalanceQueries[index]?.data?.data?.available_balance ?? 0,
+    ])
+  ) as Record<string, number>;
+
+  const refetchWalletBalances = () =>
+    Promise.all(walletBalanceQueries.map((query) => query.refetch()));
 
   const {
     data: paymentsRes,
@@ -124,9 +132,12 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
       const toastId = toast.loading(
         `Checking wallet balance for ${service}...`
       );
-      const res = await getWalletBalance(service, customerId);
+      const res = await queryClient.fetchQuery({
+        queryKey: getWalletBalanceQueryKey(service, customerId),
+        queryFn: () => getWalletBalance(service, customerId),
+        staleTime: 0,
+      });
       toast.dismiss(toastId);
-      await refetchWalletBalances();
 
       if (res.data?.is_balance_available) {
         toast.success(
@@ -271,7 +282,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
           Wallet Balances
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {modules.map((mod) => (
+          {modules.map((mod, index) => (
             <div key={mod.id} className="relative group">
               <button
                 onClick={() => handleCheckWalletBalance(mod.id)}
@@ -284,7 +295,7 @@ export default function WalletModal({ selectedCustomer }: WalletModalProps) {
                   {mod.label}
                 </span>
                 <span className="mt-1.5 text-lg font-bold text-[#002366]">
-                  {isWalletLoading ? (
+                  {walletBalanceQueries[index]?.isLoading ? (
                     <CrispLoader className="h-4 w-4 text-[#002366]" />
                   ) : (
                     `₹${walletBalances[mod.id] ?? 0}`

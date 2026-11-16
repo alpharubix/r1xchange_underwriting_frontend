@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import {
   Building2,
   CalendarDays,
@@ -17,13 +17,16 @@ import { downloadBsaReport } from '@/api/export';
 import {
   getBankAccounts,
   type BankAccounts,
-  getDateRange,
-  type DateRange,
 } from '@/api/bsa';
+import {
+  fetchDateRange,
+  getDateRangeQueryKey,
+  type DateRange,
+} from '@/hooks/useDateRange';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { useEffect, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from '@/lib/toast';
 import CrispLoader from '@/components/CrispLoader';
@@ -60,17 +63,6 @@ export default function BankAccountsPage({
    * for each individual account.
    */
   const [showReports, setShowReports] = useState<Record<string, boolean>>({});
-
-  /*
-   * Determines which report/module set is available
-   * for every account.
-   */
-  const [showModules, setShowModules] = useState<Record<string, boolean>>({});
-
-  /*
-   * Stores BSA date range for every account.
-   */
-  const [dateRanges, setDateRanges] = useState<Record<string, DateRange>>({});
 
   /*
    * Track report export download status
@@ -140,58 +132,45 @@ export default function BankAccountsPage({
   });
 
   /*
-   * Fetch date range and determine available modules
-   * for every account.
+   * Fetch and cache BSA date range per unique account number
+   * so remounts and BSA report views share the same React Query cache.
    */
-  useEffect(() => {
-    if (!accounts.length) return;
+  const accountNumbers = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          accounts
+            .map((account) => account.accountNumber)
+            .filter((accountNumber): accountNumber is string =>
+              Boolean(accountNumber)
+            )
+        )
+      ),
+    [accounts]
+  );
 
-    const fetchAccountData = async () => {
-      for (const account of accounts) {
-        if (!account.accountNumber) continue;
+  const dateRangeQueries = useQueries({
+    queries: accountNumbers.map((accountNumber) => ({
+      queryKey: getDateRangeQueryKey(accountNumber),
+      queryFn: () => fetchDateRange({ accountNumber }),
+      staleTime: 1000 * 60 * 5,
+      retry: false,
+    })),
+  });
 
-        try {
-          /*
-           * Determine which module set is available
-           * for this account.
-           */
-          const isIndividual =
-            account.entityType?.toLowerCase() === 'individual';
-
-
-          setShowModules((prev) => ({
-            ...prev,
-            [account.accountNumber!]: isIndividual,
-          }));
-
-          /*
-           * Fetch BSA date range.
-           */
-          const data = await getDateRange(account.accountNumber);
-
-          setDateRanges((prev) => ({
-            ...prev,
-            [account.accountNumber!]: data,
-          }));
-
-          console.log(
-            'Account Number:',
-            account.accountNumber,
-            'Date fetched:',
-            data
-          );
-        } catch (error) {
-          console.error(
-            'Failed to fetch data for:',
-            account.accountNumber,
-            error
-          );
-        }
+  const dateRangeStateByAccount = useMemo(() => {
+    const map: Record<string, { data?: DateRange; isError: boolean }> = {};
+    accountNumbers.forEach((accountNumber, index) => {
+      const query = dateRangeQueries[index];
+      if (query) {
+        map[accountNumber] = {
+          data: query.data,
+          isError: query.isError,
+        };
       }
-    };
-
-    fetchAccountData();
-  }, [accounts]);
+    });
+    return map;
+  }, [accountNumbers, dateRangeQueries]);
 
   return (
     <main className="min-h-full bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
@@ -294,7 +273,11 @@ export default function BankAccountsPage({
                     {accounts.map((account, index) => {
                       const accountNumber = account.accountNumber ?? '';
 
-                      const modulesAvailable = showModules[accountNumber];
+                      const modulesAvailable =
+                        account.entityType?.toLowerCase() === 'individual';
+
+                      const dateRangeState =
+                        dateRangeStateByAccount[accountNumber];
 
                       const reportsVisible = showReports[accountNumber];
 
@@ -668,13 +651,15 @@ export default function BankAccountsPage({
                                       </p>
 
                                       <p className="truncate text-xs font-semibold text-slate-700">
-                                        {dateRanges[accountNumber]
+                                        {dateRangeState?.data
                                           ? `${formatDate(
-                                            dateRanges[accountNumber]?.from_date
-                                          )} → ${formatDate(
-                                            dateRanges[accountNumber]?.to_date
-                                          )}`
-                                          : 'Loading...'}
+                                              dateRangeState.data.from_date
+                                            )} → ${formatDate(
+                                              dateRangeState.data.to_date
+                                            )}`
+                                          : dateRangeState?.isError
+                                            ? '-'
+                                            : 'Loading...'}
                                       </p>
                                     </div>
                                   </div>
