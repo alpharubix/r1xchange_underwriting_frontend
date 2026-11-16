@@ -168,6 +168,8 @@ export function useAnchorLogin() {
         data?.anchor_code;
       if (anchorId) {
         sessionStorage.setItem('anchor_id', String(anchorId));
+      } else {
+        sessionStorage.removeItem('anchor_id');
       }
 
       const loginUser = {
@@ -176,16 +178,29 @@ export function useAnchorLogin() {
         id: anchorId,
         role,
         portal: 'anchor' as const,
+        isProfilePending: true,
       };
       setUser(loginUser);
-      queryClient.setQueryData(['user', 'me'], loginUser);
       toast.success(msg);
       console.log("Roles after anchor login:", { extractedRole, rawRole, role, anchorId });
       sessionStorage.removeItem('anchor_intro_shown');
       navigate('/anchors/dashboard');
       void loadProfileFromMe(queryClient, role, 'anchor')
-        .then(setUser)
-        .catch(() => undefined);
+        .then((profile) => {
+          const resolvedAnchorId =
+            (profile as any)?._id ||
+            (profile as any)?.id ||
+            (profile as any)?.user_id ||
+            (profile as any)?.anchor_id ||
+            (profile as any)?.anchor_code;
+          if (resolvedAnchorId) {
+            sessionStorage.setItem('anchor_id', String(resolvedAnchorId));
+          }
+          setUser(profile);
+        })
+        .catch(() => {
+          setUser({ ...loginUser, isProfilePending: false });
+        });
     },
   });
 }
@@ -200,6 +215,8 @@ export function useLogout() {
       // Always clear local user cache regardless of API success/failure.
       // The server clears the HttpOnly cookie on its side.
       sessionStorage.removeItem('user_role');
+      sessionStorage.removeItem('anchor_id');
+      sessionStorage.removeItem('active_customer_id');
       clearAuth();
       if (window.location.pathname.toLowerCase().includes('/anchors')) {
         navigate('/anchors/login');

@@ -19,9 +19,9 @@ import SaveMoneyReportView from './money/SaveMoneyReportView';
 import RectifyMoneyReportView from './money/RectifyMoneyReportView';
 import AccessMoneyReportView from './money/AccessMoneyReportView';
 
-import { getWalletBalance } from '@/api/payment';
+import { getWalletBalance, getWalletBalanceQueryKey } from '@/api/payment';
 import { toast } from '@/lib/toast';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import PaymentModal from '@/components/cart/PaymentModal';
 import PayerSelectionModal from '@/components/PayerSelectionModal';
 import { createPaymentOrder, getPendingPayments } from '@/api/payment';
@@ -190,6 +190,7 @@ export default function ServiceReport({
     onSuccess: () => { },
   });
 
+  const queryClient = useQueryClient();
   const [isCheckingWallet, setIsCheckingWallet] = useState(false);
   const handleCreateReport = async (
     moduleName: string,
@@ -199,7 +200,11 @@ export default function ServiceReport({
   ) => {
     try {
       setIsCheckingWallet(true);
-      const res = await getWalletBalance(serviceId, selectedCustomer.id);
+      const res = await queryClient.fetchQuery({
+        queryKey: getWalletBalanceQueryKey(serviceId, selectedCustomer.id),
+        queryFn: () => getWalletBalance(serviceId, selectedCustomer.id),
+        staleTime: 0,
+      });
 
       if (res.data.is_balance_available) {
         onSuccess();

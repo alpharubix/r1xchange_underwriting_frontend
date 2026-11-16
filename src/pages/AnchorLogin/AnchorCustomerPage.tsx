@@ -164,11 +164,13 @@ export default function AnchorCustomerPage() {
     setCurrentPage(1);
   }, [selectedAnchorFilter]);
 
+  const isProfilePending = Boolean(user?.isProfilePending);
+
   // Fetch anchors list if super anchor
   const { data: fetchedAnchors } = useQuery({
     queryKey: ['anchor', 'anchors-list'],
     queryFn: getAssociatedAnchorsList,
-    enabled: isSuperAnchor,
+    enabled: isSuperAnchor && !isProfilePending,
   });
 
   const [anchorsList, setAnchorsList] = useState<any[]>([]);
@@ -211,12 +213,14 @@ export default function AnchorCustomerPage() {
     ? (selectedAnchorFilter || undefined)
     : (user?._id || user?.id || user?.user_id || user?.anchor_id || user?.anchor_code || sessionStorage.getItem('anchor_id') || undefined);
 
-  // Fetch users under anchor
-  const { data: fetchedUsers, isLoading: isUsersLoading } = useQuery({
+  // Fetch users under anchor once the canonical user profile is loaded
+  const { data: fetchedUsers, isLoading: isUsersQueryLoading } = useQuery({
     queryKey: ['anchor', 'users-list', effectiveAnchorId],
     queryFn: () => getAnchorUsers(effectiveAnchorId),
-    enabled: Boolean(effectiveAnchorId),
+    enabled: Boolean(effectiveAnchorId) && !isProfilePending,
   });
+
+  const isUsersLoading = isProfilePending || isUsersQueryLoading;
   useEffect(() => {
   console.log('isSuperAnchor:', isSuperAnchor);
   console.log('selectedAnchorFilter:', selectedAnchorFilter);

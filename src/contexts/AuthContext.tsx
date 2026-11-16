@@ -62,6 +62,8 @@ export function AuthProvider({
     queryClient.setQueryData(['user', 'me'], null);
 
     sessionStorage.removeItem('user_role');
+    sessionStorage.removeItem('anchor_id');
+    sessionStorage.removeItem('active_customer_id');
     sessionStorage.removeItem('redirect_path');
     localStorage.removeItem('gst_reference_id');
     localStorage.removeItem('gstin_list');
