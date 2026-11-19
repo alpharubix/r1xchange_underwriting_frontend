@@ -67,11 +67,11 @@ export default function AnchorViewIntro({ onComplete }: AnchorViewIntroProps) {
                   <div className="flex flex-col items-center justify-center gap-4">
                     <img
                       src={crispLogoWhiteWebView}
-                      alt="crisp logo"
+                      alt="CRISP logo"
                       className="h-24 md:h-32 w-auto object-contain select-none drop-shadow-[0_20px_50px_rgba(0,0,0,0.4)]"
                     />
                     <p className="text-white/95 font-extrabold tracking-[0.3em] text-lg md:text-xl uppercase font-sans">
-                    CRisp
+                    CRISP
                     </p>
                   </div>
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { motion } from 'framer-motion';
-import { Eye, EyeOff, Lock, User, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, Lock, User, ArrowRight,  HomeIcon } from 'lucide-react';
 import CrispLoader from '@/components/CrispLoader';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -182,7 +182,8 @@ export default function AnchorLoginPage() {
           to="/anchors" 
           className="absolute top-8 right-8 flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-[#002366] transition-colors bg-white/80 backdrop-blur px-4 py-2 rounded-full shadow-sm border border-slate-200"
         >
-          <ArrowLeft className="w-4 h-4" /> Go Home
+        <HomeIcon className="h-5 w-5"/>
+          Go Home
         </Link>
         <motion.div
           initial={{ opacity: 0, y: 20 }}

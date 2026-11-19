@@ -36,6 +36,22 @@ function BankAccountDetails() {
   const openingBalance = entries.find(([key]) => isOpening(key));
   const closingBalance = entries.find(([key]) => isClosing(key));
 
+  const get_proper_key = (key_name: string) => {
+    console.log("Entered get_proper_key")
+    console.log("Key name : ", key_name.toLowerCase())
+    if (key_name.toLowerCase() == "clientname") {
+      return "Customer Name"
+    }
+    else if (key_name.toLowerCase() == "opening balanace") {
+      return "Opening Balance"
+    }
+    else if (key_name.toLowerCase() == "accounttype") {
+      return "Account Type"
+    }
+    else
+      return key_name
+  }
+
   return (
     <Card className="mx-auto shadow-sm border border-gray-300">
       <CardHeader>
@@ -48,7 +64,7 @@ function BankAccountDetails() {
         {/* First 8 tiles */}
         <div className="grid grid-cols-4 gap-4">
           {normalTiles.map(([key, value]) => (
-            <Tile key={key} title={key} value={String(value)} />
+            <Tile key={key} title={get_proper_key(key)} value={String(value)} />
           ))}
         </div>
 
@@ -57,7 +73,7 @@ function BankAccountDetails() {
           {openingBalance && (
             <Tile
               className="col-span-2"
-              title={openingBalance[0]}
+              title="Opening Balance"
               value={String(openingBalance[1])}
             />
           )}
