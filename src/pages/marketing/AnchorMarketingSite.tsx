@@ -43,7 +43,7 @@ function AnchorDashboardMontage() {
             <span>ITR</span>
             <span>CIBIL</span>
             <span>Save<br/> money</span>
-            <span>Acess<br/> Money</span>
+            <span>Access<br/> Money</span>
             <span>Rectify<br/> Money</span>
             <span>Wallet</span>
           </div>
@@ -514,7 +514,7 @@ function AnchorFooter() {
     <footer className="site-footer" id="company">
       <div className="footer-top-anchor">
         <div className="footer-brand-block">
-          <Brand /><p>Command your underwriting ecosystem.</p><a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrsip.com 
+          <Brand /><p>Command your underwriting ecosystem.</p><a href="mailto:support@checkcrisp.com" className='spacing-2'>support@checkcrisp.com 
             <ArrowUpRightIcon size={14}/></a>
         </div>
 
