@@ -115,6 +115,38 @@ const findLastLoginValue = (user: any): string => {
   return '-';
 };
 
+const parseCreatedAt = (value: unknown): Date | null => {
+  if (!value) return null;
+  const rawValue = String(value).trim();
+  const mmddyyyy = /^(\d{2})-(\d{2})-(\d{4})$/u.exec(rawValue);
+  const parsed = mmddyyyy
+    ? new Date(Number(mmddyyyy[3]), Number(mmddyyyy[1]) - 1, Number(mmddyyyy[2]))
+    : new Date(rawValue);
+
+  return Number.isNaN(parsed.getTime()) ? null : parsed;
+};
+
+const formatCreatedAt = (value: unknown): string => {
+  const parsed = parseCreatedAt(value);
+  if (!parsed) return '-';
+
+  return `${String(parsed.getDate()).padStart(2, '0')}-${parsed.toLocaleString('en-US', {
+    month: 'long',
+  })}-${parsed.getFullYear()}`;
+};
+
+const matchesDateFilter = (value: unknown, dateFilter: string): boolean => {
+  if (!dateFilter) return true;
+  const parsed = parseCreatedAt(value);
+  if (!parsed) return false;
+  const [year, month, day] = dateFilter.split('-').map(Number);
+  return (
+    parsed.getFullYear() === year &&
+    parsed.getMonth() === month - 1 &&
+    parsed.getDate() === day
+  );
+};
+
 export default function AdminCustomersPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [copiedCustomerId, setCopiedCustomerId] = useState<string | null>(null);
@@ -159,7 +191,7 @@ export default function AdminCustomersPage() {
   });
 
   const customersList = useMemo(() => {
-    return (fetchedData || []).map((user: any, index: number) => ({
+    const mappedCustomers = (fetchedData || []).map((user: any, index: number) => ({
         accountid: findAccountId(user, index),
         customername:
           user.customername ||
@@ -228,8 +260,18 @@ export default function AdminCustomersPage() {
         gst: getFlagValue(user, 'gst'),
         itr: getFlagValue(user, 'itr'),
         cibil: getFlagValue(user, 'cibil'),
+        bsaCreatedAt: user.bsa_created_at || user.bsaCreatedAt || '',
+        gstCreatedAt: user.gst_created_at || user.gstCreatedAt || '',
+        itrCreatedAt: user.itr_created_at || user.itrCreatedAt || '',
+        cibilCreatedAt: user.cibil_created_at || user.cibilCreatedAt || '',
         raw: user,
       }));
+
+    return mappedCustomers.sort((firstCustomer, secondCustomer) => {
+      const firstCreatedAt = parseCreatedAt(firstCustomer.createat)?.getTime() ?? -Infinity;
+      const secondCreatedAt = parseCreatedAt(secondCustomer.createat)?.getTime() ?? -Infinity;
+      return secondCreatedAt - firstCreatedAt;
+    });
   }, [fetchedData]);
 
   // Filter input states
@@ -241,6 +283,15 @@ export default function AdminCustomersPage() {
   const [filterGstNumber, setFilterGstNumber] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [filterAnchorId, setFilterAnchorId] = useState('');
+  const [filterCreatedAt, setFilterCreatedAt] = useState('all');
+  const [filterCreatedFrom, setFilterCreatedFrom] = useState('');
+  const [filterCreatedTo, setFilterCreatedTo] = useState('');
+  const [reportLoggedInDates, setReportLoggedInDates] = useState({
+    bsa: '',
+    gst: '',
+    itr: '',
+    cibil: '',
+  });
 
   // Selected customer for detail view
   const selectedCustomer = useMemo(() => {
@@ -303,6 +354,37 @@ export default function AdminCustomersPage() {
       const matchAnchor = filterAnchorId
         ? (item.anchor_id || '').toLowerCase().includes(filterAnchorId.toLowerCase())
         : true;
+      const createdAt = parseCreatedAt(item.createat);
+      const now = new Date();
+      const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      let createdFrom: Date | null = null;
+      let createdTo: Date | null = null;
+      if (filterCreatedAt === 'today') {
+        createdFrom = startOfToday;
+        createdTo = now;
+      } else if (filterCreatedAt === 'last-1-day' || filterCreatedAt === 'last-5-days') {
+        const days = filterCreatedAt === 'last-1-day' ? 1 : 5;
+        createdFrom = new Date(startOfToday);
+        createdFrom.setDate(createdFrom.getDate() - days);
+        createdTo = now;
+      } else if (filterCreatedAt === 'custom') {
+        createdFrom = filterCreatedFrom ? new Date(`${filterCreatedFrom}T00:00:00`) : null;
+        createdTo = filterCreatedTo ? new Date(`${filterCreatedTo}T23:59:59.999`) : null;
+      }
+      const matchCreatedAt =
+        filterCreatedAt === 'all'
+          ? true
+          : Boolean(
+              createdAt &&
+                !Number.isNaN(createdAt.getTime()) &&
+                (!createdFrom || createdAt >= createdFrom) &&
+                (!createdTo || createdAt <= createdTo)
+            );
+      const matchReportLoggedInDate =
+        matchesDateFilter(item.bsaCreatedAt, reportLoggedInDates.bsa) &&
+        matchesDateFilter(item.gstCreatedAt, reportLoggedInDates.gst) &&
+        matchesDateFilter(item.itrCreatedAt, reportLoggedInDates.itr) &&
+        matchesDateFilter(item.cibilCreatedAt, reportLoggedInDates.cibil);
       const hasAnyReport = Boolean(item.bsa || item.gst || item.itr || item.cibil);
       const matchesSelectedService = selectedServiceFilters.every(
         (service) => item[service]
@@ -322,6 +404,8 @@ export default function AdminCustomersPage() {
         matchGstNumber &&
         matchStatus &&
         matchAnchor &&
+        matchCreatedAt &&
+        matchReportLoggedInDate &&
         matchReports
       );
     });
@@ -335,6 +419,10 @@ export default function AdminCustomersPage() {
     filterGstNumber,
     filterStatus,
     filterAnchorId,
+    filterCreatedAt,
+    filterCreatedFrom,
+    filterCreatedTo,
+    reportLoggedInDates,
     selectedServiceFilters,
     includeNoReports,
   ]);
@@ -350,6 +438,13 @@ export default function AdminCustomersPage() {
       filterCompanyName,
       filterGstNumber,
       filterAnchorId,
+      filterCreatedAt !== 'all' ? filterCreatedAt : '',
+      filterCreatedFrom,
+      filterCreatedTo,
+      reportLoggedInDates.bsa,
+      reportLoggedInDates.gst,
+      reportLoggedInDates.itr,
+      reportLoggedInDates.cibil,
     ].filter((value) => value.trim()).length +
     Number(filterStatus !== 'all') +
     selectedServiceFilters.length +
@@ -654,6 +749,10 @@ export default function AdminCustomersPage() {
             filterCompanyName ||
             filterGstNumber ||
             filterAnchorId ||
+            filterCreatedAt !== 'all' ||
+            filterCreatedFrom ||
+            filterCreatedTo ||
+            Object.values(reportLoggedInDates).some(Boolean) ||
             filterStatus !== 'all' ||
             selectedServiceFilters.length > 0 ||
             includeNoReports) && (
@@ -669,6 +768,10 @@ export default function AdminCustomersPage() {
                   setFilterCompanyName('');
                   setFilterGstNumber('');
                   setFilterAnchorId('');
+                  setFilterCreatedAt('all');
+                  setFilterCreatedFrom('');
+                  setFilterCreatedTo('');
+                  setReportLoggedInDates({ bsa: '', gst: '', itr: '', cibil: '' });
                   setFilterStatus('all');
                   setSelectedServiceFilters([]);
                   setIncludeNoReports(false);
@@ -681,16 +784,86 @@ export default function AdminCustomersPage() {
             </div>
           )}
 
+            {/* Created At Filter */}
+            <div className="space-y-1 sm:col-span-2 md:col-span-2 lg:col-span-2 min-w-0">
+              <Label htmlFor="f-created-at" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                Created at
+              </Label>
+              <select
+                id="f-created-at"
+                value={filterCreatedAt}
+                onChange={(e) => {
+                  setFilterCreatedAt(e.target.value);
+                  setCurrentPage(1);
+                }}
+                className={`h-10 w-full px-2.5 rounded-xl border text-xs font-semibold outline-none transition-all duration-200 ${
+                  filterCreatedAt !== 'all'
+                    ? 'border-[#000080] bg-blue-50/70 text-[#000080] shadow-sm ring-2 ring-blue-100'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 focus:bg-white focus:border-[#000080]'
+                }`}
+              >
+                <option value="all">All dates</option>
+                <option value="today">Today</option>
+                <option value="last-1-day">Last 1 day</option>
+                <option value="last-5-days">Last 5 days</option>
+                <option value="custom">Custom range</option>
+              </select>
+            </div>
+            {filterCreatedAt === 'custom' && (
+              <>
+                <div className="space-y-1 md:col-span-2 lg:col-span-2 min-w-0">
+                  <Label htmlFor="f-created-from" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">From</Label>
+                  <Input id="f-created-from" type="date" value={filterCreatedFrom} onChange={(e) => { setFilterCreatedFrom(e.target.value); setCurrentPage(1); }} className={getTextFilterClass(Boolean(filterCreatedFrom))} />
+                </div>
+                <div className="space-y-1 md:col-span-2 lg:col-span-2 min-w-0">
+                  <Label htmlFor="f-created-to" className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">To</Label>
+                  <Input id="f-created-to" type="date" value={filterCreatedTo} onChange={(e) => { setFilterCreatedTo(e.target.value); setCurrentPage(1); }} className={getTextFilterClass(Boolean(filterCreatedTo))} />
+                </div>
+              </>
+            )}
+            <fieldset className="space-y-2 sm:col-span-2 md:col-span-4 lg:col-span-6 lg:row-span-2">
+              <legend className="text-[10px] font-bold uppercase tracking-wider text-slate-500 text-red-500">
+                Filter reports by when they were logged in
+              </legend>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {([
+                  ['bsa', 'BSA'],
+                  ['itr', 'ITR'],
+                  ['gst', 'GST'],
+                  ['cibil', 'CIBIL'],
+                ] as const).map(([report, label]) => (
+                  <div key={report} className="space-y-1 min-w-0">
+                    <Label htmlFor={`f-${report}-logged-in`} className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                      {label} logged in date
+                    </Label>
+                    <Input
+                      id={`f-${report}-logged-in`}
+                      type="date"
+                      value={reportLoggedInDates[report]}
+                      onChange={(event) => {
+                        setReportLoggedInDates((current) => ({
+                          ...current,
+                          [report]: event.target.value,
+                        }));
+                        setCurrentPage(1);
+                      }}
+                      className={getTextFilterClass(Boolean(reportLoggedInDates[report]))}
+                    />
+                  </div>
+                ))}
+              </div>
+            </fieldset>
+
             <fieldset className="space-y-2 sm:col-span-2 md:col-span-4 lg:col-span-8">
               <legend className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
                 Report Filters
               </legend>
               <div className="flex flex-wrap gap-3">
                 {([
-                  ['bsa', 'BSA'],
-                  ['gst', 'GST'],
-                  ['itr', 'ITR'],
-                  ['cibil', 'CIBIL'],
+                    ['bsa', 'BSA '],
+                    ['gst', 'GST '],
+                    ['itr', 'ITR '],
+                    ['cibil', 'CIBIL '],
                 ] as const).map(([service, label]) => (
                   <motion.label
                     key={service}
@@ -745,13 +918,14 @@ export default function AdminCustomersPage() {
                 By default, customers with at least one analyzed report are shown. Select services to require all selected reports, or choose “No Reports” to show customers without analyzed reports.
               </p>
             </fieldset>
+
           </div>
 
          
 
           {/* ─── DATA TABLE ─── */}
           <div className="overflow-x-auto border border-gray-100 rounded-2xl shadow-sm bg-white">
-            <table className="w-full min-w-[1620px] table-fixed text-left border-collapse">
+            <table className="w-full min-w-[2050px] table-fixed text-left border-collapse">
               <colgroup>
                 <col className="w-10" />
                 <col className="w-[190px]" />
@@ -760,12 +934,13 @@ export default function AdminCustomersPage() {
                 <col className="w-[120px]" />
                 <col className="w-[140px]" />
                 <col className="w-[150px]" />
+                <col className="w-[170px]" />
                 <col className="w-[110px]" />
-                <col className="w-[70px]" />
-                <col className="w-[70px]" />
-                <col className="w-[70px]" />
-                <col className="w-[70px]" />
-                <col className="w-[70px]" />
+                <col className="w-[120px]" />
+                <col className="w-[120px]" />
+                <col className="w-[120px]" />
+                <col className="w-[120px]" />
+                <col className="w-[80px]" />
               </colgroup>
               <thead>
                 <tr className="border-b border-gray-100 text-gray-400 font-bold text-[11px] uppercase tracking-wider bg-white">
@@ -778,6 +953,7 @@ export default function AdminCustomersPage() {
                   <th className="py-3.5 px-4 font-bold text-gray-400">MOBILE NUMBER</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">COMPANY NAME</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">GST NO</th>
+                  <th className="py-3.5 px-4 font-bold text-gray-400">CREATED AT</th>
                   <th className="py-3.5 px-4 font-bold text-gray-400">STATUS</th>
                   <th className="py-3.5 px-4 font-bold text-center text-gray-400">BSA</th>
                   <th className="py-3.5 px-4 font-bold text-center text-gray-400">GST</th>
@@ -789,13 +965,13 @@ export default function AdminCustomersPage() {
               <tbody className="divide-y divide-gray-100 text-sm">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={13} className="py-16 text-center text-gray-400">
+                    <td colSpan={14} className="py-16 text-center text-gray-400">
                       <CrispLoader className="h-9 w-9 text-[#000080]" text="Loading customers..." />
                     </td>
                   </tr>
                 ) : paginatedList.length === 0 ? (
                   <tr>
-                    <td colSpan={13} className="py-16 text-center text-gray-400">
+                    <td colSpan={14} className="py-16 text-center text-gray-400">
                       <div className="flex flex-col items-center justify-center gap-2">
                         <Users className="h-8 w-8 text-slate-300" />
                         <p className="text-sm font-bold text-slate-600">No customers found</p>
@@ -846,29 +1022,42 @@ export default function AdminCustomersPage() {
 
                       {/* CUSTOMER NAME */}
                       <td className="py-4 px-4 font-bold text-gray-900">
-                        {item.customername || 'N/A'}
+                        <span className="block truncate" title={item.customername}>
+                          {item.customername || 'N/A'}
+                        </span>
                       </td>
 
                       {/* EMAIL ID */}
-                      <td className="overflow-visible py-4 px-4 text-gray-700">
-                        <span className="block whitespace-nowrap" title={item.emailid}>
+                      <td className="py-4 px-4 text-gray-700">
+                        <span className="block truncate whitespace-nowrap" title={item.emailid}>
                           {item.emailid || '-'}
                         </span>
                       </td>
 
                       {/* MOBILE NUMBER */}
                       <td className="py-4 px-4 text-gray-700">
-                        {item.phone || '-'}
+                        <span className="block truncate whitespace-nowrap" title={item.phone}>
+                          {item.phone || '-'}
+                        </span>
                       </td>
 
                       {/* COMPANY NAME */}
                       <td className="py-4 px-4 text-gray-700">
-                        {item.companyname || '-'}
+                        <span className="block truncate" title={item.companyname}>
+                          {item.companyname || '-'}
+                        </span>
                       </td>
 
                       {/* GST NO */}
                       <td className="py-4 px-4 text-gray-700 font-mono">
-                        {item.gstnumber || <p className='text-red-700 text-bold'>Not Found</p>}
+                        <span className="block truncate" title={item.gstnumber || 'Not Found'}>
+                          {item.gstnumber || <span className="text-red-700 font-bold">Not Found</span>}
+                        </span>
+                      </td>
+
+                      {/* STATUS */}
+                      <td className="py-4 px-4 text-gray-700 whitespace-nowrap text-xs">
+                        {formatCreatedAt(item.createat)}
                       </td>
 
                       {/* STATUS */}
@@ -903,6 +1092,9 @@ export default function AdminCustomersPage() {
                             <X className="h-3.5 w-3.5 stroke-[2.5]" />
                           </span>
                         )}
+                        <span className="mt-1 block whitespace-nowrap text-[10px] font-medium text-slate-400 text-black">
+                          {formatCreatedAt(item.bsaCreatedAt)}
+                        </span>
                       </td>
 
                       {/* GST */}
@@ -922,6 +1114,9 @@ export default function AdminCustomersPage() {
                             <X className="h-3.5 w-3.5 stroke-[2.5]" />
                           </span>
                         )}
+                        <span className="mt-1 block whitespace-nowrap text-[10px] font-medium text-slate-400">
+                          {formatCreatedAt(item.gstCreatedAt)}
+                        </span>
                       </td>
 
                       {/* ITR */}
@@ -941,6 +1136,9 @@ export default function AdminCustomersPage() {
                             <X className="h-3.5 w-3.5 stroke-[2.5]" />
                           </span>
                         )}
+                        <span className="mt-1 block whitespace-nowrap text-[10px] font-medium text-slate-400">
+                          {formatCreatedAt(item.itrCreatedAt)}
+                        </span>
                       </td>
 
                       {/* CIBIL */}
@@ -960,6 +1158,9 @@ export default function AdminCustomersPage() {
                             <X className="h-3.5 w-3.5 stroke-[2.5]" />
                           </span>
                         )}
+                        <span className="mt-1 block whitespace-nowrap text-[10px] font-medium text-slate-400">
+                          {formatCreatedAt(item.cibilCreatedAt)}
+                        </span>
                       </td>
 
                       {/* ACTION */}
