@@ -372,7 +372,7 @@ function Navbar() {
         <Brand />
 
         <nav className="desktop-nav" aria-label="Main navigation" ref={navRef}>
-          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>Go Home</Link><div className="nav-products-wrap" onClick={() => { !productsOpen ? setProductsOpen(true) : setProductsOpen(false) }} >
+          <Link to="/" className="nav-link" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}></Link><div className="nav-products-wrap" onClick={() => { !productsOpen ? setProductsOpen(true) : setProductsOpen(false) }} >
 
             <button className='nav-link' style={{ fontSize: '15px', fontWeight: 600, color: '', fontFamily: 'inherit' }} onClick={() => setProductsOpen(true)}>
               Services <ChevronDown size={14} />
